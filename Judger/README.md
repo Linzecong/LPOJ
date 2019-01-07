@@ -24,7 +24,11 @@
 # 参数解释
 
 ## result 
-    WRONG_ANSWER (judger module will never return this value, it's used for awswer checker)
+    PRESENTATION_ERROR = -5
+    COMPILE_ERROR = -4
+    WRONG_ANSWER = -3
+    PENDDING = -1
+    JUDGINNG = -2
     SUCCESS = 0 (this only means the process exited normally)
     CPU_TIME_LIMIT_EXCEEDED = 1
     REAL_TIME_LIMIT_EXCEEDED = 2
