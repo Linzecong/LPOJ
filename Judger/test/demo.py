@@ -5,6 +5,7 @@ if os.system("gcc main.c -o main"):
     print("compile error")
     exit(1)
 
+
 ret = _judger.run(max_cpu_time=1000,
                   max_real_time=2000,
                   max_memory=128 * 1024 * 1024,
@@ -23,5 +24,8 @@ ret = _judger.run(max_cpu_time=1000,
                   # can be None
                   seccomp_rule_name="c_cpp",
                   uid=0,
-                  gid=0)
+                  gid=0
+                  )
+
 print(ret)
+

@@ -13,7 +13,7 @@
 # 测试
 
     0. cd test
-    1. sudo python demp.py
+    1. sudo python demo.py
 
 # 详细测试
     参考 https://github.com/QingdaoU/Judger 中的 unittest
