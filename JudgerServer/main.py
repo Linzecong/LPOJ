@@ -1,97 +1,92 @@
 # coding=utf-8
 
 import MySQLdb
-from socket import *
+import socket
 import json
 from time import sleep
 import threading
 
 
-myjsonfile = open("./judger.json", 'r')
-judgerjson = json.loads(myjsonfile.read())
+mutex = threading.Lock() # queue mutex
 
-ip = list()
-port = list()
-statue = list()
-for s in judgerjson['judger']:
-    ip.append(s['ip'])
-    port.append(s['port'])
-    statue.append(False)
+queue = list()
 
-judgernum = len(ip)
+def getSubmition():
+    global queue, mutex
+    myjsonfile = open("./setting.json", 'r')
+    judgerjson = json.loads(myjsonfile.read())
 
-db = MySQLdb.connect(judgerjson["db_ip"], judgerjson["db_user"], judgerjson["db_pass"], judgerjson["db_database"],int(judgerjson["db_port"]), charset='utf8' )
-cursor = db.cursor()
+    db = MySQLdb.connect(judgerjson["db_ip"], judgerjson["db_user"], judgerjson["db_pass"], judgerjson["db_database"],int(judgerjson["db_port"]), charset='utf8' )
+    cursor = db.cursor()
+    while True:
+        sleep(1)
+        cursor.execute("SELECT * from judgestatus_judgestatus where result = '-1' order by id desc")
+        data = cursor.fetchall()
+        
+       # print(data)
+        
+        if mutex.acquire():
+            try:
+                for d in data:
+                    queue.append(d[0])
+                    cursor.execute("UPDATE judgestatus_judgestatus SET result = '-6' WHERE id = '%d'" % d[0])
+                db.commit()
+            except:
+                db.rollback()
+            mutex.release()
+    db.close()
 
-sockets = list()
-for i in range(judgernum):
-    tp = socket(AF_INET,SOCK_STREAM)
-    tp.settimeout(2)
-    sockets.append(tp)
 
-
-mutex = threading.Lock() # statue mutex
-
-def run(id):
-    global sockets, mutex, statue
+def deal_client(newSocket: socket, addr):
+    global mutex, queue
+    statue = False
     while True:
         sleep(1)
         if mutex.acquire():
             try:
-                print(id)
-                sockets[id].connect((ip[id],int(port[id])))
-                sockets[id].send("getstatue")
-                total_data=[]
-                while True:
-                    data = sockets[id].recv(1024)   
-                    if not data: 
-                        break
-                    total_data.append(data)
-                recv_data = ''.join(total_data)
-                if recv_data:
-                    if recv_data == "ok":
-                        statue[id]=True
-                    else:
-                        statue[id]=False
+                print(addr)
+                if statue == True and len(queue) > 0:
+                    id = queue.pop()
+                    statue = False
+                    newSocket.send(("judge|%d" % id).encode("utf-8"))
                 else:
-                    statue[id]=False
-                sockets[id].close()
-            except:
-                pass
+                    newSocket.send("getstatue".encode("utf-8"))
+                    print("send!!",addr)
+                    data = newSocket.recv(1024)   
+                    recv_data = data.decode('utf-8')
+                    print(recv_data)
+                    if recv_data == "ok":
+                        statue = True
+                    else:
+                        statue = False
+                    print(statue)
+
+            except socket.error:
+                newSocket.close()
+                mutex.release() 
+                return
+            # except:
+            #     print("error!")
+            #     mutex.release()
+            #     return
             mutex.release() 
 
-for i in range(judgernum):
-    t = threading.Thread(target=run,args=(i,))
-    t.setDaemon(True)
-    t.start()
 
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
+server.bind(("", 9906))
+server.listen(20)
+print("server is running!")
+
+t = threading.Thread(target=getSubmition, args=())
+t.setDaemon(True)
+t.start()
 
 while True:
-    sleep(1)
-    
-    cursor.execute("SELECT * from judgestatus_judgestatus where result = '-1' order by id limit %s" % judgernum)
+    newSocket, addr = server.accept()
+    print("client [%s] is connected!" % str(addr))
+    client = threading.Thread(target=deal_client, args=(newSocket, addr))
+    client.setDaemon(True)
+    client.start()
 
-    data = cursor.fetchall()
-    judgequeue = list()
-
-    print(data)
-
-    for t in data:
-        judgequeue.append(t[0])
-    
-    if mutex.acquire():
-        for id in judgequeue:
-            for num in range(judgernum):
-                if statue[num] == True:
-                    statue[num] = False
-                    try:
-                        sockets[num].connect((ip[num],int(port[num])))
-                        sockets[num].send("judge|%d" % id[0])
-                        sockets[num].close()
-                    except:
-                        pass
-        mutex.release()
-
-
-db.close()
 

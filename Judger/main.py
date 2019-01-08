@@ -8,22 +8,27 @@ import threading
 import _judger
 import os
 
-# 创建 socket 对象
-serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
 
-# 获取本地主机名
+clientsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+
 host = "localhost"
 
-port = 1234
-
-# 绑定端口号
-serversocket.bind((host, port))
-
-# 设置最大连接数，超过后排队
-serversocket.listen()
+port = 9906
 
 statue = True
 
+
+def reconnect():
+    global statue, clientsocket
+    clientsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    try :
+        clientsocket.connect((host,port))
+        statue = True
+    except :
+        print("connect error!")
+        pass
+
+reconnect()
 
 myjsonfile = open("./setting.json", 'r')
 judgerjson = json.loads(myjsonfile.read())
@@ -35,36 +40,48 @@ cursor = db.cursor()
 def judge(id, code, lang, problem):
     global statue
 
+    # print(id,code,lang,problem)
+
     if lang == "C":
         file = open("main.c", "w")
         file.write(code)
         file.close()
-        result = os.system("gcc main.c -o2 main")
-
+        result = os.system("gcc main.c -o main -O2")
+        # print(result)
         if result:
             try:
-                cursor.execute("UPDATE judgestatus_judgestatus SET result = '-4' WHERE id = '%d'" % id)
+                cursor.execute("UPDATE judgestatus_judgestatus SET result = '-4' WHERE id = '%s'" % id)
                 db.commit()
                 statue = True
             except:
                 db.rollback()
                 statue = True
-                return
+            return
 
     elif lang == "C++":
         file = open("main.cpp", "w")
         file.write(code)
         file.close()
-        result = os.system("g++ main.cpp -o2 main")
+        result = os.system("g++ main.cpp -o main -O2")
+        # print(result)
         if result:
             try:
-                cursor.execute("UPDATE judgestatus_judgestatus SET result = '-4' WHERE id = '%d'" % id)
+                cursor.execute("UPDATE judgestatus_judgestatus SET result = '-4' WHERE id = '%s'" % id)
                 db.commit()
                 statue = True
             except:
                 db.rollback()
                 statue = True
-                return
+            return
+    else:
+        try:
+            cursor.execute("UPDATE judgestatus_judgestatus SET result = '-4' WHERE id = '%s'" % id)
+            db.commit()
+            statue = True
+        except:
+            db.rollback()
+            statue = True
+        return
     
     def file_name(file_dir):
         for root, dirs, files in os.walk(file_dir):
@@ -106,7 +123,7 @@ def judge(id, code, lang, problem):
 
         if ret["result"] != 0:
             try:
-                cursor.execute("UPDATE judgestatus_judgestatus SET result = '%d' WHERE id = '%d'" % (ret["result"], id))
+                cursor.execute("UPDATE judgestatus_judgestatus SET result = '%s' WHERE id = '%s'" % (ret["result"], id))
                 db.commit()
                 statue = True
             except:
@@ -147,7 +164,7 @@ def judge(id, code, lang, problem):
 
             if result != 0:
                 try:
-                    cursor.execute("UPDATE judgestatus_judgestatus SET result = '%d' WHERE id = '%d'" % (result, id))
+                    cursor.execute("UPDATE judgestatus_judgestatus SET result = '%s' WHERE id = '%s'" % (result, id))
                     db.commit()
                     statue = True
                 except:
@@ -155,7 +172,7 @@ def judge(id, code, lang, problem):
                     statue = True
                     return
     try:
-        cursor.execute("UPDATE judgestatus_judgestatus SET result = 0 WHERE id = '%d'" % id)
+        cursor.execute("UPDATE judgestatus_judgestatus SET result = 0 WHERE id = '%s'" % id)
         db.commit()
         statue = True
     except:
@@ -165,31 +182,40 @@ def judge(id, code, lang, problem):
              
 
 while True:
-    # 建立客户端连接
-    clientsocket,addr = serversocket.accept()   
-    print(addr)
-    data = clientsocket.recv(1024)  
-    print(data)
-    if data:
-        if data == "getstatue":
-            if statue == True:
-                clientsocket.send("ok")
-            else:
-                clientsocket.send("notok")
+    sleep(1)
+    try:
+        data = clientsocket.recv(1024)  
+        data = data.decode("utf-8")
+        print(data)
+        if data:
+            if data == "getstatue":
+                if statue == True:
+                    clientsocket.send("ok".encode("utf-8"))
+                else:
+                    clientsocket.send("notok".encode("utf-8"))
+                # print(statue)
 
-        elif data.find("judge") != -1:
-            statue = False
-            tp = data.split("|")
-            cursor.execute("SELECT * from judgestatus_judgestatus where id = '%s'" % tp[1])
-            data = cursor.fetchone()
-            try:
-                cursor.execute("UPDATE judgestatus_judgestatus SET result = '-2' WHERE id = '%d'" % tp[1])
-                db.commit()
-                t = threading.Thread(target=judge,args=(data[0], data[12], data[8], data[3]))
-                t.setDaemon(True)
-                t.start()
-            except:
-                db.rollback()
-                statue = True
+            elif data.find("judge") != -1:
+                statue = False
+                tp = data.split("|")
+                cursor.execute("SELECT * from judgestatus_judgestatus where id = '%s'" % tp[1])
+                data = cursor.fetchone()
+                print(data,tp[1])
+                try:
+                    cursor.execute("UPDATE judgestatus_judgestatus SET result = '-2' WHERE id = '%s'" % tp[1])
+                    db.commit()
+                    t = threading.Thread(target=judge,args=(data[0], data[12], data[8], data[3]))
+                    t.setDaemon(True)
+                    t.start()
+                except:
+                   db.rollback()
+                   statue = True
+        else:
+            reconnect()
+    except socket.error:
+        reconnect()
+    except:
+        print("error!")
+        break
 
-    clientsocket.close()
+

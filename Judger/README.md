@@ -24,6 +24,7 @@
 # 参数解释
 
 ## result 
+    WAITING = -6
     PRESENTATION_ERROR = -5
     COMPILE_ERROR = -4
     WRONG_ANSWER = -3
