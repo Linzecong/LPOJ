@@ -16,6 +16,8 @@ class JudgeStatus(models.Model):
     judger = models.CharField(max_length=50)
     contest = models.IntegerField()
     code = models.TextField()
+    testcase = models.IntegerField()
+    message = models.TextField()
 
     objects = models.Manager()
 

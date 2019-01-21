@@ -7,6 +7,8 @@ pip install djangorestframework
 
 sudo apt-get install python-django
 
+pip install django-cors-headers
+
 sudo apt-get install libmysqlclient-dev
 
 pip install mysqlclient

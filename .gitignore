@@ -1,6 +1,13 @@
 __pycache__
 build
+migrations
+Judger\test
 *.pyc
 Judger/main.cpp
 Judger/main.c
 Judger/main
+Judger/judger.log
+Judger/error.out
+Judger/temp.out
+*.in
+*.out

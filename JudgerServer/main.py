@@ -20,7 +20,7 @@ def getSubmition():
     cursor = db.cursor()
     while True:
         sleep(1)
-        cursor.execute("SELECT * from judgestatus_judgestatus where result = '-1' order by id desc")
+        cursor.execute("SELECT * from judgestatus_judgestatus where result = '-1'")
         data = cursor.fetchall()
         
        # print(data)
@@ -33,6 +33,7 @@ def getSubmition():
                 db.commit()
             except:
                 db.rollback()
+            queue.sort(reverse=True)
             mutex.release()
     db.close()
 

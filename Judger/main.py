@@ -38,7 +38,7 @@ cursor = db.cursor()
 
 
 def judge(id, code, lang, problem):
-    global statue
+    global statue, cursor
 
     # print(id,code,lang,problem)
 
@@ -50,7 +50,7 @@ def judge(id, code, lang, problem):
         # print(result)
         if result:
             try:
-                cursor.execute("UPDATE judgestatus_judgestatus SET result = '-4' WHERE id = '%s'" % id)
+                cursor.execute("UPDATE judgestatus_judgestatus SET result = '-4',message='%s' WHERE id = '%s'" % (result,id))
                 db.commit()
                 statue = True
             except:
@@ -66,7 +66,7 @@ def judge(id, code, lang, problem):
         # print(result)
         if result:
             try:
-                cursor.execute("UPDATE judgestatus_judgestatus SET result = '-4' WHERE id = '%s'" % id)
+                cursor.execute("UPDATE judgestatus_judgestatus SET result = '-4',message='%s' WHERE id = '%s'" % (result,id))
                 db.commit()
                 statue = True
             except:
@@ -75,19 +75,25 @@ def judge(id, code, lang, problem):
             return
     else:
         try:
-            cursor.execute("UPDATE judgestatus_judgestatus SET result = '-4' WHERE id = '%s'" % id)
+            cursor.execute("UPDATE judgestatus_judgestatus SET result = '-4',message='%s' WHERE id = '%s'" % ("Unknow language",id))
             db.commit()
             statue = True
         except:
             db.rollback()
             statue = True
         return
-    
-    def file_name(file_dir):
-        for root, dirs, files in os.walk(file_dir):
-            return files  # 当前路径下所有非目录子文件
 
-    files = file_name("../DataServer/problemdata/")
+    cursor.execute("SELECT * from problem_problem where problem = '%s' " % problem)
+    data = cursor.fetchone()
+
+    timelimit = int(data[12])
+    memorylimit = int(data[13])
+    
+
+
+    files = os.listdir("../DataServer/problemdata/%s/" % problem)
+
+    print(files)
 
     tempset = set() # 用于判读数据是否都有in,out
     newfiles = set()
@@ -100,15 +106,16 @@ def judge(id, code, lang, problem):
             tempset.add(s)
 
     for filename in newfiles:
-        ret = _judger.run(max_cpu_time=1000,
-                    max_real_time=2000,
-                    max_memory=128 * 1024 * 1024,
+        print("judging!!!!!!!!",filename)
+        ret = _judger.run(max_cpu_time=timelimit,
+                    max_real_time=_judger.UNLIMITED,
+                    max_memory=memorylimit * 1024 * 1024,
                     max_process_number=200,
-                    max_output_size=10000,
+                    max_output_size=32 * 1024 * 1024,
                     max_stack=32 * 1024 * 1024,
                     # five args above can be _judger.UNLIMITED
                     exe_path="main",
-                    input_path="../DataServer/problemdata/%s.in" % filename,
+                    input_path="../DataServer/problemdata/%s/%s.in" % (problem,filename),
                     output_path="temp.out",
                     error_path="error.out",
                     args=[],
@@ -120,19 +127,38 @@ def judge(id, code, lang, problem):
                     uid=0,
                     gid=0
                     )
+        print(ret)
 
         if ret["result"] != 0:
-            try:
-                cursor.execute("UPDATE judgestatus_judgestatus SET result = '%s' WHERE id = '%s'" % (ret["result"], id))
-                db.commit()
-                statue = True
-            except:
-                db.rollback()
-                statue = True
-                return
+
+            if ret["result"] == 4 and ret["exit_code"] == 127 and ret["signal"] == 0:
+                try:
+                    cursor.execute("UPDATE judgestatus_judgestatus SET result = '%s',testcase='%s'  WHERE id = '%s'" % ('3',filename, id))
+                    db.commit()
+                    statue = True
+                except:
+                    db.rollback()
+                    statue = True
+            elif ret["result"] == 4 and ret["exit_code"] == 0 and ret["signal"] == 31:
+                try:
+                    cursor.execute("UPDATE judgestatus_judgestatus SET result = '%s',testcase='%s'  WHERE id = '%s'" % ('3',filename, id))
+                    db.commit()
+                    statue = True
+                except:
+                    db.rollback()
+                    statue = True
+            else:
+                try:
+                    cursor.execute("UPDATE judgestatus_judgestatus SET result = '%s',testcase='%s'  WHERE id = '%s'" % (ret["result"],filename, id))
+                    db.commit()
+                    statue = True
+                except:
+                    db.rollback()
+                    statue = True
+            return
         else:
             file1 = open("temp.out", "r")
-            file2 = open("../DataServer/problemdata/%s.out" % filename, "r")
+            file2 = open("../DataServer/problemdata/%s/%s.out" % (problem,filename), "r")
 
             result = 0 # 0 ac -3 wrong -5 presentation
 
@@ -144,11 +170,15 @@ def judge(id, code, lang, problem):
                 std = file1.readline()
                 ans = file2.readline()
 
+                
+
                 if std == "" and ans == "":
                     break
 
                 std = std.rstrip()
                 ans = ans.rstrip()
+
+                print(std,ans)
 
                 stdout = stdout + std
                 answer = answer + ans
@@ -156,7 +186,7 @@ def judge(id, code, lang, problem):
                 if std != ans:
                     result = -3
             
-            if stdout == answer:
+            if stdout == answer and result == -3:
                 result = -5
             
             file1.close()
@@ -164,13 +194,13 @@ def judge(id, code, lang, problem):
 
             if result != 0:
                 try:
-                    cursor.execute("UPDATE judgestatus_judgestatus SET result = '%s' WHERE id = '%s'" % (result, id))
+                    cursor.execute("UPDATE judgestatus_judgestatus SET result = '%s',testcase='%s' WHERE id = '%s'" % (result,filename, id))
                     db.commit()
                     statue = True
                 except:
                     db.rollback()
                     statue = True
-                    return
+                return
     try:
         cursor.execute("UPDATE judgestatus_judgestatus SET result = 0 WHERE id = '%s'" % id)
         db.commit()
@@ -202,7 +232,7 @@ while True:
                 data = cursor.fetchone()
                 print(data,tp[1])
                 try:
-                    cursor.execute("UPDATE judgestatus_judgestatus SET result = '-2' WHERE id = '%s'" % tp[1])
+                    cursor.execute("UPDATE judgestatus_judgestatus SET result = '-2',judger='%s' WHERE id = '%s'" % (host,tp[1]))
                     db.commit()
                     t = threading.Thread(target=judge,args=(data[0], data[12], data[8], data[3]))
                     t.setDaemon(True)
