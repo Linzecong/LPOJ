@@ -17,10 +17,38 @@ class Problem(models.Model):
     source = models.TextField()
     time = models.IntegerField()
     memory = models.IntegerField()
-    submission = models.IntegerField()
-    accepted = models.IntegerField()
 
     objects = models.Manager()
 
     def __str__(self):
         return self.title
+
+class ProblemData(models.Model):
+    problem = models.CharField(max_length=50)
+    title = models.CharField(max_length=50)
+    level = models.IntegerField(default=5)
+    submission = models.IntegerField(default=0)
+    ac = models.IntegerField(default=0)
+    mle = models.IntegerField(default=0)
+    tle = models.IntegerField(default=0)
+    rte = models.IntegerField(default=0)
+    pe = models.IntegerField(default=0)
+    ce = models.IntegerField(default=0)
+    wa = models.IntegerField(default=0)
+    se = models.IntegerField(default=0)
+
+    tag = models.TextField(null=True)
+
+    objects = models.Manager()
+
+    def __str__(self):
+        return self.title
+
+class ProblemTag(models.Model):
+    tagname = models.CharField(max_length=50,unique=True)
+    count = models.IntegerField()
+
+    objects = models.Manager()
+
+    def __str__(self):
+        return self.tagname

@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import main from '@/components/main'
 import problem from '@/components/problem'
 import statue from '@/components/statue'
+import problemdetail from '@/components/problemdetail'
 
 Vue.use(Router)
 
@@ -17,7 +18,12 @@ export default new Router({
     {
       path: '/problem',
       name: 'problem',
-      component: problem
+      component: problem,
+    },
+    {
+      path: '/problem/:problemID',
+      name: 'problemdetail',
+      component: problemdetail,
     },
     {
       path: '/main',
