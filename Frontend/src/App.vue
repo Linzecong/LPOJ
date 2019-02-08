@@ -9,32 +9,32 @@
         id="nav"
       >
         <el-menu-item index="/" id="title">GDUFS Online Judge</el-menu-item>
-        <el-menu-item index="main">
+        <el-menu-item index="/main">
           <i class="el-icon-star-off"></i>Home
         </el-menu-item>
-        <el-menu-item index="problem">
+        <el-menu-item index="/problem">
           <i class="el-icon-menu"></i>Problem
         </el-menu-item>
-        <el-menu-item index="statue">
+        <el-menu-item index="/statue">
           <i class="el-icon-tickets"></i>Status
         </el-menu-item>
-        <el-menu-item index="contest">
+        <el-menu-item index="/contest">
           <i class="el-icon-bell"></i>Contest
         </el-menu-item>
-        <el-menu-item index="rank">
+        <el-menu-item index="/rank">
           <i class="el-icon-star-on"></i>Rank
         </el-menu-item>
-        <el-menu-item index="blog">
+        <el-menu-item index="/blog">
           <i class="el-icon-edit-outline"></i>Blog
         </el-menu-item>
-        <el-menu-item index="about">
+        <el-menu-item index="/about">
           <i class="el-icon-document"></i>About
         </el-menu-item>
       </el-menu>
     </el-col>
-<transition name="el-zoom-in-center" mode="out-in">
-    <router-view id="route"></router-view>
-</transition>
+    <transition name="el-zoom-in-center" mode="out-in">
+      <router-view id="route"></router-view>
+    </transition>
   </div>
 </template>
 

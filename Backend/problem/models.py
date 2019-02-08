@@ -17,6 +17,7 @@ class Problem(models.Model):
     source = models.TextField()
     time = models.IntegerField()
     memory = models.IntegerField()
+    hint = models.TextField(null=True)
 
     objects = models.Manager()
 
