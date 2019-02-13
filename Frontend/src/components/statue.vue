@@ -1,6 +1,6 @@
 <template>
   <el-card shadow="always" id="card">
-    <el-table :data="tableData" style="width: 100%" :row-class-name="tableRowClassName">
+    <el-table  :default-sort = "{prop: 'id', order: 'descending'}" :data="tableData" style="width: 100%" :row-class-name="tableRowClassName">
       <el-table-column prop="id" label="ID" :width="40"></el-table-column>
       <el-table-column prop="user" label="User"></el-table-column>
       <el-table-column prop="problem" label="Problem"></el-table-column>

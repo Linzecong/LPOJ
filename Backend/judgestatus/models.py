@@ -18,6 +18,7 @@ class JudgeStatus(models.Model):
     code = models.TextField()
     testcase = models.IntegerField()
     message = models.TextField()
+    
 
     objects = models.Manager()
 

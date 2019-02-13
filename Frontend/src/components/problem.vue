@@ -26,7 +26,8 @@
             <template slot-scope="scope">
               <el-tag
                 id="protag"
-                v-for="name in scope.row.tag"
+                v-for="(name,index) in scope.row.tag"
+                :key="index"
                 size="medium"
                 disable-transitions
                 hit
@@ -43,7 +44,8 @@
             <h2>Tags</h2>
             <el-tag
               id="tag"
-              v-for="name in tagnames"
+              v-for="(name,index) in tagnames"
+              :key="index"
               size="medium"
               type="info"
               disable-transitions

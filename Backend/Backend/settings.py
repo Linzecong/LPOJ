@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'judgestatus',
     'corsheaders',
-    'problem'
+    'problem',
+    'user',
 ]
 
 MIDDLEWARE = [

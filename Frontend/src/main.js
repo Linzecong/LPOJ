@@ -7,11 +7,12 @@ import App from './App'
 import router from './router'
 import VueResource from 'vue-resource';
 import Vuex from 'vuex'
-
+import md5 from 'js-md5';
 Vue.use(Vuex)
 Vue.config.productionTip = false
 Vue.use(ElementUI);
 Vue.use(VueResource)
+Vue.prototype.$md5 = md5;
 
 const store = new Vuex.Store({
   state: {

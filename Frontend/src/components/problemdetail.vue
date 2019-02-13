@@ -20,13 +20,13 @@
 
           <el-row :gutter="18" style="left:10px">
             <el-col :span="11" id="text">
-              <el-row :gutter="18" v-for="(item,index) in sinput.length">
+              <el-row :gutter="18" v-for="(item,index) in sinput.length" :key="index">
                 <el-row :gutter="18" id="des" style="margin-bottom: 0px;">Sample Input {{item}}</el-row>
                 <el-row :gutter="18" id="data" style="margin-bottom: 0px;">{{sinput[index]}}</el-row>
               </el-row>
             </el-col>
             <el-col :span="11" id="text">
-              <el-row :gutter="18" v-for="(item,index) in sinput.length">
+              <el-row :gutter="18" v-for="(item,index) in sinput.length" :key="index">
                 <el-row :gutter="18" id="des" style="margin-bottom: 0px;">Sample Output {{item}}</el-row>
                 <el-row :gutter="18" id="data" style="margin-bottom: 0px;">{{soutput[index]}}</el-row>
               </el-row>
@@ -46,10 +46,10 @@
       <el-row>
         <el-card shadow="always">
           <el-row :gutter="15">
-            <el-col :span="1">
+            <el-col :span="3">
               <div id="des" style="padding: 5px 10px;">Language:</div>
             </el-col>
-            <el-col :span="2" style="margin-left:60px;">
+            <el-col :span="3">
               <el-select v-model="language" placeholder="请选择">
                 <el-option key="C++" label="C++" value="C++"></el-option>
                 <el-option key="C" label="C" value="C"></el-option>
@@ -121,7 +121,8 @@
               </template>
               <el-tag
                 id="tag"
-                v-for="name in tagnames"
+                v-for="(name,index) in tagnames"
+                :key="index"
                 size="medium"
                 type="info"
                 disable-transitions
@@ -336,9 +337,21 @@ export default {
       if (type == "ExtremelyHard") return "danger";
     },
     submit:function(){
+      if(!sessionStorage.username){
+        this.$message.error("请先登录！");
+        return;
+      }
+      if(!this.code){
+        this.$message.error("请输入代码！");
+        return;
+      }
+      if(!this.language){
+        this.$message.error("请选择语言！");
+        return;
+      }
 
       this.$http.post('http://localhost:8000/judgestatus/',{
-        'user':'admin',
+        'user':sessionStorage.username,
         'oj':'LPOJ',
         "problem": this.ID,
         "result": -1,
@@ -351,8 +364,11 @@ export default {
         "code": this.code,
         "testcase": 0,
         "message": "0"
-      }).then((response) =>{
-          console.log(response)
+      }).then(response =>{
+          this.$message({
+            message: "提交成功！",
+            type: "success"
+          });
       })
   }
   }

@@ -19,6 +19,7 @@ class Problem(models.Model):
     memory = models.IntegerField()
     hint = models.TextField(null=True)
 
+
     objects = models.Manager()
 
     def __str__(self):
