@@ -55,13 +55,23 @@
                 <el-option key="C" label="C" value="C"></el-option>
               </el-select>
             </el-col>
-            <el-col :span="18">
+            <el-col :span="3">
               <el-button
-                type="primary"
+              type="primary"
                 @click="submit"
                 style="font-weight:bold;margin-left:10px;"
               >Submit</el-button>
             </el-col>
+
+            <el-col :span="15">
+              <el-button
+                round
+                :type="judgetype"
+                :loading="loadingshow"
+                style="font-weight:bold;margin-left:10px;"
+              >{{submitbuttontext}}</el-button>
+            </el-col>
+
           </el-row>
           <el-row :gutter="15">
             <el-input
@@ -69,6 +79,7 @@
               :autosize="{ minRows: 10, maxRows: 70}"
               placeholder="Please type your code here."
               v-model="code"
+              @focus="codechange"
             ></el-input>
           </el-row>
         </el-card>
@@ -241,7 +252,7 @@ export default {
       activeNames: ["4", "5"],
       level: "Easy",
       code: "",
-      language:"",
+      language: "",
 
       ac: 100,
       mle: 100,
@@ -250,7 +261,11 @@ export default {
       pe: 100,
       ce: 100,
       wa: 100,
-      se: 100
+      se: 100,
+      submitbuttontext: "提交后请勿重复刷新",
+      judgetype: "primary",
+      loadingshow: false,
+      submitid: -1
     };
   },
   created() {
@@ -336,42 +351,144 @@ export default {
       if (type == "VeryHard") return "warning";
       if (type == "ExtremelyHard") return "danger";
     },
-    submit:function(){
-      if(!sessionStorage.username){
+    submit: function() {
+      
+      if (!sessionStorage.username) {
         this.$message.error("请先登录！");
         return;
       }
-      if(!this.code){
+      if (!this.code) {
         this.$message.error("请输入代码！");
         return;
       }
-      if(!this.language){
+      if (!this.language) {
         this.$message.error("请选择语言！");
         return;
       }
-
-      this.$http.post('http://localhost:8000/judgestatus/',{
-        'user':sessionStorage.username,
-        'oj':'LPOJ',
-        "problem": this.ID,
-        "result": -1,
-        "time": 0,
-        "memory": 0,
-        "length": this.code.length,
-        "language": this.language,
-        "judger": "waiting for judger",
-        "contest": 0,
-        "code": this.code,
-        "testcase": 0,
-        "message": "0"
-      }).then(response =>{
+      this.$confirm('确定提交吗？', '提交', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '提交中...'
+          });
+          this.$http
+        .post("http://localhost:8000/judgestatus/", {
+          user: sessionStorage.name,
+          oj: "LPOJ",
+          problem: this.ID,
+          result: -1,
+          time: 0,
+          memory: 0,
+          length: this.code.length,
+          language: this.language,
+          judger: "waiting for judger",
+          contest: 0,
+          code: this.code,
+          testcase: 0,
+          message: "0"
+        })
+        .then(response => {
           this.$message({
             message: "提交成功！",
             type: "success"
           });
-      })
-  }
-  }
+          this.submitid = response.data.id;
+          this.submitbuttontext = "Pending";
+          this.judgetype = "info";
+          this.loadingshow = true;
+          //创建一个全局定时器，定时刷新状态
+          this.$store.state.submittimer = setInterval(this.timer, 1000);
+        });
+   
+        }).catch(() => {
+          return;          
+        });
+
+       },
+    codechange: function(t) {
+      
+    },
+    timer: function() {
+      if(this.submitbuttontext=="提交后请勿重复刷新")
+        return;
+      this.$http
+        .get("http://localhost:8000/judgestatus/" + this.submitid)
+        .then(response => {
+          this.loadingshow = false;
+          if (response.data["result"] == "-1") {
+            response.data["result"] = "Pending";
+            this.loadingshow = true;
+            this.judgetype = "info";
+          }
+
+          if (response.data["result"] == "-2") {
+            response.data["result"] = "Judging";
+            this.loadingshow = true;
+            this.judgetype = "";
+          }
+
+          if (response.data["result"] == "-3") {
+            response.data["result"] = "Wrong Answer";
+            this.judgetype = "danger";
+          }
+
+          if (response.data["result"] == "-4") {
+            response.data["result"] = "Compile Error";
+            this.judgetype = "warning";
+          }
+
+          if (response.data["result"] == "-5") {
+            response.data["result"] = "Presentation Error";
+            this.judgetype = "warning";
+          }
+
+          if (response.data["result"] == "-6") {
+            response.data["result"] = "Waiting";
+            this.loadingshow = true;
+            this.judgetype = "info";
+          }
+
+          if (response.data["result"] == "0") {
+            response.data["result"] = "Accepted";
+            this.judgetype = "success";
+          }
+
+          if (response.data["result"] == "1") {
+            response.data["result"] = "Time Limit Exceeded";
+            this.judgetype = "warning";
+          }
+
+          if (response.data["result"] == "2") {
+            response.data["result"] = "Time Limit Exceeded";
+            this.judgetype = "warning";
+          }
+
+          if (response.data["result"] == "3") {
+            response.data["result"] = "Memory Limit Exceeded";
+            this.judgetype = "warning";
+          }
+
+          if (response.data["result"] == "4") {
+            response.data["result"] = "Runtime Error";
+            this.judgetype = "warning";
+          }
+
+          if (response.data["result"] == "5") {
+            response.data["result"] = "System Error";
+            this.judgetype = "danger";
+          }
+
+          this.submitbuttontext = response.data["result"];
+        });
+    }
+  },
+  destroyed() {
+    clearInterval(this.$store.state.submittimer);
+  },
+
 };
 </script>
 

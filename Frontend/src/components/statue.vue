@@ -57,7 +57,7 @@ export default {
   name: "statue",
   methods: {
     tableRowClassName({ row, rowIndex }) {
-      if (row.result == "Pendding") return "info-row";
+      if (row.result == "Pending") return "info-row";
       if (row.result == "Judging") return "judging-row";
       if (row.result == "Wrong Answer") return "danger-row";
       if (row.result == "Compile Error") return "warning-row";
@@ -72,7 +72,7 @@ export default {
       return "";
     },
     statuetype: function(type) {
-      if (type == "Pendding") return "info";
+      if (type == "Pending") return "info";
       if (type == "Judging") return "";
       if (type == "Wrong Answer") return "danger";
       if (type == "Compile Error") return "warning";
@@ -88,7 +88,7 @@ export default {
       return "danger";
     },
     statuejudge: function(type) {
-      if (type == "Pendding") return true;
+      if (type == "Pending") return true;
       if (type == "Judging") return true;
       if (type == "Wrong Answer") return false;
       if (type == "Compile Error") return false;
@@ -114,12 +114,10 @@ export default {
             response.data[i]["submittime"].split("T")[1].split(".")[0];
 
           if (response.data[i]["result"] == "-1") {
-            response.data[i]["result"] = "Pendding";
-            this.penddinglist.push(response.data[i]["id"]);
+            response.data[i]["result"] = "Pending";
           }
 
           if (response.data[i]["result"] == "-2") {
-            this.penddinglist.push(response.data[i]["id"]);
             response.data[i]["result"] = "Judging";
           }
 
@@ -133,7 +131,6 @@ export default {
             response.data[i]["result"] = "Presentation Error";
 
           if (response.data[i]["result"] == "-6") {
-            this.penddinglist.push(response.data[i]["id"]);
             response.data[i]["result"] = "Waiting";
           }
 
@@ -162,7 +159,6 @@ export default {
   data() {
     return {
       tableData: [],
-      penddinglist: []
     };
   },
   destroyed() {

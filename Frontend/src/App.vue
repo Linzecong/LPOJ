@@ -38,7 +38,7 @@
       <el-button round id="button" @click="dialogLoginVisible = true" v-show="!loginshow">Login</el-button>
 
       <el-button type="primary" id="button" plain v-show="loginshow" @click="logoutClick">Logout</el-button>
-      <el-button plain id="button" v-show="loginshow" @click="userClick">Welcome {{username}}</el-button>
+      <el-button plain id="button" v-show="loginshow" @click="userClick">Welcome {{name}}</el-button>
     </el-menu>
 
     <el-dialog title="注册" :visible.sync="dialogRegisterVisible">
@@ -251,10 +251,12 @@ export default {
             type: "success"
           });
           sessionStorage.setItem("username", this.form.username);
+          sessionStorage.setItem("name", response.data.name);
           this.dialogRegisterVisible = false;
           this.dialogLoginVisible = false;
           this.loginshow = 1;
           this.username = this.form.username;
+          this.name=sessionStorage.name
         },
         response => {
           if (response.data == "passworderror") {
