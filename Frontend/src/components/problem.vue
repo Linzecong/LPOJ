@@ -250,7 +250,7 @@ export default {
     };
   },
   created() {
-    this.$http.get("http://localhost:8000/problemdata/").then(response => {
+    this.$http.get("http://"+this.$ip+":"+this.$port+"/problemdata/").then(response => {
       for (var i = 0; i < response.data.length; i++) {
         if (response.data[i]["level"] == "1")
           response.data[i]["level"] = "Easy";
@@ -272,7 +272,7 @@ export default {
       this.tableData = response.data;
     });
 
-    this.$http.get("http://localhost:8000/problemtag/").then(response => {
+    this.$http.get("http://"+this.$ip+":"+this.$port+"/problemtag/").then(response => {
       for (var i = 0; i < response.data.length; i++)
         this.tagnames.push(response.data[i]["tagname"]);
     });

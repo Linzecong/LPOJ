@@ -225,7 +225,7 @@ export default {
       
       this.form.password=this.$md5(this.form.password)
 
-      this.$http.post("http://localhost:8000/register/", this.form).then(
+      this.$http.post("http://"+this.$ip+":"+this.$port+"/register/", this.form).then(
         response => {
           this.$message({
             message: "注册成功！",
@@ -244,7 +244,7 @@ export default {
     },
     loginClick() {
       this.form.password=this.$md5(this.form.password)
-      this.$http.post("http://localhost:8000/login/", this.form).then(
+      this.$http.post("http://"+this.$ip+":"+this.$port+"/login/", this.form).then(
         response => {
           this.$message({
             message: "登录成功！",

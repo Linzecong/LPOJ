@@ -14,6 +14,9 @@ Vue.use(ElementUI);
 Vue.use(VueResource)
 Vue.prototype.$md5 = md5;
 
+Vue.prototype.$ip = "localhost";
+Vue.prototype.$port = "8000";
+
 const store = new Vuex.Store({
   state: {
   },

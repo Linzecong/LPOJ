@@ -271,7 +271,7 @@ export default {
   created() {
     this.ID = this.$route.params.problemID;
     this.$http
-      .get("http://localhost:8000/problemdata/" + this.ID)
+      .get("http://"+this.$ip+":"+this.$port+"/problemdata/" + this.ID)
       .then(response => {
         if (response.data["level"] == "1") response.data["level"] = "Easy";
         if (response.data["level"] == "2") response.data["level"] = "Medium";
@@ -324,7 +324,7 @@ export default {
       });
 
     this.$http
-      .get("http://localhost:8000/problem/" + this.ID)
+      .get("http://"+this.$ip+":"+this.$port+"/problem/" + this.ID)
       .then(response => {
         this.des = response.data.des;
         this.input = response.data.input;
@@ -375,7 +375,7 @@ export default {
             message: '提交中...'
           });
           this.$http
-        .post("http://localhost:8000/judgestatus/", {
+        .post("http://"+this.$ip+":"+this.$port+"/judgestatus/", {
           user: sessionStorage.name,
           oj: "LPOJ",
           problem: this.ID,
@@ -415,7 +415,7 @@ export default {
       if(this.submitbuttontext=="提交后请勿重复刷新")
         return;
       this.$http
-        .get("http://localhost:8000/judgestatus/" + this.submitid)
+        .get("http://"+this.$ip+":"+this.$port+"/judgestatus/" + this.submitid)
         .then(response => {
           this.loadingshow = false;
           if (response.data["result"] == "-1") {

@@ -103,7 +103,7 @@ export default {
       return false;
     },
     timer: function() {
-      this.$http.get("http://localhost:8000/judgestatus/").then(response => {
+      this.$http.get("http://"+this.$ip+":"+this.$port+"/judgestatus/").then(response => {
         for (var i = 0; i < response.data.length; i++) {
           response.data[i]["time"] += "MS";
           response.data[i]["memory"] += "MB";
