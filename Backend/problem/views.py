@@ -5,6 +5,8 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from .models import Problem,ProblemData,ProblemTag
 from .serializers import ProblemSerializer,ProblemDataSerializer,ProblemTagSerializer
+from rest_framework.pagination import LimitOffsetPagination
+
 
 class ProblemView(viewsets.ModelViewSet):
     queryset = Problem.objects.all()
@@ -13,6 +15,7 @@ class ProblemView(viewsets.ModelViewSet):
 class ProblemDataView(viewsets.ModelViewSet):
     queryset = ProblemData.objects.all()
     serializer_class = ProblemDataSerializer
+    pagination_class = LimitOffsetPagination
 
 class ProblemTagView(viewsets.ModelViewSet):
     queryset = ProblemTag.objects.all()

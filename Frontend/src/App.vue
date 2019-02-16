@@ -180,6 +180,7 @@ export default {
       dialogRegisterVisible: false,
       loginshow: sessionStorage.username,
       username:sessionStorage.username,
+      name:sessionStorage.name,
       form: {
         username: "",
         password: "",

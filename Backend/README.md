@@ -5,6 +5,8 @@ pip install django
 
 pip install djangorestframework
 
+pip install django-filter
+
 sudo apt-get install python-django
 
 pip install django-cors-headers
@@ -19,4 +21,4 @@ python manage.py migrate
 
 **可选** python manage.py createsuperuser
 
-python manage.py runserver
+python manage.py runserver 0.0.0.0:8000

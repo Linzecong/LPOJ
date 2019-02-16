@@ -7,29 +7,34 @@ from time import sleep
 import threading
 
 
-mutex = threading.Lock() # queue mutex
+mutex = threading.Lock()  # queue mutex
 
 queue = list()
+myjsonfile = open("./setting.json", 'r')
+judgerjson = json.loads(myjsonfile.read())
+
+db = MySQLdb.connect(judgerjson["db_ip"], judgerjson["db_user"], judgerjson["db_pass"],
+                     judgerjson["db_database"], int(judgerjson["db_port"]), charset='utf8')
+
 
 def getSubmition():
     global queue, mutex
-    myjsonfile = open("./setting.json", 'r')
-    judgerjson = json.loads(myjsonfile.read())
 
-    db = MySQLdb.connect(judgerjson["db_ip"], judgerjson["db_user"], judgerjson["db_pass"], judgerjson["db_database"],int(judgerjson["db_port"]), charset='utf8' )
     cursor = db.cursor()
     while True:
         sleep(1)
-        cursor.execute("SELECT * from judgestatus_judgestatus where result = '-1'")
+        cursor.execute(
+            "SELECT * from judgestatus_judgestatus where result = '-1'")
         data = cursor.fetchall()
-        
+
        # print(data)
-        
+
         if mutex.acquire():
             try:
                 for d in data:
                     queue.append(d[0])
-                    cursor.execute("UPDATE judgestatus_judgestatus SET result = '-6' WHERE id = '%d'" % d[0])
+                    cursor.execute(
+                        "UPDATE judgestatus_judgestatus SET result = '-6' WHERE id = '%d'" % d[0])
                 db.commit()
             except:
                 db.rollback()
@@ -52,8 +57,8 @@ def deal_client(newSocket: socket, addr):
                     newSocket.send(("judge|%d" % id).encode("utf-8"))
                 else:
                     newSocket.send("getstatue".encode("utf-8"))
-                    print("send!!",addr)
-                    data = newSocket.recv(1024)   
+                    print("send!!", addr)
+                    data = newSocket.recv(1024)
                     recv_data = data.decode('utf-8')
                     print(recv_data)
                     if recv_data == "ok":
@@ -64,18 +69,18 @@ def deal_client(newSocket: socket, addr):
 
             except socket.error:
                 newSocket.close()
-                mutex.release() 
+                mutex.release()
                 return
             # except:
             #     print("error!")
             #     mutex.release()
             #     return
-            mutex.release() 
+            mutex.release()
 
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
-server.bind(("", 9906))
+server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+server.bind(("", judgerjson["server_port"]))
 server.listen(20)
 print("server is running!")
 
@@ -89,5 +94,3 @@ while True:
     client = threading.Thread(target=deal_client, args=(newSocket, addr))
     client.setDaemon(True)
     client.start()
-
-

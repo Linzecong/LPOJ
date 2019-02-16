@@ -395,6 +395,7 @@ export default {
             message: "提交成功！",
             type: "success"
           });
+          clearInterval(this.$store.state.submittimer);
           this.submitid = response.data.id;
           this.submitbuttontext = "Pending";
           this.judgetype = "info";

@@ -35,6 +35,15 @@
             </template>
           </el-table-column>
         </el-table>
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="currentpage"
+          :page-sizes="[10, 20, 30, 50]"
+          :page-size="pagesize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="totalproblem"
+        ></el-pagination>
       </el-card>
     </el-col>
     <el-col :span="5">
@@ -198,6 +207,91 @@
 import problemdetail from "@/components/problemdetail";
 export default {
   methods: {
+    handleSizeChange(val) {
+      this.pagesize = val;
+
+      this.$http
+        .get(
+          "http://" +
+            this.$ip +
+            ":" +
+            this.$port +
+            "/problemdata/?limit=" +
+            this.pagesize +
+            "&offset=" +
+            (this.currentpage - 1) * this.pagesize
+        )
+        .then(response => {
+          for (var i = 0; i < response.data.results.length; i++) {
+            if (response.data.results[i]["level"] == "1")
+              response.data.results[i]["level"] = "Easy";
+            if (response.data.results[i]["level"] == "2")
+              response.data.results[i]["level"] = "Medium";
+            if (response.data.results[i]["level"] == "3")
+              response.data.results[i]["level"] = "Hard";
+            if (response.data.results[i]["level"] == "4")
+              response.data.results[i]["level"] = "VeryHard";
+            if (response.data.results[i]["level"] == "5")
+              response.data.results[i]["level"] = "ExtremelyHard";
+
+            response.data.results[i]["rate"] =
+              response.data.results[i]["ac"] +
+              "/" +
+              response.data.results[i]["submission"];
+
+            if (response.data.results[i]["tag"] == null)
+              response.data.results[i]["tag"] = ["无"];
+            else
+              response.data.results[i]["tag"] = response.data.results[i][
+                "tag"
+              ].split("|");
+          }
+          this.tableData = response.data.results;
+          this.totalproblem = response.data.count;
+        });
+    },
+    handleCurrentChange(val) {
+      this.currentpage = val;
+      this.$http
+        .get(
+          "http://" +
+            this.$ip +
+            ":" +
+            this.$port +
+            "/problemdata/?limit=" +
+            this.pagesize +
+            "&offset=" +
+            (this.currentpage - 1) * this.pagesize
+        )
+        .then(response => {
+          for (var i = 0; i < response.data.results.length; i++) {
+            if (response.data.results[i]["level"] == "1")
+              response.data.results[i]["level"] = "Easy";
+            if (response.data.results[i]["level"] == "2")
+              response.data.results[i]["level"] = "Medium";
+            if (response.data.results[i]["level"] == "3")
+              response.data.results[i]["level"] = "Hard";
+            if (response.data.results[i]["level"] == "4")
+              response.data.results[i]["level"] = "VeryHard";
+            if (response.data.results[i]["level"] == "5")
+              response.data.results[i]["level"] = "ExtremelyHard";
+
+            response.data.results[i]["rate"] =
+              response.data.results[i]["ac"] +
+              "/" +
+              response.data.results[i]["submission"];
+
+            if (response.data.results[i]["tag"] == null)
+              response.data.results[i]["tag"] = ["无"];
+            else
+              response.data.results[i]["tag"] = response.data.results[i][
+                "tag"
+              ].split("|");
+          }
+          this.tableData = response.data.results;
+          this.totalproblem = response.data.count;
+        });
+    },
     tableRowClassName({ row, rowIndex }) {
       return "";
     },
@@ -231,11 +325,17 @@ export default {
       this.title = row.title;
     },
     problemclick: function(row, column, cell, event) {
-      this.$router.push({name: 'problemdetail', params: {problemID: row.id}})
+      this.$router.push({
+        name: "problemdetail",
+        params: { problemID: row.id }
+      });
     }
   },
   data() {
     return {
+      currentpage: 1,
+      pagesize: 10,
+      totalproblem: 10,
       tableData: [],
       tagnames: [],
       ac: 100,
@@ -250,32 +350,49 @@ export default {
     };
   },
   created() {
-    this.$http.get("http://"+this.$ip+":"+this.$port+"/problemdata/").then(response => {
-      for (var i = 0; i < response.data.length; i++) {
-        if (response.data[i]["level"] == "1")
-          response.data[i]["level"] = "Easy";
-        if (response.data[i]["level"] == "2")
-          response.data[i]["level"] = "Medium";
-        if (response.data[i]["level"] == "3")
-          response.data[i]["level"] = "Hard";
-        if (response.data[i]["level"] == "4")
-          response.data[i]["level"] = "VeryHard";
-        if (response.data[i]["level"] == "5")
-          response.data[i]["level"] = "ExtremelyHard";
+    this.$http
+      .get(
+        "http://" +
+          this.$ip +
+          ":" +
+          this.$port +
+          "/problemdata/?limit=10&offset=0"
+      )
+      .then(response => {
+        for (var i = 0; i < response.data.results.length; i++) {
+          if (response.data.results[i]["level"] == "1")
+            response.data.results[i]["level"] = "Easy";
+          if (response.data.results[i]["level"] == "2")
+            response.data.results[i]["level"] = "Medium";
+          if (response.data.results[i]["level"] == "3")
+            response.data.results[i]["level"] = "Hard";
+          if (response.data.results[i]["level"] == "4")
+            response.data.results[i]["level"] = "VeryHard";
+          if (response.data.results[i]["level"] == "5")
+            response.data.results[i]["level"] = "ExtremelyHard";
 
-        response.data[i]["rate"] =
-          response.data[i]["ac"] + "/" + response.data[i]["submission"];
+          response.data.results[i]["rate"] =
+            response.data.results[i]["ac"] +
+            "/" +
+            response.data.results[i]["submission"];
 
-        if (response.data[i]["tag"] == null) response.data[i]["tag"] = ["无"];
-        else response.data[i]["tag"] = response.data[i]["tag"].split("|");
-      }
-      this.tableData = response.data;
-    });
+          if (response.data.results[i]["tag"] == null)
+            response.data.results[i]["tag"] = ["无"];
+          else
+            response.data.results[i]["tag"] = response.data.results[i][
+              "tag"
+            ].split("|");
+        }
+        this.tableData = response.data.results;
+        this.totalproblem = response.data.count;
+      });
 
-    this.$http.get("http://"+this.$ip+":"+this.$port+"/problemtag/").then(response => {
-      for (var i = 0; i < response.data.length; i++)
-        this.tagnames.push(response.data[i]["tagname"]);
-    });
+    this.$http
+      .get("http://" + this.$ip + ":" + this.$port + "/problemtag/")
+      .then(response => {
+        for (var i = 0; i < response.data.length; i++)
+          this.tagnames.push(response.data[i]["tagname"]);
+      });
   }
 };
 </script>

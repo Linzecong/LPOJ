@@ -4,7 +4,7 @@
       <el-table-column prop="id" label="ID" :width="40"></el-table-column>
       <el-table-column prop="user" label="User"></el-table-column>
       <el-table-column prop="problem" label="Problem"></el-table-column>
-      <el-table-column prop="result" label="Status" :width="190">
+      <el-table-column prop="result" label="Status" :width="250">
         <template slot-scope="scope">
           <el-tag size="medium" :type="statuetype(scope.row.result)" disable-transitions hit>
             {{ scope.row.result }}
@@ -19,6 +19,15 @@
       <el-table-column prop="submittime" label="Submit time" :width="180"></el-table-column>
       <el-table-column prop="judger" label="Judger"></el-table-column>
     </el-table>
+    <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="currentpage"
+          :page-sizes="[10, 20, 30, 50]"
+          :page-size="pagesize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="totalstatus"
+        ></el-pagination>
   </el-card>
 </template>
 
@@ -56,6 +65,132 @@
 export default {
   name: "statue",
   methods: {
+    handleSizeChange(val) {
+      this.pagesize=val;
+        this.$http.get("http://" +
+            this.$ip +
+            ":" +
+            this.$port +
+            "/judgestatus/?limit=" +
+            this.pagesize +
+            "&offset=" +
+            (this.currentpage - 1) * this.pagesize).then(response => {
+        for (var i = 0; i < response.data.results.length; i++) {
+          var testcase = response.data.results[i]["testcase"];
+          response.data.results[i]["time"] += "MS";
+          response.data.results[i]["memory"] += "MB";
+          response.data.results[i]["length"] += "B";
+          response.data.results[i]["submittime"] =
+            response.data.results[i]["submittime"].split("T")[0] +
+            " " +
+            response.data.results[i]["submittime"].split("T")[1].split(".")[0];
+
+          if (response.data.results[i]["result"] == "-1") {
+            response.data.results[i]["result"] = "Pending";
+          }
+
+          if (response.data.results[i]["result"] == "-2") {
+            response.data.results[i]["result"] = "Judging";
+          }
+
+          if (response.data.results[i]["result"] == "-3")
+            response.data.results[i]["result"] = "Wrong Answer on test " + testcase;
+
+          if (response.data.results[i]["result"] == "-4")
+            response.data.results[i]["result"] = "Compile Error";
+
+          if (response.data.results[i]["result"] == "-5")
+            response.data.results[i]["result"] = "Presentation Error on test " + testcase;
+
+          if (response.data.results[i]["result"] == "-6") {
+            response.data.results[i]["result"] = "Waiting";
+          }
+
+          if (response.data.results[i]["result"] == "0")
+            response.data.results[i]["result"] = "Accepted";
+
+          if (response.data.results[i]["result"] == "1")
+            response.data.results[i]["result"] = "Time Limit Exceeded on test " + testcase;
+
+          if (response.data.results[i]["result"] == "2")
+            response.data.results[i]["result"] = "Time Limit Exceeded on test " + testcase;
+
+          if (response.data.results[i]["result"] == "3")
+            response.data.results[i]["result"] = "Memory Limit Exceeded on test " + testcase;
+
+          if (response.data.results[i]["result"] == "4")
+            response.data.results[i]["result"] = "Runtime Error on test " + testcase;
+
+          if (response.data.results[i]["result"] == "5")
+            response.data.results[i]["result"] = "System Error";
+        }
+        this.tableData = response.data.results;
+        this.totalstatus = response.data.count;
+      });
+      },
+      handleCurrentChange(val) {
+        this.currentpage=val;
+        this.$http.get("http://" +
+            this.$ip +
+            ":" +
+            this.$port +
+            "/judgestatus/?limit=" +
+            this.pagesize +
+            "&offset=" +
+            (this.currentpage - 1) * this.pagesize).then(response => {
+        for (var i = 0; i < response.data.results.length; i++) {
+          var testcase = response.data.results[i]["testcase"];
+          response.data.results[i]["time"] += "MS";
+          response.data.results[i]["memory"] += "MB";
+          response.data.results[i]["length"] += "B";
+          response.data.results[i]["submittime"] =
+            response.data.results[i]["submittime"].split("T")[0] +
+            " " +
+            response.data.results[i]["submittime"].split("T")[1].split(".")[0];
+
+          if (response.data.results[i]["result"] == "-1") {
+            response.data.results[i]["result"] = "Pending";
+          }
+
+          if (response.data.results[i]["result"] == "-2") {
+            response.data.results[i]["result"] = "Judging";
+          }
+
+          if (response.data.results[i]["result"] == "-3")
+            response.data.results[i]["result"] = "Wrong Answer on test " + testcase;
+
+          if (response.data.results[i]["result"] == "-4")
+            response.data.results[i]["result"] = "Compile Error";
+
+          if (response.data.results[i]["result"] == "-5")
+            response.data.results[i]["result"] = "Presentation Error on test " + testcase;
+
+          if (response.data.results[i]["result"] == "-6") {
+            response.data.results[i]["result"] = "Waiting";
+          }
+
+          if (response.data.results[i]["result"] == "0")
+            response.data.results[i]["result"] = "Accepted";
+
+          if (response.data.results[i]["result"] == "1")
+            response.data.results[i]["result"] = "Time Limit Exceeded on test " + testcase;
+
+          if (response.data.results[i]["result"] == "2")
+            response.data.results[i]["result"] = "Time Limit Exceeded on test " + testcase;
+
+          if (response.data.results[i]["result"] == "3")
+            response.data.results[i]["result"] = "Memory Limit Exceeded on test " + testcase;
+
+          if (response.data.results[i]["result"] == "4")
+            response.data.results[i]["result"] = "Runtime Error on test " + testcase;
+
+          if (response.data.results[i]["result"] == "5")
+            response.data.results[i]["result"] = "System Error";
+        }
+        this.tableData = response.data.results;
+        this.totalstatus = response.data.count;
+      });
+      },
     tableRowClassName({ row, rowIndex }) {
       if (row.result == "Pending") return "info-row";
       if (row.result == "Judging") return "judging-row";
@@ -103,62 +238,74 @@ export default {
       return false;
     },
     timer: function() {
-      this.$http.get("http://"+this.$ip+":"+this.$port+"/judgestatus/").then(response => {
-        for (var i = 0; i < response.data.length; i++) {
-          response.data[i]["time"] += "MS";
-          response.data[i]["memory"] += "MB";
-          response.data[i]["length"] += "B";
-          response.data[i]["submittime"] =
-            response.data[i]["submittime"].split("T")[0] +
+      this.$http.get("http://" +
+            this.$ip +
+            ":" +
+            this.$port +
+            "/judgestatus/?limit=" +
+            this.pagesize +
+            "&offset=" +
+            (this.currentpage - 1) * this.pagesize).then(response => {
+        for (var i = 0; i < response.data.results.length; i++) {
+          var testcase = response.data.results[i]["testcase"];
+          response.data.results[i]["time"] += "MS";
+          response.data.results[i]["memory"] += "MB";
+          response.data.results[i]["length"] += "B";
+          response.data.results[i]["submittime"] =
+            response.data.results[i]["submittime"].split("T")[0] +
             " " +
-            response.data[i]["submittime"].split("T")[1].split(".")[0];
+            response.data.results[i]["submittime"].split("T")[1].split(".")[0];
 
-          if (response.data[i]["result"] == "-1") {
-            response.data[i]["result"] = "Pending";
+          if (response.data.results[i]["result"] == "-1") {
+            response.data.results[i]["result"] = "Pending";
           }
 
-          if (response.data[i]["result"] == "-2") {
-            response.data[i]["result"] = "Judging";
+          if (response.data.results[i]["result"] == "-2") {
+            response.data.results[i]["result"] = "Judging";
           }
 
-          if (response.data[i]["result"] == "-3")
-            response.data[i]["result"] = "Wrong Answer";
+          if (response.data.results[i]["result"] == "-3")
+            response.data.results[i]["result"] = "Wrong Answer on test " + testcase;
 
-          if (response.data[i]["result"] == "-4")
-            response.data[i]["result"] = "Compile Error";
+          if (response.data.results[i]["result"] == "-4")
+            response.data.results[i]["result"] = "Compile Error";
 
-          if (response.data[i]["result"] == "-5")
-            response.data[i]["result"] = "Presentation Error";
+          if (response.data.results[i]["result"] == "-5")
+            response.data.results[i]["result"] = "Presentation Error on test " + testcase;
 
-          if (response.data[i]["result"] == "-6") {
-            response.data[i]["result"] = "Waiting";
+          if (response.data.results[i]["result"] == "-6") {
+            response.data.results[i]["result"] = "Waiting";
           }
 
-          if (response.data[i]["result"] == "0")
-            response.data[i]["result"] = "Accepted";
+          if (response.data.results[i]["result"] == "0")
+            response.data.results[i]["result"] = "Accepted";
 
-          if (response.data[i]["result"] == "1")
-            response.data[i]["result"] = "Time Limit Exceeded";
+          if (response.data.results[i]["result"] == "1")
+            response.data.results[i]["result"] = "Time Limit Exceeded on test " + testcase;
 
-          if (response.data[i]["result"] == "2")
-            response.data[i]["result"] = "Time Limit Exceeded";
+          if (response.data.results[i]["result"] == "2")
+            response.data.results[i]["result"] = "Time Limit Exceeded on test " + testcase;
 
-          if (response.data[i]["result"] == "3")
-            response.data[i]["result"] = "Memory Limit Exceeded";
+          if (response.data.results[i]["result"] == "3")
+            response.data.results[i]["result"] = "Memory Limit Exceeded on test " + testcase;
 
-          if (response.data[i]["result"] == "4")
-            response.data[i]["result"] = "Runtime Error";
+          if (response.data.results[i]["result"] == "4")
+            response.data.results[i]["result"] = "Runtime Error on test " + testcase;
 
-          if (response.data[i]["result"] == "5")
-            response.data[i]["result"] = "System Error";
+          if (response.data.results[i]["result"] == "5")
+            response.data.results[i]["result"] = "System Error";
         }
-        this.tableData = response.data;
+        this.tableData = response.data.results;
+        this.totalstatus = response.data.count;
       });
     }
   },
   data() {
     return {
       tableData: [],
+      currentpage: 1,
+      pagesize: 10,
+      totalstatus: 10,
     };
   },
   destroyed() {

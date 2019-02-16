@@ -11,9 +11,7 @@ import os
 
 clientsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
 
-host = "localhost"
 
-port = 9906
 
 statue = True
 
@@ -32,6 +30,10 @@ reconnect()
 
 myjsonfile = open("./setting.json", 'r')
 judgerjson = json.loads(myjsonfile.read())
+
+judgername = judgerjson["judger_name"]
+host = judgerjson["server_ip"]
+port = judgerjson["server_port"]
 
 db = MySQLdb.connect(judgerjson["db_ip"], judgerjson["db_user"], judgerjson["db_pass"], judgerjson["db_database"], int(judgerjson["db_port"]), charset='utf8' )
 cursor = db.cursor()
@@ -232,7 +234,7 @@ while True:
                 data = cursor.fetchone()
                 print(data,tp[1])
                 try:
-                    cursor.execute("UPDATE judgestatus_judgestatus SET result = '-2',judger='%s' WHERE id = '%s'" % (host,tp[1]))
+                    cursor.execute("UPDATE judgestatus_judgestatus SET result = '-2',judger='%s' WHERE id = '%s'" % (judgername,tp[1]))
                     db.commit()
                     t = threading.Thread(target=judge,args=(data[0], data[12], data[8], data[3]))
                     t.setDaemon(True)
