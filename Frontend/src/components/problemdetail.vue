@@ -419,6 +419,7 @@ export default {
         .get("http://"+this.$ip+":"+this.$port+"/judgestatus/" + this.submitid)
         .then(response => {
           this.loadingshow = false;
+          var testcase = response.data["testcase"]
           if (response.data["result"] == "-1") {
             response.data["result"] = "Pending";
             this.loadingshow = true;
@@ -432,7 +433,7 @@ export default {
           }
 
           if (response.data["result"] == "-3") {
-            response.data["result"] = "Wrong Answer";
+            response.data["result"] = "Wrong Answer on test "+testcase;
             this.judgetype = "danger";
           }
 
@@ -442,7 +443,7 @@ export default {
           }
 
           if (response.data["result"] == "-5") {
-            response.data["result"] = "Presentation Error";
+            response.data["result"] = "Presentation Error on test "+testcase;
             this.judgetype = "warning";
           }
 
@@ -458,22 +459,22 @@ export default {
           }
 
           if (response.data["result"] == "1") {
-            response.data["result"] = "Time Limit Exceeded";
+            response.data["result"] = "Time Limit Exceeded on test "+testcase;
             this.judgetype = "warning";
           }
 
           if (response.data["result"] == "2") {
-            response.data["result"] = "Time Limit Exceeded";
+            response.data["result"] = "Time Limit Exceeded on test "+testcase;
             this.judgetype = "warning";
           }
 
           if (response.data["result"] == "3") {
-            response.data["result"] = "Memory Limit Exceeded";
+            response.data["result"] = "Memory Limit Exceeded on test "+testcase;
             this.judgetype = "warning";
           }
 
           if (response.data["result"] == "4") {
-            response.data["result"] = "Runtime Error";
+            response.data["result"] = "Runtime Error on test "+testcase;
             this.judgetype = "warning";
           }
 

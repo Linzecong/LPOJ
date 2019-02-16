@@ -15,6 +15,15 @@ clientsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 statue = True
 
+myjsonfile = open("./setting.json", 'r')
+judgerjson = json.loads(myjsonfile.read())
+
+judgername = judgerjson["judger_name"]
+host = judgerjson["server_ip"]
+port = judgerjson["server_port"]
+
+db = MySQLdb.connect(judgerjson["db_ip"], judgerjson["db_user"], judgerjson["db_pass"], judgerjson["db_database"], int(judgerjson["db_port"]), charset='utf8' )
+cursor = db.cursor()
 
 def reconnect():
     global statue, clientsocket
@@ -28,15 +37,6 @@ def reconnect():
 
 reconnect()
 
-myjsonfile = open("./setting.json", 'r')
-judgerjson = json.loads(myjsonfile.read())
-
-judgername = judgerjson["judger_name"]
-host = judgerjson["server_ip"]
-port = judgerjson["server_port"]
-
-db = MySQLdb.connect(judgerjson["db_ip"], judgerjson["db_user"], judgerjson["db_pass"], judgerjson["db_database"], int(judgerjson["db_port"]), charset='utf8' )
-cursor = db.cursor()
 
 
 def judge(id, code, lang, problem):
