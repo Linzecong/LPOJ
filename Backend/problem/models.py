@@ -41,6 +41,8 @@ class ProblemData(models.Model):
 
     tag = models.TextField(null=True)
 
+    score = models.IntegerField(default=1000)
+
     objects = models.Manager()
 
     def __str__(self):

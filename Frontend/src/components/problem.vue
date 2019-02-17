@@ -34,6 +34,7 @@
               >{{ name }}</el-tag>
             </template>
           </el-table-column>
+          <el-table-column prop="score" label="Score"></el-table-column>
         </el-table>
         <el-pagination
           @size-change="handleSizeChange"

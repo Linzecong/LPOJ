@@ -37,8 +37,20 @@
       >Register</el-button>
       <el-button round id="button" @click="dialogLoginVisible = true" v-show="!loginshow">Login</el-button>
 
-      <el-button type="primary" id="button" plain v-show="loginshow" @click="logoutClick">Logout</el-button>
-      <el-button plain id="button" v-show="loginshow" @click="userClick">Welcome {{name}}</el-button>
+      <!-- <el-button type="primary" id="button" plain v-show="loginshow" @click="logoutClick">Logout</el-button>
+      <el-button plain   >Welcome {{name}}</el-button>-->
+      <el-dropdown id="user" v-show="loginshow" @command="handleCommand">
+        <span class="el-dropdown-link">
+          Welcome {{name}}
+          <i class="el-icon-arrow-down el-icon--right"></i>
+        </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item command="home">Home</el-dropdown-item>
+          <el-dropdown-item command="submittion">Submittion</el-dropdown-item>
+          <el-dropdown-item command="setting">Setting</el-dropdown-item>
+          <el-dropdown-item command="logout" divided>Logout</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
     </el-menu>
 
     <el-dialog title="注册" :visible.sync="dialogRegisterVisible">
@@ -179,8 +191,8 @@ export default {
       dialogLoginVisible: false,
       dialogRegisterVisible: false,
       loginshow: sessionStorage.username,
-      username:sessionStorage.username,
-      name:sessionStorage.name,
+      username: sessionStorage.username,
+      name: sessionStorage.name,
       form: {
         username: "",
         password: "",
@@ -201,94 +213,131 @@ export default {
   },
   methods: {
     handleSelect(key, keyPath) {},
+    handleCommand(command) {
+      if (command == "logout") {
+        this.$message({
+          message: "登出成功！",
+          type: "success"
+        });
+        sessionStorage.setItem("username", "");
+        this.loginshow = 0;
+        this.username = "";
+      }
+      if (command == "home") {
+        this.$router.push({
+          name: "user",
+          query: { username: sessionStorage.username }
+        });
+      }
+      if (command == "setting") {
+        this.$router.push({
+          name: "setting",
+          params: { username: sessionStorage.username }
+        });
+      }
+      if (command == "submittion") {
+        this.$router.push({
+          name: "statue",
+          query: { username: sessionStorage.username }
+        });
+      }
+    },
     registerClick() {
-      if(!this.form.school||!this.form.course||!this.form.classes||!this.form.number||!this.form.realname||!this.form.qq||!this.form.email)
-      {
+      if (
+        !this.form.name ||
+        !this.form.school ||
+        !this.form.course ||
+        !this.form.classes ||
+        !this.form.number ||
+        !this.form.realname ||
+        !this.form.qq ||
+        !this.form.email
+      ) {
         this.$message.error("字段不能为空！");
         return;
       }
-      if(this.form.password!=this.form.comfirm){
+      if (this.form.password != this.form.comfirm) {
         this.$message.error("两次密码不一致！");
         return;
       }
-      if(this.form.username.length<6){
+      if (this.form.username.length < 6) {
         this.$message.error("用户名太短！");
         return;
       }
-      if(this.form.name.length<2){
+      if (this.form.name.length < 2) {
         this.$message.error("昵称太短！");
         return;
       }
-      if(this.form.password.length<6){
+      if (this.form.password.length < 6) {
         this.$message.error("密码太短！");
         return;
       }
-      
-      this.form.password=this.$md5(this.form.password)
 
-      this.$http.post("http://"+this.$ip+":"+this.$port+"/register/", this.form).then(
-        response => {
-          this.$message({
-            message: "注册成功！",
-            type: "success"
-          });
-          this.dialogRegisterVisible = false;
-        },
-        response => {
-          if (response.data == "usererror") {
-            this.$message.error("用户名已存在！");
-          } else {
-            this.$message.error("注册失败（" + response.bodyText + "）");
+      this.form.password = this.$md5(this.form.password);
+
+      this.$http
+        .post("http://" + this.$ip + ":" + this.$port + "/register/", this.form)
+        .then(
+          response => {
+            this.$message({
+              message: "注册成功！",
+              type: "success"
+            });
+            this.dialogRegisterVisible = false;
+          },
+          response => {
+            if (response.data == "usererror") {
+              this.$message.error("用户名已存在！");
+            } else {
+              this.$message.error("注册失败（" + response.bodyText + "）");
+            }
           }
-        }
-      );
+        );
     },
     loginClick() {
-      this.form.password=this.$md5(this.form.password)
-      this.$http.post("http://"+this.$ip+":"+this.$port+"/login/", this.form).then(
-        response => {
-          this.$message({
-            message: "登录成功！",
-            type: "success"
-          });
-          sessionStorage.setItem("username", this.form.username);
-          sessionStorage.setItem("name", response.data.name);
-          this.dialogRegisterVisible = false;
-          this.dialogLoginVisible = false;
-          this.loginshow = 1;
-          this.username = this.form.username;
-          this.name=sessionStorage.name
-        },
-        response => {
-          if (response.data == "passworderror") {
-            this.$message.error("密码错误");
-          } else {
-            this.$message.error("用户名不存在（" + response.status + "）");
+      this.form.password = this.$md5(this.form.password);
+      this.$http
+        .post("http://" + this.$ip + ":" + this.$port + "/login/", this.form)
+        .then(
+          response => {
+            this.$message({
+              message: "登录成功！",
+              type: "success"
+            });
+            sessionStorage.setItem("username", this.form.username);
+            sessionStorage.setItem("name", response.data.name);
+            this.dialogRegisterVisible = false;
+            this.dialogLoginVisible = false;
+            this.loginshow = 1;
+            this.username = this.form.username;
+            this.name = sessionStorage.name;
+          },
+          response => {
+            if (response.data == "passworderror") {
+              this.$message.error("密码错误");
+            } else {
+              this.$message.error("用户名不存在（" + response.status + "）");
+            }
           }
-        }
-      );
+        );
     },
 
-    logoutClick() {
-      this.$message({
-        message: "登出成功！",
-        type: "success"
-      });
-      sessionStorage.setItem("username", "");
-      this.loginshow = 0;
-      this.username = "";
-    },
-    userClick() {
-      console.log("userclick");
-    }
   }
 };
 </script>
 
 <style scope>
+  .el-dropdown-link {
+    cursor: pointer;
+    color: #409EFF;
+  }
 #button {
   float: right;
   margin: 10px;
+}
+#user {
+  float: right;
+  margin: 20px;
 }
 #nav {
   background-color: #ffffff;
