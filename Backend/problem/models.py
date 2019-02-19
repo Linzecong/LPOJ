@@ -18,6 +18,7 @@ class Problem(models.Model):
     time = models.IntegerField()
     memory = models.IntegerField()
     hint = models.TextField(null=True)
+    auth = models.IntegerField(default=1) # 1公开 2私密（比赛中的题）
 
 
     objects = models.Manager()

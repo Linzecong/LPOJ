@@ -13,4 +13,4 @@ class JudgeStatusView(viewsets.ModelViewSet):
     serializer_class = JudgeStatusSerializer
     pagination_class = LimitOffsetPagination
     filter_backends = (DjangoFilterBackend,)
-    filter_fields = ('user', 'result')
+    filter_fields = ('user', 'result', "contest")

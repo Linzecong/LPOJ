@@ -11,6 +11,7 @@ from rest_framework.pagination import LimitOffsetPagination
 class ProblemView(viewsets.ModelViewSet):
     queryset = Problem.objects.all()
     serializer_class = ProblemSerializer
+    filter_fields = ('auth',)
 
 class ProblemDataView(viewsets.ModelViewSet):
     queryset = ProblemData.objects.all()

@@ -5,6 +5,8 @@ import problem from '@/components/problem'
 import statue from '@/components/statue'
 import user from '@/components/user'
 import setting from '@/components/setting'
+import contest from '@/components/contest'
+import contestdetail from '@/components/contestdetail'
 import problemdetail from '@/components/problemdetail'
 
 Vue.use(Router)
@@ -46,6 +48,17 @@ export default new Router({
       path: '/setting',
       name: 'setting',
       component: setting
+    },
+    {
+      path: '/contest',
+      name: 'contest',
+      component: contest
+    },
+    ,
+    {
+      path: '/contest/:contestID',
+      name: 'contestdetail',
+      component: contestdetail,
     }
   ]
 })

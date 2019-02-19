@@ -270,6 +270,34 @@ export default {
   },
   created() {
     this.ID = this.$route.params.problemID;
+    var auth = 1;
+    this.$http
+      .get("http://"+this.$ip+":"+this.$port+"/problem/" + this.ID)
+      .then(response => {
+        auth = response.data.auth;
+        if(auth==2){
+          return;
+        }
+        this.des = response.data.des;
+        this.input = response.data.input;
+        this.output = response.data.output;
+        this.sinput = response.data.sinput.split("|#)"); //分隔符
+        this.soutput = response.data.soutput.split("|#)");
+        this.author = response.data.author;
+        this.addtime =
+          response.data["addtime"].split("T")[0] +
+          " " +
+          response.data["addtime"].split("T")[1].split(".")[0];
+        this.oj = response.data.oj;
+        this.source = response.data.source;
+        this.time = response.data.time + "MS";
+        this.memory = response.data.memory + "MB";
+        this.hint = response.data.hint;
+      });
+      if(auth==2){
+        this.title = "非法访问！";
+          return;
+      }
     this.$http
       .get("http://"+this.$ip+":"+this.$port+"/problemdata/" + this.ID)
       .then(response => {
@@ -323,25 +351,7 @@ export default {
         this.tagnames = response.data.tag;
       });
 
-    this.$http
-      .get("http://"+this.$ip+":"+this.$port+"/problem/" + this.ID)
-      .then(response => {
-        this.des = response.data.des;
-        this.input = response.data.input;
-        this.output = response.data.output;
-        this.sinput = response.data.sinput.split("|#)"); //分隔符
-        this.soutput = response.data.soutput.split("|#)");
-        this.author = response.data.author;
-        this.addtime =
-          response.data["addtime"].split("T")[0] +
-          " " +
-          response.data["addtime"].split("T")[1].split(".")[0];
-        this.oj = response.data.oj;
-        this.source = response.data.source;
-        this.time = response.data.time + "MS";
-        this.memory = response.data.memory + "MB";
-        this.hint = response.data.hint;
-      });
+    
   },
   methods: {
     problemlevel: function(type) {

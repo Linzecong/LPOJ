@@ -39,10 +39,9 @@
 
       <!-- <el-button type="primary" id="button" plain v-show="loginshow" @click="logoutClick">Logout</el-button>
       <el-button plain   >Welcome {{name}}</el-button>-->
-      <el-dropdown id="user" v-show="loginshow" @command="handleCommand">
+      <el-dropdown id="user" v-show="loginshow" @command="handleCommand" :show-timeout="100" :split-button="true" @visible-change="updatename">
         <span class="el-dropdown-link">
           Welcome {{name}}
-          <i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item command="home">Home</el-dropdown-item>
@@ -212,6 +211,9 @@ export default {
     console.log(sessionStorage.username);
   },
   methods: {
+    updatename(type){
+      this.name=sessionStorage.name;
+    },
     handleSelect(key, keyPath) {},
     handleCommand(command) {
       if (command == "logout") {
@@ -337,7 +339,7 @@ export default {
 }
 #user {
   float: right;
-  margin: 20px;
+  margin: 10px;
 }
 #nav {
   background-color: #ffffff;
