@@ -43,6 +43,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 export default {
   name: "contest",
   data() {
@@ -98,14 +99,9 @@ export default {
               response.data.results[i]["level"] = "VeryHard";
             if (response.data.results[i]["level"] == "5")
               response.data.results[i]["level"] = "ExtremelyHard";
-
-            response.data.results[i]["begintime"] =
-              response.data.results[i]["begintime"].split("T")[0] +
-              " " +
-              response.data.results[i]["begintime"].split("T")[1].split(".")[0];
-
+response.data.results[i]["begintime"] =moment(response.data.results[i]["begintime"]).format('YYYY-MM-DD HH:mm:ss')
             response.data.results[i]["lasttime"] =
-              response.data.results[i]["lasttime"] + " S";
+              response.data.results[i]["lasttime"]/60/60 + ":" + response.data.results[i]["lasttime"]/60%60 + ":"+response.data.results[i]["lasttime"]%60%60;
 
             if (response.data.results[i]["auth"] == "1")
               response.data.results[i]["auth"] = "Public";
@@ -145,13 +141,10 @@ export default {
             if (response.data.results[i]["level"] == "5")
               response.data.results[i]["level"] = "ExtremelyHard";
 
-            response.data.results[i]["begintime"] =
-              response.data.results[i]["begintime"].split("T")[0] +
-              " " +
-              response.data.results[i]["begintime"].split("T")[1].split(".")[0];
-
+response.data.results[i]["begintime"] =moment(response.data.results[i]["begintime"]).format('YYYY-MM-DD HH:mm:ss')
             response.data.results[i]["lasttime"] =
-              response.data.results[i]["lasttime"] + " S";
+              response.data.results[i]["lasttime"]/60/60 + ":" + response.data.results[i]["lasttime"]/60%60 + ":"+response.data.results[i]["lasttime"]%60%60;
+
 
             if (response.data.results[i]["auth"] == "1")
               response.data.results[i]["auth"] = "Public";
@@ -187,13 +180,10 @@ export default {
           if (response.data.results[i]["level"] == "5")
             response.data.results[i]["level"] = "ExtremelyHard";
 
-          response.data.results[i]["begintime"] =
-            response.data.results[i]["begintime"].split("T")[0] +
-            " " +
-            response.data.results[i]["begintime"].split("T")[1].split(".")[0];
+          response.data.results[i]["begintime"] =moment(response.data.results[i]["begintime"]).format('YYYY-MM-DD HH:mm:ss')
+            response.data.results[i]["lasttime"] =
+              response.data.results[i]["lasttime"]/60/60 + ":" + response.data.results[i]["lasttime"]/60%60 + ":"+response.data.results[i]["lasttime"]%60%60;
 
-          response.data.results[i]["lasttime"] =
-            response.data.results[i]["lasttime"] + " S";
 
           if (response.data.results[i]["auth"] == "1")
             response.data.results[i]["auth"] = "Public";

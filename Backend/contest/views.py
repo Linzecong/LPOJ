@@ -37,11 +37,11 @@ class ContestInfoView(viewsets.ModelViewSet):
     # filter_fields = ('user', 'result', "contest")
 
 class ContestProblemView(viewsets.ModelViewSet):
-    queryset = ContestProblem.objects.all()
+    queryset = ContestProblem.objects.all().order_by('rank')
     serializer_class = ContestProblemSerializer
     pagination_class = LimitOffsetPagination
-    # filter_backends = (DjangoFilterBackend,)
-    # filter_fields = ('user', 'result', "contest")
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ('contestid',)
 
 class ContestRegisterView(viewsets.ModelViewSet):
     queryset = ContestRegister.objects.all()

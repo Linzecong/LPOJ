@@ -1,36 +1,36 @@
 <template>
   <el-tabs type="border-card" @tab-click="tabClick">
-    <el-tab-pane label="Overview" :lazy="true">
+    <el-tab-pane label="Overview">
       <span slot="label">
         <i class="el-icon-document"></i> Overview
       </span>
       <contestoverview ref="Overview"></contestoverview>
     </el-tab-pane>
-    <el-tab-pane label="Problems" :lazy="true">
+    <el-tab-pane label="Problems">
       <span slot="label">
         <i class="el-icon-menu"></i> Problems
       </span>
       <contestproblem ref="Problems"></contestproblem>
     </el-tab-pane>
-    <el-tab-pane label="Submissions" :lazy="true">
+    <el-tab-pane label="Submissions">
       <span slot="label">
         <i class="el-icon-edit-outline"></i> Submissions
       </span>
       <contestsubmit ref="Submissions"></contestsubmit>
     </el-tab-pane>
-    <el-tab-pane label="Rankings" :lazy="true">
+    <el-tab-pane label="Rankings">
       <span slot="label">
         <i class="el-icon-star-on"></i> Rankings
       </span>
       <contestrank ref="Rankings"></contestrank>
     </el-tab-pane>
-    <el-tab-pane label="Announcements" :lazy="true">
+    <el-tab-pane label="Announcements">
       <span slot="label">
         <i class="el-icon-bell"></i> Announcements
       </span>
       <contestannounce ref="Announcements"></contestannounce>
     </el-tab-pane>
-    <el-tab-pane label="Comments" :lazy="true">
+    <el-tab-pane label="Comments">
       <span slot="label">
         <i class="el-icon-info"></i> Comments
       </span>
@@ -58,8 +58,12 @@ export default {
   },
   methods: {
     tabClick(tab) {
-      console.log(tab);
-      this.$refs.Overview.aaa();
+      console.log(tab)
+      if(tab.label=="Problems")
+        this.$refs.Problems.getproblem(this.$route.params.contestID);
+      
+      if(tab.label=="Overview")
+        this.$refs.Overview.refresh(this.$route.params.contestID);
     }
   }
 };

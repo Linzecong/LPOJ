@@ -231,6 +231,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 export default {
   name: "problemdetail",
   data() {
@@ -285,9 +286,8 @@ export default {
         this.soutput = response.data.soutput.split("|#)");
         this.author = response.data.author;
         this.addtime =
-          response.data["addtime"].split("T")[0] +
-          " " +
-          response.data["addtime"].split("T")[1].split(".")[0];
+          response.data["addtime"] =moment(response.data.results[i]["addtime"]).format('YYYY-MM-DD HH:mm:ss')
+            
         this.oj = response.data.oj;
         this.source = response.data.source;
         this.time = response.data.time + "MS";
@@ -386,7 +386,7 @@ export default {
           });
           this.$http
         .post("http://"+this.$ip+":"+this.$port+"/judgestatus/", {
-          user: sessionStorage.name,
+          user: sessionStorage.username,
           oj: "LPOJ",
           problem: this.ID,
           result: -1,

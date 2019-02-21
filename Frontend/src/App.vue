@@ -346,7 +346,7 @@ export default {
   position: fixed;
   left: 0px;
   top: 0px;
-  z-index: 1;
+  z-index: 5;
   width: 100%;
   box-shadow: 00px 0px 00px rgb(255, 255, 255),
     /*左边阴影*/ 0px 0px 10px rgb(255, 255, 255),
@@ -355,7 +355,8 @@ export default {
 }
 #route {
   position: relative;
-  top: 65px;
+  top: 80px;
+
 }
 #title {
   font-size: 20px;

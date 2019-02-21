@@ -66,11 +66,15 @@
 
 
 <script>
+import moment from 'moment'
 export default {
   name: "statue",
   methods: {
     handleSizeChange(val) {
+      if(!this.username)
       this.username = this.$route.query.username;
+      this.contest = this.$route.params.contestID;
+      if(!this.contest) this.contest="";
       if (!this.username) this.username = "";
       this.pagesize = val;
       this.$http
@@ -84,7 +88,7 @@ export default {
             "&limit=" +
             this.pagesize +
             "&offset=" +
-            (this.currentpage - 1) * this.pagesize
+            (this.currentpage - 1) * this.pagesize+"&contest="+this.contest
         )
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {
@@ -92,12 +96,8 @@ export default {
             response.data.results[i]["time"] += "MS";
             response.data.results[i]["memory"] += "MB";
             response.data.results[i]["length"] += "B";
-            response.data.results[i]["submittime"] =
-              response.data.results[i]["submittime"].split("T")[0] +
-              " " +
-              response.data.results[i]["submittime"]
-                .split("T")[1]
-                .split(".")[0];
+            response.data.results[i]["submittime"] =moment(response.data.results[i]["submittime"]).format('YYYY-MM-DD HH:mm:ss')
+            
 
             if (response.data.results[i]["result"] == "-1") {
               response.data.results[i]["result"] = "Pending";
@@ -149,7 +149,10 @@ export default {
         });
     },
     handleCurrentChange(val) {
+      if(!this.username)
       this.username = this.$route.query.username;
+      this.contest = this.$route.params.contestID;
+      if(!this.contest) this.contest="";
       if (!this.username) this.username = "";
       this.currentpage = val;
       this.$http
@@ -163,7 +166,7 @@ export default {
             "&limit=" +
             this.pagesize +
             "&offset=" +
-            (this.currentpage - 1) * this.pagesize
+            (this.currentpage - 1) * this.pagesize+"&contest="+this.contest
         )
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {
@@ -171,12 +174,8 @@ export default {
             response.data.results[i]["time"] += "MS";
             response.data.results[i]["memory"] += "MB";
             response.data.results[i]["length"] += "B";
-            response.data.results[i]["submittime"] =
-              response.data.results[i]["submittime"].split("T")[0] +
-              " " +
-              response.data.results[i]["submittime"]
-                .split("T")[1]
-                .split(".")[0];
+            response.data.results[i]["submittime"] =moment(response.data.results[i]["submittime"]).format('YYYY-MM-DD HH:mm:ss')
+            
 
             if (response.data.results[i]["result"] == "-1") {
               response.data.results[i]["result"] = "Pending";
@@ -274,7 +273,10 @@ export default {
       return false;
     },
     timer: function() {
+      if(!this.username)
       this.username = this.$route.query.username;
+      this.contest = this.$route.params.contestID;
+      if(!this.contest) this.contest="";
       if (!this.username) this.username = "";
       this.$http
         .get(
@@ -287,7 +289,7 @@ export default {
             "&limit=" +
             this.pagesize +
             "&offset=" +
-            (this.currentpage - 1) * this.pagesize
+            (this.currentpage - 1) * this.pagesize+"&contest="+this.contest
         )
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {
@@ -295,12 +297,8 @@ export default {
             response.data.results[i]["time"] += "MS";
             response.data.results[i]["memory"] += "MB";
             response.data.results[i]["length"] += "B";
-            response.data.results[i]["submittime"] =
-              response.data.results[i]["submittime"].split("T")[0] +
-              " " +
-              response.data.results[i]["submittime"]
-                .split("T")[1]
-                .split(".")[0];
+           response.data.results[i]["submittime"] =moment(response.data.results[i]["submittime"]).format('YYYY-MM-DD HH:mm:ss')
+            
 
             if (response.data.results[i]["result"] == "-1") {
               response.data.results[i]["result"] = "Pending";
@@ -350,6 +348,9 @@ export default {
           this.tableData = response.data.results;
           this.totalstatus = response.data.count;
         });
+    },
+    setusername(name){
+      this.username=name;
     }
   },
   data() {
@@ -358,7 +359,8 @@ export default {
       currentpage: 1,
       pagesize: 10,
       totalstatus: 10,
-      username: ""
+      username: "",
+      contest:"",
     };
   },
   destroyed() {
@@ -369,7 +371,9 @@ export default {
 
     this.timer();
     this.$store.state.timer = setInterval(this.timer, 1000);
-  }
+  },
+  
+
 };
 </script>
 

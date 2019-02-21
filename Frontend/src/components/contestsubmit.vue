@@ -1,14 +1,18 @@
 <template>
-    <h1>{{ msg }}</h1>
+    <el-card><statue></statue></el-card>
 </template>
 
 <script>
+import statue from '@/components/statue'
 export default {
   name: 'contestsubmit',
   data () {
     return {
       msg: 'contestsubmit'
     }
+  },
+  components: {
+    statue,
   },
   created(){
     
