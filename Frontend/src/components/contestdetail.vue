@@ -12,7 +12,7 @@
       </span>
       <contestproblem ref="Problems"></contestproblem>
     </el-tab-pane>
-    <el-tab-pane label="Submissions">
+    <el-tab-pane label="Submissions" :lazy="true">
       <span slot="label">
         <i class="el-icon-edit-outline"></i> Submissions
       </span>
@@ -64,6 +64,8 @@ export default {
       
       if(tab.label=="Overview")
         this.$refs.Overview.refresh(this.$route.params.contestID);
+
+      
     }
   }
 };

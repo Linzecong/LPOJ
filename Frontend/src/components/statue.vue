@@ -1,5 +1,12 @@
 <template>
   <el-card shadow="always" id="card">
+    <el-switch
+        style="float: right;margin:10px;"
+        v-model="showall"
+        active-text="Show Mine"
+        inactive-text="Show All"
+        @change="statuechange"
+      ></el-switch>
     <el-table
       :default-sort="{prop: 'id', order: 'descending'}"
       :data="tableData"
@@ -278,6 +285,12 @@ export default {
       this.contest = this.$route.params.contestID;
       if(!this.contest) this.contest="";
       if (!this.username) this.username = "";
+
+      if(this.username==sessionStorage.username&&sessionStorage.username)
+        this.showall=true;
+        else
+        this.showall=false;
+
       this.$http
         .get(
           "http://" +
@@ -350,7 +363,21 @@ export default {
         });
     },
     setusername(name){
+      this.$route.query.username=""
       this.username=name;
+    },
+    statuechange(val) {
+      if (val == true) {
+        if(!sessionStorage.username){
+          this.showall=false;
+          this.$message.error("请先登录！");
+        }
+        else
+        this.setusername(sessionStorage.username);
+      } else {
+        
+        this.setusername("");
+      }
     }
   },
   data() {
@@ -361,6 +388,7 @@ export default {
       totalstatus: 10,
       username: "",
       contest:"",
+      showall: false,
     };
   },
   destroyed() {
