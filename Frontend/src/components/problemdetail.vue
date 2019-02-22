@@ -57,7 +57,7 @@
             </el-col>
             <el-col :span="3">
               <el-button
-              type="primary"
+                type="primary"
                 @click="submit"
                 style="font-weight:bold;margin-left:10px;"
               >Submit</el-button>
@@ -71,7 +71,6 @@
                 style="font-weight:bold;margin-left:10px;"
               >{{submitbuttontext}}</el-button>
             </el-col>
-
           </el-row>
           <el-row :gutter="15">
             <el-input
@@ -231,7 +230,7 @@
 </template>
 
 <script>
-import moment from 'moment'
+import moment from "moment";
 export default {
   name: "problemdetail",
   data() {
@@ -273,10 +272,14 @@ export default {
     this.ID = this.$route.params.problemID;
     var auth = 1;
     this.$axios
-      .get("http://"+this.$ip+":"+this.$port+"/problem/" + this.ID+"/")
+      .get(
+        "http://" + this.$ip + ":" + this.$port + "/problem/" + this.ID + "/"
+      )
       .then(response => {
         auth = response.data.auth;
-        if(auth==2){
+        if (auth == 2) {
+          this.title = "非法访问！";
+          this.$message.error("服务器错误！" + "(" + error + ")");
           return;
         }
         this.des = response.data.des;
@@ -285,73 +288,91 @@ export default {
         this.sinput = response.data.sinput.split("|#)"); //分隔符
         this.soutput = response.data.soutput.split("|#)");
         this.author = response.data.author;
-        this.addtime =
-          response.data["addtime"] =moment(response.data.results["addtime"]).format('YYYY-MM-DD HH:mm:ss')
-            
+        this.addtime = response.data["addtime"] = moment(
+          response.data["addtime"]
+        ).format("YYYY-MM-DD HH:mm:ss");
+
         this.oj = response.data.oj;
         this.source = response.data.source;
         this.time = response.data.time + "MS";
         this.memory = response.data.memory + "MB";
         this.hint = response.data.hint;
-      });
-      if(auth==2){
+        this.$axios
+          .get(
+            "http://" +
+              this.$ip +
+              ":" +
+              this.$port +
+              "/problemdata/" +
+              this.ID +
+              "/"
+          )
+          .then(response => {
+            if (response.data["level"] == "1") response.data["level"] = "Easy";
+            if (response.data["level"] == "2")
+              response.data["level"] = "Medium";
+            if (response.data["level"] == "3") response.data["level"] = "Hard";
+            if (response.data["level"] == "4")
+              response.data["level"] = "VeryHard";
+            if (response.data["level"] == "5")
+              response.data["level"] = "ExtremelyHard";
+
+            if (response.data["tag"] == null) response.data["tag"] = ["无"];
+            else response.data["tag"] = response.data["tag"].split("|");
+
+            if (response.data.submission == 0) {
+              this.ac = 0;
+              this.mle = 0;
+              this.tle = 0;
+              this.rte = 0;
+              this.pe = 0;
+              this.ce = 0;
+              this.wa = 0;
+              this.se = 0;
+            } else {
+              this.ac = parseFloat(
+                ((response.data.ac * 100) / response.data.submission).toFixed(2)
+              );
+              this.mle = parseFloat(
+                ((response.data.mle * 100) / response.data.submission).toFixed(
+                  2
+                )
+              );
+              this.tle = parseFloat(
+                ((response.data.tle * 100) / response.data.submission).toFixed(
+                  2
+                )
+              );
+              this.rte = parseFloat(
+                ((response.data.rte * 100) / response.data.submission).toFixed(
+                  2
+                )
+              );
+              this.pe = parseFloat(
+                ((response.data.pe * 100) / response.data.submission).toFixed(2)
+              );
+              this.ce = parseFloat(
+                ((response.data.ce * 100) / response.data.submission).toFixed(2)
+              );
+              this.wa = parseFloat(
+                ((response.data.wa * 100) / response.data.submission).toFixed(2)
+              );
+              this.se = parseFloat(
+                ((response.data.se * 100) / response.data.submission).toFixed(2)
+              );
+            }
+            this.title = response.data.title;
+            this.level = response.data.level;
+            this.tagnames = response.data.tag;
+          })
+          .catch(error => {
+            this.$message.error("服务器错误！" + "(" + error + ")");
+          });
+      })
+      .catch(error => {
         this.title = "非法访问！";
-          return;
-      }
-    this.$axios
-      .get("http://"+this.$ip+":"+this.$port+"/problemdata/" + this.ID+"/")
-      .then(response => {
-        if (response.data["level"] == "1") response.data["level"] = "Easy";
-        if (response.data["level"] == "2") response.data["level"] = "Medium";
-        if (response.data["level"] == "3") response.data["level"] = "Hard";
-        if (response.data["level"] == "4") response.data["level"] = "VeryHard";
-        if (response.data["level"] == "5")
-          response.data["level"] = "ExtremelyHard";
-
-        if (response.data["tag"] == null) response.data["tag"] = ["无"];
-        else response.data["tag"] = response.data["tag"].split("|");
-
-        if (response.data.submission == 0) {
-          this.ac = 0;
-          this.mle = 0;
-          this.tle = 0;
-          this.rte = 0;
-          this.pe = 0;
-          this.ce = 0;
-          this.wa = 0;
-          this.se = 0;
-        } else {
-          this.ac = parseFloat(
-            ((response.data.ac * 100) / response.data.submission).toFixed(2)
-          );
-          this.mle = parseFloat(
-            ((response.data.mle * 100) / response.data.submission).toFixed(2)
-          );
-          this.tle = parseFloat(
-            ((response.data.tle * 100) / response.data.submission).toFixed(2)
-          );
-          this.rte = parseFloat(
-            ((response.data.rte * 100) / response.data.submission).toFixed(2)
-          );
-          this.pe = parseFloat(
-            ((response.data.pe * 100) / response.data.submission).toFixed(2)
-          );
-          this.ce = parseFloat(
-            ((response.data.ce * 100) / response.data.submission).toFixed(2)
-          );
-          this.wa = parseFloat(
-            ((response.data.wa * 100) / response.data.submission).toFixed(2)
-          );
-          this.se = parseFloat(
-            ((response.data.se * 100) / response.data.submission).toFixed(2)
-          );
-        }
-        this.title = response.data.title;
-        this.level = response.data.level;
-        this.tagnames = response.data.tag;
+        this.$message.error("服务器错误！" + "(" + error + ")");
       });
-
-    
   },
   methods: {
     problemlevel: function(type) {
@@ -362,7 +383,6 @@ export default {
       if (type == "ExtremelyHard") return "danger";
     },
     submit: function() {
-      
       if (!sessionStorage.username) {
         this.$message.error("请先登录！");
         return;
@@ -375,61 +395,65 @@ export default {
         this.$message.error("请选择语言！");
         return;
       }
-      this.$confirm('确定提交吗？', '提交', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '提交中...'
-          });
-          this.$axios
-        .post("http://"+this.$ip+":"+this.$port+"/judgestatus/", {
-          user: sessionStorage.username,
-          oj: "LPOJ",
-          problem: this.ID,
-          result: -1,
-          time: 0,
-          memory: 0,
-          length: this.code.length,
-          language: this.language,
-          judger: "waiting for judger",
-          contest: 0,
-          code: this.code,
-          testcase: 0,
-          message: "0"
-        })
-        .then(response => {
-          this.$message({
-            message: "提交成功！",
-            type: "success"
-          });
-          clearInterval(this.$store.state.submittimer);
-          this.submitid = response.data.id;
-          this.submitbuttontext = "Pending";
-          this.judgetype = "info";
-          this.loadingshow = true;
-          //创建一个全局定时器，定时刷新状态
-          this.$store.state.submittimer = setInterval(this.timer, 1000);
+      this.$confirm("确定提交吗？", "提交", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        this.$message({
+          type: "success",
+          message: "提交中..."
         });
-   
-        }).catch(() => {
-          return;          
-        });
-
-       },
-    codechange: function(t) {
-      
+        this.$axios
+          .post("http://" + this.$ip + ":" + this.$port + "/judgestatusput/", {
+            user: sessionStorage.username,
+            oj: "LPOJ",
+            problem: this.ID,
+            result: -1,
+            time: 0,
+            memory: 0,
+            length: this.code.length,
+            language: this.language,
+            judger: "waiting for judger",
+            contest: 0,
+            code: this.code,
+            testcase: 0,
+            message: "0"
+          })
+          .then(response => {
+            this.$message({
+              message: "提交成功！",
+              type: "success"
+            });
+            clearInterval(this.$store.state.submittimer);
+            this.submitid = response.data.id;
+            this.submitbuttontext = "Pending";
+            this.judgetype = "info";
+            this.loadingshow = true;
+            //创建一个全局定时器，定时刷新状态
+            this.$store.state.submittimer = setInterval(this.timer, 1000);
+          })
+          .catch(error => {
+            this.$message.error("服务器错误！" + "(" + error + ")");
+          });
+      });
     },
+    codechange: function(t) {},
     timer: function() {
-      if(this.submitbuttontext=="提交后请勿重复刷新")
-        return;
+      if (this.submitbuttontext == "提交后请勿重复刷新") return;
       this.$axios
-        .get("http://"+this.$ip+":"+this.$port+"/judgestatus/" + this.submitid+"/")
+        .get(
+          "http://" +
+            this.$ip +
+            ":" +
+            this.$port +
+            "/judgestatus/" +
+            this.submitid +
+            "/"
+        )
         .then(response => {
           this.loadingshow = false;
-          var testcase = response.data["testcase"]
+          var testcase = response.data["testcase"];
           if (response.data["result"] == "-1") {
             response.data["result"] = "Pending";
             this.loadingshow = true;
@@ -443,7 +467,7 @@ export default {
           }
 
           if (response.data["result"] == "-3") {
-            response.data["result"] = "Wrong Answer on test "+testcase;
+            response.data["result"] = "Wrong Answer on test " + testcase;
             this.judgetype = "danger";
           }
 
@@ -453,7 +477,7 @@ export default {
           }
 
           if (response.data["result"] == "-5") {
-            response.data["result"] = "Presentation Error on test "+testcase;
+            response.data["result"] = "Presentation Error on test " + testcase;
             this.judgetype = "warning";
           }
 
@@ -469,22 +493,23 @@ export default {
           }
 
           if (response.data["result"] == "1") {
-            response.data["result"] = "Time Limit Exceeded on test "+testcase;
+            response.data["result"] = "Time Limit Exceeded on test " + testcase;
             this.judgetype = "warning";
           }
 
           if (response.data["result"] == "2") {
-            response.data["result"] = "Time Limit Exceeded on test "+testcase;
+            response.data["result"] = "Time Limit Exceeded on test " + testcase;
             this.judgetype = "warning";
           }
 
           if (response.data["result"] == "3") {
-            response.data["result"] = "Memory Limit Exceeded on test "+testcase;
+            response.data["result"] =
+              "Memory Limit Exceeded on test " + testcase;
             this.judgetype = "warning";
           }
 
           if (response.data["result"] == "4") {
-            response.data["result"] = "Runtime Error on test "+testcase;
+            response.data["result"] = "Runtime Error on test " + testcase;
             this.judgetype = "warning";
           }
 
@@ -499,8 +524,7 @@ export default {
   },
   destroyed() {
     clearInterval(this.$store.state.submittimer);
-  },
-
+  }
 };
 </script>
 

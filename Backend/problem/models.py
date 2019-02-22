@@ -18,8 +18,7 @@ class Problem(models.Model):
     time = models.IntegerField()
     memory = models.IntegerField()
     hint = models.TextField(null=True)
-    auth = models.IntegerField(default=1) # 1公开 2私密（比赛中的题）
-
+    auth = models.IntegerField(default=1) # 1公开 2私密 3 比赛中的题
 
     objects = models.Manager()
 
@@ -43,6 +42,8 @@ class ProblemData(models.Model):
     tag = models.TextField(null=True)
 
     score = models.IntegerField(default=1000)
+
+    auth = models.IntegerField(default=1) # 1公开 2私密 3 比赛中的题
 
     objects = models.Manager()
 

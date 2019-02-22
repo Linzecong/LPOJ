@@ -9,7 +9,7 @@ from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
 from .models import User, UserData, UserSubmittion
 from .serializers import UserSerializer, UserDataSerializer, UserSubmittionSerializer
-from .permission import IsOwnerOrReadOnly
+from .permission import LoginOnly, UserOnly
 from django_filters.rest_framework import DjangoFilterBackend
 
 class UserSubmittionView(viewsets.ModelViewSet):
@@ -17,19 +17,22 @@ class UserSubmittionView(viewsets.ModelViewSet):
     serializer_class = UserSubmittionSerializer
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('username',)
+    permission_classes = (UserOnly,)
+        
 
 class UserDataView(viewsets.ModelViewSet):
     queryset = UserData.objects.all()
     serializer_class = UserDataSerializer
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('username',)
+    permission_classes = (UserOnly,)
 
 class UserView(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('username',)
-    permission_classes = (IsOwnerOrReadOnly,)
+    permission_classes = (UserOnly,)
 
 class UserLoginAPIView(APIView):
     queryset = User.objects.all()
@@ -43,16 +46,17 @@ class UserLoginAPIView(APIView):
         if user.password == password:
             serializer = UserSerializer(user)
             new_data = serializer.data
-            
             request.session['user_id'] = user.username
+            request.session['type'] = user.type
             print(request.session.keys())
             return Response(new_data, status=HTTP_200_OK)
-        return Response('passworderror', HTTP_400_BAD_REQUEST)
+        return Response('passworderror', HTTP_200_OK)
 
 class UserLogoutAPIView(APIView):
     def get(self,request):
-        if request.session.get('user_id') is not None:
+        if request.session.get('user_id',None) is not None:
             del request.session['user_id']
+            del request.session['type']
         return Response('ok', HTTP_200_OK)
 
 
@@ -65,7 +69,7 @@ class UserRegisterAPIView(APIView):
         data = request.data
         username = data.get('username')
         if User.objects.filter(username__exact=username):
-            return Response("usererror",HTTP_400_BAD_REQUEST)
+            return Response("usererror",HTTP_200_OK)
         serializer = UserSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()

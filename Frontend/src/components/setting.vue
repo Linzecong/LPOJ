@@ -185,7 +185,7 @@ export default {
           }
           ,
           response => {
-            this.$message.error("更新失败（" + response.bodyText + "）");
+            this.$message.error("更新失败（" + response + "）");
           }
         );
     }

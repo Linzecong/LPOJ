@@ -285,7 +285,7 @@ export default {
             message: "提交中..."
           });
           this.$axios
-            .post("http://" + this.$ip + ":" + this.$port + "/judgestatus/", {
+            .post("http://" + this.$ip + ":" + this.$port + "/judgestatusput/", {
               user: sessionStorage.username,
               oj: "LPOJ",
               problem: this.currentproblem,
@@ -312,7 +312,9 @@ export default {
               this.loadingshow = true;
               //创建一个全局定时器，定时刷新状态
               this.$store.state.submittimer = setInterval(this.timer, 1000);
-            });
+            }).catch(error => {
+          this.$message.error("服务器错误！" + "(" + error + ")");
+        });
         })
         .catch(() => {
           return;

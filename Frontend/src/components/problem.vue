@@ -220,7 +220,7 @@ export default {
             "/problemdata/?limit=" +
             this.pagesize +
             "&offset=" +
-            (this.currentpage - 1) * this.pagesize
+            (this.currentpage - 1) * this.pagesize+"&auth=1"
         )
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {
@@ -262,7 +262,7 @@ export default {
             "/problemdata/?limit=" +
             this.pagesize +
             "&offset=" +
-            (this.currentpage - 1) * this.pagesize
+            (this.currentpage - 1) * this.pagesize+"&auth=1"
         )
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {
@@ -357,7 +357,7 @@ export default {
           this.$ip +
           ":" +
           this.$port +
-          "/problemdata/?limit=10&offset=0"
+          "/problemdata/?limit=10&offset=0"+"&auth=1"
       )
       .then(response => {
         for (var i = 0; i < response.data.results.length; i++) {

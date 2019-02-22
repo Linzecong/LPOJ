@@ -232,6 +232,8 @@ export default {
             sessionStorage.setItem("username", "");
             this.loginshow = 0;
             this.username = "";
+          }).catch(error=>{
+            this.$message.error("服务器错误！"+"("+error+")");
           });
       }
       if (command == "home") {
@@ -290,20 +292,19 @@ export default {
         .post("http://" + this.$ip + ":" + this.$port + "/register/", this.form)
         .then(
           response => {
+            if (response.data == "usererror") {
+              this.$message.error("用户名已存在！");
+              return;
+            } 
             this.$message({
               message: "注册成功！",
               type: "success"
             });
             this.dialogRegisterVisible = false;
-          },
-          response => {
-            if (response.data == "usererror") {
-              this.$message.error("用户名已存在！");
-            } else {
-              this.$message.error("注册失败（" + response.bodyText + "）");
-            }
           }
-        );
+        ).catch(error=>{
+            this.$message.error("服务器错误！"+"("+error+")");
+          });
     },
     loginClick() {
       this.form.password = this.$md5(this.form.password);
@@ -311,6 +312,10 @@ export default {
         .post("http://" + this.$ip + ":" + this.$port + "/login/", this.form)
         .then(
           response => {
+            if (response.data == "passworderror") {
+              this.$message.error("密码错误");
+              return;
+            }
             this.$message({
               message: "登录成功！",
               type: "success"
@@ -322,15 +327,9 @@ export default {
             this.loginshow = 1;
             this.username = this.form.username;
             this.name = sessionStorage.name;
-          },
-          response => {
-            if (response.data == "passworderror") {
-              this.$message.error("密码错误");
-            } else {
-              this.$message.error("用户名不存在（" + response.status + "）");
-            }
-          }
-        );
+          }).catch(error=>{
+            this.$message.error("用户名不存在（" + error + "）");
+          });
     }
   }
 };

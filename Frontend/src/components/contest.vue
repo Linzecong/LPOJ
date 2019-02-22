@@ -112,7 +112,9 @@ response.data.results[i]["begintime"] =moment(response.data.results[i]["begintim
           }
           this.tableData = response.data.results;
           this.totalcontest = response.data.count;
-        });
+        }).catch(error=>{
+            this.$message.error("服务器错误！"+"("+error+")");
+          });
     },
     handleCurrentChange(val) {
       this.currentpage = val;
@@ -155,7 +157,9 @@ response.data.results[i]["begintime"] =moment(response.data.results[i]["begintim
           }
           this.tableData = response.data.results;
           this.totalcontest = response.data.count;
-        });
+        }).catch(error=>{
+            this.$message.error("服务器错误！"+"("+error+")");
+          });
     }
   },
   created() {
@@ -194,7 +198,9 @@ response.data.results[i]["begintime"] =moment(response.data.results[i]["begintim
         }
         this.tableData = response.data.results;
         this.totalcontest = response.data.count;
-      });
+      }).catch(error=>{
+            this.$message.error("服务器错误！"+"("+error+")");
+          });
   }
 };
 </script>

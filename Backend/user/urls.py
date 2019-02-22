@@ -14,5 +14,6 @@ urlpatterns = [
     url('', include(routers.urls)),
     url(r'^register',views.UserRegisterAPIView.as_view()),
     url(r'^login',views.UserLoginAPIView.as_view()),
-     url(r'^logout',views.UserLogoutAPIView.as_view()),
+    url(r'^logout',views.UserLogoutAPIView.as_view()),
 ]
+
