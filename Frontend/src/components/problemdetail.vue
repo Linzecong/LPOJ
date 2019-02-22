@@ -272,8 +272,8 @@ export default {
   created() {
     this.ID = this.$route.params.problemID;
     var auth = 1;
-    this.$http
-      .get("http://"+this.$ip+":"+this.$port+"/problem/" + this.ID)
+    this.$axios
+      .get("http://"+this.$ip+":"+this.$port+"/problem/" + this.ID+"/")
       .then(response => {
         auth = response.data.auth;
         if(auth==2){
@@ -286,7 +286,7 @@ export default {
         this.soutput = response.data.soutput.split("|#)");
         this.author = response.data.author;
         this.addtime =
-          response.data["addtime"] =moment(response.data.results[i]["addtime"]).format('YYYY-MM-DD HH:mm:ss')
+          response.data["addtime"] =moment(response.data.results["addtime"]).format('YYYY-MM-DD HH:mm:ss')
             
         this.oj = response.data.oj;
         this.source = response.data.source;
@@ -298,8 +298,8 @@ export default {
         this.title = "非法访问！";
           return;
       }
-    this.$http
-      .get("http://"+this.$ip+":"+this.$port+"/problemdata/" + this.ID)
+    this.$axios
+      .get("http://"+this.$ip+":"+this.$port+"/problemdata/" + this.ID+"/")
       .then(response => {
         if (response.data["level"] == "1") response.data["level"] = "Easy";
         if (response.data["level"] == "2") response.data["level"] = "Medium";
@@ -384,7 +384,7 @@ export default {
             type: 'success',
             message: '提交中...'
           });
-          this.$http
+          this.$axios
         .post("http://"+this.$ip+":"+this.$port+"/judgestatus/", {
           user: sessionStorage.username,
           oj: "LPOJ",
@@ -425,8 +425,8 @@ export default {
     timer: function() {
       if(this.submitbuttontext=="提交后请勿重复刷新")
         return;
-      this.$http
-        .get("http://"+this.$ip+":"+this.$port+"/judgestatus/" + this.submitid)
+      this.$axios
+        .get("http://"+this.$ip+":"+this.$port+"/judgestatus/" + this.submitid+"/")
         .then(response => {
           this.loadingshow = false;
           var testcase = response.data["testcase"]

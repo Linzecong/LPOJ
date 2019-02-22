@@ -166,7 +166,7 @@ export default {
       }
 
       this.form.password = this.$md5(this.form.password);
-      this.$http
+      this.$axios
         .put(
           "http://" + this.$ip + ":" + this.$port + "/user/" + this.userid+"/",
           this.form
@@ -194,7 +194,7 @@ export default {
     this.username = this.$route.params.username;
     this.form.username=this.username
     if (this.username) {
-      this.$http
+      this.$axios
         .get(
           "http://" +
             this.$ip +

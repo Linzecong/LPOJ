@@ -8,6 +8,8 @@ import router from './router'
 import VueResource from 'vue-resource';
 import Vuex from 'vuex'
 import md5 from 'js-md5';
+import axios from 'axios';
+
 Vue.use(Vuex)
 Vue.config.productionTip = false
 Vue.use(ElementUI);
@@ -16,6 +18,13 @@ Vue.prototype.$md5 = md5;
 
 Vue.prototype.$ip = "localhost";
 Vue.prototype.$port = "8000";
+
+
+//开启debug模式
+Vue.config.debug = true;
+axios.defaults.withCredentials=true;
+Vue.prototype.$axios = axios;
+
 
 const store = new Vuex.Store({
   state: {

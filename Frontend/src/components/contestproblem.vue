@@ -168,14 +168,14 @@ export default {
       this.language= "",
       this.currentproblem = this.problemids[tab.index];
       this.title = this.problemtitles[tab.index];
-      this.$http
+      this.$axios
         .get(
           "http://" +
             this.$ip +
             ":" +
             this.$port +
             "/problem/" +
-            this.currentproblem
+            this.currentproblem+"/"
         )
         .then(response => {
           this.des = response.data.des;
@@ -191,13 +191,13 @@ export default {
         });
     },
     getproblem(id) {
-      this.$http
+      this.$axios
         .get(
           "http://" + this.$ip + ":" + this.$port + "/contestinfo/" + id + "/"
         )
         .then(response => {
           this.begintime = response.data.begintime;
-          this.$http
+          this.$axios
             .get("http://quan.suning.com/getSysTime.do")
             .then(response2 => {
               this.currenttime = response2.data.sysTime2;
@@ -220,7 +220,7 @@ export default {
 
               this.problemtitles = [];
               this.problemids = [];
-              this.$http
+              this.$axios
                 .get(
                   "http://" +
                     this.$ip +
@@ -236,14 +236,14 @@ export default {
                   }
                   this.currentproblem = this.problemids[0];
                   this.title = this.problemtitles[0];
-                  this.$http
+                  this.$axios
                     .get(
                       "http://" +
                         this.$ip +
                         ":" +
                         this.$port +
                         "/problem/" +
-                        this.currentproblem
+                        this.currentproblem+"/"
                     )
                     .then(response => {
                       this.des = response.data.des;
@@ -284,7 +284,7 @@ export default {
             type: "success",
             message: "提交中..."
           });
-          this.$http
+          this.$axios
             .post("http://" + this.$ip + ":" + this.$port + "/judgestatus/", {
               user: sessionStorage.username,
               oj: "LPOJ",
@@ -320,14 +320,14 @@ export default {
     },
     timer: function() {
       if (this.submitbuttontext == "提交后请勿重复刷新") return;
-      this.$http
+      this.$axios
         .get(
           "http://" +
             this.$ip +
             ":" +
             this.$port +
             "/judgestatus/" +
-            this.submitid
+            this.submitid+"/"
         )
         .then(response => {
           this.loadingshow = false;

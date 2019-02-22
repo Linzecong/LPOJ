@@ -39,10 +39,15 @@
 
       <!-- <el-button type="primary" id="button" plain v-show="loginshow" @click="logoutClick">Logout</el-button>
       <el-button plain   >Welcome {{name}}</el-button>-->
-      <el-dropdown id="user" v-show="loginshow" @command="handleCommand" :show-timeout="100" :split-button="true" @visible-change="updatename">
-        <span class="el-dropdown-link">
-          Welcome {{name}}
-        </span>
+      <el-dropdown
+        id="user"
+        v-show="loginshow"
+        @command="handleCommand"
+        :show-timeout="100"
+        :split-button="true"
+        @visible-change="updatename"
+      >
+        <span class="el-dropdown-link">Welcome {{name}}</span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item command="home">Home</el-dropdown-item>
           <el-dropdown-item command="submittion">Submittion</el-dropdown-item>
@@ -211,19 +216,23 @@ export default {
     console.log(sessionStorage.username);
   },
   methods: {
-    updatename(type){
-      this.name=sessionStorage.name;
+    updatename(type) {
+      this.name = sessionStorage.name;
     },
     handleSelect(key, keyPath) {},
     handleCommand(command) {
       if (command == "logout") {
-        this.$message({
-          message: "登出成功！",
-          type: "success"
-        });
-        sessionStorage.setItem("username", "");
-        this.loginshow = 0;
-        this.username = "";
+        this.$axios
+          .get("http://" + this.$ip + ":" + this.$port + "/logout/")
+          .then(response => {
+            this.$message({
+              message: "登出成功！",
+              type: "success"
+            });
+            sessionStorage.setItem("username", "");
+            this.loginshow = 0;
+            this.username = "";
+          });
       }
       if (command == "home") {
         this.$router.push({
@@ -277,7 +286,7 @@ export default {
 
       this.form.password = this.$md5(this.form.password);
 
-      this.$http
+      this.$axios
         .post("http://" + this.$ip + ":" + this.$port + "/register/", this.form)
         .then(
           response => {
@@ -298,7 +307,7 @@ export default {
     },
     loginClick() {
       this.form.password = this.$md5(this.form.password);
-      this.$http
+      this.$axios
         .post("http://" + this.$ip + ":" + this.$port + "/login/", this.form)
         .then(
           response => {
@@ -322,17 +331,16 @@ export default {
             }
           }
         );
-    },
-
+    }
   }
 };
 </script>
 
 <style scope>
-  .el-dropdown-link {
-    cursor: pointer;
-    color: #409EFF;
-  }
+.el-dropdown-link {
+  cursor: pointer;
+  color: #409eff;
+}
 #button {
   float: right;
   margin: 10px;
@@ -356,7 +364,6 @@ export default {
 #route {
   position: relative;
   top: 80px;
-
 }
 #title {
   font-size: 20px;

@@ -58,7 +58,7 @@ export default {
   },
   methods: {
     refresh(id) {
-      this.$http
+      this.$axios
         .get(
           "http://" + this.$ip + ":" + this.$port + "/contestinfo/" + id + "/"
         )
@@ -72,7 +72,7 @@ export default {
           var date2 = "";
           var date1 = new Date(Date.parse(sDate1));
 
-          this.$http
+          this.$axios
             .get("http://quan.suning.com/getSysTime.do")
             .then(response2 => {
               date2 = response2.data.sysTime2;

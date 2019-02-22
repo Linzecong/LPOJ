@@ -6,6 +6,7 @@ from rest_framework import viewsets
 from rest_framework.pagination import LimitOffsetPagination
 from .models import JudgeStatus
 from .serializers import JudgeStatusSerializer
+from .permission import LoginOrReadOnly
 from django_filters.rest_framework import DjangoFilterBackend
 
 class JudgeStatusView(viewsets.ModelViewSet):
@@ -14,3 +15,4 @@ class JudgeStatusView(viewsets.ModelViewSet):
     pagination_class = LimitOffsetPagination
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('user', 'result', "contest")
+    permission_classes = (LoginOrReadOnly,)

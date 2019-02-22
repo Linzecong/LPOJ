@@ -211,7 +211,7 @@ export default {
     handleSizeChange(val) {
       this.pagesize = val;
 
-      this.$http
+      this.$axios
         .get(
           "http://" +
             this.$ip +
@@ -253,7 +253,7 @@ export default {
     },
     handleCurrentChange(val) {
       this.currentpage = val;
-      this.$http
+      this.$axios
         .get(
           "http://" +
             this.$ip +
@@ -351,7 +351,7 @@ export default {
     };
   },
   created() {
-    this.$http
+    this.$axios
       .get(
         "http://" +
           this.$ip +
@@ -388,7 +388,7 @@ export default {
         this.totalproblem = response.data.count;
       });
 
-    this.$http
+    this.$axios
       .get("http://" + this.$ip + ":" + this.$port + "/problemtag/")
       .then(response => {
         for (var i = 0; i < response.data.length; i++)

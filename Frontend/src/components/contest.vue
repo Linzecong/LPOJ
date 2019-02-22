@@ -76,7 +76,7 @@ export default {
     handleSizeChange(val) {
       this.pagesize = val;
 
-      this.$http
+      this.$axios
         .get(
           "http://" +
             this.$ip +
@@ -117,7 +117,7 @@ response.data.results[i]["begintime"] =moment(response.data.results[i]["begintim
     handleCurrentChange(val) {
       this.currentpage = val;
 
-      this.$http
+      this.$axios
         .get(
           "http://" +
             this.$ip +
@@ -159,7 +159,7 @@ response.data.results[i]["begintime"] =moment(response.data.results[i]["begintim
     }
   },
   created() {
-    this.$http
+    this.$axios
       .get(
         "http://" +
           this.$ip +

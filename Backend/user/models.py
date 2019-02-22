@@ -16,7 +16,7 @@ class User(models.Model):
     realname = models.CharField(max_length=50,null=False)
     qq = models.CharField(max_length=50,null=True)
     email = models.CharField(max_length=50,null=True)
-    type = models.IntegerField(null=False,default=1)
+    type = models.IntegerField(null=False,default=1) # 1 普通 2 管理员 3 超级管理员
 
 
     score = models.IntegerField(default=0)

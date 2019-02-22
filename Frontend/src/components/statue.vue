@@ -84,7 +84,7 @@ export default {
       if(!this.contest) this.contest="";
       if (!this.username) this.username = "";
       this.pagesize = val;
-      this.$http
+      this.$axios
         .get(
           "http://" +
             this.$ip +
@@ -162,7 +162,7 @@ export default {
       if(!this.contest) this.contest="";
       if (!this.username) this.username = "";
       this.currentpage = val;
-      this.$http
+      this.$axios
         .get(
           "http://" +
             this.$ip +
@@ -291,7 +291,7 @@ export default {
         else
         this.showall=false;
 
-      this.$http
+      this.$axios
         .get(
           "http://" +
             this.$ip +

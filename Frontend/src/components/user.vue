@@ -98,7 +98,7 @@ export default {
   created() {
     this.username = this.$route.query.username;
     if (this.username) {
-      this.$http
+      this.$axios
         .get(
           "http://" +
             this.$ip +
@@ -114,7 +114,7 @@ export default {
             this.rating=response.data[0].rating;
         });
       
-      this.$http
+      this.$axios
         .get(
           "http://" +
             this.$ip +
@@ -128,7 +128,7 @@ export default {
             this.submittion=response.data[0].submit;
         });
 
-      this.$http.get("http://" +
+      this.$axios.get("http://" +
             this.$ip +
             ":" +
             this.$port +
