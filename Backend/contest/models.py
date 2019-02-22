@@ -35,7 +35,7 @@ class ContestAnnouncement(models.Model):
 class ContestProblem(models.Model):
 
     contestid = models.IntegerField()
-    problemid = models.IntegerField()
+    problemid = models.CharField(max_length=50)
     problemtitle = models.CharField(max_length=500,default="uname")
     rank = models.IntegerField() # 顺序 
     

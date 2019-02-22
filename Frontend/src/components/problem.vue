@@ -8,7 +8,7 @@
           @cell-mouse-enter="changestatistices"
           @cell-click="problemclick"
         >
-          <el-table-column prop="id" label="ID" :width="100"></el-table-column>
+          <el-table-column prop="problem" label="ID" :width="100"></el-table-column>
           <el-table-column prop="title" label="Title"></el-table-column>
           <el-table-column prop="level" label="Level">
             <template slot-scope="scope1">
@@ -328,7 +328,7 @@ export default {
     problemclick: function(row, column, cell, event) {
       this.$router.push({
         name: "problemdetail",
-        params: { problemID: row.id }
+        query: { problemID: row.problem }
       });
     }
   },

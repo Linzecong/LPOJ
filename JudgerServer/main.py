@@ -88,6 +88,9 @@ t = threading.Thread(target=getSubmition, args=())
 t.setDaemon(True)
 t.start()
 
+
+# 记得添加contest开始时，自动设置题目为auth=3，比赛结束自动设置auth=1
+
 while True:
     newSocket, addr = server.accept()
     print("client [%s] is connected!" % str(addr))

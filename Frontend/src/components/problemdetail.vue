@@ -269,7 +269,7 @@ export default {
     };
   },
   created() {
-    this.ID = this.$route.params.problemID;
+    this.ID = this.$route.query.problemID;
     var auth = 1;
     this.$axios
       .get(

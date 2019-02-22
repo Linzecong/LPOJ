@@ -4,7 +4,7 @@ from django.db import models
 
 class Problem(models.Model):
 
-    problem = models.CharField(max_length=50)
+    problem = models.CharField(max_length=50,primary_key=True)
     author = models.CharField(max_length=50, default="admin")
     addtime = models.DateTimeField(auto_now=True)
     oj = models.CharField(max_length=50, default="LPOJ")
@@ -26,7 +26,7 @@ class Problem(models.Model):
         return self.title
 
 class ProblemData(models.Model):
-    problem = models.CharField(max_length=50)
+    problem = models.CharField(max_length=50,primary_key=True)
     title = models.CharField(max_length=50)
     level = models.IntegerField(default=5)
     submission = models.IntegerField(default=0)
