@@ -262,6 +262,10 @@ export default {
         });
     },
     submit: function() {
+      if(this.hint=="404"){
+        this.$message.error("非法操作！");
+        return;
+      }
       if (!sessionStorage.username) {
         this.$message.error("请先登录！");
         return;

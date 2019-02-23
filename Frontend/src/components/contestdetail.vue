@@ -10,7 +10,7 @@
       <span slot="label">
         <i class="el-icon-menu"></i> Problems
       </span>
-      <contestproblem ref="Problems" ></contestproblem>
+      <contestproblem ref="Problems"></contestproblem>
     </el-tab-pane>
     <el-tab-pane label="Submissions" :lazy="true">
       <span slot="label">
@@ -49,46 +49,74 @@ import contestcomment from "@/components/contestcomment";
 export default {
   name: "contestdetail",
   components: {
-    contestoverview,contestproblem,contestannounce,contestsubmit,contestrank,contestcomment
+    contestoverview,
+    contestproblem,
+    contestannounce,
+    contestsubmit,
+    contestrank,
+    contestcomment
   },
   data() {
     return {
       contestid: this.$route.params.contestID,
-      haveauth:false
+      haveauth: false
     };
   },
-  created(){
-    this.contestid=this.$route.params.contestID
-    // var username = sessionStorage.username
-    // if(username){
-    //   this.$axios
-    //     .get(
-    //       "http://" +
-    //         this.$ip +
-    //         ":" +
-    //         this.$port +
-    //         "/contestregister/?username=" +
-    //         username+"&contestid="+this.contestid
-    //     )
-    //     .then(response => {
-    //         this.name=response.data[0].name;
-    //         this.des=response.data[0].des;
-    //         this.score=response.data[0].score;
-    //         this.rating=response.data[0].rating;
-    //     });
-    // }
-    
+  created() {
+    this.contestid = this.$route.params.contestID;
+
+    this.$axios
+      .get(
+        "http://" +
+          this.$ip +
+          ":" +
+          this.$port +
+          "/contestinfo/" +
+          this.contestid +
+          "/"
+      )
+      .then(response => {
+        var auth = response.data.auth;
+        if (auth == "1") {
+          this.haveauth = 1;
+          this.$refs.Overview.haveauth = 1;
+          return;
+        }
+        var username = sessionStorage.username;
+        if (username) {
+          this.$axios
+            .get(
+              "http://" +
+                this.$ip +
+                ":" +
+                this.$port +
+                "/contestregister/?user=" +
+                username +
+                "&contestid=" +
+                this.contestid
+            )
+            .then(response => {
+              if (response.data.length > 0) {
+                this.haveauth = 1;
+                this.$refs.Overview.haveauth = 1;
+              }
+            });
+        }
+      })
+      .catch(error => {
+        this.$message.error("服务器错误！" + error);
+        return;
+      });
   },
   methods: {
     tabClick(tab) {
-      console.log(tab)
-      if(tab.label=="Problems")
+      console.log(tab);
+      if (tab.label == "Problems")
         this.$refs.Problems.getproblem(this.$route.params.contestID);
-      
-      if(tab.label=="Overview")
+
+      if (tab.label == "Overview")
         this.$refs.Overview.refresh(this.$route.params.contestID);
-    },
-    
+    }
   }
 };
 </script>

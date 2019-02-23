@@ -232,6 +232,7 @@ export default {
             sessionStorage.setItem("username", "");
             this.loginshow = 0;
             this.username = "";
+            this.$router.go(0);
           })
           .catch(error => {
             this.$message.error("服务器错误！" + "(" + error + ")");
@@ -333,11 +334,13 @@ export default {
           });
           sessionStorage.setItem("username", this.form.username);
           sessionStorage.setItem("name", response.data.name);
+          sessionStorage.setItem("rating", response.data.rating);
           this.dialogRegisterVisible = false;
           this.dialogLoginVisible = false;
           this.loginshow = 1;
           this.username = this.form.username;
           this.name = sessionStorage.name;
+          this.$router.go(0);
         })
         .catch(error => {
           this.$message.error("用户名不存在（" + error + "）");

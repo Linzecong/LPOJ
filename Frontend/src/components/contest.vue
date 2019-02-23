@@ -1,6 +1,10 @@
 <template>
   <el-row>
-    <el-table :data="tableData" @cell-click="contestclick" :default-sort="{prop: 'begintime', order: 'descending'}">
+    <el-table
+      :data="tableData"
+      @cell-click="contestclick"
+      :default-sort="{prop: 'begintime', order: 'descending'}"
+    >
       <el-table-column prop="id" label="ID" :width="100"></el-table-column>
       <el-table-column prop="title" label="Title"></el-table-column>
       <el-table-column prop="level" label="Level">
@@ -43,7 +47,7 @@
 </template>
 
 <script>
-import moment from 'moment'
+import moment from "moment";
 export default {
   name: "contest",
   data() {
@@ -99,9 +103,15 @@ export default {
               response.data.results[i]["level"] = "VeryHard";
             if (response.data.results[i]["level"] == "5")
               response.data.results[i]["level"] = "ExtremelyHard";
-response.data.results[i]["begintime"] =moment(response.data.results[i]["begintime"]).format('YYYY-MM-DD HH:mm:ss')
+            response.data.results[i]["begintime"] = moment(
+              response.data.results[i]["begintime"]
+            ).format("YYYY-MM-DD HH:mm:ss");
             response.data.results[i]["lasttime"] =
-              response.data.results[i]["lasttime"]/60/60 + ":" + response.data.results[i]["lasttime"]/60%60 + ":"+response.data.results[i]["lasttime"]%60%60;
+              response.data.results[i]["lasttime"] / 60 / 60 +
+              ":" +
+              ((response.data.results[i]["lasttime"] / 60) % 60) +
+              ":" +
+              ((response.data.results[i]["lasttime"] % 60) % 60);
 
             if (response.data.results[i]["auth"] == "1")
               response.data.results[i]["auth"] = "Public";
@@ -112,9 +122,10 @@ response.data.results[i]["begintime"] =moment(response.data.results[i]["begintim
           }
           this.tableData = response.data.results;
           this.totalcontest = response.data.count;
-        }).catch(error=>{
-            this.$message.error("服务器错误！"+"("+error+")");
-          });
+        })
+        .catch(error => {
+          this.$message.error("服务器错误！" + "(" + error + ")");
+        });
     },
     handleCurrentChange(val) {
       this.currentpage = val;
@@ -143,10 +154,15 @@ response.data.results[i]["begintime"] =moment(response.data.results[i]["begintim
             if (response.data.results[i]["level"] == "5")
               response.data.results[i]["level"] = "ExtremelyHard";
 
-response.data.results[i]["begintime"] =moment(response.data.results[i]["begintime"]).format('YYYY-MM-DD HH:mm:ss')
+            response.data.results[i]["begintime"] = moment(
+              response.data.results[i]["begintime"]
+            ).format("YYYY-MM-DD HH:mm:ss");
             response.data.results[i]["lasttime"] =
-              response.data.results[i]["lasttime"]/60/60 + ":" + response.data.results[i]["lasttime"]/60%60 + ":"+response.data.results[i]["lasttime"]%60%60;
-
+              response.data.results[i]["lasttime"] / 60 / 60 +
+              ":" +
+              ((response.data.results[i]["lasttime"] / 60) % 60) +
+              ":" +
+              ((response.data.results[i]["lasttime"] % 60) % 60);
 
             if (response.data.results[i]["auth"] == "1")
               response.data.results[i]["auth"] = "Public";
@@ -157,9 +173,10 @@ response.data.results[i]["begintime"] =moment(response.data.results[i]["begintim
           }
           this.tableData = response.data.results;
           this.totalcontest = response.data.count;
-        }).catch(error=>{
-            this.$message.error("服务器错误！"+"("+error+")");
-          });
+        })
+        .catch(error => {
+          this.$message.error("服务器错误！" + "(" + error + ")");
+        });
     }
   },
   created() {
@@ -184,10 +201,15 @@ response.data.results[i]["begintime"] =moment(response.data.results[i]["begintim
           if (response.data.results[i]["level"] == "5")
             response.data.results[i]["level"] = "ExtremelyHard";
 
-          response.data.results[i]["begintime"] =moment(response.data.results[i]["begintime"]).format('YYYY-MM-DD HH:mm:ss')
-            response.data.results[i]["lasttime"] =
-              response.data.results[i]["lasttime"]/60/60 + ":" + response.data.results[i]["lasttime"]/60%60 + ":"+response.data.results[i]["lasttime"]%60%60;
-
+          response.data.results[i]["begintime"] = moment(
+            response.data.results[i]["begintime"]
+          ).format("YYYY-MM-DD HH:mm:ss");
+          response.data.results[i]["lasttime"] =
+            response.data.results[i]["lasttime"] / 60 / 60 +
+            ":" +
+            ((response.data.results[i]["lasttime"] / 60) % 60) +
+            ":" +
+            ((response.data.results[i]["lasttime"] % 60) % 60);
 
           if (response.data.results[i]["auth"] == "1")
             response.data.results[i]["auth"] = "Public";
@@ -198,9 +220,10 @@ response.data.results[i]["begintime"] =moment(response.data.results[i]["begintim
         }
         this.tableData = response.data.results;
         this.totalcontest = response.data.count;
-      }).catch(error=>{
-            this.$message.error("服务器错误！"+"("+error+")");
-          });
+      })
+      .catch(error => {
+        this.$message.error("服务器错误！" + "(" + error + ")");
+      });
   }
 };
 </script>

@@ -270,6 +270,10 @@ export default {
   },
   created() {
     this.ID = this.$route.query.problemID;
+    if(!this.ID){
+      this.$message.error("参数错误" + "(" + this.ID + ")");
+      return;
+    }
     var auth = 1;
     this.$axios
       .get(
@@ -383,6 +387,10 @@ export default {
       if (type == "ExtremelyHard") return "danger";
     },
     submit: function() {
+      if(this.addtime=="404"){
+        this.$message.error("非法操作！");
+        return;
+      }
       if (!sessionStorage.username) {
         this.$message.error("请先登录！");
         return;
