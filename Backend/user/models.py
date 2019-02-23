@@ -32,7 +32,7 @@ class User(models.Model):
 
 class UserData(models.Model):
 
-    username = models.CharField(max_length=50,null=False)
+    username = models.CharField(max_length=50,null=False,unique=True)
     ac = models.IntegerField(null=False,default=0)
     submit = models.IntegerField(null=False,default=0)
     

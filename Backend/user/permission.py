@@ -16,7 +16,7 @@ class LoginOnly(permissions.BasePermission):
 
 class UserOnly(permissions.BasePermission):
     def has_permission(self, request, view):
-        if request.method in permissions.SAFE_METHODS:
+        if request.method in permissions.SAFE_METHODS or request.method=="POST":
             return True
         
         data = request.data

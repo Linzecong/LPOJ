@@ -6,11 +6,11 @@
       </span>
       <contestoverview ref="Overview"></contestoverview>
     </el-tab-pane>
-    <el-tab-pane label="Problems">
+    <el-tab-pane label="Problems" :disabled="!haveauth">
       <span slot="label">
         <i class="el-icon-menu"></i> Problems
       </span>
-      <contestproblem ref="Problems"></contestproblem>
+      <contestproblem ref="Problems" ></contestproblem>
     </el-tab-pane>
     <el-tab-pane label="Submissions" :lazy="true">
       <span slot="label">
@@ -24,13 +24,13 @@
       </span>
       <contestrank ref="Rankings"></contestrank>
     </el-tab-pane>
-    <el-tab-pane label="Announcements">
+    <el-tab-pane label="Announcements" :disabled="!haveauth">
       <span slot="label">
         <i class="el-icon-bell"></i> Announcements
       </span>
       <contestannounce ref="Announcements"></contestannounce>
     </el-tab-pane>
-    <el-tab-pane label="Comments">
+    <el-tab-pane label="Comments" :disabled="!haveauth">
       <span slot="label">
         <i class="el-icon-info"></i> Comments
       </span>
@@ -53,8 +53,31 @@ export default {
   },
   data() {
     return {
-      msg: this.$route.params.contestID
+      contestid: this.$route.params.contestID,
+      haveauth:false
     };
+  },
+  created(){
+    this.contestid=this.$route.params.contestID
+    // var username = sessionStorage.username
+    // if(username){
+    //   this.$axios
+    //     .get(
+    //       "http://" +
+    //         this.$ip +
+    //         ":" +
+    //         this.$port +
+    //         "/contestregister/?username=" +
+    //         username+"&contestid="+this.contestid
+    //     )
+    //     .then(response => {
+    //         this.name=response.data[0].name;
+    //         this.des=response.data[0].des;
+    //         this.score=response.data[0].score;
+    //         this.rating=response.data[0].rating;
+    //     });
+    // }
+    
   },
   methods: {
     tabClick(tab) {
@@ -64,9 +87,8 @@ export default {
       
       if(tab.label=="Overview")
         this.$refs.Overview.refresh(this.$route.params.contestID);
-
-      
-    }
+    },
+    
   }
 };
 </script>

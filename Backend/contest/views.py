@@ -53,6 +53,5 @@ class ContestRegisterView(viewsets.ModelViewSet):
     queryset = ContestRegister.objects.all()
     serializer_class = ContestRegisterSerializer
     pagination_class = LimitOffsetPagination
-    permission_classes = (ManagerOnly,)
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('user', "contestid")

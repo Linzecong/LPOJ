@@ -91,7 +91,7 @@ export default {
     problemclick: function(row, column, cell, event) {
       this.$router.push({
         name: "problemdetail",
-        params: { problemID: row.problemid }
+        query: { problemID: row.problemid }
       });
     }
   },

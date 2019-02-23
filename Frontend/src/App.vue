@@ -232,8 +232,9 @@ export default {
             sessionStorage.setItem("username", "");
             this.loginshow = 0;
             this.username = "";
-          }).catch(error=>{
-            this.$message.error("服务器错误！"+"("+error+")");
+          })
+          .catch(error => {
+            this.$message.error("服务器错误！" + "(" + error + ")");
           });
       }
       if (command == "home") {
@@ -289,47 +290,58 @@ export default {
       this.form.password = this.$md5(this.form.password);
 
       this.$axios
-        .post("http://" + this.$ip + ":" + this.$port + "/register/", this.form)
-        .then(
-          response => {
-            if (response.data == "usererror") {
-              this.$message.error("用户名已存在！");
-              return;
-            } 
-            this.$message({
-              message: "注册成功！",
-              type: "success"
-            });
-            this.dialogRegisterVisible = false;
+        .post("http://" + this.$ip + ":" + this.$port + "/userdata/", this.form)
+        .then(response => {
+          
+
+          this.$axios
+            .post(
+              "http://" + this.$ip + ":" + this.$port + "/register/",
+              this.form
+            )
+            .then(response => {
+              if (response.data == "usererror") {
+            this.$message.error("用户名已存在！");
+            return;
           }
-        ).catch(error=>{
-            this.$message.error("服务器错误！"+"("+error+")");
-          });
+              this.$message({
+                message: "注册成功！",
+                type: "success"
+              });
+              this.dialogRegisterVisible = false;
+            })
+            .catch(error => {
+              this.$message.error("服务器错误！" + "(" + error + ")");
+            });
+        })
+        .catch(error => {
+          this.$message.error("服务器错误！" + "(" + error + ")");
+        });
     },
     loginClick() {
       this.form.password = this.$md5(this.form.password);
       this.$axios
         .post("http://" + this.$ip + ":" + this.$port + "/login/", this.form)
-        .then(
-          response => {
-            if (response.data == "passworderror") {
-              this.$message.error("密码错误");
-              return;
-            }
-            this.$message({
-              message: "登录成功！",
-              type: "success"
-            });
-            sessionStorage.setItem("username", this.form.username);
-            sessionStorage.setItem("name", response.data.name);
-            this.dialogRegisterVisible = false;
-            this.dialogLoginVisible = false;
-            this.loginshow = 1;
-            this.username = this.form.username;
-            this.name = sessionStorage.name;
-          }).catch(error=>{
-            this.$message.error("用户名不存在（" + error + "）");
+        .then(response => {
+          if (response.data == "passworderror") {
+            this.$message.error("密码错误");
+            return;
+          }
+          this.$message({
+            message: "登录成功！",
+            type: "success"
           });
+          sessionStorage.setItem("username", this.form.username);
+          sessionStorage.setItem("name", response.data.name);
+          this.dialogRegisterVisible = false;
+          this.dialogLoginVisible = false;
+          this.loginshow = 1;
+          this.username = this.form.username;
+          this.name = sessionStorage.name;
+        })
+        .catch(error => {
+          this.$message.error("用户名不存在（" + error + "）");
+        });
     }
   }
 };
