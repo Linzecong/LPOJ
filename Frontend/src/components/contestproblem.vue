@@ -149,7 +149,8 @@ export default {
       submitid: -1,
 
       currentproblem: -1,
-      currentcontest: this.$route.params.contestID
+      currentcontest: this.$route.params.contestID,
+      currentrank:-1,
     };
   },
   filters: {
@@ -160,14 +161,16 @@ export default {
   },
   methods: {
     problemtabClick(tab) {
-      this.submitbuttontext = "提交后请勿重复刷新",
-      this.judgetype= "primary",
-      this.loadingshow= false,
-      this.submitid= -1,
-      this.code= "",
-      this.language= "",
+      clearInterval(this.$store.state.submittimer);
+      this.submitbuttontext = "提交后请勿重复刷新";
+      this.judgetype= "primary";
+      this.loadingshow= false;
+      this.submitid= -1;
+      this.code= "";
+      this.language= "";
       this.currentproblem = this.problemids[tab.index];
       this.title = this.problemtitles[tab.index];
+      this.currentrank=tab.index;
       this.$axios
         .get(
           "http://" +
@@ -191,6 +194,14 @@ export default {
         });
     },
     getproblem(id) {
+      clearInterval(this.$store.state.submittimer);
+       this.submitbuttontext = "提交后请勿重复刷新";
+      this.judgetype= "primary";
+      this.loadingshow= false;
+      this.submitid= -1;
+      this.code= "";
+      this.language= "";
+
       this.$axios
         .get(
           "http://" + this.$ip + ":" + this.$port + "/contestinfo/" + id + "/"
@@ -305,6 +316,29 @@ export default {
               message: "0"
             })
             .then(response => {
+              var date1 = new Date(Date.parse(response.data.submittime));
+            //   console.log( {
+            //   username: sessionStorage.username,
+            //   user:sessionStorage.name,
+            //   type:-1,
+            //   submitid:response.data.id,
+            //   contestid: parseInt(this.currentcontest),
+            //   problemrank:this.currentrank,
+            //   submittime:date1.getTime()
+            // })
+                 
+          this.$axios
+            .post("http://" + this.$ip + ":" + this.$port + "/contestboard/", {
+              username: sessionStorage.username,
+              user:sessionStorage.name,
+              type:-1,
+              submitid:response.data.id,
+              contestid: parseInt(this.currentcontest),
+              problemrank:this.currentrank,
+              submittime:date1.getTime()
+            })
+            .then(response2 => {
+
               this.$message({
                 message: "提交成功！",
                 type: "success"
@@ -316,6 +350,11 @@ export default {
               this.loadingshow = true;
               //创建一个全局定时器，定时刷新状态
               this.$store.state.submittimer = setInterval(this.timer, 1000);
+
+            }).catch(error => {
+          this.$message.error("服务器错误！" + "(" + error + ")");
+          });
+             
             }).catch(error => {
           this.$message.error("服务器错误！" + "(" + error + ")");
         });

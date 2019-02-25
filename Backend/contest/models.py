@@ -50,8 +50,8 @@ class ContestBoard(models.Model):
     username = models.CharField(max_length=50)
     user = models.CharField(max_length=50)
     problemrank = models.IntegerField()
-    type = models.IntegerField() # 1 AC 0没AC，算罚时
-    submittime = models.IntegerField() # 秒为单位
+    type = models.IntegerField() # 1 AC， 0没AC算罚时，-1没AC不算罚时
+    submittime = models.BigIntegerField() # 豪秒为单位
     submitid = models.IntegerField() # 用于rejudge
 
     objects = models.Manager()

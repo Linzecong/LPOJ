@@ -281,9 +281,9 @@ export default {
       )
       .then(response => {
         auth = response.data.auth;
-        if (auth == 2) {
+        if (auth == 2||auth == 3) {
           this.title = "非法访问！";
-          this.$message.error("服务器错误！" + "(" + error + ")");
+          this.$message.error("服务器错误！" + "(" + "无权限" + ")");
           return;
         }
         this.des = response.data.des;

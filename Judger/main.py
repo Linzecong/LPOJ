@@ -18,7 +18,7 @@ statue = True
 myjsonfile = open("./setting.json", 'r')
 judgerjson = json.loads(myjsonfile.read())
 
-judgername = judgerjson["judger_name"]
+judgername =input("Please input judger name(must different or may cause judge problem):  ")
 host = judgerjson["server_ip"]
 port = judgerjson["server_port"]
 
@@ -39,16 +39,16 @@ reconnect()
 
 
 
-def judge(id, code, lang, problem):
+def judge(id, code, lang, problem,iscontest):
     global statue, cursor
 
     # print(id,code,lang,problem)
 
     if lang == "C":
-        file = open("main.c", "w")
+        file = open("%s.c"% judgername, "w")
         file.write(code)
         file.close()
-        result = os.system("gcc main.c -o main -O2")
+        result = os.system("gcc %s.c -o %s.out -O2" %(judgername,judgername))
         # print(result)
         if result:
             try:
@@ -61,10 +61,10 @@ def judge(id, code, lang, problem):
             return
 
     elif lang == "C++":
-        file = open("main.cpp", "w")
+        file = open("%s.cpp"%judgername, "w")
         file.write(code)
         file.close()
-        result = os.system("g++ main.cpp -o main -O2")
+        result = os.system("g++ %s.cpp -o %s.out -O2"%(judgername,judgername))
         # print(result)
         if result:
             try:
@@ -88,10 +88,8 @@ def judge(id, code, lang, problem):
     cursor.execute("SELECT * from problem_problem where problem = '%s' " % problem)
     data = cursor.fetchone()
 
-    timelimit = int(data[12])
-    memorylimit = int(data[13])
-    
-
+    timelimit = int(data[11])
+    memorylimit = int(data[12])
 
     files = os.listdir("../DataServer/problemdata/%s/" % problem)
 
@@ -107,8 +105,11 @@ def judge(id, code, lang, problem):
         else:
             tempset.add(s)
 
+    maxmemory = 0
+    maxtime = 0
+
     for filename in newfiles:
-        print("judging!!!!!!!!",filename)
+        print("judging!!!!!!!!","../DataServer/problemdata/%s/%s.in" % (problem,filename))
         ret = _judger.run(max_cpu_time=timelimit,
                     max_real_time=_judger.UNLIMITED,
                     max_memory=memorylimit * 1024 * 1024,
@@ -116,7 +117,7 @@ def judge(id, code, lang, problem):
                     max_output_size=32 * 1024 * 1024,
                     max_stack=32 * 1024 * 1024,
                     # five args above can be _judger.UNLIMITED
-                    exe_path="main",
+                    exe_path=judgername+".out",
                     input_path="../DataServer/problemdata/%s/%s.in" % (problem,filename),
                     output_path="temp.out",
                     error_path="error.out",
@@ -130,12 +131,15 @@ def judge(id, code, lang, problem):
                     gid=0
                     )
         print(ret)
-
+        maxmemory = max(ret["memory"],maxmemory)
+        maxtime = max(ret["cpu_time"],maxtime)
         if ret["result"] != 0:
 
             if ret["result"] == 4 and ret["exit_code"] == 127 and ret["signal"] == 0:
                 try:
-                    cursor.execute("UPDATE judgestatus_judgestatus SET result = '%s',testcase='%s'  WHERE id = '%s'" % ('3',filename, id))
+                    cursor.execute("UPDATE judgestatus_judgestatus SET memory =%d, time=%d, result = '%s',testcase='%s'  WHERE id = '%s'" % (maxmemory/1024/1024,maxtime,'3',filename, id))
+                    if iscontest:
+                        cursor.execute("UPDATE contest_contestboard SET type =0  WHERE submitid = '%s'" %  id)
                     db.commit()
                     statue = True
                 except:
@@ -143,7 +147,9 @@ def judge(id, code, lang, problem):
                     statue = True
             elif ret["result"] == 4 and ret["exit_code"] == 0 and ret["signal"] == 31:
                 try:
-                    cursor.execute("UPDATE judgestatus_judgestatus SET result = '%s',testcase='%s'  WHERE id = '%s'" % ('3',filename, id))
+                    cursor.execute("UPDATE judgestatus_judgestatus SET memory =%d, time=%d, result = '%s',testcase='%s'  WHERE id = '%s'" % (maxmemory/1024/1024,maxtime,'3',filename, id))
+                    if iscontest:
+                        cursor.execute("UPDATE contest_contestboard SET type =0  WHERE submitid = '%s'" %  id)
                     db.commit()
                     statue = True
                 except:
@@ -151,7 +157,9 @@ def judge(id, code, lang, problem):
                     statue = True
             else:
                 try:
-                    cursor.execute("UPDATE judgestatus_judgestatus SET result = '%s',testcase='%s'  WHERE id = '%s'" % (ret["result"],filename, id))
+                    cursor.execute("UPDATE judgestatus_judgestatus SET memory =%d, time=%d, result = '%s',testcase='%s'  WHERE id = '%s'" % (maxmemory/1024/1024,maxtime,ret["result"],filename, id))
+                    if iscontest:
+                        cursor.execute("UPDATE contest_contestboard SET type =0  WHERE submitid = '%s'" %  id)
                     db.commit()
                     statue = True
                 except:
@@ -196,15 +204,20 @@ def judge(id, code, lang, problem):
 
             if result != 0:
                 try:
-                    cursor.execute("UPDATE judgestatus_judgestatus SET result = '%s',testcase='%s' WHERE id = '%s'" % (result,filename, id))
+                    cursor.execute("UPDATE judgestatus_judgestatus SET memory =%d, time=%d, result = '%s',testcase='%s'  WHERE id = '%s'" % (maxmemory/1024/1024,maxtime,result,filename, id))
+                    if iscontest:
+                        cursor.execute("UPDATE contest_contestboard SET type =0 WHERE submitid = '%s'" %  id)
                     db.commit()
                     statue = True
                 except:
                     db.rollback()
                     statue = True
                 return
+
     try:
-        cursor.execute("UPDATE judgestatus_judgestatus SET result = 0 WHERE id = '%s'" % id)
+        cursor.execute("UPDATE judgestatus_judgestatus SET memory =%d, time=%d, result = 0  WHERE id = '%s'" % (maxmemory/1024/1024,maxtime, id))
+        if iscontest:
+            cursor.execute("UPDATE contest_contestboard SET type =1 WHERE submitid = '%s'" %  id)
         db.commit()
         statue = True
     except:
@@ -232,11 +245,12 @@ while True:
                 tp = data.split("|")
                 cursor.execute("SELECT * from judgestatus_judgestatus where id = '%s'" % tp[1])
                 data = cursor.fetchone()
-                print(data,tp[1])
+                
+                print(data[11],tp[1])
                 try:
                     cursor.execute("UPDATE judgestatus_judgestatus SET result = '-2',judger='%s' WHERE id = '%s'" % (judgername,tp[1]))
                     db.commit()
-                    t = threading.Thread(target=judge,args=(data[0], data[12], data[8], data[3]))
+                    t = threading.Thread(target=judge,args=(data[0], data[12], data[8], data[3],data[11] is not 0))
                     t.setDaemon(True)
                     t.start()
                 except:
@@ -251,3 +265,12 @@ while True:
         break
 
 
+# #include<iostream>
+# using namespace std;
+# int main(){
+# int a,b;
+# cin>>a>>b;
+# cout<<a+b<<endl;
+
+# return 0;
+# }

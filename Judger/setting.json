@@ -4,7 +4,6 @@
     "db_ip":"localhost",
     "db_port":"3306",
     "db_database":"LPOJ",
-    "judger_name":"main",
     "server_ip":"localhost",
     "server_port":9906
 }

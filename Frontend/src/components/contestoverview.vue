@@ -155,6 +155,10 @@ export default {
         });
     },
     register() {
+      if(this.left>0){
+          this.$message.error("比赛已开始，无法注册！");
+          return;
+        }
       if (this.type == "1") {
         this.$message({
           message: "公共比赛无需注册！",
@@ -168,7 +172,7 @@ export default {
       }
       if (this.haveauth) {
         this.$message({
-          message: "你已注册！",
+          message: "你已注册或比赛已结束！",
           type: "success"
         });
         return;
@@ -305,7 +309,7 @@ export default {
     },
     refreshtime() {
       if (this.auth != "Public" && this.auth != "Private") {
-        if (this.haveauth == 0) this.auth = "Protect(Click to register)";
+        if (this.haveauth == 0 && this.left<=0) this.auth = "Protect(Click to register)";
         else this.auth = "Protect";
       }
 

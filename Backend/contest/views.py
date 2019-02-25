@@ -20,8 +20,8 @@ class ContestAnnouncementView(viewsets.ModelViewSet):
 class ContestBoardView(viewsets.ModelViewSet):
     queryset = ContestBoard.objects.all()
     serializer_class = ContestBoardSerializer
-    pagination_class = LimitOffsetPagination
-    permission_classes = (ManagerOnly,)
+    # pagination_class = LimitOffsetPagination
+    # permission_classes = (ManagerOnly,)# 将来要改写成重写post形式
     # filter_backends = (DjangoFilterBackend,)
     # filter_fields = ('user', 'result', "contest")
 

@@ -37,6 +37,7 @@ class AuthOnly(permissions.BasePermission):
     def has_object_permission(self, request, view, problem):
         # Read permissions are allowed to any request,
         # so we'll always allow GET, HEAD or OPTIONS requests.
+        type = request.session.get('type', 1)
         if type == 2 or type == 3 :
             return True
         return problem.auth == 1 or problem.auth == 3

@@ -77,31 +77,49 @@ export default {
       )
       .then(response => {
         var auth = response.data.auth;
-        if (auth == "1") {
-          this.haveauth = 1;
-          this.$refs.Overview.haveauth = 1;
-          return;
-        }
-        var username = sessionStorage.username;
-        if (username) {
-          this.$axios
-            .get(
-              "http://" +
-                this.$ip +
-                ":" +
-                this.$port +
-                "/contestregister/?user=" +
-                username +
-                "&contestid=" +
-                this.contestid
-            )
-            .then(response => {
-              if (response.data.length > 0) {
-                this.haveauth = 1;
-                this.$refs.Overview.haveauth = 1;
-              }
-            });
-        }
+
+        var sDate1 = response.data.begintime;
+
+        var date2 = "";
+        var date1 = new Date(Date.parse(sDate1));
+
+        this.$axios
+          .get("http://quan.suning.com/getSysTime.do")
+          .then(response2 => {
+            date2 = response2.data.sysTime2;
+
+            var left = parseInt(
+              (new Date(Date.parse(date2)).getTime() - date1.getTime()) / 1000
+            );
+            if (left >= response.data.lasttime) {
+              auth = "1";
+            }
+            if (auth == "1") {
+              this.haveauth = 1;
+              this.$refs.Overview.haveauth = 1;
+              return;
+            }
+            var username = sessionStorage.username;
+            if (username) {
+              this.$axios
+                .get(
+                  "http://" +
+                    this.$ip +
+                    ":" +
+                    this.$port +
+                    "/contestregister/?user=" +
+                    username +
+                    "&contestid=" +
+                    this.contestid
+                )
+                .then(response => {
+                  if (response.data.length > 0) {
+                    this.haveauth = 1;
+                    this.$refs.Overview.haveauth = 1;
+                  }
+                });
+            }
+          });
       })
       .catch(error => {
         this.$message.error("服务器错误！" + error);

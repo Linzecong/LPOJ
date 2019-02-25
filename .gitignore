@@ -2,11 +2,13 @@ __pycache__
 Judger/build
 Judger/test
 *.pyc
-Judger/main.cpp
-Judger/main.c
-Judger/main
+Judger/*.cpp
+Judger/*.c
+Judger/*out
 Judger/judger.log
 Judger/error.out
 Judger/temp.out
+Judger/temp.out
 *.in
 *.out
+Judger/output/libjudger.so

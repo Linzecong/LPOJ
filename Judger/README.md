@@ -4,16 +4,14 @@
 # 原项目链接 https://github.com/QingdaoU/Judger
 
 # 安装步骤
-    0. cd Judger
     1. sudo apt-get install libseccomp-dev
     2. mkdir build && cd build && cmake .. && make && sudo make install
-    3. cd JudgerCore
-    4. python setup.py install
+    3. cd ..
+    4. cd JudgerCore
+    5. sudo python setup.py install
 
-# 测试
-
-    0. cd test
-    1. sudo python demo.py
+# 运行
+    1. sudo python main.py
 
 # 详细测试
     参考 https://github.com/QingdaoU/Judger 中的 unittest

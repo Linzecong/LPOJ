@@ -18,18 +18,15 @@ db = MySQLdb.connect(judgerjson["db_ip"], judgerjson["db_user"], judgerjson["db_
 
 
 def getSubmition():
-    global queue, mutex
+    global queue, mutex, db
 
     cursor = db.cursor()
     while True:
         sleep(1)
-        cursor.execute(
-            "SELECT * from judgestatus_judgestatus where result = '-1'")
-        data = cursor.fetchall()
-
-       # print(data)
-
         if mutex.acquire():
+            cursor.execute(
+                "SELECT * from judgestatus_judgestatus where result = '-1'")
+            data = cursor.fetchall()
             try:
                 for d in data:
                     queue.append(d[0])
@@ -90,6 +87,46 @@ t.start()
 
 
 # 记得添加contest开始时，自动设置题目为auth=3，比赛结束自动设置auth=1
+def changeauth():
+    global db,mutex
+    curcontest = set()
+    cursor = db.cursor()
+    while True:
+        sleep(2)
+        if mutex.acquire():
+            cursor.execute("SELECT * from contest_contestinfo where TO_SECONDS(NOW()) - TO_SECONDS(begintime) <= lasttime")
+            data = cursor.fetchall()
+            print(data)
+            getcontest = set()
+            for d in data:
+                getcontest.add(d[0]) # 用于求结束的比赛
+                cursor.execute("SELECT * from contest_contestproblem where contestid=%d" % d[0])
+                pros = cursor.fetchall()
+                for pid in pros:
+                    print(pid[2])
+                    cursor.execute( "UPDATE  problem_problemdata SET auth = 3 WHERE problem = %s" % pid[2])
+                    cursor.execute( "UPDATE  problem_problem SET auth = 3 WHERE problem = %s" % pid[2])
+                db.commit()
+            
+            endcontest = curcontest.difference(getcontest)
+            print("curcontest",curcontest)
+            print("endcontest",endcontest)
+
+            for eid in endcontest:
+                cursor.execute( "SELECT * from contest_contestproblem where contestid=%d" % eid)
+                pros = cursor.fetchall()
+                for pid in pros:
+                    print(pid[2])
+                    cursor.execute("UPDATE  problem_problemdata SET auth = 1 WHERE problem = %s" % pid[2])
+                    cursor.execute("UPDATE  problem_problem SET auth = 1 WHERE problem = %s" % pid[2])
+                db.commit()
+            curcontest = getcontest
+            mutex.release()
+
+t1 = threading.Thread(target=changeauth, args=())
+t1.setDaemon(True)
+t1.start()
+
 
 while True:
     newSocket, addr = server.accept()

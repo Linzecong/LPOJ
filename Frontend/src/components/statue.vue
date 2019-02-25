@@ -398,7 +398,7 @@ export default {
     //创建一个全局定时器，定时刷新状态
 
     this.timer();
-    this.$store.state.timer = setInterval(this.timer, 1000);
+    this.$store.state.timer = setInterval(this.timer, 10000);
   },
   
 
