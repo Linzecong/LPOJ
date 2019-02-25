@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from rest_framework import serializers
-from .models import User,UserData,UserSubmittion
+from .models import User,UserData
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -11,9 +11,4 @@ class UserSerializer(serializers.ModelSerializer):
 class UserDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserData
-        fields = '__all__'
-
-class UserSubmittionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserSubmittion
         fields = '__all__'

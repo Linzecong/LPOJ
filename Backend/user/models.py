@@ -40,17 +40,3 @@ class UserData(models.Model):
 
     def __str__(self):
         return self.username
-
-
-class UserSubmittion(models.Model):
-
-    username = models.CharField(max_length=50,null=False)
-    problemid = models.CharField(max_length=50,null=False)
-    problemtitle = models.CharField(max_length=50,null=False)
-    result = models.IntegerField(null=False,default=0)
-    time = models.DateTimeField(auto_now=True)
-
-    objects = models.Manager()
-
-    def __str__(self):
-        return self.username

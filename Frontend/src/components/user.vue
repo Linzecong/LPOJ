@@ -9,8 +9,8 @@
     <h2>Rating: {{ rating }}</h2>
 
 <el-table @cell-click="problemclick" :default-sort = "{prop: 'time', order: 'descending'}" :data="tableData" :row-class-name="tableRowClassName">
-      <el-table-column prop="problemid" label="Problem"></el-table-column>
-      <el-table-column prop="problemtitle" label="Title"></el-table-column>
+      <el-table-column prop="problem" label="Problem"></el-table-column>
+      <el-table-column prop="language" label="Lang"></el-table-column>
       <el-table-column prop="result" label="Status" :width="250">
         <template slot-scope="scope">
           <el-tag size="medium" :type="statuetype(scope.row.result)" disable-transitions hit>
@@ -91,7 +91,7 @@ export default {
     problemclick: function(row, column, cell, event) {
       this.$router.push({
         name: "problemdetail",
-        query: { problemID: row.problemid }
+        query: { problemID: row.problem }
       });
     }
   },
@@ -132,14 +132,14 @@ export default {
             this.$ip +
             ":" +
             this.$port +
-            "/usersubmittion/?username=" +
+            "/judgestatus/?username=" +
             this.username).then(response => {
         for (var i = 0; i < response.data.length; i++) {
           
-          response.data[i]["time"] =
-            response.data[i]["time"].split("T")[0] +
+          response.data[i]["submittime"] =
+            response.data[i]["submittime"].split("T")[0] +
             " " +
-            response.data[i]["time"].split("T")[1].split(".")[0];
+            response.data[i]["submittime"].split("T")[1].split(".")[0];
 
           if (response.data[i]["result"] == "-1") {
             response.data[i]["result"] = "Pending";

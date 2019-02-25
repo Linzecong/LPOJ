@@ -85,7 +85,7 @@ export default {
       note: 404,
       lefttime: 0,
       timestyle: "wait",
-      left: 0,
+      left: -100,
       lasttime: 0,
 
       auth: 404,
@@ -310,6 +310,10 @@ export default {
       }
 
       this.left++;
+
+      if(this.left==0){
+        this.$router.go(0);
+      }
 
       if (this.left < 0) this.timestyle = "wait";
       else this.timestyle = "begin";

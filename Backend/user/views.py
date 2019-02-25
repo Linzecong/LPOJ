@@ -7,17 +7,10 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
-from .models import User, UserData, UserSubmittion
-from .serializers import UserSerializer, UserDataSerializer, UserSubmittionSerializer
+from .models import User, UserData
+from .serializers import UserSerializer, UserDataSerializer
 from .permission import LoginOnly, UserOnly
 from django_filters.rest_framework import DjangoFilterBackend
-
-class UserSubmittionView(viewsets.ModelViewSet):
-    queryset = UserSubmittion.objects.all()
-    serializer_class = UserSubmittionSerializer
-    filter_backends = (DjangoFilterBackend,)
-    filter_fields = ('username',)
-    permission_classes = (UserOnly,)
         
 
 class UserDataView(viewsets.ModelViewSet):
