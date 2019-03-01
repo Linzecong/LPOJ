@@ -11,14 +11,16 @@ from .models import User, UserData
 from .serializers import UserSerializer, UserDataSerializer
 from .permission import LoginOnly, UserOnly
 from django_filters.rest_framework import DjangoFilterBackend
-        
+from rest_framework.pagination import LimitOffsetPagination
 
 class UserDataView(viewsets.ModelViewSet):
-    queryset = UserData.objects.all()
+    queryset = UserData.objects.all().order_by('-score')
     serializer_class = UserDataSerializer
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('username',)
     permission_classes = (UserOnly,)
+    pagination_class = LimitOffsetPagination
+
 
 class UserView(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -26,6 +28,7 @@ class UserView(viewsets.ModelViewSet):
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('username',)
     permission_classes = (UserOnly,)
+    pagination_class = LimitOffsetPagination
 
 class UserLoginAPIView(APIView):
     queryset = User.objects.all()

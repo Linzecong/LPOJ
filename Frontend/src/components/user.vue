@@ -109,9 +109,7 @@ export default {
         )
         .then(response => {
             this.name=response.data[0].name;
-            this.des=response.data[0].des;
-            this.score=response.data[0].score;
-            this.rating=response.data[0].rating;
+            
         });
       
       this.$axios
@@ -126,6 +124,9 @@ export default {
         .then(response => {
             this.ac=response.data[0].ac;
             this.submittion=response.data[0].submit;
+            this.des=response.data[0].des;
+            this.score=response.data[0].score;
+            this.rating=response.data[0].rating;
         });
 
       this.$axios.get("http://" +

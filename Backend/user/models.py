@@ -18,11 +18,6 @@ class User(models.Model):
     email = models.CharField(max_length=50,null=True)
     type = models.IntegerField(null=False,default=1) # 1 普通 2 管理员 3 超级管理员
 
-
-    score = models.IntegerField(default=0)
-    des = models.CharField(max_length=500,null=True)
-    rating = models.IntegerField(default=1500)
-
     objects = models.Manager()
 
     def __str__(self):
@@ -35,6 +30,9 @@ class UserData(models.Model):
     username = models.CharField(max_length=50,null=False,unique=True)
     ac = models.IntegerField(null=False,default=0)
     submit = models.IntegerField(null=False,default=0)
+    score = models.IntegerField(default=0)
+    des = models.CharField(max_length=500,null=True)
+    rating = models.IntegerField(default=1500)
     
     objects = models.Manager()
 

@@ -90,9 +90,8 @@
         </el-col>
       </el-row>
     </el-form>
- 
-    <el-button type="primary" @click="updateClick">更新</el-button>
 
+    <el-button type="primary" @click="updateClick">更新</el-button>
   </el-card>
 </template>
 
@@ -110,11 +109,10 @@ export default {
       rating: "404",
       tableData: [],
       form: {
-        username:"",
+        username: "",
         password: "",
         comfirm: "",
         name: "",
-        des: "",
         school: "",
         course: "",
         classes: "",
@@ -128,7 +126,7 @@ export default {
   },
   methods: {
     updateClick() {
-      if(!this.username){
+      if (!this.username) {
         this.$message.error("非法访问！");
         return;
       }
@@ -149,7 +147,7 @@ export default {
         this.$message.error("两次密码不一致！");
         return;
       }
-      
+
       if (this.form.name.length < 2) {
         this.$message.error("昵称太短！");
         return;
@@ -168,31 +166,49 @@ export default {
       this.form.password = this.$md5(this.form.password);
       this.$axios
         .put(
-          "http://" + this.$ip + ":" + this.$port + "/user/" + this.userid+"/",
+          "http://" +
+            this.$ip +
+            ":" +
+            this.$port +
+            "/user/" +
+            this.userid +
+            "/",
           this.form
         )
-        .then(
-          response => {
-            this.$message({
-              message: "更新成功！",
-              type: "success"
-            });
-            sessionStorage.setItem("name", this.form.name);
-            this.$router.push({
-        name: "user",
-        query: { username: this.form.username }
-      });
-          }
-          ,
-          response => {
-            this.$message.error("更新失败（" + response + "）");
-          }
-        );
+        .then(response => {
+          this.$axios
+            .put(
+              "http://" +
+                this.$ip +
+                ":" +
+                this.$port +
+                "/userdata/" +
+                this.userid +
+                "/",
+              this.form
+            )
+            .then(
+              response => {
+                this.$message({
+                  message: "更新成功！",
+                  type: "success"
+                });
+                sessionStorage.setItem("name", this.form.name);
+                this.$router.push({
+                  name: "user",
+                  query: { username: this.form.username }
+                });
+              },
+              response => {
+                this.$message.error("更新失败（" + response + "）");
+              }
+            );
+        });
     }
   },
   created() {
     this.username = this.$route.params.username;
-    this.form.username=this.username
+    this.form.username = this.username;
     if (this.username) {
       this.$axios
         .get(
@@ -205,7 +221,6 @@ export default {
         )
         .then(response => {
           this.form.name = response.data[0].name;
-          this.form.des = response.data[0].des;
           this.form.school = response.data[0].school;
           this.form.course = response.data[0].course;
           this.form.classes = response.data[0].classes;

@@ -8,6 +8,7 @@ import setting from '@/components/setting'
 import contest from '@/components/contest'
 import contestdetail from '@/components/contestdetail'
 import problemdetail from '@/components/problemdetail'
+import rank from '@/components/rank'
 
 Vue.use(Router)
 
@@ -54,11 +55,15 @@ export default new Router({
       name: 'contest',
       component: contest
     },
-    ,
     {
       path: '/contest/:contestID',
       name: 'contestdetail',
       component: contestdetail,
+    },
+    {
+      path: '/rank',
+      name: 'rank',
+      component: rank,
     }
   ]
 })
