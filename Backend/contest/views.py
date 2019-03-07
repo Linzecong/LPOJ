@@ -5,8 +5,8 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.pagination import LimitOffsetPagination
 from .permission import ManagerOnly
-from .models import ContestAnnouncement, ContestBoard, ContestComment, ContestInfo, ContestProblem, ContestRegister
-from .serializers import ContestAnnouncementSerializer,ContestBoardSerializer,ContestCommentSerializer,ContestInfoSerializer,ContestProblemSerializer, ContestRegisterSerializer
+from .models import ContestAnnouncement,ContestRank, ContestBoard, ContestComment, ContestInfo, ContestProblem, ContestRegister
+from .serializers import ContestRankSerializer, ContestAnnouncementSerializer,ContestBoardSerializer,ContestCommentSerializer,ContestInfoSerializer,ContestProblemSerializer, ContestRegisterSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 
 class ContestAnnouncementView(viewsets.ModelViewSet):
@@ -22,8 +22,16 @@ class ContestBoardView(viewsets.ModelViewSet):
     serializer_class = ContestBoardSerializer
     # pagination_class = LimitOffsetPagination
     # permission_classes = (ManagerOnly,)# 将来要改写成重写post形式
-    # filter_backends = (DjangoFilterBackend,)
-    # filter_fields = ('user', 'result', "contest")
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ("contestid",)
+
+class ContestRankView(viewsets.ModelViewSet):
+    queryset = ContestRank.objects.all()
+    serializer_class = ContestRankSerializer
+     # permission_classes = (ManagerOnly,)# 将来要改写成重写post形式
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ("contestid","username")
+
 
 class ContestCommentView(viewsets.ModelViewSet):
     queryset = ContestComment.objects.all()

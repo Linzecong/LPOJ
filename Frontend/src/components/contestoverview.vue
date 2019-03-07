@@ -241,6 +241,7 @@ export default {
 
           this.auth = response.data["auth"];
           this.title = response.data.title;
+          this.$store.state.contesttitle = this.title
           this.level = response.data.level;
           this.des = response.data.des;
           this.note = response.data.note;
@@ -282,6 +283,8 @@ export default {
               response.data.endtime = moment(
                 date1.getTime() + response.data.lasttime * 1000
               ).format("YYYY-MM-DD HH:mm:ss");
+
+              this.$store.state.contestbegintime = date1.getTime()
 
               this.tableData = [response.data];
               this.$axios

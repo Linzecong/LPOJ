@@ -59,6 +59,17 @@ class ContestBoard(models.Model):
     def __str__(self):
         return self.contestid
 
+class ContestRank(models.Model):
+
+    contestid = models.IntegerField()
+    username = models.CharField(max_length=50)
+    user = models.CharField(max_length=50)
+    statue = models.CharField(max_length=5000) # 用 | 分割，如  0|-1|100|0|-5 代表 B题错了一次，C题在100毫秒AC，
+
+    objects = models.Manager()
+
+    def __str__(self):
+        return self.contestid
 
 class ContestComment(models.Model):
 
