@@ -15,6 +15,7 @@ class JudgeStatus(models.Model):
     submittime = models.DateTimeField(auto_now=True)
     judger = models.CharField(max_length=50)
     contest = models.IntegerField()
+    contestproblem = models.IntegerField(default=-1) # 对应比赛里的哪一题
     code = models.TextField()
     testcase = models.IntegerField()
     message = models.TextField()

@@ -150,7 +150,7 @@ export default {
 
       currentproblem: -1,
       currentcontest: this.$route.params.contestID,
-      currentrank: -1
+      currentrank: -1,
     };
   },
   filters: {
@@ -248,6 +248,7 @@ export default {
                   }
                   this.$store.state.contestproblemcount = this.problemids.length;
                   this.currentproblem = this.problemids[0];
+                  this.currentrank=0;
                   this.title = this.problemtitles[0];
                   this.$axios
                     .get(
@@ -316,6 +317,7 @@ export default {
                 language: this.language,
                 judger: "waiting for judger",
                 contest: this.currentcontest,
+                contestproblem:this.currentrank,
                 code: this.code,
                 testcase: 0,
                 message: "0"
