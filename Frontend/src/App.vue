@@ -332,15 +332,32 @@ export default {
             message: "登录成功！",
             type: "success"
           });
+
           sessionStorage.setItem("username", this.form.username);
           sessionStorage.setItem("name", response.data.name);
-          sessionStorage.setItem("rating", response.data.rating);
+          
           this.dialogRegisterVisible = false;
           this.dialogLoginVisible = false;
           this.loginshow = 1;
           this.username = this.form.username;
           this.name = sessionStorage.name;
-          this.$router.go(0);
+          
+
+          this.$axios
+          .get(
+            "http://" +
+              this.$ip +
+              ":" +
+              this.$port +
+              "/userdata/?username=" +
+              this.username
+          )
+          .then(response => {
+              sessionStorage.setItem("rating", response.data[0].rating);
+              this.$router.go(0);
+          });
+
+          
         })
         .catch(error => {
           this.$message.error("用户名不存在（" + error + "）");

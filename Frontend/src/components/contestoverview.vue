@@ -195,9 +195,9 @@ export default {
             .post(
               "http://" + this.$ip + ":" + this.$port + "/contestregister/",
               {
-                contestid: this.id,
+                contestid:parseInt(this.id),
                 user: sessionStorage.username,
-                rating: sessionStorage.rating
+                rating: parseInt(sessionStorage.rating)
               }
             )
             .then(res => {

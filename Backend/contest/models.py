@@ -13,7 +13,7 @@ class ContestInfo(models.Model):
     begintime = models.DateTimeField()
     lasttime = models.IntegerField(default=18000)
     type = models.CharField(max_length=50, default="ACM")
-    auth = models.IntegerField(default=2) # 1 public 0 private 2 protect(需注册)
+    auth = models.IntegerField(default=2) # 1 public 2 private 0 protect(需注册)
 
     objects = models.Manager()
 

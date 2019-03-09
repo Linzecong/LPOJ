@@ -66,6 +66,9 @@ def judge(id, code, lang, problem,contest,username,submittime,contestproblem):
     submittime = date_time_milliseconds(submittime)
     print(submittime)
 
+    cursor.execute("UPDATE problem_problemdata SET submission = submission+1 WHERE problem = '%s'" % problem)
+    db.commit()
+
     if lang == "C":
         file = open("%s.c"% judgername, "w")
         file.write(code)
@@ -170,12 +173,12 @@ def judge(id, code, lang, problem,contest,username,submittime,contestproblem):
                     cursor.execute("UPDATE problem_problemdata SET mle = mle+1 WHERE problem = '%s'" % problem)
                     if contest is not 0:
                         cursor.execute("UPDATE contest_contestboard SET type =0  WHERE submitid = '%s'" %  id)
-                    if acornot == False:
-                        li[contestproblem]=int(li[contestproblem])
-                        li[contestproblem] = li[contestproblem]-1
-                        sta = '|'.join(str(i) for i in li)
-                        cursor.execute("UPDATE  contest_contestrank  SET statue = '%s' where username = '%s'  and contestid = %d" % (sta,username,contest))
-                        
+                        if acornot == False:
+                            li[contestproblem]=int(li[contestproblem])
+                            li[contestproblem] = li[contestproblem]-1
+                            sta = '|'.join(str(i) for i in li)
+                            cursor.execute("UPDATE  contest_contestrank  SET statue = '%s' where username = '%s'  and contestid = %d" % (sta,username,contest))
+                            
                     db.commit()
                     statue = True
                 except:
@@ -185,14 +188,14 @@ def judge(id, code, lang, problem,contest,username,submittime,contestproblem):
                 try:
                     cursor.execute("UPDATE judgestatus_judgestatus SET memory =%d, time=%d, result = '%s',testcase='%s'  WHERE id = '%s'" % (maxmemory/1024/1024,maxtime,'3',filename, id))
                     cursor.execute("UPDATE problem_problemdata SET mle = mle+1 WHERE problem = '%s'" % problem)
-                    if contest:
+                    if contest is not 0:
                         cursor.execute("UPDATE contest_contestboard SET type =0  WHERE submitid = '%s'" %  id)
-                    if acornot == False:
-                        li[contestproblem]=int(li[contestproblem])
-                        li[contestproblem] = li[contestproblem]-1
-                        sta = '|'.join(str(i) for i in li)
-                        cursor.execute("UPDATE  contest_contestrank  SET statue = '%s' where username = '%s'  and contestid = %d" % (sta,username,contest))
-                    
+                        if acornot == False:
+                            li[contestproblem]=int(li[contestproblem])
+                            li[contestproblem] = li[contestproblem]-1
+                            sta = '|'.join(str(i) for i in li)
+                            cursor.execute("UPDATE  contest_contestrank  SET statue = '%s' where username = '%s'  and contestid = %d" % (sta,username,contest))
+                        
                     db.commit()
                     statue = True
                 except:
@@ -210,14 +213,14 @@ def judge(id, code, lang, problem,contest,username,submittime,contestproblem):
                     if ret["result"] == 5:
                         cursor.execute("UPDATE problem_problemdata SET se = se+1 WHERE problem = '%s'" % problem)
 
-                    if contest:
+                    if contest is not 0:
                         cursor.execute("UPDATE contest_contestboard SET type =0  WHERE submitid = '%s'" %  id)
-                    if acornot == False:
-                        li[contestproblem]=int(li[contestproblem])
-                        li[contestproblem] = li[contestproblem]-1
-                        sta = '|'.join(str(i) for i in li)
-                        cursor.execute("UPDATE  contest_contestrank  SET statue = '%s' where username = '%s'  and contestid = %d" % (sta,username,contest))
-                    
+                        if acornot == False:
+                            li[contestproblem]=int(li[contestproblem])
+                            li[contestproblem] = li[contestproblem]-1
+                            sta = '|'.join(str(i) for i in li)
+                            cursor.execute("UPDATE  contest_contestrank  SET statue = '%s' where username = '%s'  and contestid = %d" % (sta,username,contest))
+                        
                     db.commit()
                     statue = True
                 except:
@@ -268,14 +271,14 @@ def judge(id, code, lang, problem,contest,username,submittime,contestproblem):
                     if result == -3:
                         cursor.execute("UPDATE problem_problemdata SET wa = wa+1 WHERE problem = '%s'" % problem)
 
-                    if contest:
+                    if contest is not 0:
                         cursor.execute("UPDATE contest_contestboard SET type =0 WHERE submitid = '%s'" %  id)
-                    if acornot == False:
-                        li[contestproblem]=int(li[contestproblem])
-                        li[contestproblem] = li[contestproblem]-1
-                        sta = '|'.join(str(i) for i in li)
-                        cursor.execute("UPDATE  contest_contestrank  SET statue = '%s' where username = '%s'  and contestid = %d" % (sta,username,contest))
-                    
+                        if acornot == False:
+                            li[contestproblem]=int(li[contestproblem])
+                            li[contestproblem] = li[contestproblem]-1
+                            sta = '|'.join(str(i) for i in li)
+                            cursor.execute("UPDATE  contest_contestrank  SET statue = '%s' where username = '%s'  and contestid = %d" % (sta,username,contest))
+                        
                     db.commit()
                     statue = True
                 except:
@@ -289,13 +292,13 @@ def judge(id, code, lang, problem,contest,username,submittime,contestproblem):
 
         if acscore == False:
             cursor.execute("UPDATE user_userdata SET score = score+%d WHERE username = '%s'" % (score,username) )
-        if contest:
+        if contest is not 0:
             cursor.execute("UPDATE contest_contestboard SET type =1 WHERE submitid = '%s'" %  id)
-        if acornot == False:
-            li[contestproblem]=submittime
-            sta = '|'.join(str(i) for i in li)
-            cursor.execute("UPDATE  contest_contestrank  SET statue = '%s' where username = '%s'  and contestid = %d" % (sta,username,contest))
-        
+            if acornot == False:
+                li[contestproblem]=submittime
+                sta = '|'.join(str(i) for i in li)
+                cursor.execute("UPDATE  contest_contestrank  SET statue = '%s' where username = '%s'  and contestid = %d" % (sta,username,contest))
+            
         db.commit()
         statue = True
     except:
