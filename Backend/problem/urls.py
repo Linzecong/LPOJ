@@ -11,6 +11,7 @@ routers.register('problemdata', views.ProblemDataView)
 routers.register('problemtag', views.ProblemTagView)
 
 urlpatterns = [
-    url('', include(routers.urls))
+    url('', include(routers.urls)),
+    url(r'^uploadfile',views.UploadFileAPIView.as_view()),
 ]
 

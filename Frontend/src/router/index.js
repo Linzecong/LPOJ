@@ -9,6 +9,7 @@ import contest from '@/components/contest'
 import contestdetail from '@/components/contestdetail'
 import problemdetail from '@/components/problemdetail'
 import rank from '@/components/rank'
+import admin from '@/components/admin'
 
 Vue.use(Router)
 
@@ -34,6 +35,11 @@ export default new Router({
       path: '/main',
       name: 'main',
       component: main
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: admin
     },
     {
       path: '/statue',

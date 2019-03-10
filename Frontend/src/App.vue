@@ -52,6 +52,7 @@
           <el-dropdown-item command="home">Home</el-dropdown-item>
           <el-dropdown-item command="submittion">Submittion</el-dropdown-item>
           <el-dropdown-item command="setting">Setting</el-dropdown-item>
+          <el-dropdown-item command="admin" divided v-show="isadmin">Admin</el-dropdown-item>
           <el-dropdown-item command="logout" divided>Logout</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -197,6 +198,7 @@ export default {
       loginshow: sessionStorage.username,
       username: sessionStorage.username,
       name: sessionStorage.name,
+      isadmin:false,
       form: {
         username: "",
         password: "",
@@ -208,12 +210,13 @@ export default {
         number: "",
         realname: "",
         qq: "",
-        email: ""
+        email: "",
+        
       }
     };
   },
   created() {
-    console.log(sessionStorage.username);
+    this.isadmin=(sessionStorage.type==2||sessionStorage.type==3)
   },
   methods: {
     updatename(type) {
@@ -230,6 +233,9 @@ export default {
               type: "success"
             });
             sessionStorage.setItem("username", "");
+            sessionStorage.setItem("name", "");
+            sessionStorage.setItem("auth", "");
+            sessionStorage.setItem("rating", "");
             this.loginshow = 0;
             this.username = "";
             this.$router.go(0);
@@ -254,6 +260,11 @@ export default {
         this.$router.push({
           name: "statue",
           query: { username: sessionStorage.username }
+        });
+      }
+      if (command == "admin") {
+        this.$router.push({
+          name: "admin",
         });
       }
     },
@@ -335,6 +346,10 @@ export default {
 
           sessionStorage.setItem("username", this.form.username);
           sessionStorage.setItem("name", response.data.name);
+          sessionStorage.setItem("type", response.data.type);
+          if(response.data.type==2 || response.data.type==3)
+            this.isadmin=true
+          
           
           this.dialogRegisterVisible = false;
           this.dialogLoginVisible = false;
