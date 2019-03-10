@@ -264,7 +264,10 @@ export default {
               else this.timestyle = "begin";
 
               this.lasttime = response.data.lasttime;
-              if (this.left >= response.data.lasttime&&isNaN(this.left)==false) {
+              if (
+                this.left >= response.data.lasttime &&
+                isNaN(this.left) == false
+              ) {
                 this.left = response.data.lasttime;
                 this.timestyle = "end";
                 this.$store.state.contestisend = true;
@@ -305,6 +308,11 @@ export default {
                 .then(response => {
                   this.tableData2 = response.data.results;
                   this.totaluser = response.data.count;
+
+                  this.$store.state.contesttimer = setInterval(
+                    this.refreshtime,
+                    1000
+                  );
                 })
                 .catch(error => {
                   this.$message.error("服务器错误！" + "(" + error + ")");
@@ -331,7 +339,7 @@ export default {
       if (this.left < 0) this.timestyle = "wait";
       else this.timestyle = "begin";
 
-      if (this.left >= this.lasttime&&isNaN(this.left)==false) {
+      if (this.left >= this.lasttime && isNaN(this.left) == false) {
         this.left = this.lasttime;
         this.timestyle = "end";
         this.$store.state.contestisend = true;
@@ -352,7 +360,6 @@ export default {
   },
   created() {
     this.refresh(this.$route.params.contestID);
-    this.$store.state.contesttimer = setInterval(this.refreshtime, 1000);
   }
 };
 </script>

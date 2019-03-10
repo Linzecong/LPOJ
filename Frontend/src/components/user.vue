@@ -134,7 +134,7 @@ export default {
             ":" +
             this.$port +
             "/judgestatus/?username=" +
-            this.username).then(response => {
+            this.username+"&result=0").then(response => {
         for (var i = 0; i < response.data.length; i++) {
           
           response.data[i]["submittime"] =

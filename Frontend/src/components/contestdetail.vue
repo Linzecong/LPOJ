@@ -129,11 +129,11 @@ export default {
   methods: {
     tabClick(tab) {
       console.log(tab);
-      if (tab.label == "Problems")
-        this.$refs.Problems.getproblem(this.$route.params.contestID);
+      // if (tab.label == "Problems")
+      //   this.$refs.Problems.getproblem(this.$route.params.contestID);
 
-      if (tab.label == "Overview")
-        this.$refs.Overview.refresh(this.$route.params.contestID);
+      // if (tab.label == "Overview")
+      //   this.$refs.Overview.refresh(this.$route.params.contestID);
       
       if (tab.label == "Rankings")
         this.$refs.Rankings.setproblemcount(this.$route.params.contestID);

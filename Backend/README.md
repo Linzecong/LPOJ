@@ -16,7 +16,12 @@ sudo apt-get install libmysqlclient-dev
 pip install mysqlclient
 
 **可选** sudo apt-get install mysql-server 
-**可选**  登录数据库后执行 CREATE DATABASE LPOJ DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+**可选**  登录数据库后执行 
+CREATE DATABASE LPOJ DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%'  IDENTIFIED BY 'you_password'  WITH GRANT OPTION;
+flush privileges;
+sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf 修改bind-address 为 0.0.0.0
+
 
  python manage.py makemigrations
 

@@ -502,7 +502,9 @@ export default {
         });
     }
   },
-  created() {}
+  created() {
+    this.getproblem(this.$route.params.contestID);
+  }
 };
 </script>
 
