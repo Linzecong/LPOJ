@@ -130,10 +130,12 @@ export default {
               var count =0 ;
               var t=0;
               for(var ii =0;ii<li.length;ii++){
-                li[ii]=parseInt(li[ii]);
-                if(li[ii]>0){
+                if(li[ii].indexOf("$")>=0){
                   count++;
-                  var cha = parseInt((li[ii]-this.$store.state.contestbegintime)/1000);
+                  var tmp = li[ii].split("$")
+                  tmp[0]=parseInt(tmp[0])
+                  tmp[1]=parseInt(tmp[1])
+                  var cha = parseInt((tmp[0]-this.$store.state.contestbegintime)/1000);
                   t+=cha;
                   var tt =
                   parseInt(cha / 60 / 60) +
@@ -142,9 +144,14 @@ export default {
                   ":" +
                   parseInt((cha % 60) % 60);
 
-                  k[this.toChar(ii)]= tt;
+                  if(tmp[1]<0)
+                    k[this.toChar(ii)]="("+tmp[1]+")\n"+ tt;
+                  else
+                    k[this.toChar(ii)]=tt;
                 }
+                
                 else{
+                  li[ii]=parseInt(li[ii]);
                   if(li[ii]<0)
                     k[this.toChar(ii)]= "("+li[ii]+")";
                 }
@@ -170,16 +177,32 @@ export default {
               var index=-1;
               var minn=100000000000000;
               for(var i=0;i<data.length;i++){
-                  var li = data[i][pro].split(":");
-                  var time = li[0]*3600+li[1]*60+li[2];
-                  if(time<minn)
-                  {
-                    minn=time
-                    index=i;
+                  if(data[i][pro].indexOf(":")>0){
+                    if(data[i][pro].indexOf("(")<0){
+                      var li = data[i][pro].split(":");
+                      var time = parseInt(li[0])*3600+parseInt(li[1])*60+parseInt(li[2]);
+                      if(time<minn)
+                      {
+                        minn=time
+                        index=i;
+                      }
+                    }
+                    else{
+                      var tmp = data[i][pro].split(")")
+                      var li = tmp[1].split(":");
+                      var time = parseInt(li[0])*3600+parseInt(li[1])*60+parseInt(li[2]);
+                      if(time<minn)
+                      {
+                        minn=time
+                        index=i;
+                      }
+                    }
+
                   }
               }
               if(index!=-1){
-                data[index][pro]="❤"+data[index][pro]
+                data[index][pro]=data[index][pro]+"❤";
+                console.log(data[index][pro])
               }
             }
 

@@ -222,6 +222,7 @@ export default {
       if (type == "Private") return "danger";
     },
     refresh(id) {
+      this.$store.state.contestisend=false
       this.$axios
         .get(
           "http://" + this.$ip + ":" + this.$port + "/contestinfo/" + id + "/"
@@ -266,6 +267,7 @@ export default {
               if (this.left >= response.data.lasttime) {
                 this.left = response.data.lasttime;
                 this.timestyle = "end";
+                this.$store.state.contestisend=true
               }
 
               var t = Math.abs(this.left);
@@ -328,6 +330,7 @@ export default {
       if (this.left >= this.lasttime) {
         this.left = this.lasttime;
         this.timestyle = "end";
+        this.$store.state.contestisend=true
       }
 
       var t = Math.abs(this.left);

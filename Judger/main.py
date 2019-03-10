@@ -56,8 +56,7 @@ def judge(id, code, lang, problem,contest,username,submittime,contestproblem):
         r = cursor.fetchone()
         statue = r[4]
         li = statue.split("|")
-        num = int(li[contestproblem])
-        if num >0:
+        if(li[contestproblem].find("$")>=0):
             acornot = True
 
     print(submittime)
@@ -295,7 +294,7 @@ def judge(id, code, lang, problem,contest,username,submittime,contestproblem):
         if contest is not 0:
             cursor.execute("UPDATE contest_contestboard SET type =1 WHERE submitid = '%s'" %  id)
             if acornot == False:
-                li[contestproblem]=submittime
+                li[contestproblem]=str(submittime)+"$"+ str(li[contestproblem])
                 sta = '|'.join(str(i) for i in li)
                 cursor.execute("UPDATE  contest_contestrank  SET statue = '%s' where username = '%s'  and contestid = %d" % (sta,username,contest))
             

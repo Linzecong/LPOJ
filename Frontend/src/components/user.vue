@@ -19,7 +19,7 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="time" label="Time"></el-table-column>
+      <el-table-column prop="submittime" label="Time"></el-table-column>
     </el-table>
    
     

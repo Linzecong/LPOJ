@@ -281,6 +281,10 @@ export default {
         this.$message.error("非法操作！");
         return;
       }
+      if(this.$store.state.contestisend==true){
+        this.$message.error("比赛已结束");
+        return;
+      }
       if (!sessionStorage.username) {
         this.$message.error("请先登录！");
         return;
@@ -369,7 +373,7 @@ export default {
                         );
                       } else {
                         var str = "";
-                        for (var i = 0; i < this.problemids - 1; i++)
+                        for (var i = 0; i < this.problemids.length - 1; i++)
                           str = str + "0|";
                         str = str + "0";
 
