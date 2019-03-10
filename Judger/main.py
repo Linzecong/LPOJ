@@ -330,7 +330,7 @@ while True:
                 try:
                     cursor.execute("UPDATE judgestatus_judgestatus SET result = '-2',judger='%s' WHERE id = '%s'" % (judgername,tp[1]))
                     db.commit()
-                    t = threading.Thread(target=judge,args=(data[0], data[12], data[8], data[3],data[11],data[1],data[9],data[15]))
+                    t = threading.Thread(target=judge,args=(data[0], data[13], data[8], data[3],data[11],data[1],data[9],data[12]))
                     t.setDaemon(True)
                     t.start()
                 except:

@@ -80,7 +80,7 @@ export default {
       if(id<0)
         return "background-color:white;text-align:center";
       if(data.row[str].indexOf("❤")>-1)
-        return "background-color:green;text-align:center";
+        return "background-color:#89C53B;text-align:center";
       if(data.row[str].indexOf("(")>-1)
         return "background-color:#F56C6C;text-align:center";
       if(data.row[str].indexOf(":")>-1)
@@ -137,6 +137,7 @@ export default {
                   tmp[1]=parseInt(tmp[1])
                   var cha = parseInt((tmp[0]-this.$store.state.contestbegintime)/1000);
                   t+=cha;
+                  t+=(-tmp[1])*20*60;
                   var tt =
                   parseInt(cha / 60 / 60) +
                   ":" +
@@ -189,8 +190,11 @@ export default {
                     }
                     else{
                       var tmp = data[i][pro].split(")")
+                      
                       var li = tmp[1].split(":");
                       var time = parseInt(li[0])*3600+parseInt(li[1])*60+parseInt(li[2]);
+                      tmp = tmp[0].split("(");
+                      time += parseInt(-tmp[1])*20*60;
                       if(time<minn)
                       {
                         minn=time

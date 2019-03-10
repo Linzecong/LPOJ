@@ -120,8 +120,8 @@ export default {
             this.pagesize +
             "&offset=" +
             (this.currentpage - 1) * this.pagesize +
-                    "&contestid=" +
-                    this.id
+            "&contestid=" +
+            this.id
         )
         .then(response => {
           this.tableData2 = response.data.results;
@@ -143,8 +143,8 @@ export default {
             this.pagesize +
             "&offset=" +
             (this.currentpage - 1) * this.pagesize +
-                    "&contestid=" +
-                    this.id
+            "&contestid=" +
+            this.id
         )
         .then(response => {
           this.tableData2 = response.data.results;
@@ -155,10 +155,10 @@ export default {
         });
     },
     register() {
-      if(this.left>0){
-          this.$message.error("比赛已开始，无法注册！");
-          return;
-        }
+      if (this.left > 0) {
+        this.$message.error("比赛已开始，无法注册！");
+        return;
+      }
       if (this.type == "1") {
         this.$message({
           message: "公共比赛无需注册！",
@@ -195,7 +195,7 @@ export default {
             .post(
               "http://" + this.$ip + ":" + this.$port + "/contestregister/",
               {
-                contestid:parseInt(this.id),
+                contestid: parseInt(this.id),
                 user: sessionStorage.username,
                 rating: parseInt(sessionStorage.rating)
               }
@@ -222,7 +222,7 @@ export default {
       if (type == "Private") return "danger";
     },
     refresh(id) {
-      this.$store.state.contestisend=false
+      this.$store.state.contestisend = false;
       this.$axios
         .get(
           "http://" + this.$ip + ":" + this.$port + "/contestinfo/" + id + "/"
@@ -242,7 +242,7 @@ export default {
 
           this.auth = response.data["auth"];
           this.title = response.data.title;
-          this.$store.state.contesttitle = this.title
+          this.$store.state.contesttitle = this.title;
           this.level = response.data.level;
           this.des = response.data.des;
           this.note = response.data.note;
@@ -264,10 +264,10 @@ export default {
               else this.timestyle = "begin";
 
               this.lasttime = response.data.lasttime;
-              if (this.left >= response.data.lasttime) {
+              if (this.left >= response.data.lasttime&&isNaN(this.left)==false) {
                 this.left = response.data.lasttime;
                 this.timestyle = "end";
-                this.$store.state.contestisend=true
+                this.$store.state.contestisend = true;
               }
 
               var t = Math.abs(this.left);
@@ -286,7 +286,7 @@ export default {
                 date1.getTime() + response.data.lasttime * 1000
               ).format("YYYY-MM-DD HH:mm:ss");
 
-              this.$store.state.contestbegintime = date1.getTime()
+              this.$store.state.contestbegintime = date1.getTime();
 
               this.tableData = [response.data];
               this.$axios
@@ -309,28 +309,32 @@ export default {
                 .catch(error => {
                   this.$message.error("服务器错误！" + "(" + error + ")");
                 });
+            })
+            .catch(error => {
+              this.$message.error("服务器错误！" + "(" + error + ")");
             });
         });
     },
     refreshtime() {
       if (this.auth != "Public" && this.auth != "Private") {
-        if (this.haveauth == 0 && this.left<=0) this.auth = "Protect(Click to register)";
+        if (this.haveauth == 0 && this.left <= 0)
+          this.auth = "Protect(Click to register)";
         else this.auth = "Protect";
       }
 
       this.left++;
 
-      if(this.left==0){
+      if (this.left == 0) {
         this.$router.go(0);
       }
 
       if (this.left < 0) this.timestyle = "wait";
       else this.timestyle = "begin";
 
-      if (this.left >= this.lasttime) {
+      if (this.left >= this.lasttime&&isNaN(this.left)==false) {
         this.left = this.lasttime;
         this.timestyle = "end";
-        this.$store.state.contestisend=true
+        this.$store.state.contestisend = true;
       }
 
       var t = Math.abs(this.left);

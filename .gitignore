@@ -12,3 +12,4 @@ Judger/temp.out
 *.in
 *.out
 Judger/output/libjudger.so
+migrations
