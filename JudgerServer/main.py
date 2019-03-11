@@ -47,22 +47,19 @@ def deal_client(newSocket: socket, addr):
         sleep(1)
         if mutex.acquire():
             try:
-                print(addr)
                 if statue == True and len(queue) > 0:
                     id = queue.pop()
                     statue = False
                     newSocket.send(("judge|%d" % id).encode("utf-8"))
                 else:
                     newSocket.send("getstatue".encode("utf-8"))
-                    print("send!!", addr)
                     data = newSocket.recv(1024)
                     recv_data = data.decode('utf-8')
-                    print(recv_data)
                     if recv_data == "ok":
                         statue = True
                     else:
                         statue = False
-                    print(statue)
+                    print(addr,statue)
 
             except socket.error:
                 newSocket.close()
@@ -96,22 +93,18 @@ def changeauth():
         if mutex.acquire():
             cursor.execute("SELECT * from contest_contestinfo where TO_SECONDS(NOW()) - TO_SECONDS(begintime) <= lasttime")
             data = cursor.fetchall()
-            print(data)
             getcontest = set()
             for d in data:
                 getcontest.add(d[0]) # 用于求结束的比赛
                 cursor.execute("SELECT * from contest_contestproblem where contestid=%d" % d[0])
                 pros = cursor.fetchall()
                 for pid in pros:
-                    print(pid[2])
                     cursor.execute( "UPDATE  problem_problemdata SET auth = 3 WHERE problem = %s" % pid[2])
                     cursor.execute( "UPDATE  problem_problem SET auth = 3 WHERE problem = %s" % pid[2])
                 db.commit()
             
             endcontest = curcontest.difference(getcontest)
             print("curcontest",curcontest)
-            print("endcontest",endcontest)
-
             for eid in endcontest:
                 cursor.execute( "SELECT * from contest_contestproblem where contestid=%d" % eid)
                 pros = cursor.fetchall()

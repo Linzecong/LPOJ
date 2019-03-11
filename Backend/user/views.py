@@ -44,7 +44,6 @@ class UserLoginAPIView(APIView):
             new_data = serializer.data
             request.session['user_id'] = user.username
             request.session['type'] = user.type
-            print(request.session.keys())
             return Response(new_data, status=HTTP_200_OK)
         return Response('passworderror', HTTP_200_OK)
 

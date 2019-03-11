@@ -59,11 +59,9 @@ def judge(id, code, lang, problem,contest,username,submittime,contestproblem):
         if(li[contestproblem].find("$")>=0):
             acornot = True
 
-    print(submittime)
     def date_time_milliseconds(date_time_obj):
         return int(time.mktime(date_time_obj.timetuple()) * 1000)
     submittime = date_time_milliseconds(submittime)
-    print(submittime)
 
     cursor.execute("UPDATE problem_problemdata SET submission = submission+1 WHERE problem = '%s'" % problem)
     if acscore==False:
@@ -126,8 +124,6 @@ def judge(id, code, lang, problem,contest,username,submittime,contestproblem):
 
     files = os.listdir("../DataServer/problemdata/%s/" % problem)
 
-    print(files)
-
     tempset = set() # 用于判读数据是否都有in,out
     newfiles = set()
     for s in files:
@@ -142,7 +138,7 @@ def judge(id, code, lang, problem,contest,username,submittime,contestproblem):
     maxtime = 0
 
     for filename in newfiles:
-        print("judging!!!!!!!!","../DataServer/problemdata/%s/%s.in" % (problem,filename))
+        print("judging!!!!!!",id,"/%s/%s.in" % (problem,filename))
         ret = _judger.run(max_cpu_time=timelimit,
                     max_real_time=_judger.UNLIMITED,
                     max_memory=memorylimit * 1024 * 1024,
@@ -250,8 +246,6 @@ def judge(id, code, lang, problem,contest,username,submittime,contestproblem):
                 std = std.rstrip()
                 ans = ans.rstrip()
 
-                print(std,ans)
-
                 stdout = stdout + std
                 answer = answer + ans
                 
@@ -314,7 +308,6 @@ while True:
     try:
         data = clientsocket.recv(1024)  
         data = data.decode("utf-8")
-        print(data)
         if data:
             if data == "getstatue":
                 if statue == True:
@@ -329,7 +322,6 @@ while True:
                 cursor.execute("SELECT * from judgestatus_judgestatus where id = '%s'" % tp[1])
                 data = cursor.fetchone()
                 
-                print(data[11],tp[1])
                 try:
                     cursor.execute("UPDATE judgestatus_judgestatus SET result = '-2',judger='%s' WHERE id = '%s'" % (judgername,tp[1]))
                     db.commit()
