@@ -11,6 +11,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
+import zipfile
+import shutil,os
 
 class ProblemView(viewsets.GenericViewSet, mixins.DestroyModelMixin, mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin):
     queryset = Problem.objects.all()
@@ -38,8 +40,21 @@ class UploadFileAPIView(APIView):
         myFile =request.FILES.get("file", None)    # 获取上传的文件，如果没有文件，则默认为None 
         if not myFile: 
             return Response("no file", status=HTTP_400_BAD_REQUEST)
+
         destination = open("../Dataserver/problemdata/"+myFile.name,'wb+')    # 打开特定的文件进行二进制的写操作 
         for chunk in myFile.chunks():      # 分块写入文件 
             destination.write(chunk) 
         destination.close() 
+
+        dirname = myFile.name.split(".")[0]
+        try:
+            shutil.rmtree("../Dataserver/problemdata/"+dirname+"/",ignore_errors=True)
+            f = zipfile.ZipFile("../Dataserver/problemdata/"+myFile.name,'r')
+            for file1 in f.namelist():
+                f.extract(file1,"../Dataserver/problemdata/"+dirname+"/")
+        except:
+            shutil.rmtree("../Dataserver/problemdata/"+dirname+"/",ignore_errors=True)
+            os.remove("../Dataserver/problemdata/"+myFile.name)
+            return Response("extract zip fail", status=HTTP_400_BAD_REQUEST)
+
         return Response('upload success', HTTP_200_OK)

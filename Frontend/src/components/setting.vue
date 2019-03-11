@@ -102,17 +102,12 @@ export default {
     return {
       username: "404",
       name: "404",
-      des: "404",
-      ac: "404",
-      submittion: "404",
-      score: "404",
-      rating: "404",
-      tableData: [],
       form: {
         username: "",
         password: "",
         comfirm: "",
         name: "",
+        des:"",
         school: "",
         course: "",
         classes: "",

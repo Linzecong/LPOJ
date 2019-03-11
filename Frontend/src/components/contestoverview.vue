@@ -11,6 +11,7 @@
           @click="register"
           style="margin:30px;"
           :foucs="false"
+          :disabled="canregister"
         >
           <b>{{ auth }}</b>
         </el-button>
@@ -97,7 +98,8 @@ export default {
 
       haveauth: 0,
       type: "1",
-      showp: true
+      showp: true,
+      canregister:false
     };
   },
   methods: {
@@ -155,6 +157,13 @@ export default {
         });
     },
     register() {
+      if (this.haveauth) {
+        this.$message({
+          message: "你已注册或比赛已结束！",
+          type: "success"
+        });
+        return;
+      }
       if (this.left > 0) {
         this.$message.error("比赛已开始，无法注册！");
         return;
@@ -170,13 +179,7 @@ export default {
         this.$message.error("私有比赛，无法注册！");
         return;
       }
-      if (this.haveauth) {
-        this.$message({
-          message: "你已注册或比赛已结束！",
-          type: "success"
-        });
-        return;
-      }
+      
       var username = sessionStorage.username;
       if (!username) {
         this.$message.error("请先登录！");
@@ -313,6 +316,7 @@ export default {
                     this.refreshtime,
                     1000
                   );
+                  this.canregister=true;
                 })
                 .catch(error => {
                   this.$message.error("服务器错误！" + "(" + error + ")");
