@@ -23,12 +23,12 @@
       <el-menu-item index="/rank">
         <i class="el-icon-star-on"></i>Rank
       </el-menu-item>
-      <el-menu-item index="/blog">
+      <!-- <el-menu-item index="/blog">
         <i class="el-icon-edit-outline"></i>Blog
       </el-menu-item>
       <el-menu-item index="/about">
         <i class="el-icon-document"></i>About
-      </el-menu-item>
+      </el-menu-item> -->
       <el-button
         round
         id="button"

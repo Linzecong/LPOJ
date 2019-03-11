@@ -24,7 +24,7 @@
       </span>
       <contestrank ref="Rankings"></contestrank>
     </el-tab-pane>
-    <el-tab-pane label="Announcements" :disabled="!haveauth">
+    <!-- <el-tab-pane label="Announcements" :disabled="!haveauth">
       <span slot="label">
         <i class="el-icon-bell"></i> Announcements
       </span>
@@ -35,7 +35,7 @@
         <i class="el-icon-info"></i> Comments
       </span>
       <contestcomment ref="Comments"></contestcomment>
-    </el-tab-pane>
+    </el-tab-pane> -->
   </el-tabs>
 </template>
 

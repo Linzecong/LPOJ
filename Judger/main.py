@@ -74,7 +74,7 @@ def judge(id, code, lang, problem,contest,username,submittime,contestproblem):
         file = open("%s.c"% judgername, "w")
         file.write(code)
         file.close()
-        result = os.system("gcc %s.c -o %s.out -O2" %(judgername,judgername))
+        result = os.system("gcc %s.c -o %s.out -O2 -std=c11" %(judgername,judgername))
         # print(result)
         if result:
             try:
@@ -91,7 +91,7 @@ def judge(id, code, lang, problem,contest,username,submittime,contestproblem):
         file = open("%s.cpp"%judgername, "w")
         file.write(code)
         file.close()
-        result = os.system("g++ %s.cpp -o %s.out -O2"%(judgername,judgername))
+        result = os.system("g++ %s.cpp -o %s.out -O2 -std=c++11"%(judgername,judgername))
         # print(result)
         if result:
             try:
