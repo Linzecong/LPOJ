@@ -100,11 +100,7 @@ export default {
     if (this.username) {
       this.$axios
         .get(
-          "http://" +
-            this.$ip +
-            ":" +
-            this.$port +
-            "/user/?username=" +
+          "/api/user/?username=" +
             this.username
         )
         .then(response => {
@@ -114,11 +110,7 @@ export default {
       
       this.$axios
         .get(
-          "http://" +
-            this.$ip +
-            ":" +
-            this.$port +
-            "/userdata/?username=" +
+          "/api/userdata/?username=" +
             this.username
         )
         .then(response => {
@@ -129,11 +121,7 @@ export default {
             this.rating=response.data[0].rating;
         });
 
-      this.$axios.get("http://" +
-            this.$ip +
-            ":" +
-            this.$port +
-            "/judgestatus/?username=" +
+      this.$axios.get("/api/judgestatus/?username=" +
             this.username+"&result=0").then(response => {
         for (var i = 0; i < response.data.length; i++) {
           

@@ -148,12 +148,12 @@ def judge(id, code, lang, problem,contest,username,submittime,contestproblem):
                     # five args above can be _judger.UNLIMITED
                     exe_path=judgername+".out",
                     input_path="../DataServer/problemdata/%s/%s.in" % (problem,filename),
-                    output_path="temp.out",
-                    error_path="error.out",
+                    output_path=judgername+"temp.out",
+                    error_path=judgername+"error.out",
                     args=[],
                     # can be empty list
                     env=[],
-                    log_path="judger.log",
+                    log_path=judgername+"judger.log",
                     # can be None
                     seccomp_rule_name="c_cpp",
                     uid=0,
@@ -225,7 +225,7 @@ def judge(id, code, lang, problem,contest,username,submittime,contestproblem):
                     statue = True
             return
         else:
-            file1 = open("temp.out", "r")
+            file1 = open(judgername+"temp.out", "r")
             file2 = open("../DataServer/problemdata/%s/%s.out" % (problem,filename), "r")
 
             result = 0 # 0 ac -3 wrong -5 presentation

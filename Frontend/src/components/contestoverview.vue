@@ -11,7 +11,7 @@
           @click="register"
           style="margin:30px;"
           :foucs="false"
-          :disabled="canregister"
+          :disabled="!canregister"
         >
           <b>{{ auth }}</b>
         </el-button>
@@ -114,11 +114,7 @@ export default {
 
       this.$axios
         .get(
-          "http://" +
-            this.$ip +
-            ":" +
-            this.$port +
-            "/contestregister/?limit=" +
+          "/api/contestregister/?limit=" +
             this.pagesize +
             "&offset=" +
             (this.currentpage - 1) * this.pagesize +
@@ -137,11 +133,7 @@ export default {
       this.currentpage = val;
       this.$axios
         .get(
-          "http://" +
-            this.$ip +
-            ":" +
-            this.$port +
-            "/contestregister/?limit=" +
+          "/api/contestregister/?limit=" +
             this.pagesize +
             "&offset=" +
             (this.currentpage - 1) * this.pagesize +
@@ -196,7 +188,7 @@ export default {
         ).then(() => {
           this.$axios
             .post(
-              "http://" + this.$ip + ":" + this.$port + "/contestregister/",
+              "/api/contestregister/",
               {
                 contestid: parseInt(this.id),
                 user: sessionStorage.username,
@@ -228,7 +220,7 @@ export default {
       this.$store.state.contestisend = false;
       this.$axios
         .get(
-          "http://" + this.$ip + ":" + this.$port + "/contestinfo/" + id + "/"
+          "/api/contestinfo/" + id + "/"
         )
         .then(response => {
           this.type = response.data["auth"];
@@ -297,11 +289,7 @@ export default {
               this.tableData = [response.data];
               this.$axios
                 .get(
-                  "http://" +
-                    this.$ip +
-                    ":" +
-                    this.$port +
-                    "/contestregister/?limit=" +
+                  "/api/contestregister/?limit=" +
                     this.pagesize +
                     "&offset=" +
                     (this.currentpage - 1) * this.pagesize +

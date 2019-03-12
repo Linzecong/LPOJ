@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
 from .models import User, UserData
-from .serializers import UserSerializer, UserDataSerializer
+from .serializers import UserSerializer, UserDataSerializer,UserNoPassSerializer
 from .permission import LoginOnly, UserOnly
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import LimitOffsetPagination
@@ -24,7 +24,7 @@ class UserDataView(viewsets.ModelViewSet):
 
 class UserView(viewsets.ModelViewSet):
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = UserNoPassSerializer
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('username',)
     permission_classes = (UserOnly,)

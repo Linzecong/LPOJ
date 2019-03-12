@@ -110,7 +110,7 @@ export default {
     contestchange(num) {
       this.$axios
         .get(
-          "http://" + this.$ip + ":" + this.$port + "/contestinfo/" + num + "/"
+          "/api/contestinfo/" + num + "/"
         )
         .then(response => {
           response.data.timerange = [];
@@ -125,11 +125,7 @@ export default {
 
           this.$axios
             .get(
-              "http://" +
-                this.$ip +
-                ":" +
-                this.$port +
-                "/contestregister/?contestid=" +
+              "/api/contestregister/?contestid=" +
                 num
             )
             .then(response2 => {
@@ -143,11 +139,7 @@ export default {
 
               this.$axios
                 .get(
-                  "http://" +
-                    this.$ip +
-                    ":" +
-                    this.$port +
-                    "/contestproblem/?contestid=" +
+                  "/api/contestproblem/?contestid=" +
                     num
                 )
                 .then(response3 => {
@@ -181,11 +173,7 @@ export default {
         }).then(() => {
           this.$axios
             .delete(
-              "http://" +
-                this.$ip +
-                ":" +
-                this.$port +
-                "/contestinfo/" +
+              "/api/contestinfo/" +
                 this.contestid +
                 "/"
             )
@@ -217,21 +205,13 @@ export default {
       ).then(() => {
         this.$axios
           .get(
-            "http://" +
-              this.$ip +
-              ":" +
-              this.$port +
-              "/contestproblem/?contestid=" +
+            "/api/contestproblem/?contestid=" +
               this.contestid
           )
           .then(response2 => {
             for (var i = 0; i < response2.data.length; i++) {
               this.$axios.delete(
-                "http://" +
-                  this.$ip +
-                  ":" +
-                  this.$port +
-                  "/contestproblem/" +
+                "/api/contestproblem/" +
                   response2.data[i].id +
                   "/"
               );
@@ -240,7 +220,7 @@ export default {
             for (var i = 0; i < this.problemnames.length; i++) {
               var li = this.problemnames[i].split("|");
               this.$axios.post(
-                "http://" + this.$ip + ":" + this.$port + "/contestproblem/",
+                "/api/contestproblem/",
                 {
                   contestid: this.contestid,
                   problemid: li[0],
@@ -272,7 +252,7 @@ export default {
     addproblemchange(num) {
       this.$axios
         .get(
-          "http://" + this.$ip + ":" + this.$port + "/problemdata/" + num + "/"
+          "/api/problemdata/" + num + "/"
         )
         .then(response2 => {
           this.tmpaddproblemtitle = response2.data.title;
@@ -325,11 +305,7 @@ export default {
       }).then(() => {
         this.$axios
           .put(
-            "http://" +
-              this.$ip +
-              ":" +
-              this.$port +
-              "/contestinfo/" +
+            "/api/contestinfo/" +
               this.contestid +
               "/",
             this.changecontestform
@@ -340,21 +316,13 @@ export default {
             if (response.data.auth != 1) {
               this.$axios
                 .get(
-                  "http://" +
-                    this.$ip +
-                    ":" +
-                    this.$port +
-                    "/contestregister/?contestid=" +
+                  "/api/contestregister/?contestid=" +
                     this.contestid
                 )
                 .then(response2 => {
                   for (var i = 0; i < response2.data.length; i++) {
                     this.$axios.delete(
-                      "http://" +
-                        this.$ip +
-                        ":" +
-                        this.$port +
-                        "/contestregister/" +
+                      "/api/contestregister/" +
                         response2.data[i].id +
                         "/"
                     );
@@ -364,11 +332,7 @@ export default {
 
                   for (var i = 0; i < li.length; i++) {
                     this.$axios.post(
-                      "http://" +
-                        this.$ip +
-                        ":" +
-                        this.$port +
-                        "/contestregister/",
+                      "/api/contestregister/",
                       {
                         contestid: this.contestid,
                         user: li[i]

@@ -188,16 +188,17 @@
   text-align: center;
   font-weight: bold;
 }
-#protag {
+#protag{
   text-align: center;
   font-weight: bold;
-  margin-right: 13px;
+  margin-right: 7px;
+  margin-bottom: 7px;
 }
 #tag {
   text-align: center;
   font-weight: bold;
-  margin-right: 13px;
-  margin-bottom: 13px;
+  margin-right: 7px;
+  margin-bottom: 7px;
 }
 .el-row {
   margin-bottom: 20px;
@@ -213,11 +214,7 @@ export default {
 
       this.$axios
         .get(
-          "http://" +
-            this.$ip +
-            ":" +
-            this.$port +
-            "/problemdata/?limit=" +
+          "/api/problemdata/?limit=" +
             this.pagesize +
             "&offset=" +
             (this.currentpage - 1) * this.pagesize+"&auth=1"
@@ -255,11 +252,7 @@ export default {
       this.currentpage = val;
       this.$axios
         .get(
-          "http://" +
-            this.$ip +
-            ":" +
-            this.$port +
-            "/problemdata/?limit=" +
+          "/api/problemdata/?limit=" +
             this.pagesize +
             "&offset=" +
             (this.currentpage - 1) * this.pagesize+"&auth=1"
@@ -353,11 +346,7 @@ export default {
   created() {
     this.$axios
       .get(
-        "http://" +
-          this.$ip +
-          ":" +
-          this.$port +
-          "/problemdata/?limit=10&offset=0"+"&auth=1"
+        "/api/problemdata/?limit=10&offset=0"+"&auth=1"
       )
       .then(response => {
         for (var i = 0; i < response.data.results.length; i++) {
@@ -389,7 +378,7 @@ export default {
       });
 
     this.$axios
-      .get("http://" + this.$ip + ":" + this.$port + "/problemtag/")
+      .get("/api/problemtag/")
       .then(response => {
         for (var i = 0; i < response.data.length; i++)
           this.tagnames.push(response.data[i]["tagname"]);

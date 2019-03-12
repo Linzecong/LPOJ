@@ -1,5 +1,5 @@
 <template>
-  <el-tabs type="border-card" tab-position="left" @tab-click="problemtabClick">
+  <el-tabs type="card" tab-position="left" @tab-click="problemtabClick">
     <center v-show="!begin">
       <h1>比赛未开始</h1>
     </center>
@@ -33,30 +33,34 @@
             <br>
             <el-row :gutter="18" id="des">Description</el-row>
             <el-row :gutter="18" id="detail">
-              <div style="margin-right:50px;">{{des}}</div>
+              <div style="margin-right:50px;">
+                <el-input type="textarea" v-model="des" autosize readonly></el-input>
+              </div>
             </el-row>
             <el-row :gutter="18" id="des">Input</el-row>
             <el-row :gutter="18" id="detail">
-              <div style="margin-right:50px;">{{input}}</div>
+              <div style="margin-right:50px;">
+                <el-input type="textarea" v-model="input" autosize readonly></el-input>
+              </div>
             </el-row>
             <el-row :gutter="18" id="des">Output</el-row>
             <el-row :gutter="18" id="detail">
-              <div style="margin-right:50px;">{{output}}</div>
+              <div style="margin-right:50px;">
+                <el-input type="textarea" v-model="output" autosize readonly></el-input>
+              </div>
             </el-row>
 
             <el-row :gutter="18" style="left:10px">
-              <el-col :span="11" id="text">
-                <el-row :gutter="18" v-for="(item,index) in sinput.length" :key="index">
+              <el-row :gutter="18" v-for="(item,index) in sinput.length" :key="index">
+                <el-col :span="11" id="text">
                   <el-row :gutter="18" id="des" style="margin-bottom: 0px;">Sample Input {{item}}</el-row>
                   <el-row :gutter="18" id="data" style="margin-bottom: 0px;">{{sinput[index]}}</el-row>
-                </el-row>
-              </el-col>
-              <el-col :span="11" id="text">
-                <el-row :gutter="18" v-for="(item,index) in sinput.length" :key="index">
+                </el-col>
+                <el-col :span="11" id="text">
                   <el-row :gutter="18" id="des" style="margin-bottom: 0px;">Sample Output {{item}}</el-row>
                   <el-row :gutter="18" id="data" style="margin-bottom: 0px;">{{soutput[index]}}</el-row>
-                </el-row>
-              </el-col>
+                </el-col>
+              </el-row>
             </el-row>
 
             <el-row :gutter="18" id="des">Source</el-row>
@@ -65,7 +69,9 @@
             </el-row>
             <el-row :gutter="18" id="des">Hint</el-row>
             <el-row :gutter="18" id="detail">
-              <div style="margin-right:50px;">{{hint}}</div>
+              <div style="margin-right:50px;">
+                <el-input type="textarea" v-model="hint" autosize readonly></el-input>
+              </div>
             </el-row>
           </el-card>
         </el-row>
@@ -150,7 +156,7 @@ export default {
 
       currentproblem: -1,
       currentcontest: this.$route.params.contestID,
-      currentrank: -1,
+      currentrank: -1
     };
   },
   filters: {
@@ -173,11 +179,7 @@ export default {
       this.currentrank = tab.index;
       this.$axios
         .get(
-          "http://" +
-            this.$ip +
-            ":" +
-            this.$port +
-            "/problem/" +
+          "/api/problem/" +
             this.currentproblem +
             "/"
         )
@@ -205,7 +207,7 @@ export default {
 
       this.$axios
         .get(
-          "http://" + this.$ip + ":" + this.$port + "/contestinfo/" + id + "/"
+          "/api/contestinfo/" + id + "/"
         )
         .then(response => {
           this.begintime = response.data.begintime;
@@ -234,11 +236,7 @@ export default {
               this.problemids = [];
               this.$axios
                 .get(
-                  "http://" +
-                    this.$ip +
-                    ":" +
-                    this.$port +
-                    "/contestproblem/?contestid=" +
+                  "/api/contestproblem/?contestid=" +
                     id
                 )
                 .then(response3 => {
@@ -248,15 +246,11 @@ export default {
                   }
                   this.$store.state.contestproblemcount = this.problemids.length;
                   this.currentproblem = this.problemids[0];
-                  this.currentrank=0;
+                  this.currentrank = 0;
                   this.title = this.problemtitles[0];
                   this.$axios
                     .get(
-                      "http://" +
-                        this.$ip +
-                        ":" +
-                        this.$port +
-                        "/problem/" +
+                      "/api/problem/" +
                         this.currentproblem +
                         "/"
                     )
@@ -281,7 +275,7 @@ export default {
         this.$message.error("非法操作！");
         return;
       }
-      if(this.$store.state.contestisend==true){
+      if (this.$store.state.contestisend == true) {
         this.$message.error("比赛已结束");
         return;
       }
@@ -301,133 +295,168 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
-      })
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: "提交中..."
-          });
-          this.$axios
-            .post(
-              "http://" + this.$ip + ":" + this.$port + "/judgestatusput/",
-              {
-                user: sessionStorage.username,
-                oj: "LPOJ",
-                problem: this.currentproblem,
-                result: -1,
-                time: 0,
-                memory: 0,
-                length: this.code.length,
-                language: this.language,
-                judger: "waiting for judger",
-                contest: this.currentcontest,
-                contestproblem:this.currentrank,
-                code: this.code,
-                testcase: 0,
-                message: "0"
-              }
-            )
-            .then(response => {
-              var date1 = new Date(Date.parse(response.data.submittime));
+      }).then(() => {
+        this.$message({
+          type: "success",
+          message: "提交中..."
+        });
+
+        this.$axios
+          .get(
+            "/api/contestrank/?contestid=" +
+              parseInt(this.currentcontest) +
+              "&username=" +
+              sessionStorage.username
+          )
+          .then(response5 => {
+            if (response5.data.length > 0) {
+              this.$axios
+                .post(
+                  "/api/judgestatusput/",
+                  {
+                    user: sessionStorage.username,
+                    oj: "LPOJ",
+                    problem: this.currentproblem,
+                    result: -1,
+                    time: 0,
+                    memory: 0,
+                    length: this.code.length,
+                    language: this.language,
+                    judger: "waiting for judger",
+                    contest: this.currentcontest,
+                    contestproblem: this.currentrank,
+                    code: this.code,
+                    testcase: 0,
+                    message: "0"
+                  }
+                )
+                .then(response => {
+                  var date1 = new Date(Date.parse(response.data.submittime));
+
+                  this.$axios
+                    .post(
+                      "/api/contestboard/",
+                      {
+                        username: sessionStorage.username,
+                        user: sessionStorage.name,
+                        type: -1,
+                        submitid: response.data.id,
+                        contestid: parseInt(this.currentcontest),
+                        problemrank: this.currentrank,
+                        submittime: date1.getTime()
+                      }
+                    )
+                    .then(response2 => {
+                      this.$message({
+                        message: "提交成功！",
+                        type: "success"
+                      });
+                      clearInterval(this.$store.state.submittimer);
+                      this.submitid = response.data.id;
+                      this.submitbuttontext = "Pending";
+                      this.judgetype = "info";
+                      this.loadingshow = true;
+                      //创建一个全局定时器，定时刷新状态
+                      this.$store.state.submittimer = setInterval(
+                        this.timer,
+                        1000
+                      );
+                    });
+                })
+                .catch(error => {
+                  this.$message.error("服务器错误！" + "(" + error + ")");
+                });
+            } else {
+              var str = "";
+              for (var i = 0; i < this.problemids.length - 1; i++)
+                str = str + "0|";
+              str = str + "0";
 
               this.$axios
                 .post(
-                  "http://" + this.$ip + ":" + this.$port + "/contestboard/",
+                  "/api/contestrank/",
                   {
                     username: sessionStorage.username,
                     user: sessionStorage.name,
-                    type: -1,
-                    submitid: response.data.id,
                     contestid: parseInt(this.currentcontest),
-                    problemrank: this.currentrank,
-                    submittime: date1.getTime()
+                    statue: str
                   }
                 )
-                .then(response2 => {
+                .then(response8 => {
                   this.$axios
-                    .get(
-                      "http://" +
-                        this.$ip +
-                        ":" +
-                        this.$port +
-                        "/contestrank/?contestid=" +
-                        parseInt(this.currentcontest) +
-                        "&username=" +
-                        sessionStorage.username
-                    )
-                    .then(response5 => {
-                      if (response5.data.length > 0) {
-                        this.$message({
-                          message: "提交成功！",
-                          type: "success"
-                        });
-                        clearInterval(this.$store.state.submittimer);
-                        this.submitid = response.data.id;
-                        this.submitbuttontext = "Pending";
-                        this.judgetype = "info";
-                        this.loadingshow = true;
-                        //创建一个全局定时器，定时刷新状态
-                        this.$store.state.submittimer = setInterval(
-                          this.timer,
-                          1000
-                        );
-                      } else {
-                        var str = "";
-                        for (var i = 0; i < this.problemids.length - 1; i++)
-                          str = str + "0|";
-                        str = str + "0";
-
-                        this.$axios
-                          .post(
-                            "http://" +
-                              this.$ip +
-                              ":" +
-                              this.$port +
-                              "/contestrank/",
-                            {
-                              username: sessionStorage.username,
-                              user: sessionStorage.name,
-                              contestid: parseInt(this.currentcontest),
-                              statue: str
-                            }
-                          )
-                          .then(response8 => {
-                            this.$message({
-                              message: "提交成功！",
-                              type: "success"
-                            });
-                            clearInterval(this.$store.state.submittimer);
-                            this.submitid = response.data.id;
-                            this.submitbuttontext = "Pending";
-                            this.judgetype = "info";
-                            this.loadingshow = true;
-                            //创建一个全局定时器，定时刷新状态
-                            this.$store.state.submittimer = setInterval(
-                              this.timer,
-                              1000
-                            );
-                          });
+                    .post(
+                      "/api/judgestatusput/",
+                      {
+                        user: sessionStorage.username,
+                        oj: "LPOJ",
+                        problem: this.currentproblem,
+                        result: -1,
+                        time: 0,
+                        memory: 0,
+                        length: this.code.length,
+                        language: this.language,
+                        judger: "waiting for judger",
+                        contest: this.currentcontest,
+                        contestproblem: this.currentrank,
+                        code: this.code,
+                        testcase: 0,
+                        message: "0"
                       }
+                    )
+                    .then(response => {
+                      var date1 = new Date(
+                        Date.parse(response.data.submittime)
+                      );
+
+                      this.$axios
+                        .post(
+                          "/api/contestboard/",
+                          {
+                            username: sessionStorage.username,
+                            user: sessionStorage.name,
+                            type: -1,
+                            submitid: response.data.id,
+                            contestid: parseInt(this.currentcontest),
+                            problemrank: this.currentrank,
+                            submittime: date1.getTime()
+                          }
+                        )
+                        .then(response2 => {
+                          this.$message({
+                            message: "提交成功！",
+                            type: "success"
+                          });
+                          clearInterval(this.$store.state.submittimer);
+                          this.submitid = response.data.id;
+                          this.submitbuttontext = "Pending";
+                          this.judgetype = "info";
+                          this.loadingshow = true;
+                          //创建一个全局定时器，定时刷新状态
+                          this.$store.state.submittimer = setInterval(
+                            this.timer,
+                            1000
+                          );
+                        });
+                    })
+                    .catch(error => {
+                      this.$message.error("服务器错误！" + "(" + error + ")");
                     });
+                })
+                .catch(error => {
+                  this.$message.error("服务器错误！" + "(" + error + ")");
                 });
-            })
-            .catch(error => {
-              this.$message.error("服务器错误！" + "(" + error + ")");
-            });
-        })
-        .catch(error => {
-          this.$message.error("服务器错误！" + "(" + error + ")");
-        });
+            }
+          })
+          .catch(error => {
+            this.$message.error("服务器错误！" + "(" + error + ")");
+          });
+      });
     },
     timer: function() {
       if (this.submitbuttontext == "提交后请勿重复刷新") return;
       this.$axios
         .get(
-          "http://" +
-            this.$ip +
-            ":" +
-            this.$port +
-            "/judgestatus/" +
+          "/api/judgestatus/" +
             this.submitid +
             "/"
         )
@@ -504,6 +533,9 @@ export default {
   },
   created() {
     this.getproblem(this.$route.params.contestID);
+  },
+  destroyed() {
+    clearInterval(this.$store.state.submittimer);
   }
 };
 </script>

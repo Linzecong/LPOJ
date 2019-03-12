@@ -19,6 +19,7 @@ class ManagerOnly(permissions.BasePermission):
             return True
 
         type = request.session.get('type', 1)
+        
         if type == 2 or type == 3 :
             return True
         else:

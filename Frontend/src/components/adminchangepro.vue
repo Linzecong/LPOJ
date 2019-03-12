@@ -85,7 +85,7 @@ export default {
   data() {
     return {
       problemcount: 0,
-      uploadaddress: "http://" + this.$ip + ":" + this.$port + "/uploadfile/",
+      uploadaddress: "/api/uploadfile/",
       fileList: [],
       problemform: {
         problem: "",
@@ -121,22 +121,14 @@ export default {
     problemchange(num) {
       this.$axios
         .get(
-          "http://" +
-            this.$ip +
-            ":" +
-            this.$port +
-            "/problem/" +
+          "/api/problem/" +
             this.problemform.problem +
             "/"
         )
         .then(response => {
           this.$axios
             .get(
-              "http://" +
-                this.$ip +
-                ":" +
-                this.$port +
-                "/problemdata/" +
+              "/api/problemdata/" +
                 this.problemform.problem +
                 "/"
             )
@@ -177,11 +169,7 @@ export default {
     handleSuccess(response, file, fileList) {
       this.$axios
         .put(
-          "http://" +
-            this.$ip +
-            ":" +
-            this.$port +
-            "/problem/" +
+          "/api/problem/" +
             this.problemform.problem +
             "/",
           this.problemform
@@ -192,14 +180,20 @@ export default {
           this.problemdataform.level = this.problemform.level;
           this.problemdataform.tag = this.problemform.tag;
           this.problemdataform.score = this.problemform.score;
-
+           var tag = this.problemdataform.tag.split("|")
+          for(var i=0;i<tag.length;i++){
+            this.$axios
+            .post(
+              "/api/problemtag/",
+              {
+                tagname:tag[i],
+                count:1,
+              }
+            );
+          }
           this.$axios
             .put(
-              "http://" +
-                this.$ip +
-                ":" +
-                this.$port +
-                "/problemdata/" +
+              "/api/problemdata/" +
                 this.problemform.problem +
                 "/",
               this.problemdataform

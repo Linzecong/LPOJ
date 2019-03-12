@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.pagination import LimitOffsetPagination
-from .permission import ManagerOnly
+from .permission import ManagerOnly,LoginOnly
 from .models import ContestAnnouncement,ContestRank, ContestBoard, ContestComment, ContestInfo, ContestProblem, ContestRegister
 from .serializers import ContestRankSerializer, ContestAnnouncementSerializer,ContestBoardSerializer,ContestCommentSerializer,ContestInfoSerializer,ContestProblemSerializer, ContestRegisterSerializer
 from django_filters.rest_framework import DjangoFilterBackend
@@ -21,14 +21,14 @@ class ContestBoardView(viewsets.ModelViewSet):
     queryset = ContestBoard.objects.all()
     serializer_class = ContestBoardSerializer
     # pagination_class = LimitOffsetPagination
-    # permission_classes = (ManagerOnly,)# 将来要改写成重写post形式
+    permission_classes = (LoginOnly,)# 将来要改写成重写post形式
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ("contestid",)
 
 class ContestRankView(viewsets.ModelViewSet):
     queryset = ContestRank.objects.all()
     serializer_class = ContestRankSerializer
-     # permission_classes = (ManagerOnly,)# 将来要改写成重写post形式
+    permission_classes = (LoginOnly,)# 将来要改写成重写post形式
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ("contestid","username")
 

@@ -86,11 +86,7 @@ export default {
       this.pagesize = val;
       this.$axios
         .get(
-          "http://" +
-            this.$ip +
-            ":" +
-            this.$port +
-            "/judgestatus/?user=" +
+          "/api/judgestatus/?user=" +
             this.username +
             "&limit=" +
             this.pagesize +
@@ -164,11 +160,7 @@ export default {
       this.currentpage = val;
       this.$axios
         .get(
-          "http://" +
-            this.$ip +
-            ":" +
-            this.$port +
-            "/judgestatus/?user=" +
+          "/api/judgestatus/?user=" +
             this.username +
             "&limit=" +
             this.pagesize +
@@ -293,11 +285,7 @@ export default {
 
       this.$axios
         .get(
-          "http://" +
-            this.$ip +
-            ":" +
-            this.$port +
-            "/judgestatus/?user=" +
+          "/api/judgestatus/?user=" +
             this.username +
             "&limit=" +
             this.pagesize +

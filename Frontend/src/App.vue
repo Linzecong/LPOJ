@@ -226,7 +226,7 @@ export default {
     handleCommand(command) {
       if (command == "logout") {
         this.$axios
-          .get("http://" + this.$ip + ":" + this.$port + "/logout/")
+          .get("/api/logout/")
           .then(response => {
             this.$message({
               message: "登出成功！",
@@ -234,8 +234,8 @@ export default {
             });
             sessionStorage.setItem("username", "");
             sessionStorage.setItem("name", "");
-            sessionStorage.setItem("auth", "");
             sessionStorage.setItem("rating", "");
+            sessionStorage.setItem("type", "");
             this.loginshow = 0;
             this.username = "";
             this.$router.go(0);
@@ -302,13 +302,13 @@ export default {
       this.form.password = this.$md5(this.form.password);
 
       this.$axios
-        .post("http://" + this.$ip + ":" + this.$port + "/userdata/", this.form)
+        .post("/api/userdata/", this.form)
         .then(response => {
           
 
           this.$axios
             .post(
-              "http://" + this.$ip + ":" + this.$port + "/register/",
+              "/api/register/",
               this.form
             )
             .then(response => {
@@ -333,7 +333,7 @@ export default {
     loginClick() {
       this.form.password = this.$md5(this.form.password);
       this.$axios
-        .post("http://" + this.$ip + ":" + this.$port + "/login/", this.form)
+        .post("/api/login/", this.form)
         .then(response => {
           if (response.data == "passworderror") {
             this.$message.error("密码错误");
@@ -360,11 +360,7 @@ export default {
 
           this.$axios
           .get(
-            "http://" +
-              this.$ip +
-              ":" +
-              this.$port +
-              "/userdata/?username=" +
+            "/api/userdata/?username=" +
               this.username
           )
           .then(response => {
@@ -414,5 +410,8 @@ export default {
 #title {
   font-size: 20px;
   font-weight: bold;
+}
+.el-row {
+  margin-bottom: 20px;
 }
 </style>

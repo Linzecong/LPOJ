@@ -67,11 +67,7 @@ export default {
 
     this.$axios
       .get(
-        "http://" +
-          this.$ip +
-          ":" +
-          this.$port +
-          "/contestinfo/" +
+        "/api/contestinfo/" +
           this.contestid +
           "/"
       )
@@ -103,11 +99,7 @@ export default {
             if (username) {
               this.$axios
                 .get(
-                  "http://" +
-                    this.$ip +
-                    ":" +
-                    this.$port +
-                    "/contestregister/?user=" +
+                  "/api/contestregister/?user=" +
                     username +
                     "&contestid=" +
                     this.contestid

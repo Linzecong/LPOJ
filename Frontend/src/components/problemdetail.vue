@@ -7,30 +7,28 @@
           <br>
           <el-row :gutter="18" id="des">Description</el-row>
           <el-row :gutter="18" id="detail">
-            <div style="margin-right:50px;">{{des}}</div>
+            <div style="margin-right:50px;"><el-input type="textarea" v-model="des" autosize readonly></el-input></div>
           </el-row>
           <el-row :gutter="18" id="des">Input</el-row>
           <el-row :gutter="18" id="detail">
-            <div style="margin-right:50px;">{{input}}</div>
+            <div style="margin-right:50px;"><el-input type="textarea" v-model="input" autosize readonly></el-input></div>
           </el-row>
           <el-row :gutter="18" id="des">Output</el-row>
           <el-row :gutter="18" id="detail">
-            <div style="margin-right:50px;">{{output}}</div>
+            <div style="margin-right:50px;"><el-input type="textarea" v-model="output" autosize readonly></el-input></div>
           </el-row>
 
           <el-row :gutter="18" style="left:10px">
-            <el-col :span="11" id="text">
-              <el-row :gutter="18" v-for="(item,index) in sinput.length" :key="index">
+            <el-row :gutter="18" v-for="(item,index) in sinput.length" :key="index">
+              <el-col :span="11" id="text">
                 <el-row :gutter="18" id="des" style="margin-bottom: 0px;">Sample Input {{item}}</el-row>
                 <el-row :gutter="18" id="data" style="margin-bottom: 0px;">{{sinput[index]}}</el-row>
-              </el-row>
-            </el-col>
-            <el-col :span="11" id="text">
-              <el-row :gutter="18" v-for="(item,index) in sinput.length" :key="index">
+              </el-col>
+              <el-col :span="11" id="text">
                 <el-row :gutter="18" id="des" style="margin-bottom: 0px;">Sample Output {{item}}</el-row>
                 <el-row :gutter="18" id="data" style="margin-bottom: 0px;">{{soutput[index]}}</el-row>
-              </el-row>
-            </el-col>
+              </el-col>
+            </el-row>
           </el-row>
 
           <el-row :gutter="18" id="des">Source</el-row>
@@ -39,7 +37,7 @@
           </el-row>
           <el-row :gutter="18" id="des">Hint</el-row>
           <el-row :gutter="18" id="detail">
-            <div style="margin-right:50px;">{{hint}}</div>
+            <div style="margin-right:50px;"><el-input type="textarea" v-model="hint" autosize readonly></el-input></div>
           </el-row>
         </el-card>
       </el-row>
@@ -249,7 +247,7 @@ export default {
       memory: "404",
       hint: "404",
       tagnames: ["404", "404"],
-      activeNames: ["4", "5"],
+      activeNames: ["1","2","3","4", "5","6"],
       level: "Easy",
       code: "",
       language: "",
@@ -270,18 +268,18 @@ export default {
   },
   created() {
     this.ID = this.$route.query.problemID;
-    if(!this.ID){
+    if (!this.ID) {
       this.$message.error("参数错误" + "(" + this.ID + ")");
       return;
     }
     var auth = 1;
     this.$axios
       .get(
-        "http://" + this.$ip + ":" + this.$port + "/problem/" + this.ID + "/"
+        "/api/problem/" + this.ID + "/"
       )
       .then(response => {
         auth = response.data.auth;
-        if (auth == 2||auth == 3) {
+        if (auth == 2 || auth == 3) {
           this.title = "非法访问！";
           this.$message.error("服务器错误！" + "(" + "无权限" + ")");
           return;
@@ -303,11 +301,7 @@ export default {
         this.hint = response.data.hint;
         this.$axios
           .get(
-            "http://" +
-              this.$ip +
-              ":" +
-              this.$port +
-              "/problemdata/" +
+            "/api/problemdata/" +
               this.ID +
               "/"
           )
@@ -387,7 +381,7 @@ export default {
       if (type == "ExtremelyHard") return "danger";
     },
     submit: function() {
-      if(this.addtime=="404"){
+      if (this.addtime == "404") {
         this.$message.error("非法操作！");
         return;
       }
@@ -413,7 +407,7 @@ export default {
           message: "提交中..."
         });
         this.$axios
-          .post("http://" + this.$ip + ":" + this.$port + "/judgestatusput/", {
+          .post("/api/judgestatusput/", {
             user: sessionStorage.username,
             oj: "LPOJ",
             problem: this.ID,
@@ -451,11 +445,7 @@ export default {
       if (this.submitbuttontext == "提交后请勿重复刷新") return;
       this.$axios
         .get(
-          "http://" +
-            this.$ip +
-            ":" +
-            this.$port +
-            "/judgestatus/" +
+          "/api/judgestatus/" +
             this.submitid +
             "/"
         )

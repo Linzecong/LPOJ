@@ -65,10 +65,10 @@ def deal_client(newSocket: socket, addr):
                 newSocket.close()
                 mutex.release()
                 return
-            # except:
-            #     print("error!")
-            #     mutex.release()
-            #     return
+            except:
+                print("error!")
+                mutex.release()
+                return
             mutex.release()
 
 

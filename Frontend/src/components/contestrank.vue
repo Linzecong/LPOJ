@@ -4,17 +4,22 @@
       <h1>{{ contesttitle }}</h1>
     </center>
     <el-row :gutter="10">
-      <el-table :data="tableData" :cell-style="cellstyle" border>
-        <el-table-column prop="user" label="User"></el-table-column>
-        <el-table-column prop="nickname" label="Nickname"></el-table-column>
-        <el-table-column prop="solved" label="Solve"></el-table-column>
+      <el-table :data="tableData" :cell-style="cellstyle" border stripe>
+        <el-table-column prop="user" label="User" fixed></el-table-column>
+        <el-table-column prop="nickname" label="Nickname" fixed></el-table-column>
+        <el-table-column prop="solved" label="Solve" fixed></el-table-column>
         <el-table-column prop="time" label="Time"></el-table-column>
         <el-table-column
           v-for="(item,index) in probleminfo"
           :key="index"
           :prop="item.prop"
           :label="item.label"
-        ></el-table-column>
+          style="white-space: pre-line;"
+        >
+        <template slot-scope="scope">
+          <div style="white-space:pre-line;">{{scope.row[item.prop]}}</div>
+        </template>
+        </el-table-column>
       </el-table>
     </el-row>
   </el-row>
@@ -81,10 +86,11 @@ export default {
         return "background-color:white;text-align:center";
       if(data.row[str].indexOf("❤")>-1)
         return "background-color:#89C53B;text-align:center";
-      if(data.row[str].indexOf("(")>-1)
-        return "background-color:#F56C6C;text-align:center";
       if(data.row[str].indexOf(":")>-1)
         return "background-color:#67C23A;text-align:center";
+      if(data.row[str].indexOf("(")>-1)
+        return "background-color:#F56C6C;text-align:center";
+      
       return "background-color:white";
     },
     setproblemcount(id) {
@@ -92,11 +98,7 @@ export default {
 
       this.$axios
         .get(
-          "http://" +
-            this.$ip +
-            ":" +
-            this.$port +
-            "/contestproblem/?contestid=" +
+          "/api/contestproblem/?contestid=" +
             id
         )
         .then(response3 => {
@@ -108,11 +110,7 @@ export default {
           }
           this.$axios
           .get(
-            "http://" +
-              this.$ip +
-              ":" +
-              this.$port +
-              "/contestrank/?contestid=" +
+            "/api/contestrank/?contestid=" +
               id
           )
           .then(response => {
@@ -194,7 +192,6 @@ export default {
                       var li = tmp[1].split(":");
                       var time = parseInt(li[0])*3600+parseInt(li[1])*60+parseInt(li[2]);
                       tmp = tmp[0].split("(");
-                      time += parseInt(-tmp[1])*20*60;
                       if(time<minn)
                       {
                         minn=time
@@ -205,7 +202,7 @@ export default {
                   }
               }
               if(index!=-1){
-                data[index][pro]=data[index][pro]+"❤";
+                data[index][pro]=data[index][pro]+"\n❤";
                 console.log(data[index][pro])
               }
             }

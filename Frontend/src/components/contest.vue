@@ -82,11 +82,7 @@ export default {
 
       this.$axios
         .get(
-          "http://" +
-            this.$ip +
-            ":" +
-            this.$port +
-            "/contestinfo/?limit=" +
+          "/api/contestinfo/?limit=" +
             this.pagesize +
             "&offset=" +
             (this.currentpage - 1) * this.pagesize
@@ -132,11 +128,7 @@ export default {
 
       this.$axios
         .get(
-          "http://" +
-            this.$ip +
-            ":" +
-            this.$port +
-            "/contestinfo/?limit=" +
+          "/api/contestinfo/?limit=" +
             this.pagesize +
             "&offset=" +
             (this.currentpage - 1) * this.pagesize
@@ -182,11 +174,7 @@ export default {
   created() {
     this.$axios
       .get(
-        "http://" +
-          this.$ip +
-          ":" +
-          this.$port +
-          "/contestinfo/?limit=10&offset=0"
+        "/api/contestinfo/?limit=10&offset=0"
       )
       .then(response => {
         for (var i = 0; i < response.data.results.length; i++) {

@@ -84,7 +84,7 @@ export default {
   data() {
     return {
       problemcount: 0,
-      uploadaddress: "http://" + this.$ip + ":" + this.$port + "/uploadfile/",
+      uploadaddress: "/api/uploadfile/",
       fileList: [],
       addproblemform: {
         problem: this.problemcount + 1,
@@ -137,7 +137,7 @@ export default {
     handleSuccess(response, file, fileList) {
       this.$axios
         .post(
-          "http://" + this.$ip + ":" + this.$port + "/problem/",
+          "/api/problem/",
           this.addproblemform
         )
         .then(response => {
@@ -147,9 +147,21 @@ export default {
           this.addproblemdataform.tag = this.addproblemform.tag;
           this.addproblemdataform.score = this.addproblemform.score;
 
+          var tag = this.addproblemdataform.tag.split("|")
+          for(var i=0;i<tag.length;i++){
+            this.$axios
+            .post(
+              "/api/problemtag/",
+              {
+                tagname:tag[i],
+                count:1,
+              }
+            );
+          }
+
           this.$axios
             .post(
-              "http://" + this.$ip + ":" + this.$port + "/problemdata/",
+              "/api/problemdata/",
               this.addproblemdataform
             )
             .then(response2 => {
@@ -178,7 +190,7 @@ export default {
   },
   created() {
     this.$axios
-      .get("http://" + this.$ip + ":" + this.$port + "/problemdata/?limit=1")
+      .get("/api/problemdata/?limit=1")
       .then(response => {
         this.problemcount = response.data.count;
         this.addproblemform.problem = this.problemcount + 1;

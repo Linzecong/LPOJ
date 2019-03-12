@@ -65,11 +65,7 @@ export default {
     getData(limit,offset){
       this.$axios
       .get(
-        "http://" +
-          this.$ip +
-          ":" +
-          this.$port +
-          "/userdata/?limit="+limit+"&offset="+offset
+        "/api/userdata/?limit="+limit+"&offset="+offset
       )
       .then(response => {
         console.log(response.data.results[0])

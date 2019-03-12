@@ -118,7 +118,7 @@ export default {
         for (var i = 0; i < this.problemnames.length; i++) {
           var li = this.problemnames[i].split("|");
           this.$axios.post(
-            "http://" + this.$ip + ":" + this.$port + "/contestproblem/",
+            "/api/contestproblem/",
             {
               contestid: this.contestid,
               problemid: li[0],
@@ -150,7 +150,7 @@ export default {
     addproblemchange(num) {
       this.$axios
         .get(
-          "http://" + this.$ip + ":" + this.$port + "/problemdata/" + num + "/"
+          "/api/problemdata/" + num + "/"
         )
         .then(response2 => {
           this.tmpaddproblemtitle = response2.data.title;
@@ -196,7 +196,7 @@ export default {
       }).then(() => {
         this.$axios
           .post(
-            "http://" + this.$ip + ":" + this.$port + "/contestinfo/",
+            "/api/contestinfo/",
             this.addcontestform
           )
           .then(response => {
@@ -207,7 +207,7 @@ export default {
 
               for (var i = 0; i < li.length; i++) {
                 this.$axios.post(
-                  "http://" + this.$ip + ":" + this.$port + "/contestregister/",
+                  "/api/contestregister/",
                   {
                     contestid: this.contestid,
                     user: li[i]

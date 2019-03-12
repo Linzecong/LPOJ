@@ -7,6 +7,11 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = '__all__'
+
+class UserNoPassSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        exclude = ['password']
     
 class UserDataSerializer(serializers.ModelSerializer):
     class Meta:
