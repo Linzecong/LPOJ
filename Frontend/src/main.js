@@ -9,6 +9,9 @@ import VueResource from 'vue-resource';
 import Vuex from 'vuex'
 import md5 from 'js-md5';
 import axios from 'axios';
+import {codemirror} from 'vue-codemirror'
+import 'codemirror/lib/codemirror.css'
+Vue.use(codemirror)
 
 Vue.use(Vuex)
 Vue.config.productionTip = false

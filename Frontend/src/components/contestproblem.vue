@@ -105,12 +105,14 @@
               </el-col>
             </el-row>
             <el-row :gutter="15">
-              <el-input
+              <codemirror  ref="myCm"  v-model="code" :options="cmOptions" class="code"></codemirror>
+              <!-- <el-input
                 type="textarea"
                 :autosize="{ minRows: 10, maxRows: 70}"
                 placeholder="Please type your code here."
                 v-model="code"
-              ></el-input>
+              ></el-input> -->
+
             </el-row>
           </el-card>
         </el-row>
@@ -120,10 +122,32 @@
 </template>
 
 <script>
+import { codemirror } from 'vue-codemirror'
+require('codemirror/lib/codemirror.css')
+require('codemirror/theme/duotone-light.css')
+require('codemirror/mode/clike/clike')
+require('codemirror/mode/vue/vue')
+require('codemirror/addon/hint/show-hint.js')
+require('codemirror/addon/hint/show-hint.css')
+require('codemirror/addon/hint/anyword-hint.js')
+
 export default {
   name: "contestproblem",
+  components:{
+	  codemirror
+  },
   data() {
     return {
+      cmOptions:{
+        tabSize:4,
+        mode:'text/x-c++src',
+        theme:'duotone-light',
+        lineNumbers:true,
+        lineWrapping:true,
+        showCursorWhenSelecting:true,
+        line:true,
+        extraKeys: {"Ctrl": "autocomplete"},
+      },
       begintime: "",
       currenttime: "",
       problemtitles: [],

@@ -16,6 +16,7 @@
     "js-md5": "^0.7.3",
     "moment": "^2.24.0",
     "vue": "^2.5.2",
+    "vue-codemirror": "^4.0.6",
     "vue-resource": "^1.5.1",
     "vue-router": "^3.0.1",
     "vuex": "^3.1.0",

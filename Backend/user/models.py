@@ -4,7 +4,7 @@ from django.db import models
 
 class User(models.Model):
 
-    username = models.CharField(max_length=50,null=False,unique=True)
+    username = models.CharField(max_length=50,null=False,primary_key=True)
     password = models.CharField(max_length=50,null=False)
     name = models.CharField(max_length=50,null=False) #名称
     regtime = models.DateTimeField(auto_now=True)
@@ -27,7 +27,7 @@ class User(models.Model):
 
 class UserData(models.Model):
 
-    username = models.CharField(max_length=50,null=False,unique=True)
+    username = models.CharField(max_length=50,null=False,primary_key=True)
     ac = models.IntegerField(null=False,default=0)
     submit = models.IntegerField(null=False,default=0)
     score = models.IntegerField(default=0)

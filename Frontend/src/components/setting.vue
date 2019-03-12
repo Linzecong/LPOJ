@@ -116,7 +116,7 @@ export default {
         qq: "",
         email: ""
       },
-      userid: 0
+      userid: -1
     };
   },
   methods: {
@@ -211,7 +211,7 @@ export default {
           this.form.realname = response.data[0].realname;
           this.form.qq = response.data[0].qq;
           this.form.email = response.data[0].email;
-          this.userid = response.data[0].id;
+          this.userid = this.username;
         });
     }
   }

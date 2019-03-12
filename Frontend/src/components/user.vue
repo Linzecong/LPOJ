@@ -121,7 +121,7 @@ export default {
             this.rating=response.data[0].rating;
         });
 
-      this.$axios.get("/api/judgestatus/?username=" +
+      this.$axios.get("/api/judgestatus/?user=" +
             this.username+"&result=0").then(response => {
         for (var i = 0; i < response.data.length; i++) {
           
