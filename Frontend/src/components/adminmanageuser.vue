@@ -120,7 +120,7 @@ export default {
         email: "",
         type: 1
       },
-      userid: 0
+      userid: -1
     };
   },
   methods: {
@@ -137,7 +137,7 @@ export default {
               return;
             }
             this.form = response.data[0];
-            this.userid = response.data[0].id;
+            this.userid = this.form.username;
           })
           .catch(error => {
             this.$message.error("服务器错误！" + error);
@@ -188,7 +188,7 @@ export default {
       this.form.password = this.$md5(this.form.password);
       this.$axios
         .put(
-          "/api/user/" +
+          "/api/changeall/" +
             this.userid +
             "/",
           this.form

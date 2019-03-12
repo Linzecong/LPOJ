@@ -25,4 +25,47 @@ class UserOnly(permissions.BasePermission):
         if userid == username or request.session.get('type', 1) == 3 :
             return True
         else:
+            return False 
+
+            
+class UserPUTOnly(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.method != "PUT":
             return False
+        
+        data = request.data
+        username = data.get('username')
+        userid = request.session.get('user_id', None)
+        if userid == username or request.session.get('type', 1) == 3 :
+            return True
+        else:
+            return False 
+    
+    def has_object_permission(self, request, view, blog):
+        if request.method != "PUT":
+            return False
+        data = request.data
+        username = data.get('username')
+        userid = request.session.get('user_id', None)
+        if userid == username or request.session.get('type', 1) == 3 :
+            return True
+        else:
+            return False 
+            
+
+class AuthPUTOnly(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.method != "PUT":
+            return False
+        if request.session.get('type', 1) == 3 :
+            return True
+        else:
+            return False 
+    
+    def has_object_permission(self, request, view, blog):
+        if request.method != "PUT":
+            return False
+        if request.session.get('type', 1) == 3 :
+            return True
+        else:
+            return False 

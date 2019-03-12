@@ -8,6 +8,8 @@ from rest_framework import routers
 routers = routers.DefaultRouter()
 routers.register('userdata', views.UserDataView)
 routers.register('user', views.UserView)
+routers.register('change', views.UserChangeView)
+routers.register('changeall', views.UserChangeAllView)
 
 urlpatterns = [
     url('', include(routers.urls)),

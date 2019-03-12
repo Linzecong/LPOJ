@@ -161,7 +161,7 @@ export default {
       this.form.password = this.$md5(this.form.password);
       this.$axios
         .put(
-          "/api/user/" +
+          "/api/change/" +
             this.userid +
             "/",
           this.form

@@ -12,8 +12,14 @@ class UserNoPassSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         exclude = ['password']
+
+class UserNoTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        exclude = ['type']
     
 class UserDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserData
         fields = '__all__'
+
