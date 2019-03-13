@@ -7,15 +7,21 @@
           <br>
           <el-row :gutter="18" id="des">Description</el-row>
           <el-row :gutter="18" id="detail">
-            <div style="margin-right:50px;"><el-input type="textarea" v-model="des" autosize readonly></el-input></div>
+            <div style="margin-right:50px;">
+              <el-input type="textarea" v-model="des" autosize readonly></el-input>
+            </div>
           </el-row>
           <el-row :gutter="18" id="des">Input</el-row>
           <el-row :gutter="18" id="detail">
-            <div style="margin-right:50px;"><el-input type="textarea" v-model="input" autosize readonly></el-input></div>
+            <div style="margin-right:50px;">
+              <el-input type="textarea" v-model="input" autosize readonly></el-input>
+            </div>
           </el-row>
           <el-row :gutter="18" id="des">Output</el-row>
           <el-row :gutter="18" id="detail">
-            <div style="margin-right:50px;"><el-input type="textarea" v-model="output" autosize readonly></el-input></div>
+            <div style="margin-right:50px;">
+              <el-input type="textarea" v-model="output" autosize readonly></el-input>
+            </div>
           </el-row>
 
           <el-row :gutter="18" style="left:10px">
@@ -37,7 +43,9 @@
           </el-row>
           <el-row :gutter="18" id="des">Hint</el-row>
           <el-row :gutter="18" id="detail">
-            <div style="margin-right:50px;"><el-input type="textarea" v-model="hint" autosize readonly></el-input></div>
+            <div style="margin-right:50px;">
+              <el-input type="textarea" v-model="hint" autosize readonly></el-input>
+            </div>
           </el-row>
         </el-card>
       </el-row>
@@ -70,19 +78,8 @@
               >{{submitbuttontext}}</el-button>
             </el-col>
           </el-row>
-          <el-row :gutter="15">
-
-            <codemirror  ref="myCm"  v-model="code"  :options="cmOptions" class="code"></codemirror>
-            <!-- <el-input
-              type="textarea"
-              :autosize="{ minRows: 10, maxRows: 70}"
-              placeholder="Please type your code here."
-              v-model="code"
-              @focus="codechange"
-              
-            ></el-input> -->
-
-
+          <el-row>
+            <codemirror v-model="code" :options="cmOptions"></codemirror>
           </el-row>
         </el-card>
       </el-row>
@@ -236,12 +233,8 @@
 import moment from "moment";
 import { codemirror } from 'vue-codemirror'
 require('codemirror/lib/codemirror.css')
-require('codemirror/theme/duotone-light.css')
+require('codemirror/theme/base16-light.css')
 require('codemirror/mode/clike/clike')
-require('codemirror/mode/vue/vue')
-require('codemirror/addon/hint/show-hint.js')
-require('codemirror/addon/hint/show-hint.css')
-require('codemirror/addon/hint/anyword-hint.js')
 
 export default {
   name: "problemdetail",
@@ -253,12 +246,8 @@ export default {
       cmOptions:{
         tabSize:4,
         mode:'text/x-c++src',
-        theme:'duotone-light',
+        theme:'base16-light',
         lineNumbers:true,
-        lineWrapping:true,
-        showCursorWhenSelecting:true,
-        line:true,
-        extraKeys: {"Ctrl": "autocomplete"},
       },
       title: "404",
       des: "404",
@@ -274,7 +263,7 @@ export default {
       memory: "404",
       hint: "404",
       tagnames: ["404", "404"],
-      activeNames: ["1","2","3","4", "5","6"],
+      activeNames: ["1", "2", "3", "4", "5", "6"],
       level: "Easy",
       code: "",
       language: "",
@@ -301,12 +290,10 @@ export default {
     }
     var auth = 1;
     this.$axios
-      .get(
-        "/api/problem/" + this.ID + "/"
-      )
+      .get("/api/problem/" + this.ID + "/")
       .then(response => {
         auth = response.data.auth;
-        if (auth == 2 || auth == 3) {
+        if ((auth == 2 || auth == 3) && sessionStorage.type ==1 ) {
           this.title = "非法访问！";
           this.$message.error("服务器错误！" + "(" + "无权限" + ")");
           return;
@@ -327,11 +314,7 @@ export default {
         this.memory = response.data.memory + "MB";
         this.hint = response.data.hint;
         this.$axios
-          .get(
-            "/api/problemdata/" +
-              this.ID +
-              "/"
-          )
+          .get("/api/problemdata/" + this.ID + "/")
           .then(response => {
             if (response.data["level"] == "1") response.data["level"] = "Easy";
             if (response.data["level"] == "2")
@@ -467,15 +450,10 @@ export default {
           });
       });
     },
-    codechange: function(t) {},
     timer: function() {
       if (this.submitbuttontext == "提交后请勿重复刷新") return;
       this.$axios
-        .get(
-          "/api/judgestatus/" +
-            this.submitid +
-            "/"
-        )
+        .get("/api/judgestatus/" + this.submitid + "/")
         .then(response => {
           this.loadingshow = false;
           var testcase = response.data["testcase"];

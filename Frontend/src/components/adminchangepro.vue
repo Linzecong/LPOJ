@@ -180,6 +180,7 @@ export default {
           this.problemdataform.level = this.problemform.level;
           this.problemdataform.tag = this.problemform.tag;
           this.problemdataform.score = this.problemform.score;
+          this.problemdataform.auth = this.problemform.auth;
            var tag = this.problemdataform.tag.split("|")
           for(var i=0;i<tag.length;i++){
             this.$axios

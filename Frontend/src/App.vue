@@ -180,7 +180,7 @@
       </div>
     </el-dialog>
 
-    <transition name="el-zoom-in-center" mode="out-in">
+    <transition name="el-fade-in-linear" mode="out-in">
       <router-view id="route"></router-view>
     </transition>
   </div>
@@ -393,18 +393,19 @@ export default {
 }
 #nav {
   background-color: #ffffff;
-  position: fixed;
+  position:fixed;
   left: 0px;
   top: 0px;
   z-index: 5;
   width: 100%;
-  box-shadow: 00px 0px 00px rgb(255, 255, 255),
-    /*左边阴影*/ 0px 0px 10px rgb(255, 255, 255),
-    /*上边阴影*/ 0px 0px 0px rgb(255, 255, 255),
-    /*右边阴影*/ 1px 1px 0px rgb(218, 218, 218); /*下边阴影*/
+  /* box-shadow: 00px 0px 00px rgb(255, 255, 255),
+    0px 0px 10px rgb(255, 255, 255),
+     0px 0px 0px rgb(255, 255, 255),
+     1px 1px 0px rgb(218, 218, 218);  */
+
 }
 #route {
-  position: relative;
+  position:relative;
   top: 80px;
 }
 #title {

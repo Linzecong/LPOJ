@@ -124,12 +124,8 @@
 <script>
 import { codemirror } from 'vue-codemirror'
 require('codemirror/lib/codemirror.css')
-require('codemirror/theme/duotone-light.css')
+require('codemirror/theme/base16-light.css')
 require('codemirror/mode/clike/clike')
-require('codemirror/mode/vue/vue')
-require('codemirror/addon/hint/show-hint.js')
-require('codemirror/addon/hint/show-hint.css')
-require('codemirror/addon/hint/anyword-hint.js')
 
 export default {
   name: "contestproblem",
@@ -141,11 +137,8 @@ export default {
       cmOptions:{
         tabSize:4,
         mode:'text/x-c++src',
-        theme:'duotone-light',
+        theme:'base16-light',
         lineNumbers:true,
-        lineWrapping:true,
-        showCursorWhenSelecting:true,
-        line:true,
         extraKeys: {"Ctrl": "autocomplete"},
       },
       begintime: "",

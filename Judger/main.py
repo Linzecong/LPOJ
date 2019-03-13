@@ -137,6 +137,9 @@ def judge(id, code, lang, problem,contest,username,submittime,contestproblem):
     maxmemory = 0
     maxtime = 0
 
+    newfiles = list(newfiles) 
+    newfiles.sort() 
+
     for filename in newfiles:
         print("judging!!!!!!",id,"/%s/%s.in" % (problem,filename))
         ret = _judger.run(max_cpu_time=timelimit,

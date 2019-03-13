@@ -22,7 +22,8 @@ class ProblemView(viewsets.GenericViewSet, mixins.DestroyModelMixin, mixins.Crea
 
 
 class ProblemDataView(viewsets.ModelViewSet):
-    queryset = ProblemData.objects.all()
+
+    queryset = ProblemData.objects.extra(select={'t':'problem+0'}).extra(order_by=["t"])
     serializer_class = ProblemDataSerializer
     pagination_class = LimitOffsetPagination
     permission_classes = (ManagerOnly,)

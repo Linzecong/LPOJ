@@ -109,7 +109,8 @@ export default {
         title: "题目标题",
         tag: "简单题|模拟|贪心",
         level: 3,
-        score: 100
+        score: 100,
+        auth:2,
       }
     };
   },
@@ -146,6 +147,7 @@ export default {
           this.addproblemdataform.level = this.addproblemform.level;
           this.addproblemdataform.tag = this.addproblemform.tag;
           this.addproblemdataform.score = this.addproblemform.score;
+          this.addproblemdataform.auth = this.addproblemform.auth;
 
           var tag = this.addproblemdataform.tag.split("|")
           for(var i=0;i<tag.length;i++){
@@ -177,6 +179,15 @@ export default {
     onAddProblemSubmit() {
       if (this.fileList.length <= 0) {
         this.$message.error("请选择数据文件");
+        return;
+      }
+      var name = this.fileList[0];
+      var li = name.split(".");
+      if (li[0] != this.addproblemform.problem) {
+        this.$message.error(
+          "数据文件名名不正确！应为" + this.addproblemform.problem + ".zip"
+        );
+        this.fileList = [];
         return;
       }
       this.$confirm("确定添加吗？", "添加题目", {
