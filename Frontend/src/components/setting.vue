@@ -107,7 +107,7 @@ export default {
         password: "",
         comfirm: "",
         name: "",
-        des:"",
+        des:"这个人很懒，什么都没有没有留下。",
         school: "",
         course: "",
         classes: "",
@@ -156,6 +156,10 @@ export default {
       if (this.form.password.length < 6) {
         this.$message.error("密码太短！");
         return;
+      }
+
+      if(this.form.des.length<=0){
+        this.form.des="这个人很懒，什么都没有没有留下。"
       }
 
       this.form.password = this.$md5(this.form.password);

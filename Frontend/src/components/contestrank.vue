@@ -5,6 +5,7 @@
     </center>
     <el-row :gutter="10">
       <el-table :data="tableData" :cell-style="cellstyle" border stripe>
+        <el-table-column prop="rank" label="Rank" width="70px" fixed></el-table-column>
         <el-table-column prop="user" label="User" fixed></el-table-column>
         <el-table-column prop="nickname" label="Nickname" fixed></el-table-column>
         <el-table-column prop="solved" label="Solve" fixed></el-table-column>
@@ -36,6 +37,7 @@ export default {
       probleminfo: [],
       tableData:[
         {
+          //rank:1,
           user:404,
           nickname:404,
           solved:100,
@@ -46,6 +48,7 @@ export default {
           D:"(-4)",
         },
         {
+          //rank:2,
           user:404,
           nickname:404,
           solved:90,
@@ -80,14 +83,14 @@ export default {
       return String.fromCharCode(val + A.charCodeAt());
     },
     cellstyle(data){
-      var id = data.columnIndex-4;
+      var id = data.columnIndex-5;
       var str = this.toChar(id);
       if(id<0)
-        return "background-color:white;text-align:center";
+        return "background-color:white;text-align:center;";
       if(data.row[str].indexOf("❤")>-1)
-        return "background-color:#89C53B;text-align:center";
+        return "background-color:#009100;text-align:center;font-weight:bold";
       if(data.row[str].indexOf(":")>-1)
-        return "background-color:#67C23A;text-align:center";
+        return "background-color:#00EC00;text-align:center";
       if(data.row[str].indexOf("(")>-1)
         return "background-color:#F56C6C;text-align:center";
       
@@ -170,6 +173,9 @@ export default {
               data.push(k)
             }
             data.sort(this.sortByProperty("solved","sorttime"));
+            for(var i=0;i<data.length;i++){
+              data[i]["rank"]=i+1;
+            }
 
             for(var id=0;id<this.problemcount;id++){
               var pro = this.toChar(id);
