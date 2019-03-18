@@ -23,6 +23,9 @@
       <el-menu-item index="/rank">
         <i class="el-icon-star-on"></i>Rank
       </el-menu-item>
+      <el-menu-item index="/billboard">
+        <i class="el-icon-star-off"></i>Billboard
+      </el-menu-item>
       <!-- <el-menu-item index="/blog">
         <i class="el-icon-edit-outline"></i>Blog
       </el-menu-item>

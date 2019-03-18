@@ -10,6 +10,7 @@ import contestdetail from '@/components/contestdetail'
 import problemdetail from '@/components/problemdetail'
 import rank from '@/components/rank'
 import admin from '@/components/admin'
+import billboard from '@/components/billboard'
 
 Vue.use(Router)
 
@@ -70,6 +71,11 @@ export default new Router({
       path: '/rank',
       name: 'rank',
       component: rank,
+    },
+    {
+      path: '/billboard',
+      name: 'billboard',
+      component: billboard,
     }
   ]
 })

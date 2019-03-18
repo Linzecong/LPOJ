@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'problem',
     'user',
     'contest',
+    'board',
 ]
 
 REST_FRAMEWORK = {
@@ -54,7 +55,7 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_THROTTLE_RATES': {
         'anon': '10/s',
-        'judge': '10/m',
+        'judge': '20/m',
     }
 
 }
