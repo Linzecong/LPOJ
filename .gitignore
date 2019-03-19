@@ -11,6 +11,7 @@ Judger/temp.out
 Judger/temp.out
 *.in
 *.out
+*.log
 Judger/output/libjudger.so
 migrations
 *.zip

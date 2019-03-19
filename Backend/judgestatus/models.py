@@ -37,6 +37,9 @@ class CaseStatus(models.Model):
     memory = models.IntegerField(default=0)
     testcase = models.CharField(max_length=50,default="unknow")
     casedata = models.CharField(max_length=500) # 非比赛才能查看，Judger中控制
+    outputdata = models.CharField(max_length=500,default="") # 非比赛才能查看，Judger中控制
+    useroutput = models.CharField(max_length=500,default="") # 非比赛才能查看，Judger中控制
+    
     objects = models.Manager()
 
     def __str__(self):

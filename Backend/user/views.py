@@ -71,7 +71,8 @@ class UserRegisterAPIView(APIView):
     permission_classes = (AllowAny,)
 
     def post(self, request, format=None):
-        data = request.data
+        data = request.data.copy()
+        data['type']=1
         username = data.get('username')
         if User.objects.filter(username__exact=username):
             return Response("usererror",HTTP_200_OK)

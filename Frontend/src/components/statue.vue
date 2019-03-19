@@ -20,12 +20,36 @@
         :closable="false"
       >
         <br>
-        <h4
+        <h5
           style="white-space:pre;margin-left:15px;"
-        >{{'Time: '+ data.casetime + 'MS'+' Memory: '+data.casememory+'MB'}}</h4>
+        >{{'Time: '+ data.casetime + 'MS'+' Memory: '+data.casememory+'MB'}}</h5>
+        <h5
+          style="white-space:pre;margin-left:15px;"
+          v-if="data.casedata!=''"
+        >Test Input:</h5>
         <div
           style="white-space:pre;margin-left:15px;word-wrap:break-word;word-break: normal;"
+          v-if="data.casedata!=''"
         >{{data.casedata+'\n'}}</div>
+
+        <h5
+          style="white-space:pre;margin-left:15px;"
+          v-if="data.casedata!=''"
+        >Your Output:</h5>
+        <div
+          style="white-space:pre;margin-left:15px;word-wrap:break-word;word-break: normal;"
+          v-if="data.casedata!=''"
+        >{{data.caseuseroutput+'\n'}}</div>
+
+       <h5
+          style="white-space:pre;margin-left:15px;"
+          v-if="data.casedata!=''"
+        >Expected Output:</h5>
+        <div
+          style="white-space:pre;margin-left:15px;word-wrap:break-word;word-break: normal;"
+          v-if="data.casedata!=''"
+        >{{data.caseoutputdata+'\n'}}</div>
+
       </el-alert>
     </el-dialog>
 
@@ -134,7 +158,9 @@ export default {
                 casedata: res.data[i]["casedata"],
                 casetime: res.data[i]["time"],
                 casememory: res.data[i]["memory"],
-                casetitle: res.data[i]["testcase"]
+                casetitle: res.data[i]["testcase"],
+                caseuseroutput: res.data[i]["useroutput"],
+                caseoutputdata: res.data[i]["outputdata"]
               });
             }
           });
