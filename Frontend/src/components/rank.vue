@@ -87,7 +87,7 @@ export default {
         this.$message.error("服务器错误！" + "(" + error + ")");
       });
     },
-    handleSizeChange(){
+    handleSizeChange(val){
       this.pagesize = val;
       this.getData(this.pagesize,(this.currentpage - 1) * this.pagesize)
     },
