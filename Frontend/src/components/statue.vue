@@ -1,17 +1,47 @@
 <template>
   <el-card shadow="always" id="card">
+    <el-dialog :visible.sync="dialogVisible" width="80%">
+      <el-alert
+        title="编译结果"
+        :type="compilemsg=='编译成功！'?'success':'warning'"
+        :description="compilemsg"
+        :closable="false"
+        show-icon
+        :show-close="false"
+      ></el-alert>
+      <el-alert title="你的代码：" type="info" :closable="false"></el-alert>
+      <codemirror v-model="code" :options="cmOptions"></codemirror>
+
+      <el-alert
+        :key="index"
+        v-for="(data,index) in dialogdata"
+        :title="index+1 +': '+data.caseresult + ' on test ' + data.casetitle"
+        :type="data.caseresult=='Accepted'?'success':(data.caseresult=='Wrong Answer'?'error':'warning')"
+        :closable="false"
+      >
+        <br>
+        <h4
+          style="white-space:pre;margin-left:15px;"
+        >{{'Time: '+ data.casetime + 'MS'+' Memory: '+data.casememory+'MB'}}</h4>
+        <div
+          style="white-space:pre;margin-left:15px;word-wrap:break-word;word-break: normal;"
+        >{{data.casedata+'\n'}}</div>
+      </el-alert>
+    </el-dialog>
+
     <el-switch
-        style="float: right;margin:10px;"
-        v-model="showall"
-        active-text="Show Mine"
-        inactive-text="Show All"
-        @change="statuechange"
-      ></el-switch>
+      style="float: right;margin:10px;"
+      v-model="showall"
+      active-text="Show Mine"
+      inactive-text="Show All"
+      @change="statuechange"
+    ></el-switch>
     <el-table
       :default-sort="{prop: 'id', order: 'descending'}"
       :data="tableData"
       style="width: 100%"
       :row-class-name="tableRowClassName"
+      @row-click="rowClick"
     >
       <el-table-column prop="id" label="ID" :width="100"></el-table-column>
       <el-table-column prop="user" label="User"></el-table-column>
@@ -73,15 +103,52 @@
 
 
 <script>
-import moment from 'moment'
+import moment from "moment";
+import { codemirror } from "vue-codemirror";
+require("codemirror/lib/codemirror.css");
+require("codemirror/theme/base16-light.css");
+require("codemirror/mode/clike/clike");
+
 export default {
   name: "statue",
+  components: {
+    codemirror
+  },
   methods: {
+    rowClick(row, col, e) {
+      if (row.message + "" == "0") this.compilemsg = "编译成功！";
+      else this.compilemsg = row.message;
+
+      this.dialogdata = [];
+      this.code = "";
+
+      this.$axios
+        .get("/api/judgestatuscode/" + row.id + "/")
+        .then(response => {
+          this.code = response.data.code;
+
+          this.$axios.get("/api/casestatus/?statusid=" + row.id).then(res => {
+            for (var i = 0; i < res.data.length; i++) {
+              this.dialogdata.push({
+                caseresult: res.data[i]["result"],
+                casedata: res.data[i]["casedata"],
+                casetime: res.data[i]["time"],
+                casememory: res.data[i]["memory"],
+                casetitle: res.data[i]["testcase"]
+              });
+            }
+          });
+        })
+        .catch(error => {
+          this.code = "无权限查看！" + error;
+        });
+
+      this.dialogVisible = true;
+    },
     handleSizeChange(val) {
-      if(!this.username)
-      this.username = this.$route.query.username;
+      if (!this.username) this.username = this.$route.query.username;
       this.contest = this.$route.params.contestID;
-      if(!this.contest) this.contest="";
+      if (!this.contest) this.contest = "";
       if (!this.username) this.username = "";
       this.pagesize = val;
       this.$axios
@@ -91,7 +158,9 @@ export default {
             "&limit=" +
             this.pagesize +
             "&offset=" +
-            (this.currentpage - 1) * this.pagesize+"&contest="+this.contest
+            (this.currentpage - 1) * this.pagesize +
+            "&contest=" +
+            this.contest
         )
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {
@@ -99,8 +168,9 @@ export default {
             response.data.results[i]["time"] += "MS";
             response.data.results[i]["memory"] += "MB";
             response.data.results[i]["length"] += "B";
-            response.data.results[i]["submittime"] =moment(response.data.results[i]["submittime"]).format('YYYY-MM-DD HH:mm:ss')
-            
+            response.data.results[i]["submittime"] = moment(
+              response.data.results[i]["submittime"]
+            ).format("YYYY-MM-DD HH:mm:ss");
 
             if (response.data.results[i]["result"] == "-1") {
               response.data.results[i]["result"] = "Pending";
@@ -152,10 +222,9 @@ export default {
         });
     },
     handleCurrentChange(val) {
-      if(!this.username)
-      this.username = this.$route.query.username;
+      if (!this.username) this.username = this.$route.query.username;
       this.contest = this.$route.params.contestID;
-      if(!this.contest) this.contest="";
+      if (!this.contest) this.contest = "";
       if (!this.username) this.username = "";
       this.currentpage = val;
       this.$axios
@@ -165,7 +234,9 @@ export default {
             "&limit=" +
             this.pagesize +
             "&offset=" +
-            (this.currentpage - 1) * this.pagesize+"&contest="+this.contest
+            (this.currentpage - 1) * this.pagesize +
+            "&contest=" +
+            this.contest
         )
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {
@@ -173,8 +244,9 @@ export default {
             response.data.results[i]["time"] += "MS";
             response.data.results[i]["memory"] += "MB";
             response.data.results[i]["length"] += "B";
-            response.data.results[i]["submittime"] =moment(response.data.results[i]["submittime"]).format('YYYY-MM-DD HH:mm:ss')
-            
+            response.data.results[i]["submittime"] = moment(
+              response.data.results[i]["submittime"]
+            ).format("YYYY-MM-DD HH:mm:ss");
 
             if (response.data.results[i]["result"] == "-1") {
               response.data.results[i]["result"] = "Pending";
@@ -272,16 +344,14 @@ export default {
       return false;
     },
     timer: function() {
-      if(!this.username)
-      this.username = this.$route.query.username;
+      if (!this.username) this.username = this.$route.query.username;
       this.contest = this.$route.params.contestID;
-      if(!this.contest) this.contest="";
+      if (!this.contest) this.contest = "";
       if (!this.username) this.username = "";
 
-      if(this.username==sessionStorage.username&&sessionStorage.username)
-        this.showall=true;
-        else
-        this.showall=false;
+      if (this.username == sessionStorage.username && sessionStorage.username)
+        this.showall = true;
+      else this.showall = false;
 
       this.$axios
         .get(
@@ -290,7 +360,9 @@ export default {
             "&limit=" +
             this.pagesize +
             "&offset=" +
-            (this.currentpage - 1) * this.pagesize+"&contest="+this.contest
+            (this.currentpage - 1) * this.pagesize +
+            "&contest=" +
+            this.contest
         )
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {
@@ -298,8 +370,9 @@ export default {
             response.data.results[i]["time"] += "MS";
             response.data.results[i]["memory"] += "MB";
             response.data.results[i]["length"] += "B";
-           response.data.results[i]["submittime"] =moment(response.data.results[i]["submittime"]).format('YYYY-MM-DD HH:mm:ss')
-            
+            response.data.results[i]["submittime"] = moment(
+              response.data.results[i]["submittime"]
+            ).format("YYYY-MM-DD HH:mm:ss");
 
             if (response.data.results[i]["result"] == "-1") {
               response.data.results[i]["result"] = "Pending";
@@ -350,33 +423,41 @@ export default {
           this.totalstatus = response.data.count;
         });
     },
-    setusername(name){
-      this.$route.query.username=""
-      this.username=name;
+    setusername(name) {
+      this.$route.query.username = "";
+      this.username = name;
     },
     statuechange(val) {
       if (val == true) {
-        if(!sessionStorage.username){
-          this.showall=false;
+        if (!sessionStorage.username) {
+          this.showall = false;
           this.$message.error("请先登录！");
-        }
-        else
-        this.setusername(sessionStorage.username);
+        } else this.setusername(sessionStorage.username);
       } else {
-        
         this.setusername("");
       }
     }
   },
   data() {
     return {
+      cmOptions: {
+        tabSize: 4,
+        mode: "text/x-c++src",
+        theme: "base16-light",
+        lineNumbers: true,
+        readOnly: true
+      },
       tableData: [],
       currentpage: 1,
       pagesize: 10,
       totalstatus: 10,
       username: "",
-      contest:"",
+      contest: "",
       showall: false,
+      dialogVisible: false,
+      code: "",
+      compilemsg: "",
+      dialogdata: []
     };
   },
   destroyed() {
@@ -387,9 +468,7 @@ export default {
 
     this.timer();
     this.$store.state.timer = setInterval(this.timer, 10000);
-  },
-  
-
+  }
 };
 </script>
 

@@ -26,3 +26,18 @@ class JudgeStatus(models.Model):
     def __str__(self):
         return self.user
 
+
+class CaseStatus(models.Model):
+
+    statusid = models.IntegerField()
+    username = models.CharField(max_length=50)
+    problem = models.CharField(max_length=50)
+    result = models.CharField(max_length=50,default="System Error")
+    time = models.IntegerField(default=0)
+    memory = models.IntegerField(default=0)
+    testcase = models.CharField(max_length=50,default="unknow")
+    casedata = models.CharField(max_length=500) # 非比赛才能查看，Judger中控制
+    objects = models.Manager()
+
+    def __str__(self):
+        return self.statusid

@@ -19,3 +19,38 @@ class LoginOrReadOnly(permissions.BasePermission):
         else:
             return False
 
+class UserOnly(permissions.BasePermission):
+    def has_permission(self, request, view):
+        
+        data = request.data
+        username = data.get('username')
+        userid = request.session.get('user_id', None)
+        if userid == username or request.session.get('type', 1) != 1 :
+            return True
+        else:
+            return False
+
+    def has_object_permission(self, request, view, blog):
+        # Read permissions are allowed to any request,
+        # so we'll always allow GET, HEAD or OPTIONS requests.
+        data = request.data
+        username = data.get('username')
+        userid = request.session.get('user_id', None)
+        if userid == username or request.session.get('type', 1) != 1 :
+            return True
+        else:
+            return False
+
+class NoContestOnly(permissions.BasePermission):
+
+    def has_object_permission(self, request, view, blog):
+        
+        userid = request.session.get('user_id', None)
+        if userid == blog.user:
+            return True
+
+        contestid = blog.contest
+        if contestid == 0 or request.session.get('type', 1) != 1 :
+            return True
+        else:
+            return False
