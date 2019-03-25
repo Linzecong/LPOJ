@@ -31,13 +31,13 @@ export default {
   name: "user",
   data() {
     return {
-      username: "404",
-      name: "404",
-      des: "404",
-      ac: "404",
-      submittion: "404",
-      score: "404",
-      rating: "404",
+      username: "",
+      name: "",
+      des: "",
+      ac: "",
+      submittion: "",
+      score: "",
+      rating: "",
       tableData:[]
     };
   },

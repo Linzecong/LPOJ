@@ -3,6 +3,7 @@
 import MySQLdb
 import socket
 import json
+import time
 from time import sleep
 from Codeforces import get_CF_data
 from HDU import get_HDU_data
@@ -36,14 +37,21 @@ while True:
         if VJ[0] == -1:
             continue
 
-        Others = [0,0] #其他OJ
+        Others = [int(str(data[6]).split("|")[-1]),int(str(data[7]).split("|")[-1])] #其他OJ
+
+        today = time.strftime('%Y-%m-%d',time.localtime(time.time()))
+        totleac = CF[0] + HDU[0] +VJ[0] + Others[0]
+        cursor.execute("INSERT INTO board_dailyboard(username,account,collecttime) SELECT '%s', %d,'%s' FROM DUAL WHERE NOT EXISTS(SELECT * FROM board_dailyboard WHERE username = '%s' and collecttime= '%s')" % (username,totleac,today,username,today))
 
         ac = str(CF[0]) + "|" + str(HDU[0]) + "|" + str(VJ[0]) + "|" + str(Others[0])
         submit = str(CF[1]) + "|" + str(HDU[1]) + "|" + str(VJ[1]) + "|" + str(Others[0])
         cursor.execute("UPDATE board_board SET acnum = '%s' ,submitnum = '%s'  WHERE username = '%s'" % (ac,submit,username))
         db.commit()
         print(username,ac,submit)
-    sleep(300)
+
+
+
+    sleep(7200)
 
 
 

@@ -33,21 +33,18 @@
             <br>
             <el-row :gutter="18" id="des">Description</el-row>
             <el-row :gutter="18" id="detail">
-              <div style="margin-right:50px;">
-                <el-input type="textarea" v-model="des" autosize readonly></el-input>
-              </div>
+              <div style="margin-right:50px;word-break:break-all;white-space:pre-line;" v-html="des">
+            </div>
             </el-row>
             <el-row :gutter="18" id="des">Input</el-row>
             <el-row :gutter="18" id="detail">
-              <div style="margin-right:50px;">
-                <el-input type="textarea" v-model="input" autosize readonly></el-input>
-              </div>
+              <div style="margin-right:50px;word-break:break-all;white-space:pre-line;" v-html="input">
+            </div>
             </el-row>
             <el-row :gutter="18" id="des">Output</el-row>
             <el-row :gutter="18" id="detail">
-              <div style="margin-right:50px;">
-                <el-input type="textarea" v-model="output" autosize readonly></el-input>
-              </div>
+             <div style="margin-right:50px;word-break:break-all;white-space:pre-line;" v-html="output">
+            </div>
             </el-row>
 
             <el-row :gutter="18" style="left:10px">
@@ -147,24 +144,24 @@ export default {
       problemids: [],
       begin: false,
 
-      title: "404",
-      des: "404",
-      input: "404",
-      output: "404",
-      sinput: ["404", "404"],
-      soutput: ["404", "404"],
-      author: "404",
-      addtime: "404",
-      oj: "404",
-      source: "404",
-      time: "404",
-      memory: "404",
-      hint: "404",
-      tagnames: ["404", "404"],
+      title: "",
+      des: "",
+      input: "",
+      output: "",
+      sinput: ["", ""],
+      soutput: ["", ""],
+      author: "",
+      addtime: "",
+      oj: "",
+      source: "",
+      time: "",
+      memory: "",
+      hint: "",
+      tagnames: ["", ""],
       activeNames: ["4", "5"],
       level: "Easy",
       code: "",
-      language: "",
+      language: "C++",
 
       submitbuttontext: "提交后请勿重复刷新",
       judgetype: "primary",
@@ -288,7 +285,7 @@ export default {
         });
     },
     submit: function() {
-      if (this.hint == "404") {
+      if (this.hint == "") {
         this.$message.error("非法操作！");
         return;
       }
@@ -495,53 +492,63 @@ export default {
           if (response.data["result"] == "-3") {
             response.data["result"] = "Wrong Answer on test " + testcase;
             this.judgetype = "danger";
+            clearInterval(this.$store.state.submittimer);
           }
 
           if (response.data["result"] == "-4") {
             response.data["result"] = "Compile Error";
             this.judgetype = "warning";
+            clearInterval(this.$store.state.submittimer);
           }
 
           if (response.data["result"] == "-5") {
             response.data["result"] = "Presentation Error on test " + testcase;
             this.judgetype = "warning";
+            clearInterval(this.$store.state.submittimer);
           }
 
           if (response.data["result"] == "-6") {
             response.data["result"] = "Waiting";
             this.loadingshow = true;
             this.judgetype = "info";
+            clearInterval(this.$store.state.submittimer);
           }
 
           if (response.data["result"] == "0") {
             response.data["result"] = "Accepted";
             this.judgetype = "success";
+            clearInterval(this.$store.state.submittimer);
           }
 
           if (response.data["result"] == "1") {
             response.data["result"] = "Time Limit Exceeded on test " + testcase;
             this.judgetype = "warning";
+            clearInterval(this.$store.state.submittimer);
           }
 
           if (response.data["result"] == "2") {
             response.data["result"] = "Time Limit Exceeded on test " + testcase;
             this.judgetype = "warning";
+            clearInterval(this.$store.state.submittimer);
           }
 
           if (response.data["result"] == "3") {
             response.data["result"] =
               "Memory Limit Exceeded on test " + testcase;
             this.judgetype = "warning";
+            clearInterval(this.$store.state.submittimer);
           }
 
           if (response.data["result"] == "4") {
             response.data["result"] = "Runtime Error on test " + testcase;
             this.judgetype = "warning";
+            clearInterval(this.$store.state.submittimer);
           }
 
           if (response.data["result"] == "5") {
             response.data["result"] = "System Error";
             this.judgetype = "danger";
+            clearInterval(this.$store.state.submittimer);
           }
 
           this.submitbuttontext = response.data["result"];

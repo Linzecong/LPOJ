@@ -100,8 +100,8 @@ export default {
   name: "setting",
   data() {
     return {
-      username: "404",
-      name: "404",
+      username: "",
+      name: "",
       form: {
         username: "",
         password: "",

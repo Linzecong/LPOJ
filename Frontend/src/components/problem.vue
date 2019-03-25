@@ -328,7 +328,7 @@ export default {
   data() {
     return {
       currentpage: 1,
-      pagesize: 10,
+      pagesize: 20,
       totalproblem: 10,
       tableData: [],
       tagnames: [],
@@ -346,7 +346,7 @@ export default {
   created() {
     this.$axios
       .get(
-        "/api/problemdata/?limit=10&offset=0"+"&auth=1"
+        "/api/problemdata/?limit=20&offset=0"+"&auth=1"
       )
       .then(response => {
         for (var i = 0; i < response.data.results.length; i++) {

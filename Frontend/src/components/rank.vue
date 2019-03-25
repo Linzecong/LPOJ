@@ -48,7 +48,7 @@ export default {
   data () {
     return {
       currentpage: 1,
-      pagesize: 10,
+      pagesize: 20,
       totaluser: 10,
       tableData: [],
       carouselData:[]
@@ -97,7 +97,7 @@ export default {
     },
   },
   created(){
-    this.getData(10,0);
+    this.getData(20,0);
   }
 
   

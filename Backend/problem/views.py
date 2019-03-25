@@ -9,7 +9,7 @@ from .permission import ManagerOnly, AuthOnly
 from rest_framework.pagination import LimitOffsetPagination, PageNumberPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
-from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
+from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_403_FORBIDDEN
 from rest_framework.views import APIView
 import zipfile
 import shutil,os
@@ -23,7 +23,7 @@ class ProblemView(viewsets.GenericViewSet, mixins.DestroyModelMixin, mixins.Crea
 
 class ProblemDataView(viewsets.ModelViewSet):
 
-    queryset = ProblemData.objects.extra(select={'t':'problem+0'}).extra(order_by=["t"])
+    queryset = ProblemData.objects.extra(select={'t':'problem+0'}).extra(order_by=["-t"])
     serializer_class = ProblemDataSerializer
     pagination_class = LimitOffsetPagination
     permission_classes = (ManagerOnly,)
@@ -38,6 +38,10 @@ class ProblemTagView(viewsets.ModelViewSet):
 
 class UploadFileAPIView(APIView):
     def post(self, request, format=None):
+        type = request.session.get('type', 1)
+        if type == 1:
+            return Response("Admin Only", status=HTTP_403_FORBIDDEN)
+
         myFile =request.FILES.get("file", None)    # 获取上传的文件，如果没有文件，则默认为None 
         if not myFile: 
             return Response("no file", status=HTTP_400_BAD_REQUEST)

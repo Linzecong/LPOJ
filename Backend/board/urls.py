@@ -8,6 +8,7 @@ from rest_framework import routers
 routers = routers.DefaultRouter()
 routers.register('board', views.BoardView)
 routers.register('otherssubmit', views.OthersSubmitView)
+routers.register('dailyboard', views.DailyBoardView)
 
 urlpatterns = [
     url('', include(routers.urls)),

@@ -18,10 +18,12 @@
         :title="index+1 +': '+data.caseresult + ' on test ' + data.casetitle"
         :type="data.caseresult=='Accepted'?'success':(data.caseresult=='Wrong Answer'?'error':'warning')"
         :closable="false"
+        v-show="data.casedata!=''"
       >
         <br>
         <h5
           style="white-space:pre;margin-left:15px;"
+          v-if="data.casedata!=''"
         >{{'Time: '+ data.casetime + 'MS'+' Memory: '+data.casememory+'MB'}}</h5>
         <h5
           style="white-space:pre;margin-left:15px;"
@@ -475,7 +477,7 @@ export default {
       },
       tableData: [],
       currentpage: 1,
-      pagesize: 10,
+      pagesize: 30,
       totalstatus: 10,
       username: "",
       contest: "",
@@ -493,7 +495,7 @@ export default {
     //创建一个全局定时器，定时刷新状态
 
     this.timer();
-    this.$store.state.timer = setInterval(this.timer, 10000);
+    this.$store.state.timer = setInterval(this.timer, 3000);
   }
 };
 </script>

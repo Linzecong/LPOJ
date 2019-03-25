@@ -36,28 +36,6 @@ export default {
       contestid: this.$route.params.contestID,
       probleminfo: [],
       tableData:[
-        {
-          //rank:1,
-          user:404,
-          nickname:404,
-          solved:100,
-          time:500,
-          A:"(-1)",
-          B:"(-2)",
-          C:"(-3)",
-          D:"(-4)",
-        },
-        {
-          //rank:2,
-          user:404,
-          nickname:404,
-          solved:90,
-          time:500,
-          A:"(-1)",
-          B:"(-2)",
-          C:"(-3)",
-          D:"(-4)",
-        }
       ]
     };
   },

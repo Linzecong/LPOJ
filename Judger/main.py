@@ -226,7 +226,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                     mytestcase = filename
                     mytime = ret["cpu_time"]
                     mymemory = ret["memory"]
-                cursor.execute("INSERT into judgestatus_casestatus (statusid,username,problem,result,time,memory,testcase,casedata,outputdata,useroutput) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s') " % (
+                cursor.execute("INSERT into judgestatus_casestatus (statusid,username,problem,result,time,memory,testcase,casedata,outputdata,useroutput) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) " , (
                     id,
                     username,
                     problem,
@@ -256,7 +256,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 if ret["result"] == 5:
                     resultstr = 'System Error'
 
-                cursor.execute("INSERT into judgestatus_casestatus (statusid,username,problem,result,time,memory,testcase,casedata,outputdata,useroutput) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s') "%(
+                cursor.execute("INSERT into judgestatus_casestatus (statusid,username,problem,result,time,memory,testcase,casedata,outputdata,useroutput) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ",(
                     id,
                     username,
                     problem,
@@ -317,7 +317,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 if result == -3:
                     resultstr = 'Wrong Answer'
 
-                cursor.execute("INSERT into judgestatus_casestatus (statusid,username,problem,result,time,memory,testcase,casedata,outputdata,useroutput) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s') "%(
+                cursor.execute("INSERT into judgestatus_casestatus (statusid,username,problem,result,time,memory,testcase,casedata,outputdata,useroutput) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ",(
                     id,
                     username,
                     problem,
@@ -332,7 +332,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
 
                 db.commit()
             else:
-                cursor.execute("INSERT into judgestatus_casestatus (statusid,username,problem,result,time,memory,testcase,casedata,outputdata,useroutput) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s') "%(
+                cursor.execute("INSERT into judgestatus_casestatus (statusid,username,problem,result,time,memory,testcase,casedata,outputdata,useroutput) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ",(
                     id,
                     username,
                     problem,
@@ -380,7 +380,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                     li[contestproblem]=int(li[contestproblem])
                     li[contestproblem] = li[contestproblem]-1
                     sta = '|'.join(str(i) for i in li)
-                    cursor.execute("UPDATE  contest_contestrank  SET statue = '%s' where username = '%s'  and contestid = %d" % (sta,username,contest))
+                    cursor.execute("UPDATE  contest_contestrank  SET statue = %s where username = %s  and contestid = %d" , (sta,username,contest))
 
     db.commit()
     statue = True

@@ -29,3 +29,14 @@ class OthersSubmit(models.Model):
 
     def __str__(self):
         return self.username
+
+class DailyBoard(models.Model):
+
+    username = models.CharField(max_length=50)
+    account = models.IntegerField(default=0)
+    collecttime = models.DateField(auto_now=True)  
+
+    objects = models.Manager()
+
+    def __str__(self):
+        return self.username
