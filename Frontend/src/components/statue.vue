@@ -149,11 +149,11 @@ export default {
       this.code = "";
 
       this.$axios
-        .get("/api/judgestatuscode/" + row.id + "/")
+        .get("/judgestatuscode/" + row.id + "/")
         .then(response => {
           this.code = response.data.code;
 
-          this.$axios.get("/api/casestatus/?statusid=" + row.id).then(res => {
+          this.$axios.get("/casestatus/?statusid=" + row.id).then(res => {
             for (var i = 0; i < res.data.length; i++) {
               this.dialogdata.push({
                 caseresult: res.data[i]["result"],
@@ -181,7 +181,7 @@ export default {
       this.pagesize = val;
       this.$axios
         .get(
-          "/api/judgestatus/?user=" +
+          "/judgestatus/?user=" +
             this.username +
             "&limit=" +
             this.pagesize +
@@ -257,7 +257,7 @@ export default {
       this.currentpage = val;
       this.$axios
         .get(
-          "/api/judgestatus/?user=" +
+          "/judgestatus/?user=" +
             this.username +
             "&limit=" +
             this.pagesize +
@@ -383,7 +383,7 @@ export default {
 
       this.$axios
         .get(
-          "/api/judgestatus/?user=" +
+          "/judgestatus/?user=" +
             this.username +
             "&limit=" +
             this.pagesize +

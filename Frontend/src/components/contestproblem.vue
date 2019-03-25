@@ -193,7 +193,7 @@ export default {
       this.currentrank = tab.index;
       this.$axios
         .get(
-          "/api/problem/" +
+          "/problem/" +
             this.currentproblem +
             "/"
         )
@@ -221,7 +221,7 @@ export default {
 
       this.$axios
         .get(
-          "/api/contestinfo/" + id + "/"
+          "/contestinfo/" + id + "/"
         )
         .then(response => {
           this.begintime = response.data.begintime;
@@ -250,7 +250,7 @@ export default {
               this.problemids = [];
               this.$axios
                 .get(
-                  "/api/contestproblem/?contestid=" +
+                  "/contestproblem/?contestid=" +
                     id
                 )
                 .then(response3 => {
@@ -264,7 +264,7 @@ export default {
                   this.title = this.problemtitles[0];
                   this.$axios
                     .get(
-                      "/api/problem/" +
+                      "/problem/" +
                         this.currentproblem +
                         "/"
                     )
@@ -317,7 +317,7 @@ export default {
 
         this.$axios
           .get(
-            "/api/contestrank/?contestid=" +
+            "/contestrank/?contestid=" +
               parseInt(this.currentcontest) +
               "&username=" +
               sessionStorage.username
@@ -326,7 +326,7 @@ export default {
             if (response5.data.length > 0) {
               this.$axios
                 .post(
-                  "/api/judgestatusput/",
+                  "/judgestatusput/",
                   {
                     user: sessionStorage.username,
                     oj: "LPOJ",
@@ -349,7 +349,7 @@ export default {
 
                   this.$axios
                     .post(
-                      "/api/contestboard/",
+                      "/contestboard/",
                       {
                         username: sessionStorage.username,
                         user: sessionStorage.name,
@@ -388,7 +388,7 @@ export default {
 
               this.$axios
                 .post(
-                  "/api/contestrank/",
+                  "/contestrank/",
                   {
                     username: sessionStorage.username,
                     user: sessionStorage.name,
@@ -399,7 +399,7 @@ export default {
                 .then(response8 => {
                   this.$axios
                     .post(
-                      "/api/judgestatusput/",
+                      "/judgestatusput/",
                       {
                         user: sessionStorage.username,
                         oj: "LPOJ",
@@ -424,7 +424,7 @@ export default {
 
                       this.$axios
                         .post(
-                          "/api/contestboard/",
+                          "/contestboard/",
                           {
                             username: sessionStorage.username,
                             user: sessionStorage.name,
@@ -470,7 +470,7 @@ export default {
       if (this.submitbuttontext == "提交后请勿重复刷新") return;
       this.$axios
         .get(
-          "/api/judgestatus/" +
+          "/judgestatus/" +
             this.submitid +
             "/"
         )

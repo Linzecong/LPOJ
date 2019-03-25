@@ -165,7 +165,7 @@ export default {
       this.form.password = this.$md5(this.form.password);
       this.$axios
         .put(
-          "/api/change/" +
+          "/change/" +
             this.userid +
             "/",
           this.form
@@ -173,7 +173,7 @@ export default {
         .then(response => {
           this.$axios
             .put(
-              "/api/userdata/" +
+              "/userdata/" +
                 this.userid +
                 "/",
               this.form
@@ -203,7 +203,7 @@ export default {
     if (this.username) {
       this.$axios
         .get(
-          "/api/user/?username=" +
+          "/user/?username=" +
             this.username
         )
         .then(response => {

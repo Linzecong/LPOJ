@@ -82,7 +82,7 @@ export default {
 
       this.$axios
         .get(
-          "/api/contestinfo/?limit=" +
+          "/contestinfo/?limit=" +
             this.pagesize +
             "&offset=" +
             (this.currentpage - 1) * this.pagesize
@@ -128,7 +128,7 @@ export default {
 
       this.$axios
         .get(
-          "/api/contestinfo/?limit=" +
+          "/contestinfo/?limit=" +
             this.pagesize +
             "&offset=" +
             (this.currentpage - 1) * this.pagesize
@@ -174,7 +174,7 @@ export default {
   created() {
     this.$axios
       .get(
-        "/api/contestinfo/?limit=10&offset=0"
+        "/contestinfo/?limit=10&offset=0"
       )
       .then(response => {
         for (var i = 0; i < response.data.results.length; i++) {

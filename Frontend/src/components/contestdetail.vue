@@ -67,7 +67,7 @@ export default {
 
     this.$axios
       .get(
-        "/api/contestinfo/" +
+        "/contestinfo/" +
           this.contestid +
           "/"
       )
@@ -99,7 +99,7 @@ export default {
             if (username) {
               this.$axios
                 .get(
-                  "/api/contestregister/?user=" +
+                  "/contestregister/?user=" +
                     username +
                     "&contestid=" +
                     this.contestid

@@ -114,7 +114,7 @@ export default {
 
       this.$axios
         .get(
-          "/api/contestregister/?limit=" +
+          "/contestregister/?limit=" +
             this.pagesize +
             "&offset=" +
             (this.currentpage - 1) * this.pagesize +
@@ -133,7 +133,7 @@ export default {
       this.currentpage = val;
       this.$axios
         .get(
-          "/api/contestregister/?limit=" +
+          "/contestregister/?limit=" +
             this.pagesize +
             "&offset=" +
             (this.currentpage - 1) * this.pagesize +
@@ -188,7 +188,7 @@ export default {
         ).then(() => {
           this.$axios
             .post(
-              "/api/contestregister/",
+              "/contestregister/",
               {
                 contestid: parseInt(this.id),
                 user: sessionStorage.username,
@@ -220,7 +220,7 @@ export default {
       this.$store.state.contestisend = false;
       this.$axios
         .get(
-          "/api/contestinfo/" + id + "/"
+          "/contestinfo/" + id + "/"
         )
         .then(response => {
           this.type = response.data["auth"];
@@ -289,7 +289,7 @@ export default {
               this.tableData = [response.data];
               this.$axios
                 .get(
-                  "/api/contestregister/?limit=" +
+                  "/contestregister/?limit=" +
                     this.pagesize +
                     "&offset=" +
                     (this.currentpage - 1) * this.pagesize +

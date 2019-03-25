@@ -214,7 +214,7 @@ export default {
 
       this.$axios
         .get(
-          "/api/problemdata/?limit=" +
+          "/problemdata/?limit=" +
             this.pagesize +
             "&offset=" +
             (this.currentpage - 1) * this.pagesize+"&auth=1"
@@ -252,7 +252,7 @@ export default {
       this.currentpage = val;
       this.$axios
         .get(
-          "/api/problemdata/?limit=" +
+          "/problemdata/?limit=" +
             this.pagesize +
             "&offset=" +
             (this.currentpage - 1) * this.pagesize+"&auth=1"
@@ -346,7 +346,7 @@ export default {
   created() {
     this.$axios
       .get(
-        "/api/problemdata/?limit=20&offset=0"+"&auth=1"
+        "/problemdata/?limit=20&offset=0"+"&auth=1"
       )
       .then(response => {
         for (var i = 0; i < response.data.results.length; i++) {
@@ -378,7 +378,7 @@ export default {
       });
 
     this.$axios
-      .get("/api/problemtag/")
+      .get("/problemtag/")
       .then(response => {
         for (var i = 0; i < response.data.length; i++)
           this.tagnames.push(response.data[i]["tagname"]);

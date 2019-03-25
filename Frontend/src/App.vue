@@ -229,7 +229,7 @@ export default {
     handleCommand(command) {
       if (command == "logout") {
         this.$axios
-          .get("/api/logout/")
+          .get("/logout/")
           .then(response => {
             this.$message({
               message: "登出成功！",
@@ -305,13 +305,13 @@ export default {
       this.form.password = this.$md5(this.form.password);
 
       this.$axios
-        .post("/api/userdata/", this.form)
+        .post("/userdata/", this.form)
         .then(response => {
           
 
           this.$axios
             .post(
-              "/api/register/",
+              "/register/",
               this.form
             )
             .then(response => {
@@ -336,7 +336,7 @@ export default {
     loginClick() {
       this.form.password = this.$md5(this.form.password);
       this.$axios
-        .post("/api/login/", this.form)
+        .post("/login/", this.form)
         .then(response => {
           if (response.data == "passworderror") {
             this.$message.error("密码错误");
@@ -363,7 +363,7 @@ export default {
 
           this.$axios
           .get(
-            "/api/userdata/?username=" +
+            "/userdata/?username=" +
               this.username
           )
           .then(response => {

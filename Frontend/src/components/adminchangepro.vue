@@ -85,7 +85,7 @@ export default {
   data() {
     return {
       problemcount: 0,
-      uploadaddress: "/api/uploadfile/",
+      uploadaddress: "/uploadfile/",
       fileList: [],
       problemform: {
         problem: "",
@@ -121,14 +121,14 @@ export default {
     problemchange(num) {
       this.$axios
         .get(
-          "/api/problem/" +
+          "/problem/" +
             this.problemform.problem +
             "/"
         )
         .then(response => {
           this.$axios
             .get(
-              "/api/problemdata/" +
+              "/problemdata/" +
                 this.problemform.problem +
                 "/"
             )
@@ -169,7 +169,7 @@ export default {
     handleSuccess(response, file, fileList) {
       this.$axios
         .put(
-          "/api/problem/" +
+          "/problem/" +
             this.problemform.problem +
             "/",
           this.problemform
@@ -185,7 +185,7 @@ export default {
           for(var i=0;i<tag.length;i++){
             this.$axios
             .post(
-              "/api/problemtag/",
+              "/problemtag/",
               {
                 tagname:tag[i],
                 count:1,
@@ -194,7 +194,7 @@ export default {
           }
           this.$axios
             .put(
-              "/api/problemdata/" +
+              "/problemdata/" +
                 this.problemform.problem +
                 "/",
               this.problemdataform

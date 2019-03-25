@@ -83,7 +83,7 @@ export default {
   },
   methods: {
       PushOtherClick(){
-           this.$axios.post("/api/otherssubmit/",this.form).then(response => {
+           this.$axios.post("/otherssubmit/",this.form).then(response => {
                this.dialogVisible=false
                this.$message({
           message: "提交成功！",
@@ -109,7 +109,7 @@ export default {
     },
 
     setdata() {
-      this.$axios.get("/api/board/").then(response => {
+      this.$axios.get("/board/").then(response => {
         this.ojcount = response.data[0]["OJCount"];
 
         this.boardinfo = [];

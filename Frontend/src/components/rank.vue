@@ -65,7 +65,7 @@ export default {
     getData(limit,offset){
       this.$axios
       .get(
-        "/api/userdata/?limit="+limit+"&offset="+offset
+        "/userdata/?limit="+limit+"&offset="+offset
       )
       .then(response => {
         console.log(response.data.results[0])

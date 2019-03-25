@@ -110,7 +110,7 @@ export default {
     contestchange(num) {
       this.$axios
         .get(
-          "/api/contestinfo/" + num + "/"
+          "/contestinfo/" + num + "/"
         )
         .then(response => {
           response.data.timerange = [];
@@ -125,7 +125,7 @@ export default {
 
           this.$axios
             .get(
-              "/api/contestregister/?contestid=" +
+              "/contestregister/?contestid=" +
                 num
             )
             .then(response2 => {
@@ -139,7 +139,7 @@ export default {
 
               this.$axios
                 .get(
-                  "/api/contestproblem/?contestid=" +
+                  "/contestproblem/?contestid=" +
                     num
                 )
                 .then(response3 => {
@@ -173,7 +173,7 @@ export default {
         }).then(() => {
           this.$axios
             .delete(
-              "/api/contestinfo/" +
+              "/contestinfo/" +
                 this.contestid +
                 "/"
             )
@@ -205,13 +205,13 @@ export default {
       ).then(() => {
         this.$axios
           .get(
-            "/api/contestproblem/?contestid=" +
+            "/contestproblem/?contestid=" +
               this.contestid
           )
           .then(response2 => {
             for (var i = 0; i < response2.data.length; i++) {
               this.$axios.delete(
-                "/api/contestproblem/" +
+                "/contestproblem/" +
                   response2.data[i].id +
                   "/"
               );
@@ -220,7 +220,7 @@ export default {
             for (var i = 0; i < this.problemnames.length; i++) {
               var li = this.problemnames[i].split("|");
               this.$axios.post(
-                "/api/contestproblem/",
+                "/contestproblem/",
                 {
                   contestid: this.contestid,
                   problemid: li[0],
@@ -252,7 +252,7 @@ export default {
     addproblemchange(num) {
       this.$axios
         .get(
-          "/api/problemdata/" + num + "/"
+          "/problemdata/" + num + "/"
         )
         .then(response2 => {
           this.tmpaddproblemtitle = response2.data.title;
@@ -305,7 +305,7 @@ export default {
       }).then(() => {
         this.$axios
           .put(
-            "/api/contestinfo/" +
+            "/contestinfo/" +
               this.contestid +
               "/",
             this.changecontestform
@@ -316,13 +316,13 @@ export default {
             if (response.data.auth != 1) {
               this.$axios
                 .get(
-                  "/api/contestregister/?contestid=" +
+                  "/contestregister/?contestid=" +
                     this.contestid
                 )
                 .then(response2 => {
                   for (var i = 0; i < response2.data.length; i++) {
                     this.$axios.delete(
-                      "/api/contestregister/" +
+                      "/contestregister/" +
                         response2.data[i].id +
                         "/"
                     );
@@ -332,7 +332,7 @@ export default {
 
                   for (var i = 0; i < li.length; i++) {
                     this.$axios.post(
-                      "/api/contestregister/",
+                      "/contestregister/",
                       {
                         contestid: this.contestid,
                         user: li[i]

@@ -79,7 +79,7 @@ export default {
     }
   },
   created() {
-    this.$axios.get("/api/dailyboard/").then(response => {
+    this.$axios.get("/dailyboard/").then(response => {
       var Xnames = new Set();
       var Ynames = new Set();
 

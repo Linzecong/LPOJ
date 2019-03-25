@@ -19,6 +19,7 @@ Vue.prototype.$md5 = md5;
 //开启debug模式
 Vue.config.debug = true;
 axios.defaults.withCredentials=true;
+axios.defaults.baseURL = process.env.API_ROOT
 Vue.prototype.$axios = axios;
 
 

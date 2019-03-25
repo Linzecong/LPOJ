@@ -287,7 +287,7 @@ export default {
     }
     var auth = 1;
     this.$axios
-      .get("/api/problem/" + this.ID + "/")
+      .get("/problem/" + this.ID + "/")
       .then(response => {
         auth = response.data.auth;
         if ((auth == 2 || auth == 3) && sessionStorage.type ==1 ) {
@@ -311,7 +311,7 @@ export default {
         this.memory = response.data.memory + "MB";
         this.hint = response.data.hint;
         this.$axios
-          .get("/api/problemdata/" + this.ID + "/")
+          .get("/problemdata/" + this.ID + "/")
           .then(response => {
             if (response.data["level"] == "1") response.data["level"] = "Easy";
             if (response.data["level"] == "2")
@@ -414,7 +414,7 @@ export default {
           message: "提交中..."
         });
         this.$axios
-          .post("/api/judgestatusput/", {
+          .post("/judgestatusput/", {
             user: sessionStorage.username,
             oj: "LPOJ",
             problem: this.ID,
@@ -450,7 +450,7 @@ export default {
     timer: function() {
       if (this.submitbuttontext == "提交后请勿重复刷新") return;
       this.$axios
-        .get("/api/judgestatus/" + this.submitid + "/")
+        .get("/judgestatus/" + this.submitid + "/")
         .then(response => {
           this.loadingshow = false;
           var testcase = response.data["testcase"];

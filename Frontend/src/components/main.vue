@@ -47,7 +47,7 @@ export default {
   },
   created() {
     this.$axios
-      .get("/api/userdata/?limit=10&offset=0")
+      .get("/userdata/?limit=10&offset=0")
       .then(response => {
         this.tableData = response.data.results;
       })

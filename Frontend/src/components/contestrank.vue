@@ -79,7 +79,7 @@ export default {
 
       this.$axios
         .get(
-          "/api/contestproblem/?contestid=" +
+          "/contestproblem/?contestid=" +
             id
         )
         .then(response3 => {
@@ -91,7 +91,7 @@ export default {
           }
           this.$axios
           .get(
-            "/api/contestrank/?contestid=" +
+            "/contestrank/?contestid=" +
               id
           )
           .then(response => {
