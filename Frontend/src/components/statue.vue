@@ -62,17 +62,28 @@
       inactive-text="Show All"
       @change="statuechange"
     ></el-switch>
+    <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="currentpage"
+      :page-sizes="[10, 20, 30, 50]"
+      :page-size="pagesize"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="totalstatus"
+    ></el-pagination>
+   
     <el-table
       :default-sort="{prop: 'id', order: 'descending'}"
       :data="tableData"
       style="width: 100%"
       :row-class-name="tableRowClassName"
       @row-click="rowClick"
+      size="small"
     >
       <el-table-column prop="id" label="ID" :width="100"></el-table-column>
       <el-table-column prop="user" label="User"></el-table-column>
       <el-table-column prop="problem" label="Problem"></el-table-column>
-      <el-table-column prop="result" label="Status" :width="250">
+      <el-table-column prop="result" label="Status" :width="300">
         <template slot-scope="scope">
           <el-tag size="medium" :type="statuetype(scope.row.result)" disable-transitions hit>
             {{ scope.row.result }}
@@ -87,6 +98,7 @@
       <el-table-column prop="submittime" label="Submit time" :width="180"></el-table-column>
       <el-table-column prop="judger" label="Judger"></el-table-column>
     </el-table>
+    <center>
     <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
@@ -96,6 +108,7 @@
       layout="total, sizes, prev, pager, next, jumper"
       :total="totalstatus"
     ></el-pagination>
+    </center>
   </el-card>
 </template>
 
@@ -464,6 +477,9 @@ export default {
       } else {
         this.setusername("");
       }
+    },
+    creattimer(){
+      this.$store.state.timer = setInterval(this.timer, 3000);
     }
   },
   data() {

@@ -8,6 +8,7 @@ from .permission import ManagerOnly,LoginOnly
 from .models import ContestAnnouncement,ContestRank, ContestBoard, ContestComment, ContestInfo, ContestProblem, ContestRegister
 from .serializers import ContestRankSerializer, ContestAnnouncementSerializer,ContestBoardSerializer,ContestCommentSerializer,ContestInfoSerializer,ContestProblemSerializer, ContestRegisterSerializer
 from django_filters.rest_framework import DjangoFilterBackend
+import datetime
 
 class ContestAnnouncementView(viewsets.ModelViewSet):
     queryset = ContestAnnouncement.objects.all()
@@ -46,8 +47,14 @@ class ContestInfoView(viewsets.ModelViewSet):
     serializer_class = ContestInfoSerializer
     pagination_class = LimitOffsetPagination
     permission_classes = (ManagerOnly,)
-    # filter_backends = (DjangoFilterBackend,)
-    # filter_fields = ('user', 'result', "contest")
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ("begintime","level")
+
+class ContestComingInfoView(viewsets.ModelViewSet):
+    queryset = ContestInfo.objects.filter(begintime__gte=datetime.datetime.now())
+    serializer_class = ContestInfoSerializer
+    pagination_class = LimitOffsetPagination
+    permission_classes = (ManagerOnly,)
 
 class ContestProblemView(viewsets.ModelViewSet):
     queryset = ContestProblem.objects.all().order_by('rank')

@@ -16,7 +16,9 @@ export default {
   },
   created() {},
   methods: {
-    
+    creattimer(){
+      this.$refs.statue.creattimer();
+    }
   }
 };
 </script>

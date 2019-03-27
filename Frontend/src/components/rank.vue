@@ -20,6 +20,7 @@
       :data="tableData"
       @cell-click="userclick"
       :default-sort="{prop: 'score', order: 'descending'}"
+      size="small"
     >
       <el-table-column prop="username" label="User"></el-table-column>
       <el-table-column prop="des" label="Mood"></el-table-column>

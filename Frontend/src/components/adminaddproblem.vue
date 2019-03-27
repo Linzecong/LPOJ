@@ -64,6 +64,7 @@
           :multiple="false"
           :limit="1"
           :auto-upload="false"
+          :http-request="myupload"
         >
           <el-button slot="trigger" size="small" type="primary">选取数据文件</el-button>
           <div
@@ -115,6 +116,24 @@ export default {
     };
   },
   methods: {
+    myupload(f){
+
+      let param = new FormData(); //创建form对象
+         param.append('file',f.file);//通过append向form对象添加数据
+         let config = {
+           headers:{'Content-Type':'multipart/form-data'}
+         };  //添加请求头
+         this.$axios.post(f.action,param,config)//上传图片
+         .then(response=>{
+           console.log(response.data)
+           f.onSuccess(response.data)
+         })
+         .catch(err => {
+           console.log(err)
+           f.onError(err)
+         })   
+
+    },
     handleRemove(file, fileList) {
       this.fileList = [];
     },
@@ -158,7 +177,7 @@ export default {
                 tagname:tag[i],
                 count:1,
               }
-            );
+            ).catch(error=>{});
           }
 
           this.$axios
@@ -181,7 +200,8 @@ export default {
         this.$message.error("请选择数据文件");
         return;
       }
-      var name = this.fileList[0];
+      console.log(this.fileList)
+      var name = this.fileList[0].name;
       var li = name.split(".");
       if (li[0] != this.addproblemform.problem) {
         this.$message.error(

@@ -1,12 +1,14 @@
 <template>
+<el-card>
   <el-row>
     <el-table
       :data="tableData"
       @cell-click="contestclick"
       :default-sort="{prop: 'begintime', order: 'descending'}"
+      size="small"
     >
       <el-table-column prop="id" label="ID" :width="100"></el-table-column>
-      <el-table-column prop="title" label="Title"></el-table-column>
+      <el-table-column prop="title" label="Title" :width="300"></el-table-column>
       <el-table-column prop="level" label="Level">
         <template slot-scope="scope1">
           <el-tag
@@ -44,6 +46,7 @@
       :total="totalcontest"
     ></el-pagination>
   </el-row>
+</el-card>
 </template>
 
 <script>

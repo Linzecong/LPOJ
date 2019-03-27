@@ -4,7 +4,7 @@
       <h1>{{ contesttitle }}</h1>
     </center>
     <el-row :gutter="10">
-      <el-table :data="tableData" :cell-style="cellstyle" border stripe>
+      <el-table :data="tableData" :cell-style="cellstyle" border stripe size="small">
         <el-table-column prop="rank" label="Rank" width="70px" fixed></el-table-column>
         <el-table-column prop="user" label="User" fixed></el-table-column>
         <el-table-column prop="nickname" label="Nickname" fixed></el-table-column>
@@ -66,9 +66,9 @@ export default {
       if(id<0)
         return "background-color:white;text-align:center;";
       if(data.row[str].indexOf("❤")>-1)
-        return "background-color:#009100;text-align:center;font-weight:bold";
+        return "background-color:#009100;text-align:center;font-weight:bold;color:white;";
       if(data.row[str].indexOf(":")>-1)
-        return "background-color:#00EC00;text-align:center";
+        return "background-color:#79FF79;text-align:center";
       if(data.row[str].indexOf("(")>-1)
         return "background-color:#F56C6C;text-align:center";
       
@@ -97,8 +97,13 @@ export default {
           .then(response => {
             var data=[]
             // 读取所有有提交的用户
-            console.log(this.$store.state.contestbegintime)
-
+            //console.log(this.$store.state.contestbegintime)
+              var proac = [];
+              var prosub = [];
+              for(var iii =0;iii<this.problemcount;iii++)
+                proac.push(0);
+              for(var iiii =0;iiii<this.problemcount;iiii++)
+                prosub.push(0);
             for(var i = 0;i<response.data.length;i++){
               var k = {user:response.data[i]["username"],nickname:response.data[i]["user"],solved:0,time:0,sorttime:0};
               for(var j =0;j<this.probleminfo.length;j++){
@@ -108,8 +113,12 @@ export default {
               var li = response.data[i]["statue"].split("|");
               var count =0 ;
               var t=0;
+              
+
               for(var ii =0;ii<li.length;ii++){
                 if(li[ii].indexOf("$")>=0){
+                  proac[ii]++;
+                  prosub[ii]++;
                   count++;
                   var tmp = li[ii].split("$")
                   tmp[0]=parseInt(tmp[0])
@@ -124,16 +133,22 @@ export default {
                   ":" +
                   parseInt((cha % 60) % 60);
 
-                  if(tmp[1]<0)
+                  if(tmp[1]<0){
                     k[this.toChar(ii)]="("+tmp[1]+")\n"+ tt;
+                    prosub[ii]=prosub[ii]-tmp[1];
+                  }
                   else
                     k[this.toChar(ii)]=tt;
                 }
                 
                 else{
                   li[ii]=parseInt(li[ii]);
-                  if(li[ii]<0)
+                  
+                  if(li[ii]<0){
                     k[this.toChar(ii)]= "("+li[ii]+")";
+                    prosub[ii]=prosub[ii]-li[ii];
+                  }
+                    
                 }
               }
               k["solved"]=count;
@@ -154,6 +169,11 @@ export default {
             for(var i=0;i<data.length;i++){
               data[i]["rank"]=i+1;
             }
+
+            //计算排行榜顶部的ac/sub
+            for(var proi =0;proi<this.problemcount;proi++)
+              this.probleminfo[proi].label=this.probleminfo[proi].label+" ( "+proac[proi]+" / "+prosub[proi]+" )"
+              
 
             for(var id=0;id<this.problemcount;id++){
               var pro = this.toChar(id);
@@ -187,7 +207,6 @@ export default {
               }
               if(index!=-1){
                 data[index][pro]=data[index][pro]+"\n❤";
-                console.log(data[index][pro])
               }
             }
 

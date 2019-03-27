@@ -1,26 +1,26 @@
 <template>
-  <el-tabs type="border-card" @tab-click="tabClick">
+  <el-tabs type="border-card" @tab-click="tabClick" >
     <el-tab-pane label="Overview">
       <span slot="label">
-        <i class="el-icon-document"></i> Overview
+        <b><i class="el-icon-document"></i> Overview</b>
       </span>
       <contestoverview ref="Overview"></contestoverview>
     </el-tab-pane>
     <el-tab-pane label="Problems" :disabled="!haveauth">
       <span slot="label">
-        <i class="el-icon-menu"></i> Problems
+        <b><i class="el-icon-menu"></i> Problems</b>
       </span>
       <contestproblem ref="Problems"></contestproblem>
     </el-tab-pane>
     <el-tab-pane label="Submissions" :lazy="true">
       <span slot="label">
-        <i class="el-icon-edit-outline"></i> Submissions
+        <b><i class="el-icon-edit-outline"></i> Submissions</b>
       </span>
       <contestsubmit ref="Submissions"></contestsubmit>
     </el-tab-pane>
     <el-tab-pane label="Rankings">
       <span slot="label">
-        <i class="el-icon-star-on"></i> Rankings
+        <b><i class="el-icon-star-on"></i> Rankings</b>
       </span>
       <contestrank ref="Rankings"></contestrank>
     </el-tab-pane>
@@ -120,15 +120,20 @@ export default {
   },
   methods: {
     tabClick(tab) {
-      console.log(tab);
+      //console.log(tab);
       // if (tab.label == "Problems")
       //   this.$refs.Problems.getproblem(this.$route.params.contestID);
 
-      // if (tab.label == "Overview")
-      //   this.$refs.Overview.refresh(this.$route.params.contestID);
+      if (tab.label == "Submissions")
+        this.$refs.Submissions.creattimer();
+      else
+        clearInterval(this.$store.state.timer);
       
-      if (tab.label == "Rankings")
+      if (tab.label == "Rankings"){
+
         this.$refs.Rankings.setproblemcount(this.$route.params.contestID);
+      }
+        
     }
   }
 };

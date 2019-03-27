@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" style="top:0px;left:0px;">
     <el-menu
       :default-active="activeIndex"
       mode="horizontal"
@@ -396,7 +396,7 @@ export default {
 }
 #nav {
   background-color: #ffffff;
-  position:fixed;
+  position:relative;
   left: 0px;
   top: 0px;
   z-index: 5;
@@ -409,7 +409,7 @@ export default {
 }
 #route {
   position:relative;
-  top: 80px;
+  top: 10px;
 }
 #title {
   font-size: 20px;

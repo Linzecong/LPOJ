@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
-from rest_framework import viewsets, mixins
+from rest_framework import viewsets, mixins,filters
 from .models import Problem, ProblemData, ProblemTag
 from .serializers import ProblemSerializer, ProblemDataSerializer, ProblemTagSerializer
 from .permission import ManagerOnly, AuthOnly
@@ -27,8 +27,9 @@ class ProblemDataView(viewsets.ModelViewSet):
     serializer_class = ProblemDataSerializer
     pagination_class = LimitOffsetPagination
     permission_classes = (ManagerOnly,)
-    filter_backends = (DjangoFilterBackend,)
+    filter_backends = (DjangoFilterBackend,filters.SearchFilter)
     filter_fields = ('auth',)
+    search_fields = ('tag', )
 
 
 class ProblemTagView(viewsets.ModelViewSet):

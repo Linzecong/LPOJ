@@ -1,16 +1,28 @@
 <template>
   <el-row :gutter="15">
-    <el-col :span="19">
+    <el-col :span="18">
       <el-card shadow="always">
+        <center>
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="currentpage"
+          :page-sizes="[10, 20, 30, 50]"
+          :page-size="pagesize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="totalproblem"
+        ></el-pagination>
+        </center>
         <el-table
           :data="tableData"
           :row-class-name="tableRowClassName"
           @cell-mouse-enter="changestatistices"
           @cell-click="problemclick"
+          size="small"
         >
-          <el-table-column prop="problem" label="ID" :width="100"></el-table-column>
-          <el-table-column prop="title" label="Title"></el-table-column>
-          <el-table-column prop="level" label="Level">
+          <el-table-column prop="problem" label="ID" :width="70"></el-table-column>
+          <el-table-column prop="title" label="Title" :width="200"></el-table-column>
+          <el-table-column prop="level" label="Level" :width="170">
             <template slot-scope="scope1">
               <el-tag
                 id="leveltag"
@@ -22,7 +34,7 @@
             </template>
           </el-table-column>
           <el-table-column prop="rate" label="AC/Submittion"></el-table-column>
-          <el-table-column prop="tag" label="Tag">
+          <el-table-column prop="tag" label="Tag" :width="350">
             <template slot-scope="scope">
               <el-tag
                 id="protag"
@@ -36,6 +48,7 @@
           </el-table-column>
           <el-table-column prop="score" label="Score"></el-table-column>
         </el-table>
+        <center>
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -45,29 +58,14 @@
           layout="total, sizes, prev, pager, next, jumper"
           :total="totalproblem"
         ></el-pagination>
+        </center>
       </el-card>
     </el-col>
-    <el-col :span="5">
+    <el-col :span="6">
       <el-row :gutter="15">
         <el-col>
           <el-card shadow="always">
-            <h2>Tags</h2>
-            <el-tag
-              id="tag"
-              v-for="(name,index) in tagnames"
-              :key="index"
-              size="medium"
-              type="info"
-              disable-transitions
-              hit
-            >{{ name }}</el-tag>
-          </el-card>
-        </el-col>
-      </el-row>
-      <el-row :gutter="15">
-        <el-col>
-          <el-card shadow="always">
-            <h2>{{title}}</h2>
+            <h3>{{title}}</h3>
 
             <el-row :gutter="10">
               <el-col :span="3">
@@ -179,6 +177,22 @@
           </el-card>
         </el-col>
       </el-row>
+      <el-row :gutter="15">
+        <el-col>
+          <el-card shadow="always">
+            <h4>Tags (点击以筛选)</h4>
+            <el-button
+              id="tag"
+              v-for="(name,index) in tagnames"
+              :key="index"
+              size="mini"
+              @click="tagclick(name)"
+              :ref="name"
+            >{{ name }}</el-button>
+          </el-card>
+        </el-col>
+      </el-row>
+      
     </el-col>
   </el-row>
 </template>
@@ -197,8 +211,8 @@
 #tag {
   text-align: center;
   font-weight: bold;
-  margin-right: 7px;
-  margin-bottom: 7px;
+  margin-left: 2px;
+  margin-bottom: 5px;
 }
 .el-row {
   margin-bottom: 20px;
@@ -209,6 +223,65 @@
 import problemdetail from "@/components/problemdetail";
 export default {
   methods: {
+    tagclick(name){
+      
+
+      if(this.currenttag.indexOf(name)>=0){
+        this.$refs[name][0].type='default'
+        var li=this.currenttag.split("+");
+        for(var i=0;i<li.length;i++){
+          if(li[i]==name){
+            li.splice(i,1);
+            break;
+          }
+        }
+        this.currenttag=li.join("+");
+      }
+      else{
+        this.$refs[name][0].type='primary'
+        var li=this.currenttag.split("+");
+        li.push(name)
+        this.currenttag=li.join("+");
+      }
+      
+
+      this.$axios
+        .get(
+          "/problemdata/?limit=" +
+            this.pagesize +
+            "&offset=" +
+            (this.currentpage - 1) * this.pagesize+"&auth=1&search="+this.currenttag
+        )
+        .then(response => {
+          for (var i = 0; i < response.data.results.length; i++) {
+            if (response.data.results[i]["level"] == "1")
+              response.data.results[i]["level"] = "Easy";
+            if (response.data.results[i]["level"] == "2")
+              response.data.results[i]["level"] = "Medium";
+            if (response.data.results[i]["level"] == "3")
+              response.data.results[i]["level"] = "Hard";
+            if (response.data.results[i]["level"] == "4")
+              response.data.results[i]["level"] = "VeryHard";
+            if (response.data.results[i]["level"] == "5")
+              response.data.results[i]["level"] = "ExtremelyHard";
+
+            response.data.results[i]["rate"] =
+              response.data.results[i]["ac"] +
+              "/" +
+              response.data.results[i]["submission"];
+
+            if (response.data.results[i]["tag"] == null)
+              response.data.results[i]["tag"] = ["无"];
+            else
+              response.data.results[i]["tag"] = response.data.results[i][
+                "tag"
+              ].split("|");
+          }
+          this.tableData = response.data.results;
+          this.totalproblem = response.data.count;
+        });
+
+    },
     handleSizeChange(val) {
       this.pagesize = val;
 
@@ -328,7 +401,7 @@ export default {
   data() {
     return {
       currentpage: 1,
-      pagesize: 20,
+      pagesize: 10,
       totalproblem: 10,
       tableData: [],
       tagnames: [],
@@ -340,13 +413,14 @@ export default {
       ce: 100,
       wa: 100,
       se: 100,
-      title: "Statistics"
+      title: "Statistics",
+      currenttag:"",
     };
   },
   created() {
     this.$axios
       .get(
-        "/problemdata/?limit=20&offset=0"+"&auth=1"
+        "/problemdata/?limit=10&offset=0"+"&auth=1"
       )
       .then(response => {
         for (var i = 0; i < response.data.results.length; i++) {

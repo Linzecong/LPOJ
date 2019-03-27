@@ -38,7 +38,7 @@
       <h3>广东外语外贸大学 ACM集训队排名<el-button @click="dialogVisible = true" type="primary" style="float:right;margin:10px;">其他申报</el-button></h3>
     </center>
 
-      <el-table :data="tableData" border stripe>
+      <el-table :data="tableData" border stripe size="small">
         <el-table-column prop="username" label="User" fixed></el-table-column>
         
         <!-- <el-table-column prop="classes" label="Class" fixed></el-table-column> -->

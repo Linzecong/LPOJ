@@ -1,6 +1,6 @@
 <template>
   <el-row :gutter="15">
-    <el-col :span="20">
+    <el-col :span="18">
       <el-row>
         <el-card shadow="always">
           <el-row :gutter="18" id="title">{{title}}</el-row>
@@ -82,7 +82,7 @@
       </el-row>
     </el-col>
 
-    <el-col :span="4">
+    <el-col :span="6">
       <el-row :gutter="15">
         <el-card shadow="always">
           <el-collapse v-model="activeNames">
@@ -222,6 +222,15 @@
           </el-row>
         </el-card>
       </el-row>
+      <el-row>
+         <el-card>
+        
+          <h3>提交记录</h3>
+          <statusmini></statusmini>
+        
+      </el-card>
+      </el-row>
+    
     </el-col>
   </el-row>
 </template>
@@ -229,6 +238,7 @@
 <script>
 import moment from "moment";
 import { codemirror } from 'vue-codemirror'
+import statusmini from "@/components/statusmini";
 require('codemirror/lib/codemirror.css')
 require('codemirror/theme/base16-light.css')
 require('codemirror/mode/clike/clike')
@@ -236,7 +246,8 @@ require('codemirror/mode/clike/clike')
 export default {
   name: "problemdetail",
   components:{
-	  codemirror
+    codemirror,
+    statusmini,
   },
   data() {
     return {

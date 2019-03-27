@@ -15,7 +15,7 @@ class JudgeStatusView(viewsets.ModelViewSet):
     serializer_class = JudgeStatusSerializer
     pagination_class = LimitOffsetPagination
     filter_backends = (DjangoFilterBackend,)
-    filter_fields = ('user', 'result', "contest")
+    filter_fields = ('user', 'result', "contest","problem")
     permission_classes = (LoginOrReadOnly,)
 
 class JudgeStatusPutView(viewsets.GenericViewSet, mixins.CreateModelMixin):
@@ -30,7 +30,7 @@ class JudgeStatusCodeView(viewsets.GenericViewSet, mixins.RetrieveModelMixin):
     serializer_class = JudgeStatusCodeSerializer
     pagination_class = LimitOffsetPagination
     filter_backends = (DjangoFilterBackend,)
-    filter_fields = ('user', 'result', "contest")
+    filter_fields = ('user', 'result', "contest","problem")
     permission_classes = (NoContestOnly,)
 
 class CaseStatusView(viewsets.ModelViewSet):

@@ -8,7 +8,7 @@
     <h2>Score: {{ score }}</h2>
     <h2>Rating: {{ rating }}</h2>
 
-<el-table @cell-click="problemclick" :default-sort = "{prop: 'time', order: 'descending'}" :data="tableData" :row-class-name="tableRowClassName">
+<el-table @cell-click="problemclick" :default-sort = "{prop: 'time', order: 'descending'}" :data="tableData" :row-class-name="tableRowClassName" size="mini">
       <el-table-column prop="problem" label="Problem"></el-table-column>
       <el-table-column prop="language" label="Lang"></el-table-column>
       <el-table-column prop="result" label="Status" :width="250">

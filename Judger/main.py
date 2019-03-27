@@ -45,6 +45,9 @@ reconnect()
 
 def judge(id, code, lang, problem, contest, username, submittime, contestproblem):
     global statue, cursor
+    contest = int(contest)
+    contest = contest + 1
+    contest = contest - 1
 
     acscore = False
     cursor.execute(
@@ -57,7 +60,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
     li = []
     if contest is not 0:
         cursor.execute(
-            "SELECT * from contest_contestrank where username = '%s'  and contestid = %d" % (username, contest))
+            "SELECT * from contest_contestrank where username = '%s'  and contestid = %d" % (username, int(contest)))
         r = cursor.fetchone()
         statue = r[4]
         li = statue.split("|")
@@ -192,29 +195,31 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
         useroutputdata =""
         outputdata=""
         casedata=""
-        if contest is  0:
-            # 计算case
-            inputfile = open("../DataServer/problemdata/%s/%s.in"%(problem, filename), "r")
-            casedata = inputfile.read(400)
-            tmpstr = inputfile.read(10)
-            if tmpstr != "":
-                casedata = casedata + '\n......'
-            inputfile.close()
+        if contest is 0:
+            try:
+                # 计算case
+                inputfile = open("../DataServer/problemdata/%s/%s.in"%(problem, filename), "r")
+                casedata = inputfile.read(400)
+                tmpstr = inputfile.read(10)
+                if tmpstr != "":
+                    casedata = casedata + '\n......'
+                inputfile.close()
 
-            outputfile = open("../DataServer/problemdata/%s/%s.out"%(problem, filename), "r")
-            outputdata = outputfile.read(400)
-            tmpstr = outputfile.read(10)
-            if tmpstr != "":
-                outputdata = outputdata + '\n......'
-            outputfile.close()
+                outputfile = open("../DataServer/problemdata/%s/%s.out"%(problem, filename), "r")
+                outputdata = outputfile.read(400)
+                tmpstr = outputfile.read(10)
+                if tmpstr != "":
+                    outputdata = outputdata + '\n......'
+                outputfile.close()
 
-            useroutputfile = open(judgername+"temp.out", "r")
-            useroutputdata = useroutputfile.read(400)
-            tmpstr = useroutputfile.read(10)
-            if tmpstr != "":
-                useroutputdata = useroutputdata + '\n......'
-            useroutputfile.close()
-
+                useroutputfile = open(judgername+"temp.out", "r")
+                useroutputdata = useroutputfile.read(400)
+                tmpstr = useroutputfile.read(10)
+                if tmpstr != "":
+                    useroutputdata = useroutputdata + '\n......'
+                useroutputfile.close()
+            except:
+                ret["result"] = 5
         
             
 
@@ -281,22 +286,27 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
             answer = ""
 
             while True:
-                
-                std = file1.readline()
-                ans = file2.readline()
+                try:
+                    std = file1.readline()
+                    ans = file2.readline()
 
-                
-                if std == "" and ans == "":
+                    
+                    if std == "" and ans == "":
+                        break
+
+                    std = std.rstrip()
+                    ans = ans.rstrip()
+
+                    stdout = stdout + std
+                    answer = answer + ans
+                    
+                    if std != ans:
+                        result = -3
+                except:
+                    result=-3
+                    stdout="1"
+                    answer="0"
                     break
-
-                std = std.rstrip()
-                ans = ans.rstrip()
-
-                stdout = stdout + std
-                answer = answer + ans
-                
-                if std != ans:
-                    result = -3
             
             if stdout == answer and result == -3:
                 result = -5
@@ -380,7 +390,8 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                     li[contestproblem]=int(li[contestproblem])
                     li[contestproblem] = li[contestproblem]-1
                     sta = '|'.join(str(i) for i in li)
-                    cursor.execute("UPDATE  contest_contestrank  SET statue = %s where username = %s  and contestid = %d" , (sta,username,contest))
+                    print(contest)
+                    cursor.execute("UPDATE  contest_contestrank  SET statue = '%s' where username = '%s'  and contestid = %d" % (sta,username,contest))
 
     db.commit()
     statue = True

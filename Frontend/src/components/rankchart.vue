@@ -1,6 +1,6 @@
 <template>
   <center>
-    <h2>广东外语外贸大学ACM集训队AC情况统计</h2>
+    <h2>广东外语外贸大学ACM集训队<br>30天内新增AC情况统计</h2>
     <div ref="myEchart" style="height:500px;width:100%"></div>
   </center>
 </template>
@@ -72,7 +72,8 @@ export default {
         },
         yAxis: {
           type: "value",
-          interval: 100
+          min:0,
+          interval: 5
         },
         series: this.series
       });
@@ -97,10 +98,18 @@ export default {
         this.xNum.push(name2);
       }
 
+      var first = {};
+
+
       for (var i = 0; i < response.data.length; i++) {
         for (var j = 0; j < this.series.length; j++) {
           if (this.series[j].name == response.data[i]["username"]) {
-            this.series[j].data.push(response.data[i]["account"]);
+            if(this.series[j].data.length==0){
+              first[this.series[j].name] = response.data[i]["account"];
+              this.series[j].data.push(0);
+            }
+            else
+              this.series[j].data.push(response.data[i]["account"]-first[this.series[j].name]);
             break;
           }
         }
