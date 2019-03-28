@@ -198,9 +198,9 @@ export default {
       activeIndex: "1",
       dialogLoginVisible: false,
       dialogRegisterVisible: false,
-      loginshow: sessionStorage.username,
-      username: sessionStorage.username,
-      name: sessionStorage.name,
+      loginshow: localStorage.username,
+      username: localStorage.username,
+      name: localStorage.name,
       isadmin:false,
       form: {
         username: "",
@@ -219,11 +219,11 @@ export default {
     };
   },
   created() {
-    this.isadmin=(sessionStorage.type==2||sessionStorage.type==3)
+    this.isadmin=(localStorage.type==2||localStorage.type==3)
   },
   methods: {
     updatename(type) {
-      this.name = sessionStorage.name;
+      this.name = localStorage.name;
     },
     handleSelect(key, keyPath) {},
     handleCommand(command) {
@@ -235,10 +235,10 @@ export default {
               message: "登出成功！",
               type: "success"
             });
-            sessionStorage.setItem("username", "");
-            sessionStorage.setItem("name", "");
-            sessionStorage.setItem("rating", "");
-            sessionStorage.setItem("type", "");
+            localStorage.setItem("username", "");
+            localStorage.setItem("name", "");
+            localStorage.setItem("rating", "");
+            localStorage.setItem("type", "");
             this.loginshow = 0;
             this.username = "";
             this.$router.go(0);
@@ -250,19 +250,19 @@ export default {
       if (command == "home") {
         this.$router.push({
           name: "user",
-          query: { username: sessionStorage.username }
+          query: { username: localStorage.username }
         });
       }
       if (command == "setting") {
         this.$router.push({
           name: "setting",
-          params: { username: sessionStorage.username }
+          params: { username: localStorage.username }
         });
       }
       if (command == "submittion") {
         this.$router.push({
           name: "statue",
-          query: { username: sessionStorage.username }
+          query: { username: localStorage.username }
         });
       }
       if (command == "admin") {
@@ -347,9 +347,9 @@ export default {
             type: "success"
           });
 
-          sessionStorage.setItem("username", this.form.username);
-          sessionStorage.setItem("name", response.data.name);
-          sessionStorage.setItem("type", response.data.type);
+          localStorage.setItem("username", this.form.username);
+          localStorage.setItem("name", response.data.name);
+          localStorage.setItem("type", response.data.type);
           if(response.data.type==2 || response.data.type==3)
             this.isadmin=true
           
@@ -358,7 +358,7 @@ export default {
           this.dialogLoginVisible = false;
           this.loginshow = 1;
           this.username = this.form.username;
-          this.name = sessionStorage.name;
+          this.name = localStorage.name;
           
 
           this.$axios
@@ -367,7 +367,7 @@ export default {
               this.username
           )
           .then(response => {
-              sessionStorage.setItem("rating", response.data[0].rating);
+              localStorage.setItem("rating", response.data[0].rating);
               this.$router.go(0);
           });
 

@@ -9,8 +9,12 @@
         show-icon
         :show-close="false"
       ></el-alert>
-      <el-alert title="你的代码：" type="info" :closable="false"></el-alert>
-      <codemirror v-model="code" :options="cmOptions"></codemirror>
+      <el-alert title="你的代码：" type="info" :closable="false"><el-button size="mini"
+        v-clipboard:copy="code"
+        v-clipboard:success="onCopy"
+        v-clipboard:error="onError">Copy</el-button></el-alert>
+
+      <codemirror id="mycode" v-model="code" :options="cmOptions"></codemirror>
 
       <el-alert
         :key="index"
@@ -154,6 +158,13 @@ export default {
     codemirror
   },
   methods: {
+    onCopy(e){
+       this.$message.success("复制成功！");
+    },
+    // 复制失败
+    onError(e){
+      this.$message.error("复制失败："+e);
+    },
     rowClick(row, col, e) {
       if (row.message + "" == "0") this.compilemsg = "编译成功！";
       else this.compilemsg = row.message;
@@ -390,7 +401,7 @@ export default {
       if (!this.contest) this.contest = "";
       if (!this.username) this.username = "";
 
-      if (this.username == sessionStorage.username && sessionStorage.username)
+      if (this.username == localStorage.username && localStorage.username)
         this.showall = true;
       else this.showall = false;
 
@@ -470,10 +481,10 @@ export default {
     },
     statuechange(val) {
       if (val == true) {
-        if (!sessionStorage.username) {
+        if (!localStorage.username) {
           this.showall = false;
           this.$message.error("请先登录！");
-        } else this.setusername(sessionStorage.username);
+        } else this.setusername(localStorage.username);
       } else {
         this.setusername("");
       }

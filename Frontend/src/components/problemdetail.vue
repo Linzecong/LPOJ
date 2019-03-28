@@ -301,7 +301,7 @@ export default {
       .get("/problem/" + this.ID + "/")
       .then(response => {
         auth = response.data.auth;
-        if ((auth == 2 || auth == 3) && sessionStorage.type ==1 ) {
+        if ((auth == 2 || auth == 3) && localStorage.type ==1 ) {
           this.title = "非法访问！";
           this.$message.error("服务器错误！" + "(" + "无权限" + ")");
           return;
@@ -403,7 +403,7 @@ export default {
         this.$message.error("非法操作！");
         return;
       }
-      if (!sessionStorage.username) {
+      if (!localStorage.username) {
         this.$message.error("请先登录！");
         return;
       }
@@ -426,7 +426,7 @@ export default {
         });
         this.$axios
           .post("/judgestatusput/", {
-            user: sessionStorage.username,
+            user: localStorage.username,
             oj: "LPOJ",
             problem: this.ID,
             result: -1,

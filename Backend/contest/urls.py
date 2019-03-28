@@ -16,6 +16,7 @@ routers.register('contestrank', views.ContestRankView)
 routers.register('contestregister', views.ContestRegisterView)
 
 urlpatterns = [
-    url('', include(routers.urls))
+    url('', include(routers.urls)),
+    url(r'^currenttime',views.CurrentTimeView.as_view()),
 ]
 

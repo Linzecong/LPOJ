@@ -172,7 +172,7 @@ export default {
         return;
       }
       
-      var username = sessionStorage.username;
+      var username = localStorage.username;
       if (!username) {
         this.$message.error("请先登录！");
         return;
@@ -191,8 +191,8 @@ export default {
               "/contestregister/",
               {
                 contestid: parseInt(this.id),
-                user: sessionStorage.username,
-                rating: parseInt(sessionStorage.rating)
+                user: localStorage.username,
+                rating: parseInt(localStorage.rating)
               }
             )
             .then(res => {
@@ -247,9 +247,9 @@ export default {
           var date1 = new Date(Date.parse(sDate1));
 
           this.$axios
-            .get("http://quan.suning.com/getSysTime.do")
+            .get("/currenttime/")
             .then(response2 => {
-              date2 = response2.data.sysTime2;
+              date2 = response2.data;
 
               this.left = parseInt(
                 (new Date(Date.parse(date2)).getTime() - date1.getTime()) / 1000
@@ -331,10 +331,11 @@ export default {
       if (this.left < 0) this.timestyle = "wait";
       else this.timestyle = "begin";
 
-      if (this.left >= this.lasttime && isNaN(this.left) == false) {
+      if (this.left >= this.lasttime && isNaN(this.left) == false&& this.$store.state.contestisend==false) {
         this.left = this.lasttime;
         this.timestyle = "end";
         this.$store.state.contestisend = true;
+        this.$router.go(0);
       }
 
       var t = Math.abs(this.left);

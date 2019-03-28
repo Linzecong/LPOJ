@@ -8,7 +8,8 @@ import router from './router'
 import Vuex from 'vuex'
 import md5 from 'js-md5';
 import axios from 'axios';
-
+import VueClipboard from 'vue-clipboard2'
+Vue.use(VueClipboard)
 
 Vue.use(Vuex)
 Vue.config.productionTip = false

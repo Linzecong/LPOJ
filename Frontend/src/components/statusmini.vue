@@ -9,7 +9,10 @@
         show-icon
         :show-close="false"
       ></el-alert>
-      <el-alert title="你的代码：" type="info" :closable="false"></el-alert>
+      <el-alert title="你的代码：" type="info" :closable="false"><el-button size="mini"
+        v-clipboard:copy="code"
+        v-clipboard:success="onCopy"
+        v-clipboard:error="onError">Copy</el-button></el-alert>
       <codemirror v-model="code" :options="cmOptions"></codemirror>
 
       <el-alert
@@ -53,7 +56,7 @@
       size="mini"
     >
       <el-table-column prop="id" label="ID" :width="50"></el-table-column>
-      <el-table-column prop="result" label="Status">
+      <el-table-column prop="result" label="Status" :width="135">
         <template slot-scope="scope">
           <el-tag size="mini" :type="statuetype(scope.row.result)" disable-transitions hit>
             {{ scope.row.result }}
@@ -65,7 +68,7 @@
           <template slot="header" slot-scope="scope">
         <el-button
           size="mini"
-          @click="setstatus" type="primary">刷新</el-button>
+          @click="setstatus(false)" type="primary">刷新</el-button>
       </template></el-table-column>
     </el-table>
   </el-row>
@@ -113,6 +116,13 @@ export default {
     codemirror
   },
   methods: {
+      onCopy(e){
+       this.$message.success("复制成功！");
+    },
+    // 复制失败
+    onError(e){
+      this.$message.error("复制失败："+e);
+    },
     rowClick(row, col, e) {
       if (row.message + "" == "0") this.compilemsg = "编译成功！";
       else this.compilemsg = row.message;
@@ -192,11 +202,24 @@ export default {
       if (type == "System Error") return false;
       return false;
     },
-    setstatus() {
-        var user=sessionStorage.username;
-        var problem =this.$route.query.problemID
+    setstatus(problem) {
+        console.log(problem)
+        if(this.$route.params.contestID){
+            var contest=this.$route.params.contestID;
+            if(problem!=false)
+                this.problem=problem
+        }
+        else{
+            this.problem = this.$route.query.problemID;
+            var contest=""
+        }
+        
+      var user=localStorage.username;
+      if(user=='')
+        user="|)#"
+
       this.$axios
-        .get("/judgestatus/?user=" + user + "&problem=" + problem)
+        .get("/judgestatus/?user=" + user + "&problem=" + this.problem+"&contest="+contest)
         .then(response => {
           for (var i = 0; i < response.data.length; i++) {
             var testcase = response.data[i]["testcase"];
@@ -214,14 +237,14 @@ export default {
             }
 
             if (response.data[i]["result"] == "-3")
-              response.data[i]["result"] = "Wrong Answer on test " + testcase;
+              response.data[i]["result"] = "Wrong Answer"
 
             if (response.data[i]["result"] == "-4")
               response.data[i]["result"] = "Compile Error";
 
             if (response.data[i]["result"] == "-5")
               response.data[i]["result"] =
-                "Presentation Error on test " + testcase;
+                "Presentation Error"
 
             if (response.data[i]["result"] == "-6") {
               response.data[i]["result"] = "Waiting";
@@ -232,18 +255,18 @@ export default {
 
             if (response.data[i]["result"] == "1")
               response.data[i]["result"] =
-                "Time Limit Exceeded on test " + testcase;
+                "Time Limit Exceeded"
 
             if (response.data[i]["result"] == "2")
               response.data[i]["result"] =
-                "Time Limit Exceeded on test " + testcase;
+                "Time Limit Exceeded"
 
             if (response.data[i]["result"] == "3")
               response.data[i]["result"] =
-                "Memory Limit Exceeded on test " + testcase;
+                "Memory Limit Exceeded"
 
             if (response.data[i]["result"] == "4")
-              response.data[i]["result"] = "Runtime Error on test " + testcase;
+              response.data[i]["result"] = "Runtime Error"
 
             if (response.data[i]["result"] == "5")
               response.data[i]["result"] = "System Error";
@@ -263,18 +286,19 @@ export default {
       },
       tableData: [],
       username: "",
-      contest: "",
       showall: false,
       dialogVisible: false,
       code: "",
       compilemsg: "",
       dialogdata: [],
 
-      problem: this.$route.query.problemID
+      problem:-1,
     };
   },
   created() {
-    this.setstatus();
+    if(this.$route.params.contestID)
+    return;
+        this.setstatus(false);
   }
 };
 </script>

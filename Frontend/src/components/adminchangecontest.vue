@@ -93,7 +93,7 @@ export default {
       tmpaddproblemtitle: "",
       canadd: false,
       changecontestform: {
-        creator: sessionStorage.name,
+        creator: localStorage.name,
         title: "",
         level: 1,
         des: "",

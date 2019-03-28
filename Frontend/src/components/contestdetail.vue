@@ -80,9 +80,9 @@ export default {
         var date1 = new Date(Date.parse(sDate1));
 
         this.$axios
-          .get("http://quan.suning.com/getSysTime.do")
+          .get("/currenttime/")
           .then(response2 => {
-            date2 = response2.data.sysTime2;
+            date2 = response2.data;
 
             var left = parseInt(
               (new Date(Date.parse(date2)).getTime() - date1.getTime()) / 1000
@@ -95,7 +95,7 @@ export default {
               this.$refs.Overview.haveauth = 1;
               return;
             }
-            var username = sessionStorage.username;
+            var username = localStorage.username;
             if (username) {
               this.$axios
                 .get(

@@ -89,7 +89,7 @@ export default {
       fileList: [],
       addproblemform: {
         problem: this.problemcount + 1,
-        author: sessionStorage.name,
+        author: localStorage.name,
         title: "题目标题",
         des: "题目说明",
         input: "输入说明",

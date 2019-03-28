@@ -9,6 +9,9 @@ from .models import ContestAnnouncement,ContestRank, ContestBoard, ContestCommen
 from .serializers import ContestRankSerializer, ContestAnnouncementSerializer,ContestBoardSerializer,ContestCommentSerializer,ContestInfoSerializer,ContestProblemSerializer, ContestRegisterSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 import datetime
+from rest_framework.response import Response
+from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
+from rest_framework.views import APIView
 
 class ContestAnnouncementView(viewsets.ModelViewSet):
     queryset = ContestAnnouncement.objects.all()
@@ -70,3 +73,7 @@ class ContestRegisterView(viewsets.ModelViewSet):
     pagination_class = LimitOffsetPagination
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('user', "contestid")
+
+class CurrentTimeView(APIView):
+    def get(self,request):
+        return Response(datetime.datetime.now(), HTTP_200_OK)

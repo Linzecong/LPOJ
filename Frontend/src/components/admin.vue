@@ -37,7 +37,7 @@ export default {
 
   },
   created() {
-    this.type = sessionStorage.type;
+    this.type = localStorage.type;
     if (this.type != 2 && this.type != 3) {
       this.$message.error("非法访问！");
       this.canshow = false;

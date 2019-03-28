@@ -88,7 +88,7 @@ export default {
       tmpaddproblemtitle: "",
       canadd: false,
       addcontestform: {
-        creator: sessionStorage.name,
+        creator: localStorage.name,
         title: "新比赛",
         level: 3,
         des: "无",

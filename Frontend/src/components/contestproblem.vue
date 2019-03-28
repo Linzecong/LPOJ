@@ -108,7 +108,12 @@
               </el-col>
             </el-row>
             <el-row :gutter="15">
+              <el-col :span="17">
               <codemirror ref="myCm" v-model="code" :options="cmOptions" class="code"></codemirror>
+              </el-col>
+              <el-col :span="7">
+                <statusmini :ref="'Statusmini'+index"></statusmini>
+              </el-col>
               <!-- <el-input
                 type="textarea"
                 :autosize="{ minRows: 10, maxRows: 70}"
@@ -116,6 +121,7 @@
                 v-model="code"
               ></el-input>-->
             </el-row>
+          
           </el-card>
         </el-row>
       </el-col>
@@ -125,6 +131,7 @@
 
 <script>
 import { codemirror } from "vue-codemirror";
+import statusmini from "@/components/statusmini";
 require("codemirror/lib/codemirror.css");
 require("codemirror/theme/base16-light.css");
 require("codemirror/mode/clike/clike");
@@ -132,7 +139,8 @@ require("codemirror/mode/clike/clike");
 export default {
   name: "contestproblem",
   components: {
-    codemirror
+    codemirror,
+    statusmini
   },
   data() {
     return {
@@ -196,6 +204,7 @@ export default {
       this.currentproblem = this.problemids[tab.index];
       this.title = this.problemtitles[tab.index];
       this.currentrank = tab.index;
+      this.$refs["Statusmini"+tab.index][0].setstatus(this.currentproblem)
       this.$axios
         .get("/problem/" + this.currentproblem + "/")
         .then(response => {
@@ -215,7 +224,7 @@ export default {
           "/contestrank/?contestid=" +
             this.currentcontest +
             "&username=" +
-            sessionStorage.username
+            localStorage.username
         )
         .then(response => {
           if (response.data.length != 0) {
@@ -249,9 +258,9 @@ export default {
       this.$axios.get("/contestinfo/" + id + "/").then(response => {
         this.begintime = response.data.begintime;
         this.$axios
-          .get("http://quan.suning.com/getSysTime.do")
+          .get("/currenttime/")
           .then(response2 => {
-            this.currenttime = response2.data.sysTime2;
+            this.currenttime = response2.data;
 
             var d1 = new Date(Date.parse(this.currenttime));
             var d2 = new Date(Date.parse(this.begintime));
@@ -277,6 +286,7 @@ export default {
                 }
                 this.$store.state.contestproblemcount = this.problemids.length;
                 this.currentproblem = this.problemids[0];
+                
                 this.currentrank = 0;
                 this.title = this.problemtitles[0];
                 this.$axios
@@ -292,10 +302,14 @@ export default {
                     this.time = response.data.time + "MS";
                     this.memory = response.data.memory + "MB";
                     this.hint = response.data.hint;
+                    this.$refs["Statusmini0"][0].setstatus(this.currentproblem)
                   });
               });
           });
       });
+    
+    
+    
     },
     submit: function() {
       if (this.hint == "") {
@@ -306,7 +320,7 @@ export default {
       //   this.$message.error("比赛已结束");
       //   return;
       // }
-      if (!sessionStorage.username) {
+      if (!localStorage.username) {
         this.$message.error("请先登录！");
         return;
       }
@@ -331,7 +345,7 @@ export default {
         if (this.$store.state.contestisend == true) {
           this.$axios
             .post("/judgestatusput/", {
-              user: sessionStorage.username,
+              user: localStorage.username,
               oj: "LPOJ",
               problem: this.currentproblem,
               result: -1,
@@ -369,13 +383,13 @@ export default {
               "/contestrank/?contestid=" +
                 parseInt(this.currentcontest) +
                 "&username=" +
-                sessionStorage.username
+                localStorage.username
             )
             .then(response5 => {
               if (response5.data.length > 0) {
                 this.$axios
                   .post("/judgestatusput/", {
-                    user: sessionStorage.username,
+                    user: localStorage.username,
                     oj: "LPOJ",
                     problem: this.currentproblem,
                     result: -1,
@@ -395,8 +409,8 @@ export default {
 
                     this.$axios
                       .post("/contestboard/", {
-                        username: sessionStorage.username,
-                        user: sessionStorage.name,
+                        username: localStorage.username,
+                        user: localStorage.name,
                         type: -1,
                         submitid: response.data.id,
                         contestid: parseInt(this.currentcontest),
@@ -431,15 +445,15 @@ export default {
 
                 this.$axios
                   .post("/contestrank/", {
-                    username: sessionStorage.username,
-                    user: sessionStorage.name,
+                    username: localStorage.username,
+                    user: localStorage.name,
                     contestid: parseInt(this.currentcontest),
                     statue: str
                   })
                   .then(response8 => {
                     this.$axios
                       .post("/judgestatusput/", {
-                        user: sessionStorage.username,
+                        user: localStorage.username,
                         oj: "LPOJ",
                         problem: this.currentproblem,
                         result: -1,
@@ -461,8 +475,8 @@ export default {
 
                         this.$axios
                           .post("/contestboard/", {
-                            username: sessionStorage.username,
-                            user: sessionStorage.name,
+                            username: localStorage.username,
+                            user: localStorage.name,
                             type: -1,
                             submitid: response.data.id,
                             contestid: parseInt(this.currentcontest),
@@ -540,7 +554,6 @@ export default {
           response.data["result"] = "Waiting";
           this.loadingshow = true;
           this.judgetype = "info";
-          clearInterval(this.$store.state.submittimer);
         }
 
         if (response.data["result"] == "0") {
@@ -583,35 +596,8 @@ export default {
       });
     }
   },
-  created() {
+  mounted() {
     this.getproblem(this.$route.params.contestID);
-  },
-  mounted(){
-  this.$axios
-        .get(
-          "/contestrank/?contestid=" +
-            this.currentcontest +
-            "&username=" +
-            sessionStorage.username
-        )
-        .then(response => {
-          if (response.data.length != 0) {
-            var li = response.data[0]["statue"].split("|");
-
-            for (var ii = 0; ii < li.length; ii++) {
-              if (li[ii].indexOf("$") >= 0) {
-                this.$refs["A" + ii][0].style["color"] = "#67C23A";
-              } else {
-                li[ii] = parseInt(li[ii]);
-
-                if (li[ii] < 0) {
-                  this.$refs["A" + ii][0].style["color"] = "#F56C6C";
-                } else this.$refs["A" + ii][0].style["color"] = "black";
-              }
-            }
-            this.$refs["A0"][0].style["color"] = "#409EFF";
-          }
-        });
   },
   destroyed() {
     clearInterval(this.$store.state.submittimer);
