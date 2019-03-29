@@ -1,10 +1,14 @@
 <template>
   <el-row>
+    <el-dialog :visible.sync="statusshow" @opened="setstatus" :show-close="false">
+      <statusmini ref="Status"></statusmini>
+    </el-dialog>
+
     <center>
       <h1>{{ contesttitle }}</h1>
     </center>
     <el-row :gutter="10">
-      <el-table :data="tableData" :cell-style="cellstyle" border stripe size="small">
+      <el-table :data="tableData" :cell-style="cellstyle" border stripe size="small" @cell-click="cellclick">
         <el-table-column prop="rank" label="Rank" width="70px" fixed></el-table-column>
         <el-table-column prop="user" label="User" fixed></el-table-column>
         <el-table-column prop="nickname" label="Nickname" fixed></el-table-column>
@@ -27,8 +31,12 @@
 </template>
 
 <script>
+import statusmini from "@/components/statusmini";
 export default {
   name: "contestrank",
+  components: {
+    statusmini
+  },
   data() {
     return {
       problemcount: this.$store.state.contestproblemcount,
@@ -36,7 +44,14 @@ export default {
       contestid: this.$route.params.contestID,
       probleminfo: [],
       tableData:[
-      ]
+      ],
+      problemids:[],
+      statusdata:{
+        user:"",
+        contest:this.$route.params.contestID,
+        problemid:"",
+      },
+      statusshow:false
     };
   },
   created() {
@@ -60,6 +75,17 @@ export default {
       var A = "A";
       return String.fromCharCode(val + A.charCodeAt());
     },
+    cellclick(row, column, cell, event){
+      var A = "A";
+      this.statusdata.user  = row.user;
+      this.statusdata.problemid = this.problemids[column.property.charCodeAt() - A.charCodeAt()]
+
+      this.statusshow = true
+    },
+    setstatus(){
+      //console.log(this.statusdata.user,this.statusdata.problemid)
+      this.$refs.Status.setstatus(this.statusdata.problemid,this.statusdata.user)
+    },
     cellstyle(data){
       var id = data.columnIndex-5;
       var str = this.toChar(id);
@@ -76,7 +102,6 @@ export default {
     },
     setproblemcount(id) {
       this.contesttitle = this.$store.state.contesttitle;
-
       this.$axios
         .get(
           "/contestproblem/?contestid=" +
@@ -88,6 +113,7 @@ export default {
           this.probleminfo=[];
           for(var i = 0;i<response3.data.length;i++){
             this.probleminfo.push({prop:this.toChar(i),label:this.toChar(i)})
+            this.problemids.push(response3.data[i].problemid);
           }
           this.$axios
           .get(

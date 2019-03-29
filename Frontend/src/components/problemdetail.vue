@@ -3,7 +3,7 @@
     <el-col :span="18">
       <el-row>
         <el-card shadow="always">
-          <el-row :gutter="18" id="title">{{title}}</el-row>
+          <el-row :gutter="18" id="title">{{'LPOJ - '+this.ID+' '}}{{title}}</el-row>
           <br>
           <el-row :gutter="18" id="des">Description</el-row>
           <el-row :gutter="18" id="detail">
@@ -24,7 +24,10 @@
           <el-row :gutter="18" style="left:10px">
             <el-row :gutter="18" v-for="(item,index) in sinput.length" :key="index">
               <el-col :span="11" id="text">
-                <el-row :gutter="18" id="des" style="margin-bottom: 0px;">Sample Input {{item}}</el-row>
+                <el-row :gutter="18" id="des" style="margin-bottom: 0px;">Sample Input {{item}} <el-button size="mini"
+        v-clipboard:copy="sinput[index]"
+        v-clipboard:success="onCopy"
+        v-clipboard:error="onError" style="margin-bottom:8px;">Copy</el-button></el-row>
                 <el-row :gutter="18" id="data" style="margin-bottom: 0px;">{{sinput[index]}}</el-row>
               </el-col>
               <el-col :span="11" id="text">
@@ -88,7 +91,7 @@
           <el-collapse v-model="activeNames">
             <el-collapse-item name="1" id="des">
               <template slot="title">
-                <font color="deepskyblue" size="4">Author:</font>
+                <font color="deepskyblue" size="4">Creator:</font>
               </template>
               <div>{{author}}</div>
             </el-collapse-item>
@@ -222,7 +225,7 @@
           </el-row>
         </el-card>
       </el-row>
-      <el-row>
+      <el-row :gutter="15">
          <el-card>
         
           <h3>提交记录</h3>
@@ -391,6 +394,13 @@ export default {
       });
   },
   methods: {
+    onCopy(e){
+       this.$message.success("复制成功！");
+    },
+    // 复制失败
+    onError(e){
+      this.$message.error("复制失败："+e);
+    },
     problemlevel: function(type) {
       if (type == "Easy") return "info";
       if (type == "Medium") return "success";

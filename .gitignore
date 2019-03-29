@@ -16,3 +16,5 @@ Judger/output/libjudger.so
 migrations
 *.zip
 *.exe
+.vscode
+*.class

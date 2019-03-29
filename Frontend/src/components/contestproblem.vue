@@ -14,7 +14,7 @@
         <el-row>
           <el-card shadow="always">
             <el-row :gutter="18" id="title">
-              {{title}}
+              {{'LPOJ - '+currentproblem+' '}}{{title}}
               <el-tag
                 size="medium"
                 disable-transitions
@@ -56,7 +56,10 @@
             <el-row :gutter="18" style="left:10px">
               <el-row :gutter="18" v-for="(item,index) in sinput.length" :key="index">
                 <el-col :span="11" id="text">
-                  <el-row :gutter="18" id="des" style="margin-bottom: 0px;">Sample Input {{item}}</el-row>
+                  <el-row :gutter="18" id="des" style="margin-bottom: 0px;">Sample Input {{item}} <el-button size="mini"
+        v-clipboard:copy="sinput[index]"
+        v-clipboard:success="onCopy"
+        v-clipboard:error="onError" style="margin-bottom:8px;">Copy</el-button></el-row>
                   <el-row :gutter="18" id="data" style="margin-bottom: 0px;">{{sinput[index]}}</el-row>
                 </el-col>
                 <el-col :span="11" id="text">
@@ -193,6 +196,13 @@ export default {
     }
   },
   methods: {
+    onCopy(e){
+       this.$message.success("复制成功！");
+    },
+    // 复制失败
+    onError(e){
+      this.$message.error("复制失败："+e);
+    },
     problemtabClick(tab) {
       clearInterval(this.$store.state.submittimer);
       this.submitbuttontext = "提交后请勿重复刷新";
@@ -200,7 +210,7 @@ export default {
       this.loadingshow = false;
       this.submitid = -1;
       this.code = "";
-      this.language = "";
+      this.language = "C++";
       this.currentproblem = this.problemids[tab.index];
       this.title = this.problemtitles[tab.index];
       this.currentrank = tab.index;
@@ -252,7 +262,7 @@ export default {
       this.loadingshow = false;
       this.submitid = -1;
       this.code = "";
-      this.language = "";
+      this.language = "C++";
 
 
       this.$axios.get("/contestinfo/" + id + "/").then(response => {

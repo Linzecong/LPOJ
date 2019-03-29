@@ -9,6 +9,7 @@
     <h2>Rating: {{ rating }}</h2>
 
 <el-table @cell-click="problemclick" :default-sort = "{prop: 'time', order: 'descending'}" :data="tableData" :row-class-name="tableRowClassName" size="mini">
+      <el-table-column type="index"></el-table-column>
       <el-table-column prop="problem" label="Problem"></el-table-column>
       <el-table-column prop="language" label="Lang"></el-table-column>
       <el-table-column prop="result" label="Status" :width="250">
@@ -121,7 +122,7 @@ export default {
             this.rating=response.data[0].rating;
         });
 
-      this.$axios.get("/judgestatus/?user=" +
+      this.$axios.get("/judgestatusdistinct/?user=" +
             this.username+"&result=0").then(response => {
         for (var i = 0; i < response.data.length; i++) {
           

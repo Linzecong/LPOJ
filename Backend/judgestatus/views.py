@@ -15,7 +15,15 @@ class JudgeStatusView(viewsets.ModelViewSet):
     serializer_class = JudgeStatusSerializer
     pagination_class = LimitOffsetPagination
     filter_backends = (DjangoFilterBackend,)
-    filter_fields = ('user', 'result', "contest","problem")
+    filter_fields = ('user', 'result', "contest","problem","language")
+    permission_classes = (LoginOrReadOnly,)
+
+class JudgeStatusDistinctView(viewsets.ModelViewSet):
+    queryset = JudgeStatus.objects.all().order_by('problem').distinct('problem')
+    serializer_class = JudgeStatusSerializer
+    pagination_class = LimitOffsetPagination
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ('user', 'result', "contest","problem","language")
     permission_classes = (LoginOrReadOnly,)
 
 class JudgeStatusPutView(viewsets.GenericViewSet, mixins.CreateModelMixin):

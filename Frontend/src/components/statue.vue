@@ -59,13 +59,61 @@
       </el-alert>
     </el-dialog>
 
-    <el-switch
+
+    <el-dialog :visible.sync="searchdialogVisible">
+
+      <el-form :model="searchform" label-position="right">
+        <el-form-item label="用户:">
+          <el-input v-model="searchform.user" placeholder="请输入用户名"></el-input>
+        </el-form-item>
+        <el-form-item label="题目编号：">
+          <el-input v-model="searchform.problem" placeholder="请输入题目编号"></el-input>
+        </el-form-item>
+        <el-form-item label="语言：">
+          <el-select v-model="searchform.language" placeholder="请选择">
+                <el-option key="C++" label="C++" value="C++"></el-option>
+                <el-option key="C" label="C" value="C"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="结果：">
+          <el-select v-model="searchform.result" placeholder="请选择">
+                <el-option key="0" label="Accepted" value="0"></el-option>
+                <el-option key="1" label="Wrong Answer" value="-3"></el-option>
+                <el-option key="2" label="Waiting" value="-6"></el-option>
+                <el-option key="3" label="Presentation Error" value="-5"></el-option>
+                <el-option key="4" label="Compile Error" value="-4"></el-option>
+                <el-option key="5" label="Pending" value="-1"></el-option>
+                <el-option key="6" label="Judging" value="-2"></el-option>
+                <el-option key="7" label="Time Limit Exceeded 1" value="1"></el-option>
+                <el-option key="8" label="Time Limit Exceeded 2" value="2"></el-option>
+                <el-option key="9" label="Memory Limit Exceeded" value="3"></el-option>
+                <el-option key="10" label="Runtime Error" value="4"></el-option>
+                <el-option key="11" label="System Error" value="5"></el-option>
+          </el-select>
+        </el-form-item>
+        
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="searchdialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="searchstatus">确 定</el-button>
+      </div>
+    </el-dialog>
+
+
+  <el-switch
       style="float: right;margin:10px;"
       v-model="showall"
       active-text="Show Mine"
       inactive-text="Show All"
       @change="statuechange"
     ></el-switch>
+    <el-button type="danger" @click="resetsearch" style="float: right;margin-top:6px;margin-right:10px;" size="mini" >重置
+        </el-button>
+    <el-button type="primary" @click="searchdialogVisible = true" style="float: right;margin-top:6px;margin-right:15px;" size="mini">筛选
+        </el-button>
+
+    
+    
     <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
@@ -197,6 +245,88 @@ export default {
 
       this.dialogVisible = true;
     },
+    searchstatus(){
+      this.searchdialogVisible = false
+      this.setusername(this.searchform.user)
+      this.$axios
+        .get(
+          "/judgestatus/?user=" +
+            this.username +
+            "&limit=" +
+            this.pagesize +
+            "&offset=" +
+            (this.currentpage - 1) * this.pagesize +
+            "&problem=" + this.searchform.problem +"&language=" + this.searchform.language +
+            "&result=" + this.searchform.result+"&contest=" + this.contest
+        )
+        .then(response => {
+          for (var i = 0; i < response.data.results.length; i++) {
+            var testcase = response.data.results[i]["testcase"];
+            response.data.results[i]["time"] += "MS";
+            response.data.results[i]["memory"] += "MB";
+            response.data.results[i]["length"] += "B";
+            response.data.results[i]["submittime"] = moment(
+              response.data.results[i]["submittime"]
+            ).format("YYYY-MM-DD HH:mm:ss");
+
+            if (response.data.results[i]["result"] == "-1") {
+              response.data.results[i]["result"] = "Pending";
+            }
+
+            if (response.data.results[i]["result"] == "-2") {
+              response.data.results[i]["result"] = "Judging";
+            }
+
+            if (response.data.results[i]["result"] == "-3")
+              response.data.results[i]["result"] =
+                "Wrong Answer on test " + testcase;
+
+            if (response.data.results[i]["result"] == "-4")
+              response.data.results[i]["result"] = "Compile Error";
+
+            if (response.data.results[i]["result"] == "-5")
+              response.data.results[i]["result"] =
+                "Presentation Error on test " + testcase;
+
+            if (response.data.results[i]["result"] == "-6") {
+              response.data.results[i]["result"] = "Waiting";
+            }
+
+            if (response.data.results[i]["result"] == "0")
+              response.data.results[i]["result"] = "Accepted";
+
+            if (response.data.results[i]["result"] == "1")
+              response.data.results[i]["result"] =
+                "Time Limit Exceeded on test " + testcase;
+
+            if (response.data.results[i]["result"] == "2")
+              response.data.results[i]["result"] =
+                "Time Limit Exceeded on test " + testcase;
+
+            if (response.data.results[i]["result"] == "3")
+              response.data.results[i]["result"] =
+                "Memory Limit Exceeded on test " + testcase;
+
+            if (response.data.results[i]["result"] == "4")
+              response.data.results[i]["result"] =
+                "Runtime Error on test " + testcase;
+
+            if (response.data.results[i]["result"] == "5")
+              response.data.results[i]["result"] = "System Error";
+          }
+          this.tableData = response.data.results;
+          this.totalstatus = response.data.count;
+        });
+    },
+    resetsearch(){
+      this.searchform.user="";
+      this.setusername(this.searchform.user)
+      this.searchform.problem="";
+      this.searchform.language="";
+      this.searchform.result="";
+      this.timer()
+      this.creattimer();
+    },
     handleSizeChange(val) {
       if (!this.username) this.username = this.$route.query.username;
       this.contest = this.$route.params.contestID;
@@ -211,8 +341,8 @@ export default {
             this.pagesize +
             "&offset=" +
             (this.currentpage - 1) * this.pagesize +
-            "&contest=" +
-            this.contest
+            "&problem=" + this.searchform.problem +"&language=" + this.searchform.language +
+            "&result=" + this.searchform.result+"&contest=" + this.contest
         )
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {
@@ -287,8 +417,8 @@ export default {
             this.pagesize +
             "&offset=" +
             (this.currentpage - 1) * this.pagesize +
-            "&contest=" +
-            this.contest
+            "&problem=" + this.searchform.problem +"&language=" + this.searchform.language +
+            "&result=" + this.searchform.result+"&contest=" + this.contest
         )
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {
@@ -413,8 +543,8 @@ export default {
             this.pagesize +
             "&offset=" +
             (this.currentpage - 1) * this.pagesize +
-            "&contest=" +
-            this.contest
+            "&problem=" + this.searchform.problem +"&language=" + this.searchform.language +
+            "&result=" + this.searchform.result+"&contest=" + this.contest
         )
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {
@@ -490,6 +620,7 @@ export default {
       }
     },
     creattimer(){
+      clearInterval(this.$store.state.timer);
       this.$store.state.timer = setInterval(this.timer, 3000);
     }
   },
@@ -510,9 +641,16 @@ export default {
       contest: "",
       showall: false,
       dialogVisible: false,
+      searchdialogVisible:false,
       code: "",
       compilemsg: "",
-      dialogdata: []
+      dialogdata: [],
+      searchform:{
+        user:"",
+        result:"",
+        problem:"",
+        language:"",
+      }
     };
   },
   destroyed() {

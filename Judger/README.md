@@ -26,7 +26,7 @@
     PRESENTATION_ERROR = -5
     COMPILE_ERROR = -4
     WRONG_ANSWER = -3
-    PENDDING = -1
+    PENDING = -1
     JUDGINNG = -2
     SUCCESS = 0 (this only means the process exited normally)
     CPU_TIME_LIMIT_EXCEEDED = 1

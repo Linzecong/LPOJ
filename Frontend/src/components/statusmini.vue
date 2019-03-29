@@ -1,6 +1,6 @@
 <template>
   <el-row>
-    <el-dialog :visible.sync="dialogVisible" width="80%">
+    <el-dialog :visible.sync="dialogVisible" width="80%" append-to-body="true">
       <el-alert
         title="编译结果"
         :type="compilemsg=='编译成功！'?'success':'warning'"
@@ -56,7 +56,7 @@
       size="mini"
     >
       <el-table-column prop="id" label="ID" :width="50"></el-table-column>
-      <el-table-column prop="result" label="Status" :width="135">
+      <el-table-column prop="result" label="Status" :width="150">
         <template slot-scope="scope">
           <el-tag size="mini" :type="statuetype(scope.row.result)" disable-transitions hit>
             {{ scope.row.result }}
@@ -65,7 +65,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="submittime" align="right">
-          <template slot="header" slot-scope="scope">
+          <template slot="header" slot-scope="scrop">
         <el-button
           size="mini"
           @click="setstatus(false)" type="primary">刷新</el-button>
@@ -202,8 +202,8 @@ export default {
       if (type == "System Error") return false;
       return false;
     },
-    setstatus(problem) {
-        console.log(problem)
+    setstatus(problem,username) {
+        //console.log(problem)
         if(this.$route.params.contestID){
             var contest=this.$route.params.contestID;
             if(problem!=false)
@@ -213,8 +213,11 @@ export default {
             this.problem = this.$route.query.problemID;
             var contest=""
         }
-        
-      var user=localStorage.username;
+      
+      if(!username)
+        var user=localStorage.username;
+      else
+        var user=username
       if(user=='')
         user="|)#"
 

@@ -7,6 +7,7 @@ from rest_framework import routers
 
 routers = routers.DefaultRouter()
 routers.register('judgestatus', views.JudgeStatusView)
+routers.register('judgestatusdistinct', views.JudgeStatusDistinctView)
 routers.register('judgestatusput', views.JudgeStatusPutView)
 routers.register('judgestatuscode', views.JudgeStatusCodeView)
 routers.register('casestatus', views.CaseStatusView)
