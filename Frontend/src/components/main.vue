@@ -5,7 +5,7 @@
         <el-card>
           <h3>{{ msg }}</h3>
           <h3>当前版本：1.1</h3>
-          <h3>支持语言：C/C++</h3>
+          <h3>支持语言：C/C++/Java</h3>
         </el-card>
         <el-card style="margin-top:10px">
           <h3>Top User</h3>

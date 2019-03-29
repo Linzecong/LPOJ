@@ -43,6 +43,44 @@ def reconnect():
 reconnect()
 
 
+def judgeJava(timelimit, memorylimit, inputpath, outputpath, errorpath):
+
+    com1 = "/usr/bin/time -f '"+"%"+"U' -o %stime.txt " % (judgername)
+    com2 = "timeout %s java -cp %s -Xss1M -XX:MaxPermSize=16M -XX:PermSize=8M -Xms16M -Xmx%sM -Djava.security.manager -Djava.security.policy==policy -Djava.awt.headless=true Main 1>%s 2>%s<%s" % (
+        str(timelimit/1000.0), judgername,memorylimit, outputpath, errorpath, inputpath)
+    com = com1 + com2
+    #print(com)
+    result = os.system(com)
+
+    ret = dict()
+
+    if result == 0:
+        tf = open(judgername+"time.txt", "r")
+        time = tf.read()
+        #print(time)
+        time = float(str(time).strip())*1000
+        ret["cpu_time"] = int(time)
+        ret["memory"] = 5201314
+        ret["result"] = 0
+        ret["exit_code"] = result
+        ret["signal"] = 0
+    elif result == 31744:
+        
+        ret["cpu_time"] = timelimit
+        ret["memory"] = 5201314
+        ret["result"] = 1
+        ret["exit_code"] = result
+        ret["signal"] = 0
+    else:
+        ret["cpu_time"] = 0
+        ret["memory"] = 5201314
+        ret["result"] = 4
+        ret["exit_code"] = result
+        ret["signal"] = 0
+
+    return ret
+
+
 def judge(id, code, lang, problem, contest, username, submittime, contestproblem):
     global statue, cursor
     contest = int(contest)
@@ -117,6 +155,30 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 db.rollback()
                 statue = True
             return
+    elif lang == "Java":
+        file = open("Main.java", "w")
+        file.write(code)
+        file.close()
+
+        isExists = os.path.exists(judgername)
+        if not isExists:
+            os.makedirs(judgername)
+
+        result = os.system("javac Main.java -d %s" %
+                           (judgername))
+
+        if result:
+            try:
+                cursor.execute(
+                    "UPDATE judgestatus_judgestatus SET result = '-4',message='%s' WHERE id = '%s'" % (result, id))
+                cursor.execute(
+                    "UPDATE problem_problemdata SET ce = ce+1 WHERE problem = '%s'" % problem)
+                db.commit()
+                statue = True
+            except:
+                db.rollback()
+                statue = True
+            return
     else:
         try:
             cursor.execute(
@@ -167,45 +229,52 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
 
     for filename in newfiles:
         print("judging!!!!!!", id, "/%s/%s.in" % (problem, filename))
-        ret = _judger.run(max_cpu_time=timelimit,
-                    max_real_time=_judger.UNLIMITED,
-                    max_memory=memorylimit * 1024 * 1024,
-                    max_process_number=200,
-                    max_output_size=32 * 1024 * 1024,
-                    max_stack=32 * 1024 * 1024,
-                    # five args above can be _judger.UNLIMITED
-                    exe_path=judgername+".out",
-                    input_path="../DataServer/problemdata/%s/%s.in" % (
-                        problem, filename),
-                    output_path=judgername+"temp.out",
-                    error_path=judgername+"error.out",
-                    args=[],
-                    # can be empty list
-                    env=[],
-                    log_path=judgername+"judger.log",
-                    # can be None
-                    seccomp_rule_name="c_cpp",
-                    uid=0,
-                    gid=0
-                    )
+        if lang == "Java":
+            ret = judgeJava(timelimit*1.5, memorylimit, "../DataServer/problemdata/%s/%s.in" % (
+                            problem, filename), judgername+"temp.out", judgername+"error.out")
+        else:
+            ret = _judger.run(max_cpu_time=timelimit,
+                              max_real_time=_judger.UNLIMITED,
+                              max_memory=memorylimit * 1024 * 1024,
+                              max_process_number=200,
+                              max_output_size=32 * 1024 * 1024,
+                              max_stack=32 * 1024 * 1024,
+                              # five args above can be _judger.UNLIMITED
+                              exe_path=judgername+".out",
+                              input_path="../DataServer/problemdata/%s/%s.in" % (
+                                  problem, filename),
+                              output_path=judgername+"temp.out",
+                              error_path=judgername+"error.out",
+                              args=[],
+                              # can be empty list
+                              env=[],
+                              log_path=judgername+"judger.log",
+                              # can be None
+                              seccomp_rule_name="c_cpp",
+                              uid=0,
+                              gid=0
+                              )
+
         print(ret)
         maxmemory = max(ret["memory"], maxmemory)
         maxtime = max(ret["cpu_time"], maxtime)
 
-        useroutputdata =""
-        outputdata=""
-        casedata=""
+        useroutputdata = ""
+        outputdata = ""
+        casedata = ""
         if contest is 0:
             try:
                 # 计算case
-                inputfile = open("../DataServer/problemdata/%s/%s.in"%(problem, filename), "r")
+                inputfile = open("../DataServer/problemdata/%s/%s.in" %
+                                 (problem, filename), "r")
                 casedata = inputfile.read(400)
                 tmpstr = inputfile.read(10)
                 if tmpstr != "":
                     casedata = casedata + '\n......'
                 inputfile.close()
 
-                outputfile = open("../DataServer/problemdata/%s/%s.out"%(problem, filename), "r")
+                outputfile = open(
+                    "../DataServer/problemdata/%s/%s.out" % (problem, filename), "r")
                 outputdata = outputfile.read(400)
                 tmpstr = outputfile.read(10)
                 if tmpstr != "":
@@ -220,8 +289,6 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 useroutputfile.close()
             except:
                 ret["result"] = 5
-        
-            
 
         if ret["result"] != 0:
             if (ret["result"] == 4 and ret["exit_code"] == 127 and ret["signal"] == 0) or (ret["result"] == 4 and ret["exit_code"] == 0 and ret["signal"] == 31):
@@ -231,7 +298,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                     mytestcase = filename
                     mytime = ret["cpu_time"]
                     mymemory = ret["memory"]
-                cursor.execute("INSERT into judgestatus_casestatus (statusid,username,problem,result,time,memory,testcase,casedata,outputdata,useroutput) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) " , (
+                cursor.execute("INSERT into judgestatus_casestatus (statusid,username,problem,result,time,memory,testcase,casedata,outputdata,useroutput) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ", (
                     id,
                     username,
                     problem,
@@ -261,7 +328,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 if ret["result"] == 5:
                     resultstr = 'System Error'
 
-                cursor.execute("INSERT into judgestatus_casestatus (statusid,username,problem,result,time,memory,testcase,casedata,outputdata,useroutput) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ",(
+                cursor.execute("INSERT into judgestatus_casestatus (statusid,username,problem,result,time,memory,testcase,casedata,outputdata,useroutput) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ", (
                     id,
                     username,
                     problem,
@@ -272,15 +339,16 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                     casedata,
                     outputdata,
                     useroutputdata
-                ) )
+                ))
 
                 db.commit()
-                
+
         else:
             file1 = open(judgername+"temp.out", "r")
-            file2 = open("../DataServer/problemdata/%s/%s.out" % (problem,filename), "r")
+            file2 = open("../DataServer/problemdata/%s/%s.out" %
+                         (problem, filename), "r")
 
-            result = 0 # 0 ac -3 wrong -5 presentation
+            result = 0  # 0 ac -3 wrong -5 presentation
 
             stdout = ""
             answer = ""
@@ -290,7 +358,6 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                     std = file1.readline()
                     ans = file2.readline()
 
-                    
                     if std == "" and ans == "":
                         break
 
@@ -299,18 +366,18 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
 
                     stdout = stdout + std
                     answer = answer + ans
-                    
+
                     if std != ans:
                         result = -3
                 except:
-                    result=-3
-                    stdout="1"
-                    answer="0"
+                    result = -3
+                    stdout = "1"
+                    answer = "0"
                     break
-            
+
             if stdout == answer and result == -3:
                 result = -5
-            
+
             file1.close()
             file2.close()
 
@@ -327,7 +394,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 if result == -3:
                     resultstr = 'Wrong Answer'
 
-                cursor.execute("INSERT into judgestatus_casestatus (statusid,username,problem,result,time,memory,testcase,casedata,outputdata,useroutput) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ",(
+                cursor.execute("INSERT into judgestatus_casestatus (statusid,username,problem,result,time,memory,testcase,casedata,outputdata,useroutput) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ", (
                     id,
                     username,
                     problem,
@@ -338,11 +405,11 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                     casedata,
                     outputdata,
                     useroutputdata
-                ) )
+                ))
 
                 db.commit()
             else:
-                cursor.execute("INSERT into judgestatus_casestatus (statusid,username,problem,result,time,memory,testcase,casedata,outputdata,useroutput) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ",(
+                cursor.execute("INSERT into judgestatus_casestatus (statusid,username,problem,result,time,memory,testcase,casedata,outputdata,useroutput) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ", (
                     id,
                     username,
                     problem,
@@ -353,55 +420,70 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                     casedata,
                     outputdata,
                     useroutputdata
-                ) )
+                ))
                 db.commit()
-                
-    if myresult == 100:
-        cursor.execute("UPDATE judgestatus_judgestatus SET memory =%d, time=%d, result = 0  WHERE id = '%s'" % (maxmemory/1024/1024,maxtime, id))
-        cursor.execute("UPDATE problem_problemdata SET ac = ac+1 WHERE problem = '%s'" % problem)
-        if acscore == False:
-            cursor.execute("UPDATE user_userdata SET score = score+%d WHERE username = '%s'" % (score,username) )
-            cursor.execute("UPDATE user_userdata SET ac = ac+1 WHERE username = '%s'" % username)
-        if contest is not 0:
-            cursor.execute("UPDATE contest_contestboard SET type =1 WHERE submitid = '%s'" %  id)
-            if acornot == False:
-                li[contestproblem]=str(submittime)+"$"+ str(li[contestproblem])
-                sta = '|'.join(str(i) for i in li)
-                cursor.execute("UPDATE  contest_contestrank  SET statue = '%s' where username = '%s'  and contestid = %d" % (sta,username,contest))
-    else:
-            cursor.execute("UPDATE judgestatus_judgestatus SET memory =%d, time=%d, result = '%s',testcase='%s'  WHERE id = '%s'" % (mymemory/1024/1024,mytime,myresult,mytestcase, id))
-                
-            if myresult== '2' or myresult == '1':
-                cursor.execute("UPDATE problem_problemdata SET tle = tle+1 WHERE problem = '%s'" % problem)
-            if myresult == '3':
-                cursor.execute("UPDATE problem_problemdata SET mle = mle+1 WHERE problem = '%s'" % problem)
-            if myresult == '4':
-                cursor.execute("UPDATE problem_problemdata SET rte = rte+1 WHERE problem = '%s'" % problem)
-            if myresult == '5':
-                cursor.execute("UPDATE problem_problemdata SET se = se+1 WHERE problem = '%s'" % problem)
-            if myresult == '-5':
-                 cursor.execute("UPDATE problem_problemdata SET pe = pe+1 WHERE problem = '%s'" % problem)
-            if myresult == '-3':
-                 cursor.execute("UPDATE problem_problemdata SET wa = wa+1 WHERE problem = '%s'" % problem)
 
-            if contest is not 0:
-                cursor.execute("UPDATE contest_contestboard SET type =0  WHERE submitid = '%s'" %  id)
-                if acornot == False:
-                    li[contestproblem]=int(li[contestproblem])
-                    li[contestproblem] = li[contestproblem]-1
-                    sta = '|'.join(str(i) for i in li)
-                    print(contest)
-                    cursor.execute("UPDATE  contest_contestrank  SET statue = '%s' where username = '%s'  and contestid = %d" % (sta,username,contest))
+    if myresult == 100:
+        cursor.execute("UPDATE judgestatus_judgestatus SET memory =%d, time=%d, result = 0  WHERE id = '%s'" % (
+            maxmemory/1024/1024, maxtime, id))
+        cursor.execute(
+            "UPDATE problem_problemdata SET ac = ac+1 WHERE problem = '%s'" % problem)
+        if acscore == False:
+            cursor.execute(
+                "UPDATE user_userdata SET score = score+%d WHERE username = '%s'" % (score, username))
+            cursor.execute(
+                "UPDATE user_userdata SET ac = ac+1 WHERE username = '%s'" % username)
+        if contest is not 0:
+            cursor.execute(
+                "UPDATE contest_contestboard SET type =1 WHERE submitid = '%s'" % id)
+            if acornot == False:
+                li[contestproblem] = str(
+                    submittime)+"$" + str(li[contestproblem])
+                sta = '|'.join(str(i) for i in li)
+                cursor.execute("UPDATE  contest_contestrank  SET statue = '%s' where username = '%s'  and contestid = %d" % (
+                    sta, username, contest))
+    else:
+        cursor.execute("UPDATE judgestatus_judgestatus SET memory =%d, time=%d, result = '%s',testcase='%s'  WHERE id = '%s'" % (
+            mymemory/1024/1024, mytime, myresult, mytestcase, id))
+
+        if myresult == '2' or myresult == '1':
+            cursor.execute(
+                "UPDATE problem_problemdata SET tle = tle+1 WHERE problem = '%s'" % problem)
+        if myresult == '3':
+            cursor.execute(
+                "UPDATE problem_problemdata SET mle = mle+1 WHERE problem = '%s'" % problem)
+        if myresult == '4':
+            cursor.execute(
+                "UPDATE problem_problemdata SET rte = rte+1 WHERE problem = '%s'" % problem)
+        if myresult == '5':
+            cursor.execute(
+                "UPDATE problem_problemdata SET se = se+1 WHERE problem = '%s'" % problem)
+        if myresult == '-5':
+            cursor.execute(
+                "UPDATE problem_problemdata SET pe = pe+1 WHERE problem = '%s'" % problem)
+        if myresult == '-3':
+            cursor.execute(
+                "UPDATE problem_problemdata SET wa = wa+1 WHERE problem = '%s'" % problem)
+
+        if contest is not 0:
+            cursor.execute(
+                "UPDATE contest_contestboard SET type =0  WHERE submitid = '%s'" % id)
+            if acornot == False:
+                li[contestproblem] = int(li[contestproblem])
+                li[contestproblem] = li[contestproblem]-1
+                sta = '|'.join(str(i) for i in li)
+                print(contest)
+                cursor.execute("UPDATE  contest_contestrank  SET statue = '%s' where username = '%s'  and contestid = %d" % (
+                    sta, username, contest))
 
     db.commit()
     statue = True
-    
-             
+
 
 while True:
     sleep(1)
     try:
-        data = clientsocket.recv(1024)  
+        data = clientsocket.recv(1024)
         data = data.decode("utf-8")
         if data:
             if data == "getstatue":
@@ -414,18 +496,21 @@ while True:
             elif data.find("judge") != -1:
                 statue = False
                 tp = data.split("|")
-                cursor.execute("SELECT * from judgestatus_judgestatus where id = '%s'" % tp[1])
+                cursor.execute(
+                    "SELECT * from judgestatus_judgestatus where id = '%s'" % tp[1])
                 data = cursor.fetchone()
-                
+
                 try:
-                    cursor.execute("UPDATE judgestatus_judgestatus SET result = '-2',judger='%s' WHERE id = '%s'" % (judgername,tp[1]))
+                    cursor.execute(
+                        "UPDATE judgestatus_judgestatus SET result = '-2',judger='%s' WHERE id = '%s'" % (judgername, tp[1]))
                     db.commit()
-                    t = threading.Thread(target=judge,args=(data[0], data[13], data[8], data[3],data[11],data[1],data[9],data[12]))
+                    t = threading.Thread(target=judge, args=(
+                        data[0], data[13], data[8], data[3], data[11], data[1], data[9], data[12]))
                     t.setDaemon(True)
                     t.start()
                 except:
-                   db.rollback()
-                   statue = True
+                    db.rollback()
+                    statue = True
         else:
             reconnect()
     except socket.error:

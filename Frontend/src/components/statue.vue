@@ -73,6 +73,8 @@
           <el-select v-model="searchform.language" placeholder="请选择">
                 <el-option key="C++" label="C++" value="C++"></el-option>
                 <el-option key="C" label="C" value="C"></el-option>
+                <el-option key="Java" label="Java" value="Java"></el-option>
+                
           </el-select>
         </el-form-item>
         <el-form-item label="结果：">

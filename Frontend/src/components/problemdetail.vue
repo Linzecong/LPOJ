@@ -59,6 +59,7 @@
               <el-select v-model="language" placeholder="请选择">
                 <el-option key="C++" label="C++" value="C++"></el-option>
                 <el-option key="C" label="C" value="C"></el-option>
+                <el-option key="Java" label="Java" value="Java"></el-option>
               </el-select>
             </el-col>
             <el-col :span="3">

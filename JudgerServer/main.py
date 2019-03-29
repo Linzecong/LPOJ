@@ -40,9 +40,10 @@ def getSubmition():
     db.close()
 
 
-def deal_client(newSocket: socket, addr):
+def deal_client(newSocket: socket, addr,fir):
     global mutex, queue
     statue = False
+    cursor = db.cursor()
     while True:
         sleep(1)
         if mutex.acquire():
@@ -50,7 +51,18 @@ def deal_client(newSocket: socket, addr):
                 if statue == True and len(queue) > 0:
                     id = queue.pop()
                     statue = False
-                    newSocket.send(("judge|%d" % id).encode("utf-8"))
+                    # 只允许一个测评机测JAVA，否则时间会判断失败
+                    
+                    cursor.execute(
+                        "SELECT language from judgestatus_judgestatus where id = '%d'"%(id))
+                    data = cursor.fetchall()
+                    print(data[0][0])
+                    if data[0][0] == "Java" and fir==True:
+                        newSocket.send(("judge|%d" % id).encode("utf-8"))
+                    elif data[0][0] != "Java":
+                        newSocket.send(("judge|%d" % id).encode("utf-8"))
+                    else:
+                        queue.append(id)
                 else:
                     newSocket.send("getstatue".encode("utf-8"))
                     data = newSocket.recv(1024)
@@ -121,9 +133,11 @@ t1.setDaemon(True)
 t1.start()
 
 
+fir=True
 while True:
     newSocket, addr = server.accept()
     print("client [%s] is connected!" % str(addr))
-    client = threading.Thread(target=deal_client, args=(newSocket, addr))
+    client = threading.Thread(target=deal_client, args=(newSocket, addr,fir))
+    fir=False
     client.setDaemon(True)
     client.start()

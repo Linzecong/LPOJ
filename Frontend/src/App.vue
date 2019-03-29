@@ -165,7 +165,7 @@
             <div style="text-align:center;margin:5px;">用户名</div>
           </el-col>
           <el-col :span="12">
-            <el-input v-model="form.username" autocomplete="off"></el-input>
+            <el-input v-model="form.username" autocomplete="off" :autofocus="true"></el-input>
           </el-col>
         </el-row>
         <el-row :gutter="10">
