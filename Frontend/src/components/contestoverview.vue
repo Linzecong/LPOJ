@@ -331,11 +331,20 @@ export default {
       if (this.left < 0) this.timestyle = "wait";
       else this.timestyle = "begin";
 
-      if (this.left >= this.lasttime && isNaN(this.left) == false&& this.$store.state.contestisend==false) {
+      if(this.$store.state.contestisend==false){
+
+      
+      if (this.left >= this.lasttime && isNaN(this.left) == false) {
         this.left = this.lasttime;
         this.timestyle = "end";
         this.$store.state.contestisend = true;
         this.$router.go(0);
+      }
+      }
+      else{
+        this.left = this.lasttime;
+        this.timestyle = "end";
+        this.$store.state.contestisend = true;
       }
 
       var t = Math.abs(this.left);

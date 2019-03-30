@@ -35,7 +35,7 @@ def getSubmition():
                 db.commit()
             except:
                 db.rollback()
-            queue.sort(reverse=True)
+            #queue.sort(reverse=True)
             mutex.release()
     db.close()
 
