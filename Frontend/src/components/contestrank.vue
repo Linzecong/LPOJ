@@ -76,6 +76,8 @@ export default {
       return String.fromCharCode(val + A.charCodeAt());
     },
     cellclick(row, column, cell, event){
+      if(column.property.length>1)
+        return
       var A = "A";
       this.statusdata.user  = row.user;
       this.statusdata.problemid = this.problemids[column.property.charCodeAt() - A.charCodeAt()]

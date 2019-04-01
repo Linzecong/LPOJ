@@ -51,13 +51,13 @@ export default {
             },
           axisLabel: {
             interval: 0,
-            rotate: -80
+            rotate: -60
           }
         },
         yAxis: {
           type: "value",
           min:0,
-          interval: 20
+          interval: 300
         },
         series: this.series
       });

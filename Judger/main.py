@@ -120,13 +120,16 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
         file = open("%s.c" % judgername, "w")
         file.write(code)
         file.close()
-        result = os.system("gcc %s.c -o %s.out -O2 -std=c11" %
-                           (judgername, judgername))
+        result = os.system("gcc %s.c -o %s.out -O2 -std=c11 2>%sce.txt" %
+                           (judgername, judgername,judgername))
         # print(result)
         if result:
             try:
+                filece = open("%sce.txt" % judgername, "r")
+                msg = str(filece.read())
+                filece.close()
                 cursor.execute(
-                    "UPDATE judgestatus_judgestatus SET result = '-4',message='%s' WHERE id = '%s'" % (result, id))
+                    "UPDATE judgestatus_judgestatus SET result = '-4',message='%s' WHERE id = '%s'" % (msg, id))
                 cursor.execute(
                     "UPDATE problem_problemdata SET ce = ce+1 WHERE problem = '%s'" % problem)
                 db.commit()
@@ -140,13 +143,16 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
         file = open("%s.cpp" % judgername, "w")
         file.write(code)
         file.close()
-        result = os.system("g++ %s.cpp -o %s.out -O2 -std=c++11" %
-                           (judgername, judgername))
+        result = os.system("g++ %s.cpp -o %s.out -O2 -std=c++11 2>%sce.txt" %
+                           (judgername, judgername,judgername))
         # print(result)
         if result:
             try:
+                filece = open("%sce.txt" % judgername, "r")
+                msg = str(filece.read())
+                filece.close()
                 cursor.execute(
-                    "UPDATE judgestatus_judgestatus SET result = '-4',message='%s' WHERE id = '%s'" % (result, id))
+                    "UPDATE judgestatus_judgestatus SET result = '-4',message='%s' WHERE id = '%s'" % (msg, id))
                 cursor.execute(
                     "UPDATE problem_problemdata SET ce = ce+1 WHERE problem = '%s'" % problem)
                 db.commit()
@@ -164,13 +170,16 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
         if not isExists:
             os.makedirs(judgername)
 
-        result = os.system("javac Main.java -d %s" %
-                           (judgername))
+        result = os.system("javac Main.java -d %s 2>%sce.txt" %
+                           (judgername,judgername))
 
         if result:
             try:
+                filece = open("%sce.txt" % judgername, "r")
+                msg = str(filece.read())
+                filece.close()
                 cursor.execute(
-                    "UPDATE judgestatus_judgestatus SET result = '-4',message='%s' WHERE id = '%s'" % (result, id))
+                    "UPDATE judgestatus_judgestatus SET result = '-4',message='%s' WHERE id = '%s'" % (msg, id))
                 cursor.execute(
                     "UPDATE problem_problemdata SET ce = ce+1 WHERE problem = '%s'" % problem)
                 db.commit()
@@ -515,8 +524,8 @@ while True:
             reconnect()
     except socket.error:
         reconnect()
-    except:
-        print("error!")
+    except Exception as e:
+        print(e)
         break
 
 
