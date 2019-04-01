@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from .serializers import BoardSerializer,OthersSubmitSerializer,DailyBoardSerializer
+from .serializers import BoardSerializer,OthersSubmitSerializer,DailyBoardSerializer,TeamBoardSerializer
 from .permission import ManagerOnly
-from .models import Board,OthersSubmit,DailyBoard
+from .models import Board,OthersSubmit,DailyBoard,TeamBoard
 from rest_framework.pagination import LimitOffsetPagination
 import datetime
 
@@ -26,3 +26,12 @@ class OthersSubmitView(viewsets.ModelViewSet):
     serializer_class = OthersSubmitSerializer
     filter_fields = ('username','accepted')
     pagination_class = LimitOffsetPagination
+
+class TeamBoardView(viewsets.ModelViewSet):
+    queryset = TeamBoard.objects.all()
+    serializer_class = TeamBoardSerializer
+    filter_fields = ('teammember','collecttime')
+    pagination_class = LimitOffsetPagination
+    permission_classes = (ManagerOnly,)
+
+

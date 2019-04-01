@@ -18,9 +18,16 @@
       </el-row>
     </el-col>
     <el-col :span="18">
-      <el-card>
-        <rankchart></rankchart>
-      </el-card>
+      <el-tabs type="border-card">
+  <el-tab-pane label="队伍"><teamchart></teamchart></el-tab-pane>
+  <el-tab-pane label="个人" :lazy="true"><rankchart></rankchart></el-tab-pane>
+  <el-tab-pane label="规则" :lazy="true">
+
+    
+
+  </el-tab-pane>
+</el-tabs>
+
       <el-card style="margin-top:10px">
         <center>
           <h3>近期比赛</h3>
@@ -54,9 +61,11 @@
 <script>
 import moment from "moment";
 import rankchart from "@/components/rankchart";
+import teamchart from "@/components/teamchart";
 export default {
   components: {
-    rankchart
+    rankchart,
+    teamchart
   },
   name: "main",
   data() {
