@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from rest_framework import serializers
-from .models import Board,OthersSubmit,DailyBoard,TeamBoard
+from .models import Board,OthersSubmit,DailyBoard,TeamBoard,DailyContestBoard
 
 class BoardSerializer(serializers.ModelSerializer):
     class Meta:
@@ -21,4 +21,9 @@ class OthersSubmitSerializer(serializers.ModelSerializer):
 class TeamBoardSerializer(serializers.ModelSerializer):
     class Meta:
         model = TeamBoard
+        fields = '__all__'
+
+class DailyContestBoardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DailyContestBoard
         fields = '__all__'

@@ -52,3 +52,21 @@ class TeamBoard(models.Model):
 
     def __str__(self):
         return self.teammember
+
+
+
+
+class DailyContestBoard(models.Model):
+
+    contestdate = models.DateField(auto_now=True)
+    teammember = models.CharField(max_length=100)
+    problemcount = models.IntegerField(default=0)
+    wronglist = models.CharField(max_length=1000) # A|B|C|F
+    wrongtime = models.CharField(max_length=1000) # 0|0|1|0  没AC必为0
+    aclist = models.CharField(max_length=1000) # A|B|C|F
+    actime = models.CharField(max_length=1000) # 00:10:50|0|0|0  没AC必为0
+
+    objects = models.Manager()
+
+    def __str__(self):
+        return self.teammember

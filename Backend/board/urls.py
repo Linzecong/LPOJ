@@ -10,6 +10,7 @@ routers.register('board', views.BoardView)
 routers.register('otherssubmit', views.OthersSubmitView)
 routers.register('dailyboard', views.DailyBoardView)
 routers.register('teamboard', views.TeamBoardView)
+routers.register('dailycontestboard', views.DailyContestBoardView)
 
 urlpatterns = [
     url('', include(routers.urls)),
