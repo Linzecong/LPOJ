@@ -18,8 +18,8 @@ class ContestAnnouncementView(viewsets.ModelViewSet):
     serializer_class = ContestAnnouncementSerializer
     pagination_class = LimitOffsetPagination
     permission_classes = (ManagerOnly,)
-    # filter_backends = (DjangoFilterBackend,)
-    # filter_fields = ('user', 'result', "contest")
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ("contestid",)
 
 class ContestBoardView(viewsets.ModelViewSet):
     queryset = ContestBoard.objects.all()
@@ -41,9 +41,8 @@ class ContestCommentView(viewsets.ModelViewSet):
     queryset = ContestComment.objects.all()
     serializer_class = ContestCommentSerializer
     pagination_class = LimitOffsetPagination
-    permission_classes = (ManagerOnly,)
-    # filter_backends = (DjangoFilterBackend,)
-    # filter_fields = ('user', 'result', "contest")
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ("contestid",)
 
 class ContestInfoView(viewsets.ModelViewSet):
     queryset = ContestInfo.objects.all()

@@ -54,3 +54,17 @@ class NoContestOnly(permissions.BasePermission):
             return True
         else:
             return False
+
+class AdminOnly(permissions.BasePermission):
+
+    def has_permission(self, request, view):
+        if request.session.get('type', 1) == 3 :
+            return True
+        else:
+            return False
+
+    def has_object_permission(self, request, view, blog):
+        if request.session.get('type', 1) == 3 :
+            return True
+        else:
+            return False

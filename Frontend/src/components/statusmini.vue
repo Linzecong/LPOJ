@@ -1,6 +1,6 @@
 <template>
   <el-row>
-    <el-dialog :visible.sync="dialogVisible" width="80%" append-to-body="true">
+    <el-dialog :visible.sync="dialogVisible" width="80%" :append-to-body="true">
       <el-alert
         title="编译结果"
         :type="compilemsg=='编译成功！'?'success':'warning'"
@@ -9,10 +9,14 @@
         show-icon
         :show-close="false"
       ></el-alert>
-      <el-alert title="你的代码：" type="info" :closable="false"><el-button size="mini"
-        v-clipboard:copy="code"
-        v-clipboard:success="onCopy"
-        v-clipboard:error="onError">Copy</el-button></el-alert>
+      <el-alert title="你的代码：" type="info" :closable="false">
+        <el-button
+          size="mini"
+          v-clipboard:copy="code"
+          v-clipboard:success="onCopy"
+          v-clipboard:error="onError"
+        >Copy</el-button>
+      </el-alert>
       <codemirror v-model="code" :options="cmOptions"></codemirror>
 
       <el-alert
@@ -65,11 +69,10 @@
         </template>
       </el-table-column>
       <el-table-column prop="submittime" align="right">
-          <template slot="header" slot-scope="scrop">
-        <el-button
-          size="mini"
-          @click="setstatus(false)" type="primary">刷新</el-button>
-      </template></el-table-column>
+        <template slot="header" slot-scope="scrop">
+          <el-button size="mini" @click="setstatus(false)" type="primary">刷新</el-button>
+        </template>
+      </el-table-column>
     </el-table>
   </el-row>
 </template>
@@ -116,12 +119,12 @@ export default {
     codemirror
   },
   methods: {
-      onCopy(e){
-       this.$message.success("复制成功！");
+    onCopy(e) {
+      this.$message.success("复制成功！");
     },
     // 复制失败
-    onError(e){
-      this.$message.error("复制失败："+e);
+    onError(e) {
+      this.$message.error("复制失败：" + e);
     },
     rowClick(row, col, e) {
       if (row.message + "" == "0") this.compilemsg = "编译成功！";
@@ -202,27 +205,30 @@ export default {
       if (type == "System Error") return false;
       return false;
     },
-    setstatus(problem,username) {
-        //console.log(problem)
-        if(this.$route.params.contestID){
-            var contest=this.$route.params.contestID;
-            if(problem!=false)
-                this.problem=problem
-        }
-        else{
-            this.problem = this.$route.query.problemID;
-            var contest=""
-        }
-      
-      if(!username)
-        var user=localStorage.username;
-      else
-        var user=username
-      if(user=='')
-        user="|)#"
+    setstatus(problem, username) {
+      this.tableData=[]
+      //console.log(problem)
+      if (this.$route.params.contestID) {
+        var contest = this.$route.params.contestID;
+        if (problem != false) this.problem = problem;
+      } else {
+        this.problem = this.$route.query.problemID;
+        var contest = "";
+      }
+
+      if (!username) var user = localStorage.username;
+      else var user = username;
+      if (user == "") user = "|)#";
 
       this.$axios
-        .get("/judgestatus/?user=" + user + "&problem=" + this.problem+"&contest="+contest)
+        .get(
+          "/judgestatus/?user=" +
+            user +
+            "&problem=" +
+            this.problem +
+            "&contest=" +
+            contest
+        )
         .then(response => {
           for (var i = 0; i < response.data.length; i++) {
             var testcase = response.data[i]["testcase"];
@@ -240,14 +246,13 @@ export default {
             }
 
             if (response.data[i]["result"] == "-3")
-              response.data[i]["result"] = "Wrong Answer"
+              response.data[i]["result"] = "Wrong Answer";
 
             if (response.data[i]["result"] == "-4")
               response.data[i]["result"] = "Compile Error";
 
             if (response.data[i]["result"] == "-5")
-              response.data[i]["result"] =
-                "Presentation Error"
+              response.data[i]["result"] = "Presentation Error";
 
             if (response.data[i]["result"] == "-6") {
               response.data[i]["result"] = "Waiting";
@@ -257,19 +262,16 @@ export default {
               response.data[i]["result"] = "Accepted";
 
             if (response.data[i]["result"] == "1")
-              response.data[i]["result"] =
-                "Time Limit Exceeded"
+              response.data[i]["result"] = "Time Limit Exceeded";
 
             if (response.data[i]["result"] == "2")
-              response.data[i]["result"] =
-                "Time Limit Exceeded"
+              response.data[i]["result"] = "Time Limit Exceeded";
 
             if (response.data[i]["result"] == "3")
-              response.data[i]["result"] =
-                "Memory Limit Exceeded"
+              response.data[i]["result"] = "Memory Limit Exceeded";
 
             if (response.data[i]["result"] == "4")
-              response.data[i]["result"] = "Runtime Error"
+              response.data[i]["result"] = "Runtime Error";
 
             if (response.data[i]["result"] == "5")
               response.data[i]["result"] = "System Error";
@@ -295,13 +297,12 @@ export default {
       compilemsg: "",
       dialogdata: [],
 
-      problem:-1,
+      problem: -1
     };
   },
   created() {
-    if(this.$route.params.contestID)
-    return;
-        this.setstatus(false);
+    if (this.$route.params.contestID) return;
+    this.setstatus(false);
   }
 };
 </script>

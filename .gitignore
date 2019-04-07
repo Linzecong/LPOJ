@@ -18,3 +18,5 @@ migrations
 *.exe
 .vscode
 *.class
+# GDUFSTeamScore.py
+# GDUFSTeamExport.py
