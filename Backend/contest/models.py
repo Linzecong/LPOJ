@@ -76,10 +76,10 @@ class ContestComment(models.Model):
     contestid = models.IntegerField()
     user = models.CharField(max_length=50)
     title = models.CharField(max_length=50,default="提问")
-    problem = models.IntegerField(default=0) # 对哪个题目提问
-    message = models.CharField(max_length=50)
-    huifu = models.IntegerField(default=0) # 0代表是提问，其他数字代表回复了哪个提问
-    time = models.DateTimeField()
+    problem = models.CharField(default='ALL',max_length=500) # 对哪个题目提问
+    message = models.CharField(max_length=500)
+    huifu = models.CharField(default="暂无回复",max_length=500) # 0代表是提问，其他数字代表回复了哪个提问
+    time = models.DateTimeField(auto_now=True)
 
     objects = models.Manager()
 

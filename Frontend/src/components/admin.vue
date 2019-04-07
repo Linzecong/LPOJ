@@ -8,6 +8,7 @@
     <el-tab-pane label="题目修改"><adminchangepro></adminchangepro></el-tab-pane>
     <el-tab-pane label="比赛设置"><adminchangecontest></adminchangecontest></el-tab-pane>
     <el-tab-pane label="管理用户" :disabled="!isadmin"><adminmanageuser></adminmanageuser></el-tab-pane>
+    <el-tab-pane label="Rejudge" :disabled="!isadmin"><adminrejudge></adminrejudge></el-tab-pane>
   </el-tabs>
 </template>
 
@@ -17,6 +18,7 @@ import adminaddcontest from "@/components/adminaddcontest";
 import adminchangepro from "@/components/adminchangepro";
 import adminchangecontest from "@/components/adminchangecontest";
 import adminmanageuser from "@/components/adminmanageuser";
+import adminrejudge from "@/components/adminrejudge";
 export default {
   name: "admin",
   components: {
@@ -24,7 +26,8 @@ export default {
     adminaddcontest,
     adminchangepro,
     adminchangecontest,
-    adminmanageuser
+    adminmanageuser,
+    adminrejudge
   },
   data() {
     return {

@@ -1,31 +1,148 @@
 <template>
-    <h1>{{ msg }}</h1>
+  <el-card>
+    <el-table :data="tableData" style="width: 100%">
+      <el-table-column type="expand">
+        <template slot-scope="props">
+          <span>{{ props.row.huifu }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="ID" prop="id" v-if="isadmin" :width="50"></el-table-column>
+      <el-table-column label="User" prop="user"></el-table-column>
+      <el-table-column label="Title" prop="title"></el-table-column>
+      <el-table-column label="Problem" prop="problem"></el-table-column>
+      <el-table-column label="Message" prop="message"></el-table-column>
+      <el-table-column label="Time" prop="time"></el-table-column>
+    </el-table>
+    <br>
+    <br>
+    <el-form ref="contestcomment" :model="contestcomment" label-position="right">
+      <el-form-item label="标题：">
+        <el-input v-model="contestcomment.title" style="width:700px"></el-input>
+      </el-form-item>
+      <el-form-item label="题目编号：">
+        <el-select v-model="contestcomment.problem" placeholder="请选择题目">
+          <el-option v-for="(index,K) in pros" :key="K" :label="index" :value="index"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="提问内容：">
+        <el-input type="textarea" v-model="contestcomment.message" autosize style="width:700px"></el-input>
+      </el-form-item>
+      <el-button @click="commentClick">提问</el-button>
+    </el-form>
+    <br>
+    <br>
+    <el-form label-position="right" v-if="isadmin">
+      <el-form-item label="提问编号">
+        <el-input v-model="commentid" style="width:700px"></el-input>
+      </el-form-item>
+
+      <el-form-item label="回复他：">
+        <el-input type="textarea" v-model="commentmessage" autosize style="width:700px"></el-input>
+      </el-form-item>
+      <el-button @click="huifuClick">回复</el-button>
+    </el-form>
+  </el-card>
 </template>
 
 <script>
+import moment from "moment";
 export default {
-  name: 'contestcomment',
-  data () {
+  name: "contestcomment",
+  data() {
     return {
-      msg: 'contestcomment'
+      commentid: "",
+      commentmessage: "",
+      isadmin: false,
+      tableData: [],
+      pros: [],
+      contestcomment: {
+        contestid: this.$route.params.contestID,
+        user: localStorage.username,
+        title: "",
+        message: "",
+        problem: ""
+      }
+    };
+  },
+  methods: {
+    huifuClick() {
+      this.$confirm("确定回复吗？", "回复", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        this.$axios
+          .get("/contestcomment/" + this.commentid + "/")
+          .then(response => {
+            response.data.huifu = this.commentmessage;
+            this.$axios
+              .put("/contestcomment/" + this.commentid + "/", response.data)
+              .then(response2 => {
+                this.$message.success("提交成功！");
+                this.reflash();
+              })
+              .catch(error => {
+                this.$message.error("服务器出错！" + error);
+              });
+          })
+          .catch(error => {
+            this.$message.error("服务器出错！" + error);
+          });
+      });
+    },
+    commentClick() {
+      this.$confirm("确定提交吗？", "提交", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        if (this.contestcomment.user == "") {
+          this.$message.error("请先登录！");
+          return;
+        }
+        this.$axios
+          .post("/contestcomment/", this.contestcomment)
+          .then(response => {
+            this.$message.success("提交成功！");
+            this.reflash();
+          })
+          .catch(error => {
+            this.$message.error("服务器出错！" + error);
+          });
+      });
+    },
+    reflash() {
+      this.$axios
+        .get("/contestcomment/?contestid=" + this.$route.params.contestID)
+        .then(response => {
+          for (let i = 0; i < response.data.length; i++) {
+            response.data.time = moment(response.data.time).format(
+              "YYYY-MM-DD HH:mm:ss"
+            );
+          }
+
+          this.tableData = response.data;
+        });
     }
   },
-  created(){
-    
-  },
-  methods:{
-    aaa(){
-      console.log(123124)
+  created() {
+    this.isadmin = localStorage.type == 2 || localStorage.type == 3;
+
+    this.pros.push("All");
+    for (var i = 65; i < 65 + 26; i++) {
+      this.pros.push(String.fromCharCode(i));
     }
+  },
+
+  mounted() {
+    this.reflash();
   }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
-h1{
+h1 {
   position: relative;
 }
-
 </style>

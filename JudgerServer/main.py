@@ -1,6 +1,7 @@
 # coding=utf-8
 
 import MySQLdb
+import Queue
 import socket
 import json
 from time import sleep
@@ -9,7 +10,7 @@ import threading
 
 mutex = threading.Lock()  # queue mutex
 
-queue = list()
+queue = Queue.Queue()
 myjsonfile = open("./setting.json", 'r')
 judgerjson = json.loads(myjsonfile.read())
 
@@ -29,7 +30,7 @@ def getSubmition():
             data = cursor.fetchall()
             try:
                 for d in data:
-                    queue.append(d[0])
+                    queue.put(d[0])
                     cursor.execute(
                         "UPDATE judgestatus_judgestatus SET result = '-6' WHERE id = '%d'" % d[0])
                 db.commit()
@@ -48,8 +49,8 @@ def deal_client(newSocket: socket, addr,fir):
         sleep(1)
         if mutex.acquire():
             try:
-                if statue == True and len(queue) > 0:
-                    id = queue.pop()
+                if statue == True and queue.empty() is not True:
+                    id = queue.get()
                     statue = False
                     # 只允许一个测评机测JAVA，否则时间会判断失败
                     
@@ -62,7 +63,7 @@ def deal_client(newSocket: socket, addr,fir):
                     elif data[0][0] != "Java":
                         newSocket.send(("judge|%d" % id).encode("utf-8"))
                     else:
-                        queue.append(id)
+                        queue.put(id)
                 else:
                     newSocket.send("getstatue".encode("utf-8"))
                     data = newSocket.recv(1024)

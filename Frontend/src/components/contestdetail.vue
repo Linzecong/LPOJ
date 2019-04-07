@@ -24,18 +24,18 @@
       </span>
       <contestrank ref="Rankings"></contestrank>
     </el-tab-pane>
-    <!-- <el-tab-pane label="Announcements" :disabled="!haveauth">
+    <el-tab-pane label="Announcements" :disabled="!haveauth">
       <span slot="label">
-        <i class="el-icon-bell"></i> Announcements
+        <b><i class="el-icon-bell"></i> Announcements</b>
       </span>
       <contestannounce ref="Announcements"></contestannounce>
     </el-tab-pane>
     <el-tab-pane label="Comments" :disabled="!haveauth">
       <span slot="label">
-        <i class="el-icon-info"></i> Comments
+        <b><i class="el-icon-info"></i> Comments</b>
       </span>
       <contestcomment ref="Comments"></contestcomment>
-    </el-tab-pane> -->
+    </el-tab-pane>
   </el-tabs>
 </template>
 
@@ -132,6 +132,16 @@ export default {
       if (tab.label == "Rankings"){
 
         this.$refs.Rankings.setproblemcount(this.$route.params.contestID);
+      }
+
+      if (tab.label == "Announcements"){
+
+        this.$refs.Announcements.reflash();
+      }
+
+      if (tab.label == "Comments"){
+
+        this.$refs.Comments.reflash(this.$route.params.contestID);
       }
         
     }

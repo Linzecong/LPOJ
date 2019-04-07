@@ -13,5 +13,6 @@ routers.register('judgestatuscode', views.JudgeStatusCodeView)
 routers.register('casestatus', views.CaseStatusView)
 
 urlpatterns = [
-    url('', include(routers.urls))
+    url('', include(routers.urls)),
+    url(r'^rejudge',views.RejudgeAPIView.as_view()),
 ]

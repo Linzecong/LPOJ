@@ -98,6 +98,8 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
     li = []
     if contest is not 0:
         cursor.execute(
+                "UPDATE contest_contestboard SET type = -1 WHERE submitid = '%s'" % id)
+        cursor.execute(
             "SELECT * from contest_contestrank where username = '%s'  and contestid = %d" % (username, int(contest)))
         r = cursor.fetchone()
         statue = r[4]
@@ -481,7 +483,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 li[contestproblem] = int(li[contestproblem])
                 li[contestproblem] = li[contestproblem]-1
                 sta = '|'.join(str(i) for i in li)
-                print(contest)
+                # print(contest)
                 cursor.execute("UPDATE  contest_contestrank  SET statue = '%s' where username = '%s'  and contestid = %d" % (
                     sta, username, contest))
 

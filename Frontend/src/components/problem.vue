@@ -177,7 +177,7 @@
           </el-card>
         </el-col>
       </el-row>
-      <el-row :gutter="15">
+      <el-row :gutter="15" >
         <el-col>
           <el-card shadow="always">
             <h4>Tags (点击以筛选)</h4>
@@ -415,8 +415,17 @@ export default {
       se: 100,
       title: "Statistics",
       currenttag:"",
+
+      isdesktop:true
     };
   },
+  mounted() {
+		//可用于设置自适应屏幕，根据获得的可视宽度（兼容性）判断是否显示
+		let w = document.documentElement.offsetWidth || document.body.offsetWidth;
+		if(w < 1000){
+      this.isdesktop = false;
+    }
+	},
   created() {
     this.$axios
       .get(
