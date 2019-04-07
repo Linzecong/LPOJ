@@ -152,7 +152,7 @@ for i, data in enumerate(teamscorefinal):
             continue
         E = E + (1.0/(1.0 + pow(10, float(d["score"]-score)/400)))
 
-    K = 16 * (data["score"] / teamscoreava)
+    K = (data["score"] / teamscoreava)
 
     lastrank = 0
     lastscore = 0
@@ -162,15 +162,15 @@ for i, data in enumerate(teamscorefinal):
             lastrank = da["rank"]
             lastscore = da["score"]
 
-    P = 10.0 * (lastrank/len(teamscorefinal))
+    P = (lastrank/len(teamscorefinal))
 
     # print(K+P,S,E,S-E)
 
-    D.append((K+P)*(S-E))
-    print(data["name"]+" 本次比赛得分： "+str(int(data["score"]))+"  Raiting变化："+str(round((K+P)*(S-E))) + "  ......  " +
-          str(lastscore)+" ---> " + str(round(lastscore+(K+P)*(S-E))))
+    D.append(20*(K+P+S-E))
+    print(data["name"]+" 本次比赛得分： "+str(int(data["score"]))+"  Raiting变化："+str(round(20*(K+P+S-E))) + "  ......  " +
+          str(lastscore)+" ---> " + str(round(lastscore+20*(K+P+S-E))))
 
     cursor.execute("UPDATE  board_teamboard  SET score = %s where teammember = %s", (
-        str(round(lastscore+(K+P)*(S-E))), data["name"]))
+        str(round(lastscore+20*(K+P+S-E))), data["name"]))
 
 db.commit()

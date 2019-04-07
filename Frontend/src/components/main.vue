@@ -22,6 +22,7 @@
             <el-table-column prop="score" label="Score"></el-table-column>
           </el-table>
         </el-card>
+        <ojmessage></ojmessage>
       </el-row>
     </el-col>
     <el-col :span="18">
@@ -38,9 +39,9 @@
           <h4>2、每场比赛后计算一个排名得分S （ S=（比赛得分线性归一化后）*比赛队伍数 ）（线性归一化函数: x = (x-min)/(max-min)）</h4>
           <h4>3、每场比赛后计算一个期望得分E （ E=sum(1/(1+10^((Rb-Ra)/400)))</h4>
           <h4>其中Ra代表你当前积分，Rb代表每一队伍的得分</h4>
-          <h4>4、为了鼓励思考，计算一个系数K，K=16*（本次比赛得分/平均分）</h4>
-          <h4>5、为了鼓励新人，计算一个系数P，P=10*（开始比赛前的积分排名/总人数）</h4>
-          <h4>6、计算积分的变化 D = (K+P)*(S-E)</h4>
+          <h4>4、为了鼓励思考，计算一个系数K，K=（本次比赛得分/平均分）</h4>
+          <h4>5、为了鼓励新人，计算一个系数P，P=（开始比赛前的积分排名/总人数）</h4>
+          <h4>6、计算积分的变化 D = 20*(K+P+S-E)</h4>
 
           <h3>每场比赛排名怎么算?</h3>
           <h3>LPOJ个人赛：</h3>
@@ -84,6 +85,26 @@
           </el-table-column>
         </el-table>
       </el-card>
+
+      <el-card style="margin-top:10px">
+        <center>
+          <h3>最新博客</h3>
+        </center>
+        <el-table :data="tableData3" @cell-click="blogclick" size="small">
+          <el-table-column prop="username" label="User" :width="150"></el-table-column>
+          <el-table-column prop="title" label="Title (Click to view content)">
+            <template slot-scope="scope">
+              <el-popover trigger="hover" placement="top" :width="500">
+                <p>摘要: {{ scope.row.summary }}</p>
+                <div slot="reference" class="name-wrapper">
+                  <b>{{ scope.row.title }}</b>
+                </div>
+              </el-popover>
+            </template>
+          </el-table-column>
+          <el-table-column prop="time" label="Time" :width="160"></el-table-column>
+        </el-table>
+      </el-card>
     </el-col>
   </el-row>
 </template>
@@ -92,17 +113,20 @@
 import moment from "moment";
 import rankchart from "@/components/rankchart";
 import teamchart from "@/components/teamchart";
+import ojmessage from "@/components/ojmessage";
 export default {
   components: {
     rankchart,
-    teamchart
+    teamchart,
+    ojmessage
   },
   name: "main",
   data() {
     return {
       msg: "欢迎来到LPOJ",
       tableData: [],
-      tableData2: []
+      tableData2: [],
+      tableData3: []
     };
   },
   created() {
@@ -110,6 +134,19 @@ export default {
       .get("/userdata/?limit=10&offset=0")
       .then(response => {
         this.tableData = response.data.results;
+      })
+      .catch(error => {
+        this.$message.error("服务器错误！" + "(" + error + ")");
+      });
+    this.$axios
+      .get("/blog/?limit=10&offset=0")
+      .then(response => {
+        for (var i = 0; i < response.data.results.length; i++) {
+          response.data.results[i].time = moment(
+            response.data.results[i].time
+          ).format("YYYY-MM-DD HH:mm:ss");
+        }
+        this.tableData3 = response.data.results;
       })
       .catch(error => {
         this.$message.error("服务器错误！" + "(" + error + ")");
@@ -143,6 +180,9 @@ export default {
       });
   },
   methods: {
+    blogclick(row, column, cell, event) {
+      window.open(row.url);
+    },
     rankcolor({ row, rowIndex }) {
       if (rowIndex == 0) return "color:red;font-weight: bold;";
       if (rowIndex == 1) return "color:#BB5E00;font-weight: bold;";

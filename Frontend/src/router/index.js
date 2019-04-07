@@ -11,6 +11,7 @@ import problemdetail from '@/components/problemdetail'
 import rank from '@/components/rank'
 import admin from '@/components/admin'
 import billboard from '@/components/billboard'
+import blog from '@/components/blog'
 
 Vue.use(Router)
 
@@ -76,6 +77,11 @@ export default new Router({
       path: '/billboard',
       name: 'billboard',
       component: billboard,
+    },
+    {
+      path: '/blog',
+      name: 'blog',
+      component: blog,
     }
   ]
 })

@@ -1,6 +1,8 @@
 <template>
   <center>
     <h2>广东外语外贸大学ACM集训队<br>30天内新增AC情况统计</h2>
+    <el-button size="mini" @click="seeall" type="primary">查看所有</el-button>
+    <h2>  </h2>
     <div ref="myEchart" style="height:500px;width:100%"></div>
   </center>
 </template>
@@ -17,6 +19,11 @@ export default {
     };
   },
   methods: {
+    seeall(){
+      this.$router.push({
+        name: "billboard"
+      });
+    },
     initChart() {
       let myChart = echarts.init(this.$refs.myEchart);
       myChart.setOption({

@@ -1,7 +1,7 @@
 <template>
   <el-card>
     <el-table :data="tableData" style="width: 100%">
-      <el-table-column type="expand">
+      <el-table-column type="expand" label="Expand Comment" :width="150">
         <template slot-scope="props">
           <span>{{ props.row.huifu }}</span>
         </template>
@@ -116,7 +116,7 @@ export default {
         .get("/contestcomment/?contestid=" + this.$route.params.contestID)
         .then(response => {
           for (let i = 0; i < response.data.length; i++) {
-            response.data.time = moment(response.data.time).format(
+            response.data[i].time = moment(response.data[i].time).format(
               "YYYY-MM-DD HH:mm:ss"
             );
           }
@@ -132,10 +132,6 @@ export default {
     for (var i = 65; i < 65 + 26; i++) {
       this.pros.push(String.fromCharCode(i));
     }
-  },
-
-  mounted() {
-    this.reflash();
   }
 };
 </script>

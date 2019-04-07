@@ -22,7 +22,7 @@ class JudgeStatusView(viewsets.ModelViewSet):
     permission_classes = (LoginOrReadOnly,)
 
 class JudgeStatusDistinctView(viewsets.ModelViewSet):
-    queryset = JudgeStatus.objects.all().order_by('problem').distinct('problem')
+    queryset = JudgeStatus.objects.all().order_by('-submittime')
     serializer_class = JudgeStatusSerializer
     pagination_class = LimitOffsetPagination
     filter_backends = (DjangoFilterBackend,)
