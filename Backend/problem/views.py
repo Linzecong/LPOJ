@@ -29,7 +29,7 @@ class ProblemDataView(viewsets.ModelViewSet):
     permission_classes = (ManagerOnly,)
     filter_backends = (DjangoFilterBackend,filters.SearchFilter)
     filter_fields = ('auth',)
-    search_fields = ('tag', )
+    search_fields = ('tag', 'title')
 
 
 class ProblemTagView(viewsets.ModelViewSet):

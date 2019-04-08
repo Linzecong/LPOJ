@@ -13,6 +13,8 @@
           :total="totalproblem"
         ></el-pagination>
         </center>
+       
+
         <el-table
           :data="tableData"
           :row-class-name="tableRowClassName"
@@ -33,7 +35,7 @@
               >{{ scope1.row.level }}</el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="rate" label="AC/Submittion"></el-table-column>
+          <el-table-column prop="rate" label="A/S"></el-table-column>
           <el-table-column prop="tag" label="Tag" :width="350">
             <template slot-scope="scope">
               <el-tag
@@ -177,6 +179,14 @@
           </el-card>
         </el-col>
       </el-row>
+      <el-row>
+        <el-card shadow="always">
+         <el-input placeholder="请输入搜索内容筛选题目" v-model="searchtext">
+    
+          <el-button slot="append" icon="el-icon-search" @click="searchtitle"></el-button>
+         </el-input>
+        </el-card>
+      </el-row>
       <el-row :gutter="15" >
         <el-col>
           <el-card shadow="always">
@@ -223,6 +233,44 @@
 import problemdetail from "@/components/problemdetail";
 export default {
   methods: {
+    searchtitle(){
+      this.currentpage=1
+      this.$axios
+        .get(
+          "/problemdata/?limit=" +
+            this.pagesize +
+            "&offset=" +
+            (this.currentpage - 1) * this.pagesize+"&auth=1&search="+this.searchtext
+        )
+        .then(response => {
+          for (var i = 0; i < response.data.results.length; i++) {
+            if (response.data.results[i]["level"] == "1")
+              response.data.results[i]["level"] = "Easy";
+            if (response.data.results[i]["level"] == "2")
+              response.data.results[i]["level"] = "Medium";
+            if (response.data.results[i]["level"] == "3")
+              response.data.results[i]["level"] = "Hard";
+            if (response.data.results[i]["level"] == "4")
+              response.data.results[i]["level"] = "VeryHard";
+            if (response.data.results[i]["level"] == "5")
+              response.data.results[i]["level"] = "ExtremelyHard";
+
+            response.data.results[i]["rate"] =
+              response.data.results[i]["ac"] +
+              "/" +
+              response.data.results[i]["submission"];
+
+            if (response.data.results[i]["tag"] == null)
+              response.data.results[i]["tag"] = ["无"];
+            else
+              response.data.results[i]["tag"] = response.data.results[i][
+                "tag"
+              ].split("|");
+          }
+          this.tableData = response.data.results;
+          this.totalproblem = response.data.count;
+        });
+    },
     tagclick(name){
       
 
@@ -243,14 +291,14 @@ export default {
         li.push(name)
         this.currenttag=li.join("+");
       }
-      
-
+      this.searchtext=this.currenttag
+      this.currentpage=1
       this.$axios
         .get(
           "/problemdata/?limit=" +
             this.pagesize +
             "&offset=" +
-            (this.currentpage - 1) * this.pagesize+"&auth=1&search="+this.currenttag
+            (this.currentpage - 1) * this.pagesize+"&auth=1&search="+this.searchtext
         )
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {
@@ -290,7 +338,7 @@ export default {
           "/problemdata/?limit=" +
             this.pagesize +
             "&offset=" +
-            (this.currentpage - 1) * this.pagesize+"&auth=1"
+            (this.currentpage - 1) * this.pagesize+"&auth=1&search="+this.searchtext
         )
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {
@@ -328,7 +376,7 @@ export default {
           "/problemdata/?limit=" +
             this.pagesize +
             "&offset=" +
-            (this.currentpage - 1) * this.pagesize+"&auth=1"
+            (this.currentpage - 1) * this.pagesize+"&auth=1&search="+this.searchtext
         )
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {
@@ -416,7 +464,8 @@ export default {
       title: "Statistics",
       currenttag:"",
 
-      isdesktop:true
+      isdesktop:true,
+      searchtext:"",
     };
   },
   mounted() {

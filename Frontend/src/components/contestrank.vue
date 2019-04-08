@@ -1,6 +1,6 @@
 <template>
   <el-row>
-    <el-dialog :visible.sync="statusshow" @opened="setstatus" :show-close="false">
+    <el-dialog :visible.sync="statusshow" @open="setstatus" :show-close="false" @closed="statusclosed">
       <statusmini ref="Status"></statusmini>
     </el-dialog>
 
@@ -90,6 +90,12 @@ export default {
       ];
 
       this.statusshow = true;
+    },
+    statusclosed(){
+      this.$refs.Status.setstatus(
+        -1,
+        -1
+      );
     },
     setstatus() {
       //console.log(this.statusdata.user,this.statusdata.problemid)

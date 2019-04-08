@@ -14,7 +14,7 @@
         <el-row>
           <el-card shadow="always">
             <el-row :gutter="18" id="title">
-              {{'LPOJ - '+currentproblem+' '}}{{title}}
+              {{currentrankE}}{{' '+title}}
               <el-tag
                 size="medium"
                 disable-transitions
@@ -187,16 +187,23 @@ export default {
 
       currentproblem: -1,
       currentcontest: this.$route.params.contestID,
-      currentrank: -1
+      currentrank: -1,
+      currentrankE:'A'
     };
   },
   filters: {
     toChar(val) {
       var A = "A";
+      val = parseInt(val)
       return String.fromCharCode(val + A.charCodeAt());
     }
   },
   methods: {
+    toCharM(val) {
+      var A = "A";
+      val = parseInt(val)
+      return String.fromCharCode(val + A.charCodeAt());
+    },
     onCopy(e){
        this.$message.success("复制成功！");
     },
@@ -215,6 +222,7 @@ export default {
       this.currentproblem = this.problemids[tab.index];
       this.title = this.problemtitles[tab.index];
       this.currentrank = tab.index;
+      this.currentrankE = this.toCharM(tab.index)
       this.$refs["Statusmini"+tab.index][0].setstatus(this.currentproblem)
       this.$axios
         .get("/problem/" + this.currentproblem + "/")
@@ -299,6 +307,7 @@ export default {
                 this.currentproblem = this.problemids[0];
                 
                 this.currentrank = 0;
+                this.currentrankE = 'A';
                 this.title = this.problemtitles[0];
                 this.$axios
                   .get("/problem/" + this.currentproblem + "/")
@@ -366,10 +375,11 @@ export default {
               language: this.language,
               judger: "waiting for judger",
               contest: 0,
-              contestproblem: this.currentrank,
+              contestproblem: -1,
               code: this.code,
               testcase: 0,
-              message: "0"
+              message: "0",
+              problemtitle:'比赛 '+this.currentcontest+this.currentrankE
             })
             .then(response => {
               this.$message({
@@ -413,7 +423,8 @@ export default {
                     contestproblem: this.currentrank,
                     code: this.code,
                     testcase: 0,
-                    message: "0"
+                    message: "0",
+                    problemtitle:'比赛 '+this.currentcontest+this.currentrankE
                   })
                   .then(response => {
                     var date1 = new Date(Date.parse(response.data.submittime));
@@ -477,7 +488,8 @@ export default {
                         contestproblem: this.currentrank,
                         code: this.code,
                         testcase: 0,
-                        message: "0"
+                        message: "0",
+                        problemtitle:'比赛'+this.currentcontest+this.currentrankE
                       })
                       .then(response => {
                         var date1 = new Date(

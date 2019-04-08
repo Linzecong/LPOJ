@@ -449,7 +449,8 @@ export default {
             contest: 0,
             code: this.code,
             testcase: 0,
-            message: "0"
+            message: "0",
+            problemtitle:'LPOJ - '+this.ID+' '+this.title
           })
           .then(response => {
             this.$message({

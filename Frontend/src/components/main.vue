@@ -3,12 +3,19 @@
     <el-col :span="6">
       <el-row :gutter="10">
         <el-card>
-          <h3>{{ msg }}</h3>
-          <h3>当前版本：1.2</h3>
-          <h3>支持语言：C/C++/Java</h3>
+          <div slot="header">
+            <b>{{ msg }}</b>
+          </div>
+          <b>当前版本：1.2.1</b>
+          <br>
+          <b>支持语言：C/C++/Java</b>
         </el-card>
-        <el-card style="margin-top:10px">
-          <h3>Top User</h3>
+      </el-row>
+      <el-row :gutter="10">
+        <el-card>
+          <div slot="header">
+            <b>Top User</b>
+          </div>
           <el-table
             :data="tableData"
             border
@@ -22,89 +29,124 @@
             <el-table-column prop="score" label="Score"></el-table-column>
           </el-table>
         </el-card>
+      </el-row>
+      <el-row :gutter="10">
         <ojmessage></ojmessage>
       </el-row>
     </el-col>
     <el-col :span="18">
-      <el-tabs type="border-card">
-        <el-tab-pane label="队伍">
-          <teamchart></teamchart>
-        </el-tab-pane>
-        <el-tab-pane label="个人" :lazy="true">
-          <rankchart></rankchart>
-        </el-tab-pane>
-        <el-tab-pane label="规则" :lazy="true">
-          <h3>基于艾洛积分系统（Elo Rating System）修改</h3>
-          <h4>1、所有队伍初始得分为1500</h4>
-          <h4>2、每场比赛后计算一个排名得分S （ S=（比赛得分线性归一化后）*比赛队伍数 ）（线性归一化函数: x = (x-min)/(max-min)）</h4>
-          <h4>3、每场比赛后计算一个期望得分E （ E=sum(1/(1+10^((Rb-Ra)/400)))</h4>
-          <h4>其中Ra代表你当前积分，Rb代表每一队伍的得分</h4>
-          <h4>4、为了鼓励思考，计算一个系数K，K=（本次比赛得分/平均分）</h4>
-          <h4>5、为了鼓励新人，计算一个系数P，P=（开始比赛前的积分排名/总人数）</h4>
-          <h4>6、计算积分的变化 D = 20*(K+P+S-E)</h4>
+      <el-row>
+        <el-tabs type="border-card">
+          <el-tab-pane label="队伍">
+            <teamchart></teamchart>
+          </el-tab-pane>
+          <el-tab-pane label="个人" :lazy="true">
+            <rankchart></rankchart>
+          </el-tab-pane>
+          <el-tab-pane label="规则" :lazy="true">
+            <h3>基于艾洛积分系统（Elo Rating System）修改</h3>
+            <h4>1、所有队伍初始得分为1500</h4>
+            <h4>2、每场比赛后计算一个排名得分S （ S=（比赛得分线性归一化后）*比赛队伍数 ）（线性归一化函数: x = (x-min)/(max-min)）</h4>
+            <h4>3、每场比赛后计算一个期望得分E （ E=sum(1/(1+10^((Rb-Ra)/400)))</h4>
+            <h4>其中Ra代表你当前积分，Rb代表每一队伍的得分</h4>
+            <h4>4、为了鼓励思考，计算一个系数K，K=（本次比赛得分/平均分）</h4>
+            <h4>5、为了鼓励新人，计算一个系数P，P=（开始比赛前的积分排名/总人数）</h4>
+            <h4>6、计算积分的变化 D = 20*(K+P+S-E)</h4>
 
-          <h3>每场比赛排名怎么算?</h3>
-          <h3>LPOJ个人赛：</h3>
-          <h4>每道题目有一个积分，按照AC顺序得分为 题目积分-(题目积分/做出总人数/2)*(AC顺序-1)</h4>
-          <h4>每一次失败提交-20分，一血加分为 题目积分/100</h4>
-          <br>
-          <h4>集训组队赛：</h4>
-          <h4>为减轻管理员负担，并鼓励积极思考，按照如下规则算分，所有队伍仅算校内队伍</h4>
-          <h4>每道题初始分为500+500*(比赛总队伍-AC队数)</h4>
-          <h4>每道题目有一个积分，按照AC顺序得分为 题目积分-(题目积分/做出总人数/2)*(AC顺序-1)</h4>
-          <h4>每一次失败提交-50分（每道题目最多算十发罚时），一血加分为 题目积分/100</h4>
+            <h3>每场比赛排名怎么算?</h3>
+            <h3>LPOJ个人赛：</h3>
+            <h4>每道题目有一个积分，按照AC顺序得分为 题目积分-(题目积分/做出总人数/2)*(AC顺序-1)</h4>
+            <h4>每一次失败提交-20分，一血加分为 题目积分/100</h4>
+            <br>
+            <h4>集训组队赛：</h4>
+            <h4>为减轻管理员负担，并鼓励积极思考，按照如下规则算分，所有队伍仅算校内队伍</h4>
+            <h4>每道题初始分为500+500*(比赛总队伍-AC队数)</h4>
+            <h4>每道题目有一个积分，按照AC顺序得分为 题目积分-(题目积分/做出总人数/2)*(AC顺序-1)</h4>
+            <h4>每一次失败提交-50分（每道题目最多算十发罚时），一血加分为 题目积分/100</h4>
 
-          <br>
-          <br>
-          <h2>每场比赛结果都会保存，所以如果积分系统崩了的话，可以用其他方式计算，保证公平性</h2>
-        </el-tab-pane>
-      </el-tabs>
-      <el-card style="margin-top:10px">
-        <center>
-          <h3>近期比赛</h3>
-        </center>
-        <el-table
-          :data="tableData2"
-          @cell-click="contestclick"
-          :default-sort="{prop: 'begintime', order: 'descending'}"
-        >
-          <el-table-column prop="id" label="ID" :width="100"></el-table-column>
-          <el-table-column prop="title" label="Title"></el-table-column>
-          <el-table-column prop="begintime" label="Begin Time"></el-table-column>
-          <el-table-column prop="lasttime" label="Duration"></el-table-column>
-          <el-table-column prop="auth" label="Openness">
-            <template slot-scope="scope">
-              <el-tag
-                id="leveltag"
-                size="medium"
-                disable-transitions
-                hit
-                :type="contestauth(scope.row.auth)"
-              >{{ scope.row.auth }}</el-tag>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-card>
+            <br>
+            <br>
+            <h2>每场比赛结果都会保存，所以如果积分系统崩了的话，可以用其他方式计算，保证公平性</h2>
+          </el-tab-pane>
+        </el-tabs>
+      </el-row>
 
-      <el-card style="margin-top:10px">
-        <center>
-          <h3>最新博客</h3>
-        </center>
-        <el-table :data="tableData3" @cell-click="blogclick" size="small">
-          <el-table-column prop="username" label="User" :width="150"></el-table-column>
-          <el-table-column prop="title" label="Title (Click to view content)">
-            <template slot-scope="scope">
-              <el-popover trigger="hover" placement="top" :width="500">
-                <p>摘要: {{ scope.row.summary }}</p>
-                <div slot="reference" class="name-wrapper">
-                  <b>{{ scope.row.title }}</b>
-                </div>
-              </el-popover>
-            </template>
-          </el-table-column>
-          <el-table-column prop="time" label="Time" :width="160"></el-table-column>
-        </el-table>
-      </el-card>
+      <el-row :gutter="10">
+        <el-col :span="8">
+          <el-card>
+            <div slot="header">
+              <b>kuangbin</b>
+            </div>
+            <b>年轻人要多刷题，少水题，才能进Final！</b>
+          </el-card>
+        </el-col>
+        <el-col :span="8">
+          <el-card>
+            <div slot="header">
+              <b>LP_Cong</b>
+            </div>
+            <b>有时候，人和人的差距，比人和猪还大！</b>
+          </el-card>
+        </el-col>
+        <el-col :span="8">
+          <el-card>
+            <div slot="header">
+              <b>阿聪</b>
+            </div>
+            <b>你的努力程度还没到拼天赋的程度！人一我十，人十我百，人百我千！</b>
+          </el-card>
+        </el-col>
+      </el-row>
+
+      <el-row>
+        <el-card>
+          <div slot="header">
+            <b>近期比赛</b>
+          </div>
+          <el-table
+            :data="tableData2"
+            @cell-click="contestclick"
+            :default-sort="{prop: 'begintime', order: 'descending'}"
+          >
+            <el-table-column prop="id" label="ID" :width="100"></el-table-column>
+            <el-table-column prop="title" label="Title"></el-table-column>
+            <el-table-column prop="begintime" label="Begin Time"></el-table-column>
+            <el-table-column prop="lasttime" label="Duration"></el-table-column>
+            <el-table-column prop="auth" label="Openness">
+              <template slot-scope="scope">
+                <el-tag
+                  id="leveltag"
+                  size="medium"
+                  disable-transitions
+                  hit
+                  :type="contestauth(scope.row.auth)"
+                >{{ scope.row.auth }}</el-tag>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-card>
+      </el-row>
+      <el-row>
+        <el-card>
+          <div slot="header">
+            <b>最新博客</b>
+          </div>
+          <el-table :data="tableData3" @cell-click="blogclick" size="small">
+            <el-table-column prop="username" label="User" :width="150"></el-table-column>
+            <el-table-column prop="title" label="Title (Click to view content)">
+              <template slot-scope="scope">
+                <el-popover trigger="hover" placement="top" :width="500">
+                  <p>摘要: {{ scope.row.summary }}</p>
+                  <div slot="reference" class="name-wrapper">
+                    <b>{{ scope.row.title }}</b>
+                  </div>
+                </el-popover>
+              </template>
+            </el-table-column>
+            <el-table-column prop="time" label="Time" :width="160"></el-table-column>
+          </el-table>
+        </el-card>
+      </el-row>
     </el-col>
   </el-row>
 </template>
@@ -223,6 +265,6 @@ export default {
   font-weight: bold;
 }
 .el-row {
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
 </style>

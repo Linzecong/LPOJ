@@ -1,5 +1,5 @@
 <template>
-  <el-card style="margin-top:10px">
+  <el-card>
     <el-dialog :visible.sync="dialogVisible">
       <el-row :gutter="10">
         <el-col :span="3">
@@ -13,8 +13,10 @@
         </el-col>
       </el-row>
     </el-dialog>
-
-    <h3>留言与建议板</h3>
+        <div slot="header">
+            <b>留言与建议板</b>
+          </div>
+    
     <el-table :data="tableData" border style="width: 100%" size="mini">
       <el-table-column prop="username" label="User"></el-table-column>
       <el-table-column prop="msg" align="right">

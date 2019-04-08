@@ -208,6 +208,9 @@ export default {
     setstatus(problem, username) {
       this.tableData=[]
       //console.log(problem)
+      if(problem==-1){
+        return //用于清零
+      }
       if (this.$route.params.contestID) {
         var contest = this.$route.params.contestID;
         if (problem != false) this.problem = problem;

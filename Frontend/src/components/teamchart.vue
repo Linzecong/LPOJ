@@ -1,6 +1,6 @@
 <template>
   <center>
-    <h2>广东外语外贸大学ACM集训队<br>队伍实时排名</h2>
+    <b>广东外语外贸大学ACM集训队<br>队伍实时排名</b>
     <div ref="myEchart" style="height:500px;width:100%"></div>
   </center>
 </template>

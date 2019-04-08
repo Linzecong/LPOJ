@@ -19,6 +19,7 @@ class JudgeStatus(models.Model):
     code = models.TextField()
     testcase = models.CharField(max_length=50,default="0")
     message = models.TextField()
+    problemtitle = models.CharField(max_length=100,default="")
     
 
     objects = models.Manager()
