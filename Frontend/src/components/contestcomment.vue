@@ -60,7 +60,8 @@ export default {
         user: localStorage.username,
         title: "",
         message: "",
-        problem: ""
+        problem: "",
+        rating: parseInt(localStorage.rating)
       }
     };
   },

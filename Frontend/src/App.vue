@@ -31,7 +31,7 @@
       </el-menu-item>
       <el-menu-item index="/about">
         <i class="el-icon-document"></i>About
-      </el-menu-item> -->
+      </el-menu-item>-->
       <el-button
         round
         id="button"
@@ -201,7 +201,7 @@ export default {
       loginshow: localStorage.username,
       username: localStorage.username,
       name: localStorage.name,
-      isadmin:false,
+      isadmin: false,
       form: {
         username: "",
         password: "",
@@ -213,13 +213,20 @@ export default {
         number: "",
         realname: "",
         qq: "",
-        email: "",
-        
+        email: ""
       }
     };
   },
   created() {
-    this.isadmin=(localStorage.type==2||localStorage.type==3)
+    this.isadmin = localStorage.type == 2 || localStorage.type == 3;
+
+    if (localStorage.username != "") {
+      this.$axios
+        .get("/userdata/?username=" + localStorage.username)
+        .then(response => {
+          localStorage.setItem("rating", response.data[0].rating);
+        });
+    }
   },
   methods: {
     updatename(type) {
@@ -267,7 +274,7 @@ export default {
       }
       if (command == "admin") {
         this.$router.push({
-          name: "admin",
+          name: "admin"
         });
       }
     },
@@ -307,18 +314,13 @@ export default {
       this.$axios
         .post("/userdata/", this.form)
         .then(response => {
-          
-
           this.$axios
-            .post(
-              "/register/",
-              this.form
-            )
+            .post("/register/", this.form)
             .then(response => {
               if (response.data == "usererror") {
-            this.$message.error("用户名已存在！");
-            return;
-          }
+                this.$message.error("用户名已存在！");
+                return;
+              }
               this.$message({
                 message: "注册成功！",
                 type: "success"
@@ -350,28 +352,21 @@ export default {
           localStorage.setItem("username", this.form.username);
           localStorage.setItem("name", response.data.name);
           localStorage.setItem("type", response.data.type);
-          if(response.data.type==2 || response.data.type==3)
-            this.isadmin=true
-          
-          
+          if (response.data.type == 2 || response.data.type == 3)
+            this.isadmin = true;
+
           this.dialogRegisterVisible = false;
           this.dialogLoginVisible = false;
           this.loginshow = 1;
           this.username = this.form.username;
           this.name = localStorage.name;
-          
 
           this.$axios
-          .get(
-            "/userdata/?username=" +
-              this.username
-          )
-          .then(response => {
+            .get("/userdata/?username=" + this.username)
+            .then(response => {
               localStorage.setItem("rating", response.data[0].rating);
               this.$router.go(0);
-          });
-
-          
+            });
         })
         .catch(error => {
           this.$message.error("用户名不存在（" + error + "）");
@@ -396,7 +391,7 @@ export default {
 }
 #nav {
   background-color: #ffffff;
-  position:relative;
+  position: relative;
   left: 0px;
   top: 0px;
   z-index: 5;
@@ -405,10 +400,9 @@ export default {
     0px 0px 10px rgb(255, 255, 255),
      0px 0px 0px rgb(255, 255, 255),
      1px 1px 0px rgb(218, 218, 218);  */
-
 }
 #route {
-  position:relative;
+  position: relative;
   top: 10px;
 }
 #title {

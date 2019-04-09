@@ -135,7 +135,7 @@
       size="small"
     >
       <el-table-column prop="id" label="ID" :width="70"></el-table-column>
-      <el-table-column prop="user" label="User"></el-table-column>
+      <el-table-column prop="user" label="User" :width="150"></el-table-column>
       <el-table-column prop="problemtitle" label="Problem" :width="200"></el-table-column>
       <el-table-column prop="result" label="Status" :width="300">
         <template slot-scope="scope">

@@ -8,7 +8,7 @@
       </span>
       <contestoverview ref="Overview"></contestoverview>
     </el-tab-pane>
-    <el-tab-pane label="Problems" :disabled="!haveauth">
+    <el-tab-pane label="Problems" :disabled="!haveauth" :lazy="true">
       <span slot="label">
         <b>
           <i class="el-icon-menu"></i> Problems
@@ -24,7 +24,7 @@
       </span>
       <contestsubmit ref="Submissions"></contestsubmit>
     </el-tab-pane>
-    <el-tab-pane label="Rankings">
+    <el-tab-pane label="Rankings" >
       <span slot="label">
         <b>
           <i class="el-icon-star-on"></i> Rankings
@@ -82,9 +82,7 @@ export default {
     };
   },
   created() {
-    this.$store.state.antimer = setInterval(this.getan, 120000);
-    this.getan();
-
+    
     this.contestid = this.$route.params.contestID;
 
     this.$axios
@@ -133,6 +131,11 @@ export default {
         this.$message.error("服务器错误！" + error);
         return;
       });
+  },
+  mounted(){
+    this.$store.state.antimer = setInterval(this.getan, 120000);
+    
+this.getan();
   },
   destroyed() {
     clearInterval(this.$store.state.antimer);

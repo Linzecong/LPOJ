@@ -294,7 +294,7 @@ export default {
               ).format("YYYY-MM-DD HH:mm:ss");
 
               this.$store.state.contestbegintime = date1.getTime();
-
+              this.$store.state.contesttype = response.data.type
               this.tableData = [response.data];
               this.$axios
                 .get(
@@ -372,7 +372,7 @@ export default {
   destroyed() {
     clearInterval(this.$store.state.contesttimer);
   },
-  created() {
+  mounted() {
     this.refresh(this.$route.params.contestID);
   }
 };

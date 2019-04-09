@@ -1,6 +1,11 @@
 <template>
   <el-row>
-    <el-dialog :visible.sync="statusshow" @open="setstatus" :show-close="false" @closed="statusclosed">
+    <el-dialog
+      :visible.sync="statusshow"
+      @open="setstatus"
+      :show-close="false"
+      @closed="statusclosed"
+    >
       <statusmini ref="Status"></statusmini>
     </el-dialog>
 
@@ -16,10 +21,10 @@
         size="small"
         @cell-click="cellclick"
       >
-        <el-table-column prop="rank" label="Rank" width="70px" fixed></el-table-column>
+        <el-table-column type="index" width="40" fixed></el-table-column>
         <el-table-column prop="user" label="User" fixed></el-table-column>
         <el-table-column prop="nickname" label="Nickname" fixed></el-table-column>
-        <el-table-column prop="solved" label="Solve" fixed></el-table-column>
+        <el-table-column prop="score" :label="SolveLabel" fixed></el-table-column>
         <el-table-column prop="time" label="Time"></el-table-column>
         <el-table-column
           v-for="(item,index) in probleminfo"
@@ -57,7 +62,8 @@ export default {
         contest: this.$route.params.contestID,
         problemid: ""
       },
-      statusshow: false
+      statusshow: false,
+      SolveLabel: "Solved"
     };
   },
   created() {
@@ -91,11 +97,8 @@ export default {
 
       this.statusshow = true;
     },
-    statusclosed(){
-      this.$refs.Status.setstatus(
-        -1,
-        -1
-      );
+    statusclosed() {
+      this.$refs.Status.setstatus(-1, -1);
     },
     setstatus() {
       //console.log(this.statusdata.user,this.statusdata.problemid)
@@ -118,6 +121,8 @@ export default {
       return "background-color:white";
     },
     setproblemcount(id) {
+      if (this.$store.state.contesttype == "Rated") this.SolveLabel = "Score";
+
       this.contesttitle = this.$store.state.contesttitle;
       this.$axios.get("/contestproblem/?contestid=" + id).then(response3 => {
         this.$store.state.contestproblemcount = response3.data.length;
@@ -132,112 +137,143 @@ export default {
         }
         this.$axios.get("/contestboard/?contestid=" + id).then(response => {
           var data = [];
-          // 读取所有有提交的用户
-          //console.log(this.$store.state.contestbegintime)
+
+          //初始化每道题目的AC/Sub数
           var proac = [];
           var prosub = [];
           for (var iii = 0; iii < this.problemcount; iii++) proac.push(0);
           for (var iiii = 0; iiii < this.problemcount; iiii++) prosub.push(0);
 
+          //获取所有提交，提取出参加比赛的有哪些人
           var nameset = new Set();
-          for (let index = 0; index < response.data.length; index++)
-            nameset.add(response.data[index].username+"|"+response.data[index].user);
+          var namevis = {"!!!":1}
+          for (let index = 0; index < response.data.length; index++){
+            nameset.add(
+              response.data[index].username + "|" + response.data[index].user
+            );
+            namevis[response.data[index].username]=0
+          }
+            
 
+          //遍历每一个人，计算每一个人的信息
           for (var na of nameset) {
-            var k = {
-              user: na.split("|")[0],
-              nickname: na.split("|")[1],
-              solved: 0,
+            //初始化参赛者信息
+            
+            var username = na.split("|")[0];
+            var nickname = na.split("|")[1];
+            //去重
+            if(namevis[username]==1)
+              continue
+            namevis[username]=1
+            var PaticipantData = {
+              user: username,
+              nickname: nickname,
+              score: 0,
               time: 0,
               sorttime: 0
             };
-
             for (var j = 0; j < this.probleminfo.length; j++) {
-              k[this.probleminfo[j].prop] = "";
+              PaticipantData[this.probleminfo[j].prop] = "";
             }
 
-            var count = 0;
-            var t = 0;
+            //需要单独计算的信息
+            var ACNum = 0;
+            var Score = 0;
+            var FaShi = 0;
 
+            //计算每道题目的信息
+
+            var ProblemDataList = [];
+            for (var ii = 0; ii < this.probleminfo.length; ii++)
+              ProblemDataList.push([5552304570991, 0]); //第一个代表AC时间，第二个代表罚时次数
+
+            //找出每一道题AC的时间
+            for (let index = 0; index < response.data.length; index++) {
+              if (response.data[index].username == username) {
+                if (parseInt(response.data[index]["type"]) == 1) {
+                  let time =
+                    ProblemDataList[response.data[index].problemrank][0];
+                  if (parseInt(response.data[index]["submittime"]) < time)
+                    ProblemDataList[
+                      response.data[index].problemrank
+                    ][0] = parseInt(response.data[index]["submittime"]);
+                }
+              }
+            }
+
+            //找出每一道题AC前的提交次数，作为罚时
+            for (let index = 0; index < response.data.length; index++) {
+              if (response.data[index].username == username) {
+                if (parseInt(response.data[index]["type"]) == 0) {
+                  if (
+                    parseInt(response.data[index]["submittime"]) <
+                    ProblemDataList[response.data[index].problemrank][0]
+                  )
+                    ProblemDataList[response.data[index].problemrank][1]--;
+                }
+              }
+            }
+
+            //计算每一道题的信息
             for (var ii = 0; ii < this.probleminfo.length; ii++) {
-              var tmp = [5552304570991, 0];
+              var ProblemScore = 0
+              if(ii==0) ProblemScore = 200
+              else if(ii==1) ProblemScore = 500
+              else ProblemScore = (ii - 1) * 1000
 
-              let isac = false;
-              for (let index = 0; index < response.data.length; index++) {
-                if (
-                  response.data[index].username == na.split("|")[0] &&
-                  response.data[index].problemrank == ii
-                ) {
-                  if (parseInt(response.data[index]["type"]) == 1) {
-                    isac = true;
-                    if (parseInt(response.data[index]["submittime"]) < tmp[0])
-                      tmp[0] = parseInt(response.data[index]["submittime"]);
-                  }
-                }
-              }
-
-              for (let index = 0; index < response.data.length; index++) {
-                if (
-                  response.data[index].username == na.split("|")[0] &&
-                  response.data[index].problemrank == ii
-                ) {
-                  if (parseInt(response.data[index]["type"]) == 0) {
-                    if (parseInt(response.data[index]["submittime"]) < tmp[0])
-                      tmp[1]--;
-                  }
-                }
-              }
-
-              if (isac == true) {
+              //如果AC了
+              if (ProblemDataList[ii][0] != 5552304570991) {
                 proac[ii]++;
                 prosub[ii]++;
+                ACNum++;
 
-                count++;
-
-                tmp[0] = parseInt(tmp[0]);
-                tmp[1] = parseInt(tmp[1]);
+                //计算罚时
+                var ACTime = parseInt(ProblemDataList[ii][0]);
+                var FaShiNum = parseInt(ProblemDataList[ii][1]);
                 var cha = parseInt(
-                  (tmp[0] - this.$store.state.contestbegintime) / 1000
+                  (ACTime - this.$store.state.contestbegintime) / 1000
                 );
-                t += cha;
-                t += -tmp[1] * 20 * 60;
-                var tt =
+
+                Score += ProblemScore- ((cha/60.0 * 0.5)/100.0*ProblemScore)
+
+                FaShi += cha;
+                FaShi += -FaShiNum * 20 * 60;
+                var actime =
                   parseInt(cha / 60 / 60) +
                   ":" +
                   parseInt((cha / 60) % 60) +
                   ":" +
                   parseInt((cha % 60) % 60);
 
-                if (tmp[1] < 0) {
-                  k[this.toChar(ii)] = "(" + tmp[1] + ")\n" + tt;
-                  prosub[ii] = prosub[ii] - tmp[1];
-                } else k[this.toChar(ii)] = tt;
+                //表格中需要显示的信息
+                if (FaShiNum < 0) {
+                  PaticipantData[this.toChar(ii)] =
+                    "(" + FaShiNum + ")\n" + actime;
+                  prosub[ii] = prosub[ii] - FaShiNum;
+                  Score += 20 * FaShiNum
+                } else PaticipantData[this.toChar(ii)] = actime;
               } else {
-                tmp[1] = parseInt(tmp[1]);
-
-                if (tmp[1] < 0) {
-                  k[this.toChar(ii)] = "(" + tmp[1] + ")";
-                  prosub[ii] = prosub[ii] - tmp[1];
+                //表格中需要显示的信息
+                var FaShiNum = parseInt(ProblemDataList[ii][1]);
+                if (FaShiNum < 0) {
+                  PaticipantData[this.toChar(ii)] = "(" + FaShiNum + ")";
+                  prosub[ii] = prosub[ii] - FaShiNum;
                 }
               }
             }
+            PaticipantData["score"] =
+              this.$store.state.contesttype == "Rated" ? parseInt(Score<0?0:Score) : parseInt(ACNum);
 
-            k["solved"] = count;
-            var ttt =
-              parseInt(t / 60 / 60) +
+            var TimeTotal =
+              parseInt(FaShi / 60 / 60) +
               ":" +
-              parseInt((t / 60) % 60) +
+              parseInt((FaShi / 60) % 60) +
               ":" +
-              parseInt((t % 60) % 60);
-            k["time"] = ttt;
-            k["sorttime"] = t;
+              parseInt((FaShi % 60) % 60);
+            PaticipantData["time"] = TimeTotal; //排行榜上显示的
+            PaticipantData["sorttime"] = FaShi; //用于分数相同时排序的
 
-            data.push(k);
-          }
-
-          data.sort(this.sortByProperty("solved", "sorttime"));
-          for (var i = 0; i < data.length; i++) {
-            data[i]["rank"] = i + 1;
+            data.push(PaticipantData);
           }
 
           //计算排行榜顶部的ac/sub
@@ -250,7 +286,13 @@ export default {
               prosub[proi] +
               " )";
 
+          //查找FB
           for (var id = 0; id < this.problemcount; id++) {
+            var ProblemScore = 0
+            if(id==0) ProblemScore = 200
+            else if(id==1) ProblemScore = 500
+            else ProblemScore = (id - 1) * 1000
+
             var pro = this.toChar(id);
             var index = -1;
             var minn = 100000000000000;
@@ -284,9 +326,12 @@ export default {
             }
             if (index != -1) {
               data[index][pro] = data[index][pro] + "\n❤";
+              if (this.$store.state.contesttype == "Rated")
+                data[index]["score"] += parseInt(ProblemScore/10)
             }
           }
 
+          data.sort(this.sortByProperty("score", "sorttime"));
           this.tableData = data;
         });
       });

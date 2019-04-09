@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from rest_framework import serializers
-from .models import ContestAnnouncement,ContestRank, ContestBoard, ContestComment, ContestInfo, ContestProblem, ContestRegister
+from .models import ContestAnnouncement,ContestRank,ContestRatingChange, ContestBoard, ContestComment, ContestInfo, ContestProblem, ContestRegister
 
 
 class ContestAnnouncementSerializer(serializers.ModelSerializer):
@@ -39,3 +39,7 @@ class ContestRegisterSerializer(serializers.ModelSerializer):
         model = ContestRegister
         fields = '__all__'
     
+class ContestRatingChangeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContestRatingChange
+        fields = '__all__'

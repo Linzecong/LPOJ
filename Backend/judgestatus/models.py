@@ -12,7 +12,7 @@ class JudgeStatus(models.Model):
     memory = models.IntegerField()
     length = models.IntegerField()
     language = models.CharField(max_length=50)
-    submittime = models.DateTimeField(auto_now=True)
+    submittime = models.DateTimeField()
     judger = models.CharField(max_length=50)
     contest = models.IntegerField()
     contestproblem = models.IntegerField(default=-1) # 对应比赛里的哪一题
@@ -20,6 +20,7 @@ class JudgeStatus(models.Model):
     testcase = models.CharField(max_length=50,default="0")
     message = models.TextField()
     problemtitle = models.CharField(max_length=100,default="")
+    rating = models.IntegerField(default=1500)
     
 
     objects = models.Manager()

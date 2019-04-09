@@ -64,7 +64,8 @@ export default {
         .post(
           "/ojmessage/",{
             username:localStorage.username,
-            msg:this.msg
+            msg:this.msg,
+            rating: parseInt(localStorage.rating)
           }
         )
         .then(response => {

@@ -5,8 +5,8 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.pagination import LimitOffsetPagination
 from .permission import ManagerOnly,LoginOnly
-from .models import ContestAnnouncement,ContestRank, ContestBoard, ContestComment, ContestInfo, ContestProblem, ContestRegister
-from .serializers import ContestRankSerializer, ContestAnnouncementSerializer,ContestBoardSerializer,ContestCommentSerializer,ContestInfoSerializer,ContestProblemSerializer, ContestRegisterSerializer
+from .models import ContestAnnouncement,ContestRank,ContestRatingChange, ContestBoard, ContestComment, ContestInfo, ContestProblem, ContestRegister
+from .serializers import ContestRankSerializer,ContestRatingChangeSerializer, ContestAnnouncementSerializer,ContestBoardSerializer,ContestCommentSerializer,ContestInfoSerializer,ContestProblemSerializer, ContestRegisterSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 import datetime
 from rest_framework.response import Response
@@ -69,6 +69,13 @@ class ContestProblemView(viewsets.ModelViewSet):
 class ContestRegisterView(viewsets.ModelViewSet):
     queryset = ContestRegister.objects.all()
     serializer_class = ContestRegisterSerializer
+    pagination_class = LimitOffsetPagination
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ('user', "contestid")
+
+class ContestRatingChangeView(viewsets.ModelViewSet):
+    queryset = ContestRatingChange.objects.all()
+    serializer_class = ContestRatingChangeSerializer
     pagination_class = LimitOffsetPagination
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('user', "contestid")

@@ -21,6 +21,13 @@ class UserOnly(permissions.BasePermission):
         
         data = request.data
         username = data.get('username')
+        rating = data.get('rating',-1)
+        score = data.get('score',-1)
+        ac = data.get('ac',-1)
+        submit = data.get('submit',-1)
+        if rating != -1 or score != -1 or ac != -1 or submit != -1:
+            return False
+
         userid = request.session.get('user_id', None)
         if userid == username or request.session.get('type', 1) == 3 :
             return True

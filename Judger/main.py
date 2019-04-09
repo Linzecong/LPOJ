@@ -30,9 +30,12 @@ cursor = db.cursor()
 
 
 def reconnect():
-    global statue, clientsocket
+    global statue, clientsocket,db,cursor
     clientsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
+        db = MySQLdb.connect(judgerjson["db_ip"], judgerjson["db_user"], judgerjson["db_pass"],
+                     judgerjson["db_database"], int(judgerjson["db_port"]), charset='utf8')
+        cursor = db.cursor()
         clientsocket.connect((host, port))
         statue = True
     except:
@@ -528,6 +531,7 @@ while True:
         reconnect()
     except Exception as e:
         print(e)
+        reconnect()
         break
 
 

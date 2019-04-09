@@ -6,7 +6,7 @@
           <div slot="header">
             <b>{{ msg }}</b>
           </div>
-          <b>当前版本：1.2.1</b>
+          <b>当前版本：1.2.2</b>
           <br>
           <b>支持语言：C/C++/Java</b>
         </el-card>
@@ -26,7 +26,7 @@
           >
             <el-table-column type="index" width="40"></el-table-column>
             <el-table-column prop="username" label="User"></el-table-column>
-            <el-table-column prop="score" label="Score"></el-table-column>
+            <el-table-column prop="rating" label="Score"></el-table-column>
           </el-table>
         </el-card>
       </el-row>
@@ -52,11 +52,22 @@
             <h4>4、为了鼓励思考，计算一个系数K，K=（本次比赛得分/平均分）</h4>
             <h4>5、为了鼓励新人，计算一个系数P，P=（开始比赛前的积分排名/总人数）</h4>
             <h4>6、计算积分的变化 D = 20*(K+P+S-E)</h4>
+            <el-table
+            :data="RatingData"
+            border
+            style="width: 70%"
+            size="mini"
+            :row-style="rankcolor"
+            >
+            <el-table-column prop="name" label="Name"></el-table-column>
+            <el-table-column prop="rating" label="Score"></el-table-column>
+            <el-table-column prop="color" label="Color"></el-table-column>
+          </el-table>
 
             <h3>每场比赛排名怎么算?</h3>
             <h3>LPOJ个人赛：</h3>
-            <h4>每道题目有一个积分，按照AC顺序得分为 题目积分-(题目积分/做出总人数/2)*(AC顺序-1)</h4>
-            <h4>每一次失败提交-20分，一血加分为 题目积分/100</h4>
+            <h4>每道题目有一个积分，每分钟衰减0.5%，比赛一般为120分钟。每道题分数按顺序为200 500 1000 2000 3000 4000往后的每道+1000</h4>
+            <h4>每一次失败提交-20分，一血加分为 题目积分/10</h4>
             <br>
             <h4>集训组队赛：</h4>
             <h4>为减轻管理员负担，并鼓励积极思考，按照如下规则算分，所有队伍仅算校内队伍</h4>
@@ -168,7 +179,19 @@ export default {
       msg: "欢迎来到LPOJ",
       tableData: [],
       tableData2: [],
-      tableData3: []
+      tableData3: [],
+      RatingData:[
+        {name:"Legendary Grandmaster",rating:"3000+",color:"红色"},
+        {name:"International Grandmaster",rating:"2600 ~ 2999",color:"褐色"},
+        {name:"Grandmaster",rating:"2200 ~ 2599",color:"橙色"},
+        {name:"International master",rating:"2050 ~ 2199",color:"紫色"},
+        {name:"Master",rating:"1900 ~ 2049",color:"蓝色"},
+        {name:"Candidate master",rating:"1700 ~ 1899",color:"青色"},
+        {name:"Expert",rating:"1500 ~ 1699",color:"淡绿色"},
+        {name:"Specialist",rating:"1350 ~ 1499",color:"草绿色"},
+        {name:"Pupil",rating:"1200 ~ 1349",color:"灰色"},
+        {name:"Newbie",rating:"0 ~ 1199",color:"黑色"},
+      ]
     };
   },
   created() {
