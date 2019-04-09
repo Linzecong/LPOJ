@@ -19,6 +19,9 @@ class UserOnly(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS or request.method=="POST":
             return True
         
+        if request.session.get('type', 1) == 3 :
+            return True
+        
         data = request.data
         username = data.get('username')
         rating = data.get('rating',-1)

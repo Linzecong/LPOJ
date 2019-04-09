@@ -130,14 +130,14 @@
       :default-sort="{prop: 'id', order: 'descending'}"
       :data="tableData"
       style="width: 100%"
-      :row-class-name="tableRowClassName"
+      :row-style="ratingcolor"
       @row-click="rowClick"
       size="small"
     >
       <el-table-column prop="id" label="ID" :width="70"></el-table-column>
-      <el-table-column prop="user" label="User" :width="150"></el-table-column>
-      <el-table-column prop="problemtitle" label="Problem" :width="200"></el-table-column>
-      <el-table-column prop="result" label="Status" :width="300">
+      <el-table-column prop="user" label="User" :width="140"></el-table-column>
+      <el-table-column prop="problemtitle" label="Problem" :width="190"></el-table-column>
+      <el-table-column prop="result" label="Status" :width="290">
         <template slot-scope="scope">
           <el-tag size="medium" :type="statuetype(scope.row.result)" disable-transitions hit>
             {{ scope.row.result }}
@@ -168,26 +168,6 @@
 
 
 <style scope>
-.el-table .warning-row {
-  background: #fff9f9;
-}
-
-.el-table .success-row {
-  background: #e6ffdf;
-}
-
-.el-table .info-row {
-  background: #fffff7;
-}
-
-.el-table .judging-row {
-  background: #f7ffff;
-}
-
-.el-table .danger-row {
-  background: #fff9f9;
-}
-
 .el-tag {
   text-align: center;
   font-weight: bold;
@@ -490,21 +470,23 @@ export default {
           this.totalstatus = response.data.count;
         });
     },
-    tableRowClassName({ row, rowIndex }) {
-      if (row.result == "Pending") return "info-row";
-      if (row.result == "Judging") return "judging-row";
-      if (row.result == "Wrong Answer") return "danger-row";
-      if (row.result == "Compile Error") return "warning-row";
-      if (row.result == "Presentation Error") return "warning-row";
-      if (row.result == "Waiting") return "info-row";
-      if (row.result == "Accepted") return "success-row";
-      if (row.result == "Time Limit Exceeded") return "warning-row";
-      if (row.result == "Time Limit Exceeded") return "warning-row";
-      if (row.result == "Memory Limit Exceeded") return "warning-row";
-      if (row.result == "Runtime Error") return "warning-row";
-      if (row.result == "System Error") return "warning-row";
-      return "";
+    ratingcolor({row, rowIndex}){
+      var back ="";
+      if (row.result == "Accepted") back="background:#e6ffdf;font-weight: bold;";
+      if (row.result == "Wrong Answer") back="font-weight: bold;";
+
+      if (row.rating >= 3000) return "color:red;"+back;
+      if (row.rating >= 2600) return "color:#BB5E00;"+back;
+      if (row.rating >= 2200) return "color:#E6A23C;"+back;
+      if (row.rating >= 2050) return "color:#930093;"+back;
+      if (row.rating >= 1900) return "color:#0000AA;"+back;
+      if (row.rating >= 1700) return "color:#007799;"+back;
+      if (row.rating >= 1500) return "color:#227700;"+back;
+      if (row.rating >= 1350) return "color:#67C23A;"+back;
+      if (row.rating >= 1200) return "color:#909399;"+back;
+      return "color:#303133;"+back;
     },
+
     statuetype: function(type) {
       if (type == "Pending") return "info";
       if (type == "Judging") return "";

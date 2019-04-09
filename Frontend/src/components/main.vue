@@ -22,7 +22,7 @@
             style="width: 100%"
             @cell-click="userclick"
             size="mini"
-            :row-style="rankcolor"
+            :row-style="ratingcolor"
           >
             <el-table-column type="index" width="40"></el-table-column>
             <el-table-column prop="username" label="User"></el-table-column>
@@ -187,7 +187,7 @@ export default {
         {name:"International master",rating:"2050 ~ 2199",color:"紫色"},
         {name:"Master",rating:"1900 ~ 2049",color:"蓝色"},
         {name:"Candidate master",rating:"1700 ~ 1899",color:"青色"},
-        {name:"Expert",rating:"1500 ~ 1699",color:"淡绿色"},
+        {name:"Expert",rating:"1500 ~ 1699",color:"绿色"},
         {name:"Specialist",rating:"1350 ~ 1499",color:"草绿色"},
         {name:"Pupil",rating:"1200 ~ 1349",color:"灰色"},
         {name:"Newbie",rating:"0 ~ 1199",color:"黑色"},
@@ -248,14 +248,26 @@ export default {
     blogclick(row, column, cell, event) {
       window.open(row.url);
     },
+    ratingcolor({row, rowIndex}){
+      if (row.rating >= 3000) return "color:red;font-weight: bold;";
+      if (row.rating >= 2600) return "color:#BB5E00;font-weight: bold;";
+      if (row.rating >= 2200) return "color:#E6A23C;font-weight: bold;";
+      if (row.rating >= 2050) return "color:#930093;font-weight: bold;";
+      if (row.rating >= 1900) return "color:#0000AA;font-weight: bold;";
+      if (row.rating >= 1700) return "color:#007799;font-weight: bold;";
+      if (row.rating >= 1500) return "color:#227700;font-weight: bold;";
+      if (row.rating >= 1350) return "color:#67C23A;font-weight: bold;";
+      if (row.rating >= 1200) return "color:#909399;font-weight: bold;";
+      return "color:#303133;font-weight: bold;";
+    },
     rankcolor({ row, rowIndex }) {
       if (rowIndex == 0) return "color:red;font-weight: bold;";
       if (rowIndex == 1) return "color:#BB5E00;font-weight: bold;";
       if (rowIndex == 2) return "color:#E6A23C;font-weight: bold;";
       if (rowIndex == 3) return "color:#930093;font-weight: bold;";
-      if (rowIndex == 4) return "color:#409EFF;font-weight: bold;";
-      if (rowIndex == 5) return "color:#00CACA;font-weight: bold;";
-      if (rowIndex == 6) return "color:#02DF82;font-weight: bold;";
+      if (rowIndex == 4) return "color:#0000AA;font-weight: bold;";
+      if (rowIndex == 5) return "color:#007799;font-weight: bold;";
+      if (rowIndex == 6) return "color:#227700;font-weight: bold;";
       if (rowIndex == 7) return "color:#67C23A;font-weight: bold;";
       if (rowIndex == 8) return "color:#909399;font-weight: bold;";
       return "color:#303133;font-weight: bold;";

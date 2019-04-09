@@ -20,6 +20,7 @@
         stripe
         size="small"
         @cell-click="cellclick"
+        :row-style="ratingcolor"
       >
         <el-table-column type="index" width="40" fixed></el-table-column>
         <el-table-column prop="user" label="User" fixed></el-table-column>
@@ -106,6 +107,18 @@ export default {
         this.statusdata.problemid,
         this.statusdata.user
       );
+    },
+    ratingcolor({row, rowIndex}){
+      if (row.rating >= 3000) return "color:red;font-weight: bold;";
+      if (row.rating >= 2600) return "color:#BB5E00;font-weight: bold;";
+      if (row.rating >= 2200) return "color:#E6A23C;font-weight: bold;";
+      if (row.rating >= 2050) return "color:#930093;font-weight: bold;";
+      if (row.rating >= 1900) return "color:#0000AA;font-weight: bold;";
+      if (row.rating >= 1700) return "color:#007799;font-weight: bold;";
+      if (row.rating >= 1500) return "color:#227700;font-weight: bold;";
+      if (row.rating >= 1350) return "color:#67C23A;font-weight: bold;";
+      if (row.rating >= 1200) return "color:#909399;font-weight: bold;";
+      return "color:#303133;font-weight: bold;";
     },
     cellstyle(data) {
       var id = data.columnIndex - 5;

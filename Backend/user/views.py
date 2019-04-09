@@ -14,7 +14,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import LimitOffsetPagination
 
 class UserDataView(viewsets.ModelViewSet):
-    queryset = UserData.objects.all().order_by('-score')
+    queryset = UserData.objects.all().order_by('-rating')
     serializer_class = UserDataSerializer
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('username',)
