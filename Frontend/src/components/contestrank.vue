@@ -2,7 +2,7 @@
   <el-row>
     <el-dialog
       :visible.sync="statusshow"
-      @open="setstatus"
+      @opened="setstatus"
       :show-close="false"
       @closed="statusclosed"
     >
@@ -127,9 +127,9 @@ export default {
       if (data.row[str].indexOf("❤") > -1)
         return "background-color:#009100;text-align:center;font-weight:bold;color:white;";
       if (data.row[str].indexOf(":") > -1)
-        return "background-color:#79FF79;text-align:center";
+        return "background-color:#79FF79;text-align:center;color:black;";
       if (data.row[str].indexOf("(") > -1)
-        return "background-color:#F56C6C;text-align:center";
+        return "background-color:#F56C6C;text-align:center;color:black;";
 
       return "background-color:white";
     },
@@ -203,6 +203,7 @@ export default {
             //找出每一道题AC的时间
             for (let index = 0; index < response.data.length; index++) {
               if (response.data[index].username == username) {
+                PaticipantData["rating"]=response.data[index].rating
                 if (parseInt(response.data[index]["type"]) == 1) {
                   let time =
                     ProblemDataList[response.data[index].problemrank][0];
@@ -285,6 +286,7 @@ export default {
               parseInt((FaShi % 60) % 60);
             PaticipantData["time"] = TimeTotal; //排行榜上显示的
             PaticipantData["sorttime"] = FaShi; //用于分数相同时排序的
+            
 
             data.push(PaticipantData);
           }

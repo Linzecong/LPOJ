@@ -473,7 +473,6 @@ export default {
     ratingcolor({row, rowIndex}){
       var back ="";
       if (row.result == "Accepted") back="background:#e6ffdf;font-weight: bold;";
-      if (row.result == "Wrong Answer") back="font-weight: bold;";
 
       if (row.rating >= 3000) return "color:red;"+back;
       if (row.rating >= 2600) return "color:#BB5E00;"+back;

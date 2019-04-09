@@ -82,9 +82,9 @@ export default {
         "/userdata/?limit="+limit+"&offset="+offset
       )
       .then(response => {
-        console.log(response.data.results[0])
+        //console.log(response.data.results[0])
         for(var i=0;i<response.data.results.length;i++){
-          console.log(response.data.results[i]["ac"])
+          //console.log(response.data.results[i]["ac"])
           response.data.results[i]["rate"]= ((response.data.results[i]["ac"]/ response.data.results[i]["submit"])*100).toFixed(2)+"%";
           
           if(response.data.results[i]["submit"]==0){

@@ -88,7 +88,7 @@
             <div slot="header">
               <b>kuangbin</b>
             </div>
-            <b>年轻人要多刷题，少水题，才能进Final！</b>
+            <b>年轻人要多刷题，少水群，才能进Final！</b>
           </el-card>
         </el-col>
         <el-col :span="8">

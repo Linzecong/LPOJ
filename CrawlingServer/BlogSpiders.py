@@ -32,8 +32,8 @@ while True:
                 url = e.links[0].href
                 summary = e.summary
                 time = e.published
-                cursor.execute("INSERT INTO blog_blog(username,title,url,summary,time) SELECT %s, %s,%s,%s,%s FROM DUAL WHERE NOT EXISTS(SELECT * FROM blog_blog WHERE username = %s and url= %s)",
-                        (username, title, url, summary, time, username, url))
+                cursor.execute("INSERT INTO blog_blog(username,title,url,summary,time) SELECT %s, %s,%s,%s,%s FROM DUAL WHERE NOT EXISTS(SELECT * FROM blog_blog WHERE url= %s)",
+                        (username, title, url, summary, time, url))
         db.commit()
         print(user, " Done!")
     sleep(3600)
