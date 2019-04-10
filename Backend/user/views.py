@@ -12,14 +12,17 @@ from .serializers import UserSerializer, UserDataSerializer,UserNoPassSerializer
 from .permission import LoginOnly, UserOnly,UserPUTOnly,AuthPUTOnly
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import LimitOffsetPagination
+from rest_framework.throttling import ScopedRateThrottle
 
 class UserDataView(viewsets.ModelViewSet):
-    queryset = UserData.objects.all().order_by('-score')
+    queryset = UserData.objects.all().order_by('-rating')
     serializer_class = UserDataSerializer
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('username',)
     permission_classes = (UserOnly,)
     pagination_class = LimitOffsetPagination
+    throttle_scope  = "post"
+    throttle_classes =[ScopedRateThrottle,]
 
 
 class UserView(viewsets.ModelViewSet):
@@ -29,39 +32,54 @@ class UserView(viewsets.ModelViewSet):
     filter_fields = ('username',)
     permission_classes = (UserOnly,)
     pagination_class = LimitOffsetPagination
+    throttle_scope  = "post"
+    throttle_classes =[ScopedRateThrottle,]
 
 class UserChangeView(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserNoTypeSerializer
     permission_classes = (UserPUTOnly,)
+    throttle_scope  = "post"
+    throttle_classes =[ScopedRateThrottle,]
 
 class UserChangeAllView(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (AuthPUTOnly,)
+    throttle_scope  = "post"
+    throttle_classes =[ScopedRateThrottle,]
 
 class UserLoginAPIView(APIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (AllowAny,)
+    throttle_scope  = "post"
+    throttle_classes =[ScopedRateThrottle,]
     def post(self, request, format=None):
         data = request.data
         username = data.get('username')
         password = data.get('password')
         user = User.objects.get(username__exact=username)
+        userdata = UserData.objects.get(username__exact=username)
         if user.password == password:
             serializer = UserSerializer(user)
             new_data = serializer.data
             request.session['user_id'] = user.username
             request.session['type'] = user.type
+            request.session['rating'] = userdata.rating
             return Response(new_data, status=HTTP_200_OK)
         return Response('passworderror', HTTP_200_OK)
 
 class UserLogoutAPIView(APIView):
+    throttle_scope  = "post"
+    throttle_classes =[ScopedRateThrottle,]
     def get(self,request):
         if request.session.get('user_id',None) is not None:
             del request.session['user_id']
+        if request.session.get('type',None) is not None:
             del request.session['type']
+        if request.session.get('rating',None) is not None:
+            del request.session['rating']
         return Response('ok', HTTP_200_OK)
 
 
@@ -69,6 +87,8 @@ class UserRegisterAPIView(APIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (AllowAny,)
+    throttle_scope  = "post"
+    throttle_classes =[ScopedRateThrottle,]
 
     def post(self, request, format=None):
         data = request.data.copy()

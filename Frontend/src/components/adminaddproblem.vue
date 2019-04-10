@@ -197,8 +197,14 @@ export default {
 
     onAddProblemSubmit() {
       if (this.fileList.length <= 0) {
-        this.$message.error("请选择数据文件");
-        return;
+        this.$confirm("确定添加吗？本次添加没有添加数据文件！后续可在修改题目中添加", "添加题目", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(() => {
+          this.handleSuccess(1,2,3);
+        });
+      return
       }
       console.log(this.fileList)
       var name = this.fileList[0].name;

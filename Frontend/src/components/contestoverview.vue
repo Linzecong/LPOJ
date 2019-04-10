@@ -3,6 +3,8 @@
     <el-row :gutter="10">
       <center>
         <h1>{{ title }}</h1>
+        <el-progress :text-inside="true" :stroke-width="18" :percentage="leftpercentage" :status="barstatus"></el-progress>
+        <br>
         <el-rate v-model="level" disabled text-color="#409EFF" score-template="{value}"></el-rate>
         <el-button
           plain
@@ -84,7 +86,9 @@ export default {
       level: 1,
       des: "",
       note: "",
-      lefttime: 0,
+      lefttime: 0.0,
+      leftpercentage:0,
+      barstatus:"",
       timestyle: "wait",
       left: -100,
       lasttime: 0,
@@ -126,7 +130,7 @@ export default {
           this.totaluser = response.data.count;
         })
         .catch(error => {
-          this.$message.error("服务器错误！" + "(" + error + ")");
+          this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
         });
     },
     handleCurrentChange(val) {
@@ -145,7 +149,7 @@ export default {
           this.totaluser = response.data.count;
         })
         .catch(error => {
-          this.$message.error("服务器错误！" + "(" + error + ")");
+          this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
         });
     },
     register() {
@@ -204,7 +208,7 @@ export default {
               this.$router.go(0);
             })
             .catch(error => {
-              this.$message.error("服务器错误！" + error);
+              this.$message.error("服务器错误！" + JSON.stringify(error.response.data));
               return;
             });
         });
@@ -256,7 +260,11 @@ export default {
               );
 
               if (this.left < 0) this.timestyle = "wait";
-              else this.timestyle = "begin";
+              else {
+                this.timestyle = "begin";
+                this.barstatus="success"
+              }
+                
 
               this.lasttime = response.data.lasttime;
               if (
@@ -269,6 +277,7 @@ export default {
               }
 
               var t = Math.abs(this.left);
+              this.leftpercentage = parseInt(Math.abs(this.left)/response.data.lasttime*100)
 
               this.lefttime =
                 parseInt(t / 60 / 60) +
@@ -285,7 +294,7 @@ export default {
               ).format("YYYY-MM-DD HH:mm:ss");
 
               this.$store.state.contestbegintime = date1.getTime();
-
+              this.$store.state.contesttype = response.data.type
               this.tableData = [response.data];
               this.$axios
                 .get(
@@ -307,11 +316,11 @@ export default {
                   this.canregister=true;
                 })
                 .catch(error => {
-                  this.$message.error("服务器错误！" + "(" + error + ")");
+                  this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
                 });
             })
             .catch(error => {
-              this.$message.error("服务器错误！" + "(" + error + ")");
+              this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
             });
         });
     },
@@ -329,7 +338,9 @@ export default {
       }
 
       if (this.left < 0) this.timestyle = "wait";
-      else this.timestyle = "begin";
+      else {this.timestyle = "begin";
+      this.barstatus="success"
+      }
 
       if(this.$store.state.contestisend==false){
 
@@ -348,6 +359,7 @@ export default {
       }
 
       var t = Math.abs(this.left);
+      this.leftpercentage = parseInt(Math.abs(this.left)/this.lasttime*100)
 
       this.lefttime =
         parseInt(t / 60 / 60) +
@@ -360,7 +372,7 @@ export default {
   destroyed() {
     clearInterval(this.$store.state.contesttimer);
   },
-  created() {
+  mounted() {
     this.refresh(this.$route.params.contestID);
   }
 };

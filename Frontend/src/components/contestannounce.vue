@@ -43,7 +43,7 @@ export default {
             this.reflash();
           })
           .catch(error => {
-            this.$message.error("服务器出错！" + error);
+            this.$message.error("服务器出错！" + JSON.stringify(error.response.data));
           });
       });
     },

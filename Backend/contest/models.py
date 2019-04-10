@@ -53,6 +53,7 @@ class ContestBoard(models.Model):
     type = models.IntegerField() # 1 AC， 0没AC算罚时，-1没AC不算罚时
     submittime = models.BigIntegerField() # 豪秒为单位
     submitid = models.IntegerField() # 用于rejudge
+    rating = models.IntegerField(default=1500)
 
     objects = models.Manager()
 
@@ -65,7 +66,7 @@ class ContestRank(models.Model):
     username = models.CharField(max_length=50)
     user = models.CharField(max_length=50)
     statue = models.CharField(max_length=5000) # 用 | 分割，如  0|-1|100|0|-5 代表 B题错了一次，C题在100毫秒AC，
-
+    rating = models.IntegerField(default=1500)
     objects = models.Manager()
 
     def __str__(self):
@@ -80,6 +81,7 @@ class ContestComment(models.Model):
     message = models.CharField(max_length=500)
     huifu = models.CharField(default="暂无回复",max_length=500) # 0代表是提问，其他数字代表回复了哪个提问
     time = models.DateTimeField(auto_now=True)
+    rating = models.IntegerField(default=1500)
 
     objects = models.Manager()
 
@@ -91,6 +93,21 @@ class ContestRegister(models.Model):
     contestid = models.IntegerField()
     user = models.CharField(max_length=50)
     rating = models.IntegerField(default=0)
+    
+    objects = models.Manager()
+
+    def __str__(self):
+        return self.contestid
+
+class ContestRatingChange(models.Model):
+
+    contestid = models.IntegerField()
+    contestname = models.CharField(max_length=100)
+    contesttime = models.CharField(max_length=100)
+    user = models.CharField(max_length=50)
+    lastrating = models.IntegerField(default=0)
+    ratingchange = models.IntegerField(default=0)
+    currentrating = models.IntegerField(default=0)
     
     objects = models.Manager()
 

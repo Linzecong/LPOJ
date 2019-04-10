@@ -5,7 +5,7 @@ from .permission import ManagerOnly
 from .models import Board,OthersSubmit,DailyBoard,TeamBoard,DailyContestBoard
 from rest_framework.pagination import LimitOffsetPagination
 import datetime
-
+from rest_framework.throttling import ScopedRateThrottle
 
 class BoardView(viewsets.ModelViewSet):
     queryset = Board.objects.all()
@@ -13,6 +13,8 @@ class BoardView(viewsets.ModelViewSet):
     filter_fields = ('username',)
     pagination_class = LimitOffsetPagination
     permission_classes = (ManagerOnly,)
+    throttle_scope  = "post"
+    throttle_classes =[ScopedRateThrottle,]
 
 class DailyBoardView(viewsets.ModelViewSet):
     queryset = DailyBoard.objects.filter(collecttime__gte=datetime.datetime.now()-datetime.timedelta(days=30)).order_by('collecttime')
@@ -20,12 +22,16 @@ class DailyBoardView(viewsets.ModelViewSet):
     filter_fields = ('username','collecttime')
     pagination_class = LimitOffsetPagination
     permission_classes = (ManagerOnly,)
+    throttle_scope  = "post"
+    throttle_classes =[ScopedRateThrottle,]
 
 class OthersSubmitView(viewsets.ModelViewSet):
     queryset = OthersSubmit.objects.all()
     serializer_class = OthersSubmitSerializer
     filter_fields = ('username','accepted')
     pagination_class = LimitOffsetPagination
+    throttle_scope  = "post"
+    throttle_classes =[ScopedRateThrottle,]
 
 class TeamBoardView(viewsets.ModelViewSet):
     queryset = TeamBoard.objects.all()
@@ -33,6 +39,8 @@ class TeamBoardView(viewsets.ModelViewSet):
     filter_fields = ('teammember','collecttime')
     pagination_class = LimitOffsetPagination
     permission_classes = (ManagerOnly,)
+    throttle_scope  = "post"
+    throttle_classes =[ScopedRateThrottle,]
 
 class DailyContestBoardView(viewsets.ModelViewSet):
     queryset = DailyContestBoard.objects.all()
@@ -40,3 +48,5 @@ class DailyContestBoardView(viewsets.ModelViewSet):
     filter_fields = ('contestdate','teammember')
     pagination_class = LimitOffsetPagination
     permission_classes = (ManagerOnly,)
+    throttle_scope  = "post"
+    throttle_classes =[ScopedRateThrottle,]

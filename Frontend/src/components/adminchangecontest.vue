@@ -156,7 +156,7 @@ export default {
             });
         })
         .catch(error => {
-          this.$message.error("服务器错误！" + error);
+          this.$message.error("服务器错误！" + JSON.stringify(error.response.data));
           this.changecontestform = {};
         });
     },
@@ -260,7 +260,7 @@ export default {
         })
         .catch(error => {
           this.canadd = false;
-          this.$message.error("服务器错误！" + error);
+          this.$message.error("服务器错误！" + JSON.stringify(error.response.data));
         });
     },
     handleClose(tag) {
@@ -348,7 +348,7 @@ export default {
             });
           })
           .catch(error => {
-            this.$message.error("服务器出错！" + error);
+            this.$message.error("服务器出错！" + JSON.stringify(error.response.data));
           });
       });
     }

@@ -31,7 +31,7 @@
       </el-menu-item>
       <el-menu-item index="/about">
         <i class="el-icon-document"></i>About
-      </el-menu-item> -->
+      </el-menu-item>-->
       <el-button
         round
         id="button"
@@ -48,7 +48,6 @@
         @command="handleCommand"
         :show-timeout="100"
         :split-button="true"
-        @visible-change="updatename"
       >
         <span class="el-dropdown-link">Welcome {{name}}</span>
         <el-dropdown-menu slot="dropdown">
@@ -68,7 +67,7 @@
             <div style="text-align:center;margin:5px;">用户名</div>
           </el-col>
           <el-col :span="12">
-            <el-input v-model="form.username" autocomplete="off"></el-input>
+            <el-input v-model="form.username" autocomplete="off" placeholder="不少于3个字符的用户名，必填"></el-input>
           </el-col>
         </el-row>
         <el-row :gutter="10">
@@ -76,7 +75,7 @@
             <div style="text-align:center;margin:5px;">昵称</div>
           </el-col>
           <el-col :span="12">
-            <el-input v-model="form.name" autocomplete="off"></el-input>
+            <el-input v-model="form.name" autocomplete="off" placeholder="不少于1个字符的昵称，必填"></el-input>
           </el-col>
         </el-row>
         <el-row :gutter="10">
@@ -84,7 +83,12 @@
             <div style="text-align:center;margin:5px;">密码</div>
           </el-col>
           <el-col :span="12">
-            <el-input type="password" v-model="form.password" autocomplete="off"></el-input>
+            <el-input
+              type="password"
+              v-model="form.password"
+              autocomplete="off"
+              placeholder="不少于6个字符的密码，必填"
+            ></el-input>
           </el-col>
         </el-row>
         <el-row :gutter="10">
@@ -92,7 +96,12 @@
             <div style="text-align:center;margin:5px;">确认密码</div>
           </el-col>
           <el-col :span="12">
-            <el-input type="password" v-model="form.comfirm" autocomplete="off"></el-input>
+            <el-input
+              type="password"
+              v-model="form.comfirm"
+              autocomplete="off"
+              placeholder="请重复密码，必填"
+            ></el-input>
           </el-col>
         </el-row>
         <el-row :gutter="10">
@@ -100,7 +109,7 @@
             <div style="text-align:center;margin:5px;">学校</div>
           </el-col>
           <el-col :span="12">
-            <el-input v-model="form.school" autocomplete="off"></el-input>
+            <el-input v-model="form.school" autocomplete="off" placeholder="请填写真实学校，必填"></el-input>
           </el-col>
         </el-row>
         <el-row :gutter="10">
@@ -108,7 +117,7 @@
             <div style="text-align:center;margin:5px;">专业</div>
           </el-col>
           <el-col :span="12">
-            <el-input v-model="form.course" autocomplete="off"></el-input>
+            <el-input v-model="form.course" autocomplete="off" placeholder="请填写真实专业，必填"></el-input>
           </el-col>
         </el-row>
         <el-row :gutter="10">
@@ -116,7 +125,7 @@
             <div style="text-align:center;margin:5px;">班级</div>
           </el-col>
           <el-col :span="12">
-            <el-input v-model="form.classes" autocomplete="off"></el-input>
+            <el-input v-model="form.classes" autocomplete="off" placeholder="请填写真实班级，必填"></el-input>
           </el-col>
         </el-row>
         <el-row :gutter="10">
@@ -124,7 +133,7 @@
             <div style="text-align:center;margin:5px;">学号</div>
           </el-col>
           <el-col :span="12">
-            <el-input v-model="form.number" autocomplete="off"></el-input>
+            <el-input v-model="form.number" autocomplete="off" placeholder="请填写真实学号，必填"></el-input>
           </el-col>
         </el-row>
         <el-row :gutter="10">
@@ -132,7 +141,7 @@
             <div style="text-align:center;margin:5px;">真实姓名</div>
           </el-col>
           <el-col :span="12">
-            <el-input v-model="form.realname" autocomplete="off"></el-input>
+            <el-input v-model="form.realname" autocomplete="off" placeholder="请填写真实姓名，必填"></el-input>
           </el-col>
         </el-row>
         <el-row :gutter="10">
@@ -140,7 +149,7 @@
             <div style="text-align:center;margin:5px;">QQ</div>
           </el-col>
           <el-col :span="12">
-            <el-input v-model="form.qq" autocomplete="off"></el-input>
+            <el-input v-model="form.qq" autocomplete="off" placeholder="请填写真实QQ，必填"></el-input>
           </el-col>
         </el-row>
         <el-row :gutter="10">
@@ -148,7 +157,7 @@
             <div style="text-align:center;margin:5px;">Email</div>
           </el-col>
           <el-col :span="12">
-            <el-input v-model="form.email" autocomplete="off"></el-input>
+            <el-input v-model="form.email" autocomplete="off" placeholder="请填写真实邮箱，必填"></el-input>
           </el-col>
         </el-row>
       </el-form>
@@ -201,7 +210,7 @@ export default {
       loginshow: localStorage.username,
       username: localStorage.username,
       name: localStorage.name,
-      isadmin:false,
+      isadmin: false,
       form: {
         username: "",
         password: "",
@@ -213,18 +222,27 @@ export default {
         number: "",
         realname: "",
         qq: "",
-        email: "",
-        
+        email: ""
       }
     };
   },
   created() {
-    this.isadmin=(localStorage.type==2||localStorage.type==3)
+    this.isadmin = localStorage.type == 2 || localStorage.type == 3;
+
+    if (localStorage.username != "") {
+      this.$axios
+        .get("/userdata/?username=" + localStorage.username)
+        .then(response => {
+          localStorage.setItem("rating", response.data[0].rating);
+        });
+    } else {
+      localStorage.setItem("username", "");
+      localStorage.setItem("name", "");
+      localStorage.setItem("rating", "");
+      localStorage.setItem("type", "");
+    }
   },
   methods: {
-    updatename(type) {
-      this.name = localStorage.name;
-    },
     handleSelect(key, keyPath) {},
     handleCommand(command) {
       if (command == "logout") {
@@ -244,7 +262,7 @@ export default {
             this.$router.go(0);
           })
           .catch(error => {
-            this.$message.error("服务器错误！" + "(" + error + ")");
+            this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
           });
       }
       if (command == "home") {
@@ -267,7 +285,7 @@ export default {
       }
       if (command == "admin") {
         this.$router.push({
-          name: "admin",
+          name: "admin"
         });
       }
     },
@@ -278,9 +296,7 @@ export default {
         !this.form.course ||
         !this.form.classes ||
         !this.form.number ||
-        !this.form.realname ||
-        !this.form.qq ||
-        !this.form.email
+        !this.form.realname
       ) {
         this.$message.error("字段不能为空！");
         return;
@@ -289,7 +305,7 @@ export default {
         this.$message.error("两次密码不一致！");
         return;
       }
-      if (this.form.username.length < 6) {
+      if (this.form.username.length < 3) {
         this.$message.error("用户名太短！");
         return;
       }
@@ -301,36 +317,55 @@ export default {
         this.$message.error("密码太短！");
         return;
       }
+      if (
+        this.form.username.indexOf("|") >= 0 ||
+        this.form.username.indexOf("'") >= 0 ||
+        this.form.username.indexOf("#") >= 0
+      ) {
+        this.$message.error("用户名包含非法字符！");
+        return;
+      }
+      if (
+        this.form.username.indexOf("{") >= 0 ||
+        this.form.username.indexOf("(") >= 0 ||
+        this.form.username.indexOf(")") >= 0
+      ) {
+        this.$message.error("用户名包含非法字符！");
+        return;
+      }
 
       this.form.password = this.$md5(this.form.password);
 
       this.$axios
         .post("/userdata/", this.form)
         .then(response => {
-          
-
           this.$axios
-            .post(
-              "/register/",
-              this.form
-            )
+            .post("/register/", this.form)
             .then(response => {
               if (response.data == "usererror") {
-            this.$message.error("用户名已存在！");
-            return;
-          }
+                this.$message.error("用户名已存在！");
+                return;
+              }
               this.$message({
                 message: "注册成功！",
                 type: "success"
               });
               this.dialogRegisterVisible = false;
+              this.form.password = "";
             })
             .catch(error => {
-              this.$message.error("服务器错误！" + "(" + error + ")");
+              this.$message.error(
+                "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
+              );
             });
         })
         .catch(error => {
-          this.$message.error("服务器错误！" + "(" + error + ")");
+          if (JSON.stringify(error.response.data).indexOf("user") >= 0)
+            this.$message.error("用户名已存在！");
+          else
+            this.$message.error(
+              "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
+            );
         });
     },
     loginClick() {
@@ -350,28 +385,21 @@ export default {
           localStorage.setItem("username", this.form.username);
           localStorage.setItem("name", response.data.name);
           localStorage.setItem("type", response.data.type);
-          if(response.data.type==2 || response.data.type==3)
-            this.isadmin=true
-          
-          
+          if (response.data.type == 2 || response.data.type == 3)
+            this.isadmin = true;
+
           this.dialogRegisterVisible = false;
           this.dialogLoginVisible = false;
           this.loginshow = 1;
           this.username = this.form.username;
           this.name = localStorage.name;
-          
 
           this.$axios
-          .get(
-            "/userdata/?username=" +
-              this.username
-          )
-          .then(response => {
+            .get("/userdata/?username=" + this.username)
+            .then(response => {
               localStorage.setItem("rating", response.data[0].rating);
               this.$router.go(0);
-          });
-
-          
+            });
         })
         .catch(error => {
           this.$message.error("用户名不存在（" + error + "）");
@@ -396,7 +424,7 @@ export default {
 }
 #nav {
   background-color: #ffffff;
-  position:relative;
+  position: relative;
   left: 0px;
   top: 0px;
   z-index: 5;
@@ -405,10 +433,9 @@ export default {
     0px 0px 10px rgb(255, 255, 255),
      0px 0px 0px rgb(255, 255, 255),
      1px 1px 0px rgb(218, 218, 218);  */
-
 }
 #route {
-  position:relative;
+  position: relative;
   top: 10px;
 }
 #title {

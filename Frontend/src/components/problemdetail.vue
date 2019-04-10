@@ -7,27 +7,34 @@
           <br>
           <el-row :gutter="18" id="des">Description</el-row>
           <el-row :gutter="18" id="detail">
-            <div style="margin-right:50px;word-break:break-all;white-space:pre-line;" v-html="des">
-            </div>
+            <div style="margin-right:50px;word-break:break-all;white-space:pre-line;" v-html="des"></div>
           </el-row>
           <el-row :gutter="18" id="des">Input</el-row>
           <el-row :gutter="18" id="detail">
-            <div style="margin-right:50px;word-break:break-all;white-space:pre-line;" v-html="input">
-            </div>
+            <div
+              style="margin-right:50px;word-break:break-all;white-space:pre-line;"
+              v-html="input"
+            ></div>
           </el-row>
           <el-row :gutter="18" id="des">Output</el-row>
           <el-row :gutter="18" id="detail">
-            <div style="margin-right:50px;word-break:break-all;white-space:pre-line;" v-html="output">
-            </div>
+            <div
+              style="margin-right:50px;word-break:break-all;white-space:pre-line;"
+              v-html="output"
+            ></div>
           </el-row>
 
           <el-row :gutter="18" style="left:10px">
             <el-row :gutter="18" v-for="(item,index) in sinput.length" :key="index">
               <el-col :span="11" id="text">
-                <el-row :gutter="18" id="des" style="margin-bottom: 0px;">Sample Input {{item}} <el-button size="mini"
-        v-clipboard:copy="sinput[index]"
-        v-clipboard:success="onCopy"
-        v-clipboard:error="onError" style="margin-bottom:8px;">Copy</el-button></el-row>
+                <el-row :gutter="18" id="des" style="margin-bottom: 0px;">Sample Input {{item}}<el-button
+                    size="mini"
+                    v-clipboard:copy="sinput[index]"
+                    v-clipboard:success="onCopy"
+                    v-clipboard:error="onError"
+                    style="margin-left:8px;float:top;"
+                  >Copy</el-button>
+                </el-row>
                 <el-row :gutter="18" id="data" style="margin-bottom: 0px;">{{sinput[index]}}</el-row>
               </el-col>
               <el-col :span="11" id="text">
@@ -227,39 +234,36 @@
         </el-card>
       </el-row>
       <el-row :gutter="15">
-         <el-card>
-        
+        <el-card>
           <h3>提交记录</h3>
           <statusmini></statusmini>
-        
-      </el-card>
+        </el-card>
       </el-row>
-    
     </el-col>
   </el-row>
 </template>
 
 <script>
 import moment from "moment";
-import { codemirror } from 'vue-codemirror'
+import { codemirror } from "vue-codemirror";
 import statusmini from "@/components/statusmini";
-require('codemirror/lib/codemirror.css')
-require('codemirror/theme/base16-light.css')
-require('codemirror/mode/clike/clike')
+require("codemirror/lib/codemirror.css");
+require("codemirror/theme/base16-light.css");
+require("codemirror/mode/clike/clike");
 
 export default {
   name: "problemdetail",
-  components:{
+  components: {
     codemirror,
-    statusmini,
+    statusmini
   },
   data() {
     return {
-      cmOptions:{
-        tabSize:4,
-        mode:'text/x-c++src',
-        theme:'base16-light',
-        lineNumbers:true,
+      cmOptions: {
+        tabSize: 4,
+        mode: "text/x-c++src",
+        theme: "base16-light",
+        lineNumbers: true
       },
       title: "",
       des: "",
@@ -305,7 +309,7 @@ export default {
       .get("/problem/" + this.ID + "/")
       .then(response => {
         auth = response.data.auth;
-        if ((auth == 2 || auth == 3) && localStorage.type ==1 ) {
+        if ((auth == 2 || auth == 3) && localStorage.type == 1) {
           this.title = "非法访问！";
           this.$message.error("服务器错误！" + "(" + "无权限" + ")");
           return;
@@ -386,21 +390,21 @@ export default {
             this.tagnames = response.data.tag;
           })
           .catch(error => {
-            this.$message.error("服务器错误！" + "(" + error + ")");
+            this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
           });
       })
       .catch(error => {
         this.title = "非法访问！";
-        this.$message.error("服务器错误！" + "(" + error + ")");
+        this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
       });
   },
   methods: {
-    onCopy(e){
-       this.$message.success("复制成功！");
+    onCopy(e) {
+      this.$message.success("复制成功！");
     },
     // 复制失败
-    onError(e){
-      this.$message.error("复制失败："+e);
+    onError(e) {
+      this.$message.error("复制失败：" + e);
     },
     problemlevel: function(type) {
       if (type == "Easy") return "info";
@@ -435,123 +439,125 @@ export default {
           type: "success",
           message: "提交中..."
         });
-        this.$axios
-          .post("/judgestatusput/", {
-            user: localStorage.username,
-            oj: "LPOJ",
-            problem: this.ID,
-            result: -1,
-            time: 0,
-            memory: 0,
-            length: this.code.length,
-            language: this.language,
-            judger: "waiting for judger",
-            contest: 0,
-            code: this.code,
-            testcase: 0,
-            message: "0"
-          })
-          .then(response => {
-            this.$message({
-              message: "提交成功！",
-              type: "success"
+        this.$axios.get("/currenttime/").then(response2 => {
+          var curtime = response2.data;
+          this.$axios
+            .post("/judgestatusput/", {
+              user: localStorage.username,
+              oj: "LPOJ",
+              problem: this.ID,
+              result: -1,
+              time: 0,
+              memory: 0,
+              length: this.code.length,
+              language: this.language,
+              submittime: curtime,
+              judger: "waiting for judger",
+              contest: 0,
+              code: this.code,
+              testcase: 0,
+              message: "0",
+              problemtitle: "LPOJ - " + this.ID + " " + this.title,
+              rating: parseInt(localStorage.rating)
+            })
+            .then(response => {
+              this.$message({
+                message: "提交成功！",
+                type: "success"
+              });
+              clearInterval(this.$store.state.submittimer);
+              this.submitid = response.data.id;
+              this.submitbuttontext = "Pending";
+              this.judgetype = "info";
+              this.loadingshow = true;
+              //创建一个全局定时器，定时刷新状态
+              this.$store.state.submittimer = setInterval(this.timer, 1000);
+            })
+            .catch(error => {
+              this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
             });
-            clearInterval(this.$store.state.submittimer);
-            this.submitid = response.data.id;
-            this.submitbuttontext = "Pending";
-            this.judgetype = "info";
-            this.loadingshow = true;
-            //创建一个全局定时器，定时刷新状态
-            this.$store.state.submittimer = setInterval(this.timer, 1000);
-          })
-          .catch(error => {
-            this.$message.error("服务器错误！" + "(" + error + ")");
-          });
+        });
       });
     },
     timer: function() {
       if (this.submitbuttontext == "提交后请勿重复刷新") return;
-      this.$axios
-        .get("/judgestatus/" + this.submitid + "/")
-        .then(response => {
-          this.loadingshow = false;
-          var testcase = response.data["testcase"];
-          if (response.data["result"] == "-1") {
-            response.data["result"] = "Pending";
-            this.loadingshow = true;
-            this.judgetype = "info";
-          }
+      this.$axios.get("/judgestatus/" + this.submitid + "/").then(response => {
+        this.loadingshow = false;
+        var testcase = response.data["testcase"];
+        if (response.data["result"] == "-1") {
+          response.data["result"] = "Pending";
+          this.loadingshow = true;
+          this.judgetype = "info";
+        }
 
-          if (response.data["result"] == "-2") {
-            response.data["result"] = "Judging";
-            this.loadingshow = true;
-            this.judgetype = "";
-            
-          }
+        if (response.data["result"] == "-2") {
+          response.data["result"] = "Judging";
+          this.loadingshow = true;
+          this.judgetype = "";
+        }
 
-          if (response.data["result"] == "-3") {
-            response.data["result"] = "Wrong Answer on test " + testcase;
-            this.judgetype = "danger";
-            clearInterval(this.$store.state.submittimer);
-          }
+        if (response.data["result"] == "-3") {
+          response.data["result"] = "Wrong Answer on test " + testcase;
+          this.judgetype = "danger";
+          clearInterval(this.$store.state.submittimer);
+        }
 
-          if (response.data["result"] == "-4") {
-            response.data["result"] = "Compile Error";
-            this.judgetype = "warning";
-            clearInterval(this.$store.state.submittimer);
-          }
+        if (response.data["result"] == "-4") {
+          response.data["result"] = "Compile Error";
+          this.judgetype = "warning";
+          clearInterval(this.$store.state.submittimer);
+        }
 
-          if (response.data["result"] == "-5") {
-            response.data["result"] = "Presentation Error on test " + testcase;
-            this.judgetype = "warning";
-            clearInterval(this.$store.state.submittimer);
-          }
+        if (response.data["result"] == "-5") {
+          response.data["result"] = "Presentation Error on test " + testcase;
+          this.judgetype = "warning";
+          clearInterval(this.$store.state.submittimer);
+        }
 
-          if (response.data["result"] == "-6") {
-            response.data["result"] = "Waiting";
-            this.loadingshow = true;
-            this.judgetype = "info";
-          }
+        if (response.data["result"] == "-6") {
+          response.data["result"] = "Waiting";
+          this.loadingshow = true;
+          this.judgetype = "info";
+        }
 
-          if (response.data["result"] == "0") {
-            response.data["result"] = "Accepted";
-            this.judgetype = "success";
-            clearInterval(this.$store.state.submittimer);
-          }
+        if (response.data["result"] == "0") {
+          response.data["result"] = "Accepted";
+          this.judgetype = "success";
+          clearInterval(this.$store.state.submittimer);
+        }
 
-          if (response.data["result"] == "1") {
-            response.data["result"] = "Time Limit Exceeded on test " + testcase;
-            this.judgetype = "warning";
-            clearInterval(this.$store.state.submittimer);
-          }
+        if (response.data["result"] == "1") {
+          response.data["result"] = "Time Limit Exceeded on test " + testcase;
+          this.judgetype = "warning";
+          clearInterval(this.$store.state.submittimer);
+        }
 
-          if (response.data["result"] == "2") {
-            response.data["result"] = "Time Limit Exceeded on test " + testcase;
-            this.judgetype = "warning";
-            clearInterval(this.$store.state.submittimer);
-          }
+        if (response.data["result"] == "2") {
+          response.data["result"] = "Time Limit Exceeded on test " + testcase;
+          this.judgetype = "warning";
+          clearInterval(this.$store.state.submittimer);
+        }
 
-          if (response.data["result"] == "3") {
-            response.data["result"] =
-              "Memory Limit Exceeded on test " + testcase;
-            this.judgetype = "warning";
-            clearInterval(this.$store.state.submittimer);
-          }
+        if (response.data["result"] == "3") {
+          response.data["result"] = "Memory Limit Exceeded on test " + testcase;
+          this.judgetype = "warning";
+          clearInterval(this.$store.state.submittimer);
+        }
 
-          if (response.data["result"] == "4") {
-            response.data["result"] = "Runtime Error on test " + testcase;
-            this.judgetype = "warning";
-            clearInterval(this.$store.state.submittimer);
-          }
+        if (response.data["result"] == "4") {
+          response.data["result"] = "Runtime Error on test " + testcase;
+          this.judgetype = "warning";
+          clearInterval(this.$store.state.submittimer);
+        }
 
-          if (response.data["result"] == "5") {
-            response.data["result"] = "System Error";
-            this.judgetype = "danger";
-            clearInterval(this.$store.state.submittimer);
-          }
+        if (response.data["result"] == "5") {
+          response.data["result"] = "System Error";
+          this.judgetype = "danger";
+          clearInterval(this.$store.state.submittimer);
+        }
 
-          this.submitbuttontext = response.data["result"];
-        });
+        this.submitbuttontext = response.data["result"];
+      });
     }
   },
   destroyed() {

@@ -4,7 +4,8 @@ class OJMessage(models.Model):
 
     username = models.CharField(max_length=50)
     msg = models.CharField(max_length=500)
-    time = models.DateField(auto_now=True)  
+    time = models.DateField(auto_now=True)
+    rating = models.IntegerField(default=1500)
 
     objects = models.Manager()
 

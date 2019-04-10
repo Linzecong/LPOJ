@@ -123,7 +123,7 @@ export default {
           this.totalcontest = response.data.count;
         })
         .catch(error => {
-          this.$message.error("服务器错误！" + "(" + error + ")");
+          this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
         });
     },
     handleCurrentChange(val) {
@@ -170,7 +170,7 @@ export default {
           this.totalcontest = response.data.count;
         })
         .catch(error => {
-          this.$message.error("服务器错误！" + "(" + error + ")");
+          this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
         });
     }
   },
@@ -213,7 +213,7 @@ export default {
         this.totalcontest = response.data.count;
       })
       .catch(error => {
-        this.$message.error("服务器错误！" + "(" + error + ")");
+        this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
       });
   }
 };

@@ -14,8 +14,8 @@ class User(models.Model):
     classes =  models.CharField(max_length=50,null=False)
     number = models.CharField(max_length=50,null=False)
     realname = models.CharField(max_length=50,null=False)
-    qq = models.CharField(max_length=50,null=True)
-    email = models.CharField(max_length=50,null=True)
+    qq = models.CharField(max_length=50,null=True,default="")
+    email = models.CharField(max_length=50,null=True,default="")
     type = models.IntegerField(null=False,default=1) # 1 普通 2 管理员 3 超级管理员
 
     objects = models.Manager()

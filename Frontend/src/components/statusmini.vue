@@ -60,7 +60,7 @@
       size="mini"
     >
       <el-table-column prop="id" label="ID" :width="50"></el-table-column>
-      <el-table-column prop="result" label="Status" :width="150">
+      <el-table-column prop="result" label="Status" :width="160">
         <template slot-scope="scope">
           <el-tag size="mini" :type="statuetype(scope.row.result)" disable-transitions hit>
             {{ scope.row.result }}
@@ -208,6 +208,9 @@ export default {
     setstatus(problem, username) {
       this.tableData=[]
       //console.log(problem)
+      if(problem==-1){
+        return //用于清零
+      }
       if (this.$route.params.contestID) {
         var contest = this.$route.params.contestID;
         if (problem != false) this.problem = problem;
