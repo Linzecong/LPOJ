@@ -6,7 +6,7 @@ from rest_framework import viewsets, mixins
 from rest_framework.pagination import LimitOffsetPagination
 from .models import JudgeStatus,CaseStatus
 from .serializers import JudgeStatusSerializer,CaseStatusSerializer,JudgeStatusCodeSerializer
-from .permission import LoginOrReadOnly,UserOnly,NoContestOnly,AdminOnly
+from .permission import ReadOnly,UserOnly,NoContestOnly,AdminOnly
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.views import APIView
@@ -19,7 +19,7 @@ class JudgeStatusView(viewsets.ModelViewSet):
     pagination_class = LimitOffsetPagination
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('user', 'result', "contest","problem","language")
-    permission_classes = (LoginOrReadOnly,)
+    permission_classes = (ReadOnly,)
 
 class JudgeStatusDistinctView(viewsets.ModelViewSet):
     queryset = JudgeStatus.objects.all().order_by('-submittime')
@@ -27,12 +27,12 @@ class JudgeStatusDistinctView(viewsets.ModelViewSet):
     pagination_class = LimitOffsetPagination
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('user', 'result', "contest","problem","language")
-    permission_classes = (LoginOrReadOnly,)
+    permission_classes = (ReadOnly,)
 
 class JudgeStatusPutView(viewsets.GenericViewSet, mixins.CreateModelMixin):
     queryset = JudgeStatus.objects.all()
     serializer_class = JudgeStatusCodeSerializer
-    permission_classes = (LoginOrReadOnly,)
+    permission_classes = (UserOnly,)
     throttle_scope  = "judge"
     throttle_classes =[ScopedRateThrottle,]
 
@@ -50,7 +50,7 @@ class CaseStatusView(viewsets.ModelViewSet):
     pagination_class = LimitOffsetPagination
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('username', 'problem', "statusid")
-    # permission_classes = (UserOnly,)
+    permission_classes = (ReadOnly,)
 
 class RejudgeAPIView(APIView):
     permission_classes = (AdminOnly,)

@@ -356,7 +356,8 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 ))
 
                 db.commit()
-
+            if contest is not 0:
+                break
         else:
             file1 = open(judgername+"temp.out", "r")
             file2 = open("../DataServer/problemdata/%s/%s.out" %
@@ -422,6 +423,8 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 ))
 
                 db.commit()
+                if contest is not 0:
+                    break
             else:
                 cursor.execute("INSERT into judgestatus_casestatus (statusid,username,problem,result,time,memory,testcase,casedata,outputdata,useroutput) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ", (
                     id,

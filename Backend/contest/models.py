@@ -66,7 +66,7 @@ class ContestRank(models.Model):
     username = models.CharField(max_length=50)
     user = models.CharField(max_length=50)
     statue = models.CharField(max_length=5000) # 用 | 分割，如  0|-1|100|0|-5 代表 B题错了一次，C题在100毫秒AC，
-
+    rating = models.IntegerField(default=1500)
     objects = models.Manager()
 
     def __str__(self):

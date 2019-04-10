@@ -49,11 +49,13 @@ class UserLoginAPIView(APIView):
         username = data.get('username')
         password = data.get('password')
         user = User.objects.get(username__exact=username)
+        userdata = UserData.objects.get(username__exact=username)
         if user.password == password:
             serializer = UserSerializer(user)
             new_data = serializer.data
             request.session['user_id'] = user.username
             request.session['type'] = user.type
+            request.session['rating'] = userdata.rating
             return Response(new_data, status=HTTP_200_OK)
         return Response('passworderror', HTTP_200_OK)
 
@@ -62,6 +64,7 @@ class UserLogoutAPIView(APIView):
         if request.session.get('user_id',None) is not None:
             del request.session['user_id']
             del request.session['type']
+            del request.session['rating']
         return Response('ok', HTTP_200_OK)
 
 

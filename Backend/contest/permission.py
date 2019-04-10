@@ -25,3 +25,50 @@ class ManagerOnly(permissions.BasePermission):
         else:
             return False
 
+class UserOnly(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        
+        rating = request.data.get('rating',-1)
+        r2 = request.session.get('rating', 1)
+        if rating != r2:
+            return False
+        else:
+            return True
+        
+        if request.session.get('type', 1) == 3 :
+            return True
+        
+        data = request.data
+        username = data.get('username')
+
+        userid = request.session.get('user_id', None)
+        if userid == username or request.session.get('type', 1) == 3 :
+            return True
+        else:
+            return False 
+
+class UserOnly2(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        
+        rating = request.data.get('rating',-1)
+        r2 = request.session.get('rating', 1)
+        if rating != r2:
+            return False
+        else:
+            return True
+        
+        if request.session.get('type', 1) == 3 :
+            return True
+        
+        data = request.data
+        username = data.get('user')
+
+        userid = request.session.get('user_id', None)
+        if userid == username or request.session.get('type', 1) == 3 :
+            return True
+        else:
+            return False 

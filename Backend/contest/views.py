@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.pagination import LimitOffsetPagination
-from .permission import ManagerOnly,LoginOnly
+from .permission import ManagerOnly,LoginOnly,UserOnly,UserOnly2
 from .models import ContestAnnouncement,ContestRank,ContestRatingChange, ContestBoard, ContestComment, ContestInfo, ContestProblem, ContestRegister
 from .serializers import ContestRankSerializer,ContestRatingChangeSerializer, ContestAnnouncementSerializer,ContestBoardSerializer,ContestCommentSerializer,ContestInfoSerializer,ContestProblemSerializer, ContestRegisterSerializer
 from django_filters.rest_framework import DjangoFilterBackend
@@ -25,14 +25,14 @@ class ContestBoardView(viewsets.ModelViewSet):
     queryset = ContestBoard.objects.all()
     serializer_class = ContestBoardSerializer
     # pagination_class = LimitOffsetPagination
-    permission_classes = (LoginOnly,)# 将来要改写成重写post形式
+    permission_classes = (UserOnly,)
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ("contestid",)
 
 class ContestRankView(viewsets.ModelViewSet):
     queryset = ContestRank.objects.all()
     serializer_class = ContestRankSerializer
-    permission_classes = (LoginOnly,)# 将来要改写成重写post形式
+    permission_classes = (UserOnly,)
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ("contestid","username")
 
@@ -41,6 +41,7 @@ class ContestCommentView(viewsets.ModelViewSet):
     queryset = ContestComment.objects.all()
     serializer_class = ContestCommentSerializer
     pagination_class = LimitOffsetPagination
+    permission_classes = (UserOnly2,)
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ("contestid",)
 
@@ -71,12 +72,14 @@ class ContestRegisterView(viewsets.ModelViewSet):
     serializer_class = ContestRegisterSerializer
     pagination_class = LimitOffsetPagination
     filter_backends = (DjangoFilterBackend,)
+    permission_classes = (UserOnly2,)
     filter_fields = ('user', "contestid")
 
 class ContestRatingChangeView(viewsets.ModelViewSet):
     queryset = ContestRatingChange.objects.all()
     serializer_class = ContestRatingChangeSerializer
     pagination_class = LimitOffsetPagination
+    permission_classes = (ManagerOnly,)
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('user', "contestid")
 

@@ -16,8 +16,20 @@ class LoginOnly(permissions.BasePermission):
 
 class UserOnly(permissions.BasePermission):
     def has_permission(self, request, view):
-        if request.method in permissions.SAFE_METHODS or request.method=="POST":
+        if request.method in permissions.SAFE_METHODS:
             return True
+        
+        if request.method=="POST":
+            rating = request.data.get('rating',-1)
+            acc = request.data.get('ac',-1)
+            sub = request.data.get('submit',-1)
+            sco = request.data.get('score',-1)
+            if rating != "" or acc !="" or sub !="" or sco!="":
+                if rating == -1:
+                    return True
+                return False
+            else:
+                return True
         
         if request.session.get('type', 1) == 3 :
             return True
@@ -36,6 +48,17 @@ class UserOnly(permissions.BasePermission):
             return True
         else:
             return False 
+
+    # def has_object_permission(self, request, view, blog):
+    #     # Read permissions are allowed to any request,
+    #     # so we'll always allow GET, HEAD or OPTIONS requests.
+    #     if request.method in permissions.SAFE_METHODS:
+    #         return True
+    #     return False
+    #     # data = request.data
+    #     # print(data.get('rating'))
+    #     # print(data.get('des'))
+    #     # return data.get('rating',-1) == -1
 
             
 class UserPUTOnly(permissions.BasePermission):

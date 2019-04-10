@@ -157,11 +157,11 @@ export default {
               response.data.score = response2.data.score;
               this.problemform = response.data;
             }).catch(error=>{
-              this.$message.error("服务器错误！"+error);
+              this.$message.error("服务器错误！"+JSON.stringify(error.response.data));
               this.problemform={}
         });
         }).catch(error=>{
-              this.$message.error("服务器错误！"+error);
+              this.$message.error("服务器错误！"+JSON.stringify(error.response.data));
               this.problemform={}
         });
     },
