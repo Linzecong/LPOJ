@@ -20,6 +20,8 @@ class JudgeStatusView(viewsets.ModelViewSet):
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('user', 'result', "contest","problem","language")
     permission_classes = (ReadOnly,)
+    throttle_scope  = "post"
+    throttle_classes =[ScopedRateThrottle,]
 
 class JudgeStatusDistinctView(viewsets.ModelViewSet):
     queryset = JudgeStatus.objects.all().order_by('-submittime')
@@ -28,6 +30,8 @@ class JudgeStatusDistinctView(viewsets.ModelViewSet):
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('user', 'result', "contest","problem","language")
     permission_classes = (ReadOnly,)
+    throttle_scope  = "post"
+    throttle_classes =[ScopedRateThrottle,]
 
 class JudgeStatusPutView(viewsets.GenericViewSet, mixins.CreateModelMixin):
     queryset = JudgeStatus.objects.all()
@@ -43,6 +47,8 @@ class JudgeStatusCodeView(viewsets.GenericViewSet, mixins.RetrieveModelMixin):
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('user', 'result', "contest","problem")
     permission_classes = (NoContestOnly,)
+    throttle_scope  = "post"
+    throttle_classes =[ScopedRateThrottle,]
 
 class CaseStatusView(viewsets.ModelViewSet):
     queryset = CaseStatus.objects.all()
@@ -51,6 +57,8 @@ class CaseStatusView(viewsets.ModelViewSet):
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('username', 'problem', "statusid")
     permission_classes = (ReadOnly,)
+    throttle_scope  = "post"
+    throttle_classes =[ScopedRateThrottle,]
 
 class RejudgeAPIView(APIView):
     permission_classes = (AdminOnly,)

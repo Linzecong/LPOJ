@@ -13,12 +13,15 @@ from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_403_FO
 from rest_framework.views import APIView
 import zipfile
 import shutil,os
+from rest_framework.throttling import ScopedRateThrottle
 
 class ProblemView(viewsets.GenericViewSet, mixins.DestroyModelMixin, mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin):
     queryset = Problem.objects.all()
     serializer_class = ProblemSerializer
     filter_fields = ('auth',)
     permission_classes = (AuthOnly,)
+    throttle_scope  = "post"
+    throttle_classes =[ScopedRateThrottle,]
 
 
 class ProblemDataView(viewsets.ModelViewSet):
@@ -30,12 +33,16 @@ class ProblemDataView(viewsets.ModelViewSet):
     filter_backends = (DjangoFilterBackend,filters.SearchFilter)
     filter_fields = ('auth',)
     search_fields = ('tag', 'title')
+    throttle_scope  = "post"
+    throttle_classes =[ScopedRateThrottle,]
 
 
 class ProblemTagView(viewsets.ModelViewSet):
     queryset = ProblemTag.objects.all()
     serializer_class = ProblemTagSerializer
     permission_classes = (ManagerOnly,)
+    throttle_scope  = "post"
+    throttle_classes =[ScopedRateThrottle,]
 
 class UploadFileAPIView(APIView):
     def post(self, request, format=None):

@@ -87,7 +87,7 @@ export default {
           statustype:this.resulttype
         })
         .then(response => {
-          this.$message.success("提交成功！" + response);
+          this.$message.success("提交成功！" + response.data);
         })
         .catch(error => {
           this.$message.error("服务器错误！" + JSON.stringify(error.response.data));

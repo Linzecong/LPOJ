@@ -6,9 +6,10 @@
           <div slot="header">
             <b>{{ msg }}</b>
           </div>
-          <b>当前版本：1.2.2</b>
+          <b>当前版本：1.3</b>
           <br>
           <b>支持语言：C/C++/Java</b>
+          <b>一个非常安全的版本！准备办比赛！</b>
         </el-card>
       </el-row>
       <el-row :gutter="10">
