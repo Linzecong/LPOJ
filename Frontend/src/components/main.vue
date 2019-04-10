@@ -201,7 +201,7 @@ export default {
         this.tableData = response.data.results;
       })
       .catch(error => {
-        this.$message.error("服务器错误！" + "(" + error + ")");
+        this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
       });
     this.$axios
       .get("/blog/?limit=10&offset=0")
@@ -214,7 +214,7 @@ export default {
         this.tableData3 = response.data.results;
       })
       .catch(error => {
-        this.$message.error("服务器错误！" + "(" + error + ")");
+        this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
       });
 
     this.$axios
@@ -241,7 +241,7 @@ export default {
         this.tableData2 = response.data;
       })
       .catch(error => {
-        this.$message.error("服务器错误！" + "(" + error + ")");
+        this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
       });
   },
   methods: {

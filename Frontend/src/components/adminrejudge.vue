@@ -54,7 +54,7 @@ export default {
           this.$message.success("提交成功！" + response);
         })
         .catch(error => {
-          this.$message.error("服务器错误！" + error);
+          this.$message.error("服务器错误！" + JSON.stringify(error.response.data));
         });
     },
     problemrejudge() {
@@ -66,7 +66,7 @@ export default {
           this.$message.success("提交成功！" + response);
         })
         .catch(error => {
-          this.$message.error("服务器错误！" + error);
+          this.$message.error("服务器错误！" + JSON.stringify(error.response.data));
         });
     },
     statusrejudge() {
@@ -78,7 +78,7 @@ export default {
           this.$message.success("提交成功！" + response);
         })
         .catch(error => {
-          this.$message.error("服务器错误！" + error);
+          this.$message.error("服务器错误！" + JSON.stringify(error.response.data));
         });
     },
     typerejudge() {
@@ -90,7 +90,7 @@ export default {
           this.$message.success("提交成功！" + response);
         })
         .catch(error => {
-          this.$message.error("服务器错误！" + error);
+          this.$message.error("服务器错误！" + JSON.stringify(error.response.data));
         });
     },
   },

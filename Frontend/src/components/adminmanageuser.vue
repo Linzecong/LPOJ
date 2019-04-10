@@ -140,7 +140,7 @@ export default {
             this.userid = this.form.username;
           })
           .catch(error => {
-            this.$message.error("服务器错误！" + error);
+            this.$message.error("服务器错误！" + JSON.stringify(error.response.data));
           });
       }
     },

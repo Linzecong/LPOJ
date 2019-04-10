@@ -90,7 +90,7 @@ export default {
           type: "success"
         });
            }).catch(error=>{
-               this.$message.error("服务器错误！请联系管理员！"+error)
+               this.$message.error("服务器错误！请联系管理员！"+JSON.stringify(error.response.data))
            });
 
       },

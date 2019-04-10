@@ -400,7 +400,7 @@ export default {
                 this.$store.state.submittimer = setInterval(this.timer, 1000);
               })
               .catch(error => {
-                this.$message.error("服务器错误！" + "(" + error + ")");
+                this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
               });
           } else {
             this.$axios
@@ -467,7 +467,7 @@ export default {
                         });
                     })
                     .catch(error => {
-                      this.$message.error("服务器错误！" + "(" + error + ")");
+                      this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
                     });
                 } else {
                   var str = "";
@@ -539,17 +539,17 @@ export default {
                         })
                         .catch(error => {
                           this.$message.error(
-                            "服务器错误！" + "(" + error + ")"
+                            "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
                           );
                         });
                     })
                     .catch(error => {
-                      this.$message.error("服务器错误！" + "(" + error + ")");
+                      this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
                     });
                 }
               })
               .catch(error => {
-                this.$message.error("服务器错误！" + "(" + error + ")");
+                this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
               });
           }
         });

@@ -392,12 +392,12 @@ export default {
             this.tagnames = response.data.tag;
           })
           .catch(error => {
-            this.$message.error("服务器错误！" + "(" + error + ")");
+            this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
           });
       })
       .catch(error => {
         this.title = "非法访问！";
-        this.$message.error("服务器错误！" + "(" + error + ")");
+        this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
       });
   },
   methods: {
@@ -476,7 +476,7 @@ export default {
               this.$store.state.submittimer = setInterval(this.timer, 1000);
             })
             .catch(error => {
-              this.$message.error("服务器错误！" + "(" + error + ")");
+              this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
             });
         });
       });

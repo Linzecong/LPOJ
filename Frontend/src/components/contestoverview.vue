@@ -130,7 +130,7 @@ export default {
           this.totaluser = response.data.count;
         })
         .catch(error => {
-          this.$message.error("服务器错误！" + "(" + error + ")");
+          this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
         });
     },
     handleCurrentChange(val) {
@@ -149,7 +149,7 @@ export default {
           this.totaluser = response.data.count;
         })
         .catch(error => {
-          this.$message.error("服务器错误！" + "(" + error + ")");
+          this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
         });
     },
     register() {
@@ -208,7 +208,7 @@ export default {
               this.$router.go(0);
             })
             .catch(error => {
-              this.$message.error("服务器错误！" + error);
+              this.$message.error("服务器错误！" + JSON.stringify(error.response.data));
               return;
             });
         });
@@ -316,11 +316,11 @@ export default {
                   this.canregister=true;
                 })
                 .catch(error => {
-                  this.$message.error("服务器错误！" + "(" + error + ")");
+                  this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
                 });
             })
             .catch(error => {
-              this.$message.error("服务器错误！" + "(" + error + ")");
+              this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
             });
         });
     },
