@@ -262,7 +262,9 @@ export default {
             this.$router.go(0);
           })
           .catch(error => {
-            this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
+            this.$message.error(
+              "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
+            );
           });
       }
       if (command == "home") {

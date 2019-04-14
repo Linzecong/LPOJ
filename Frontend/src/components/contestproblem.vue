@@ -79,9 +79,10 @@
             </el-row>
             <el-row :gutter="18" id="des">Hint</el-row>
             <el-row :gutter="18" id="detail">
-              <div style="margin-right:50px;">
-                <el-input type="textarea" v-model="hint" autosize readonly></el-input>
-              </div>
+              <div
+              style="margin-right:50px;word-break:break-all;white-space:pre-line;"
+              v-html="hint"
+            ></div>
             </el-row>
           </el-card>
         </el-row>

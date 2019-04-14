@@ -117,7 +117,7 @@ export default {
   },
   methods: {
     myupload(f){
-
+      this.$message.success("提交中！请等待自动刷新！")
       let param = new FormData(); //创建form对象
          param.append('file',f.file);//通过append向form对象添加数据
          let config = {

@@ -8,7 +8,7 @@
           </div>
           <b>当前版本：1.3</b>
           <br>
-          <b>支持语言：C/C++/Java</b>
+          <b>支持语言：C/C++/Java</b><br>
           <b>一个非常安全的版本！准备办比赛！</b>
         </el-card>
       </el-row>
@@ -36,7 +36,55 @@
       </el-row>
     </el-col>
     <el-col :span="18">
+      
+      <el-row :gutter="10">
+        <el-col :span="8">
+          <el-card>
+            <div slot="header">
+              <b>kuangbin</b>
+            </div>
+            <b>年轻人要多刷题，少水群，才能进Final！</b>
+          </el-card>
+        </el-col>
+        <el-col :span="8">
+          <el-card>
+            <div slot="header">
+              <b>LP_Cong</b>
+            </div>
+            <b>有时候，人和人的差距，比人和猪还大！</b>
+          </el-card>
+        </el-col>
+        <el-col :span="8">
+          <el-card>
+            <div slot="header">
+              <b>阿聪</b>
+            </div>
+            <b>你的努力程度还没到拼天赋的程度！人一我十，人十我百，人百我千！</b>
+          </el-card>
+        </el-col>
+      </el-row>
       <el-row>
+        <el-card>
+          <div slot="header">
+            <b>最新博客</b>
+          </div>
+          <el-table :data="tableData3" @cell-click="blogclick" size="small">
+            <el-table-column prop="username" label="User" :width="150"></el-table-column>
+            <el-table-column prop="title" label="Title (Click to view content)">
+              <template slot-scope="scope">
+                <el-popover trigger="hover" placement="top" :width="500">
+                  <p>摘要: {{ scope.row.summary }}</p>
+                  <div slot="reference" class="name-wrapper">
+                    <b>{{ scope.row.title }}</b>
+                  </div>
+                </el-popover>
+              </template>
+            </el-table-column>
+            <el-table-column prop="time" label="Time" :width="160"></el-table-column>
+          </el-table>
+        </el-card>
+      </el-row>
+<el-row>
         <el-tabs type="border-card">
           <el-tab-pane label="队伍">
             <teamchart></teamchart>
@@ -83,33 +131,6 @@
         </el-tabs>
       </el-row>
 
-      <el-row :gutter="10">
-        <el-col :span="8">
-          <el-card>
-            <div slot="header">
-              <b>kuangbin</b>
-            </div>
-            <b>年轻人要多刷题，少水群，才能进Final！</b>
-          </el-card>
-        </el-col>
-        <el-col :span="8">
-          <el-card>
-            <div slot="header">
-              <b>LP_Cong</b>
-            </div>
-            <b>有时候，人和人的差距，比人和猪还大！</b>
-          </el-card>
-        </el-col>
-        <el-col :span="8">
-          <el-card>
-            <div slot="header">
-              <b>阿聪</b>
-            </div>
-            <b>你的努力程度还没到拼天赋的程度！人一我十，人十我百，人百我千！</b>
-          </el-card>
-        </el-col>
-      </el-row>
-
       <el-row>
         <el-card>
           <div slot="header">
@@ -138,27 +159,7 @@
           </el-table>
         </el-card>
       </el-row>
-      <el-row>
-        <el-card>
-          <div slot="header">
-            <b>最新博客</b>
-          </div>
-          <el-table :data="tableData3" @cell-click="blogclick" size="small">
-            <el-table-column prop="username" label="User" :width="150"></el-table-column>
-            <el-table-column prop="title" label="Title (Click to view content)">
-              <template slot-scope="scope">
-                <el-popover trigger="hover" placement="top" :width="500">
-                  <p>摘要: {{ scope.row.summary }}</p>
-                  <div slot="reference" class="name-wrapper">
-                    <b>{{ scope.row.title }}</b>
-                  </div>
-                </el-popover>
-              </template>
-            </el-table-column>
-            <el-table-column prop="time" label="Time" :width="160"></el-table-column>
-          </el-table>
-        </el-card>
-      </el-row>
+      
     </el-col>
   </el-row>
 </template>

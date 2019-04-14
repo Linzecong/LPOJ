@@ -61,7 +61,7 @@ class ContestInfoView(viewsets.ModelViewSet):
     pagination_class = LimitOffsetPagination
     permission_classes = (ManagerOnly,)
     filter_backends = (DjangoFilterBackend,)
-    filter_fields = ("begintime","level")
+    filter_fields = ("begintime","level","type")
     throttle_scope  = "post"
     throttle_classes =[ScopedRateThrottle,]
 

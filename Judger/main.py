@@ -535,7 +535,6 @@ while True:
     except Exception as e:
         print(e)
         reconnect()
-        break
 
 
 # #include<iostream>
