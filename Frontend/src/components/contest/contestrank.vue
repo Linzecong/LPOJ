@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import statusmini from "@/components/statusmini";
+import statusmini from "@/components/utils/statusmini";
 export default {
   name: "contestrank",
   components: {

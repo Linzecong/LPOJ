@@ -13,12 +13,12 @@
 </template>
 
 <script>
-import adminaddproblem from "@/components/adminaddproblem";
-import adminaddcontest from "@/components/adminaddcontest";
-import adminchangepro from "@/components/adminchangepro";
-import adminchangecontest from "@/components/adminchangecontest";
-import adminmanageuser from "@/components/adminmanageuser";
-import adminrejudge from "@/components/adminrejudge";
+import adminaddproblem from "@/components/admin/adminaddproblem";
+import adminaddcontest from "@/components/admin/adminaddcontest";
+import adminchangepro from "@/components/admin/adminchangepro";
+import adminchangecontest from "@/components/admin/adminchangecontest";
+import adminmanageuser from "@/components/admin/adminmanageuser";
+import adminrejudge from "@/components/admin/adminrejudge";
 export default {
   name: "admin",
   components: {

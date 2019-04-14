@@ -1,6 +1,6 @@
 <template>
   <center>
-    <b>广东外语外贸大学ACM集训队<br>30天内新增AC情况统计</b>
+    <b>广东外语外贸大学ACM集训队<br>10天内新增AC情况统计</b>
     <h2>  </h2>
     <el-button size="mini" @click="seeall" type="primary">查看所有</el-button>
     <h2>  </h2>

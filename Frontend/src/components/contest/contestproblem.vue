@@ -139,7 +139,7 @@
 
 <script>
 import { codemirror } from "vue-codemirror";
-import statusmini from "@/components/statusmini";
+import statusmini from "@/components/utils/statusmini";
 require("codemirror/lib/codemirror.css");
 require("codemirror/theme/base16-light.css");
 require("codemirror/mode/clike/clike");

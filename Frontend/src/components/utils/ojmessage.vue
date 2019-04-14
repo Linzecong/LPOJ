@@ -6,7 +6,7 @@
           <div style="text-align:center;margin:5px;">留言</div>
         </el-col>
         <el-col :span="18">
-          <el-input v-model="msg" autocomplete="off" type="textarea"></el-input>
+          <el-input v-model="msg" autocomplete="off" type="textarea" @keyup.native.enter="addcomment"></el-input>
         </el-col>
         <el-col :span="3">
           <el-button size="mini" @click="addcomment" type="primary">提交</el-button>
@@ -15,14 +15,13 @@
     </el-dialog>
         <div slot="header">
             <b>留言与建议板</b>
-          </div>
+            <el-button size="mini" @click="dialogVisible = true" type="primary" style="float: right;">留言</el-button>
     
+          </div>
+          
     <el-table :data="tableData" border style="width: 100%" size="mini" :row-style="ratingcolor">
       <el-table-column prop="username" label="User"></el-table-column>
-      <el-table-column prop="msg" align="right">
-        <template slot="header" slot-scope="scrop">
-          <el-button size="mini" @click="dialogVisible = true" type="primary">留言</el-button>
-        </template>
+      <el-table-column prop="msg" label="Message">
       </el-table-column>
     </el-table>
     <el-pagination

@@ -57,12 +57,12 @@
 </template>
 
 <script>
-import contestoverview from "@/components/contestoverview";
-import contestproblem from "@/components/contestproblem";
-import contestannounce from "@/components/contestannounce";
-import contestsubmit from "@/components/contestsubmit";
-import contestrank from "@/components/contestrank";
-import contestcomment from "@/components/contestcomment";
+import contestoverview from "@/components/contest/contestoverview";
+import contestproblem from "@/components/contest/contestproblem";
+import contestannounce from "@/components/contest/contestannounce";
+import contestsubmit from "@/components/contest/contestsubmit";
+import contestrank from "@/components/contest/contestrank";
+import contestcomment from "@/components/contest/contestcomment";
 export default {
   name: "contestdetail",
   components: {

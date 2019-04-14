@@ -5,7 +5,7 @@
     <el-form label-position="right" v-if="isadmin">
       
       <el-form-item label="Announcement：">
-        <el-input type="textarea" v-model="anvalue" autosize style="width:700px"></el-input>
+        <el-input type="textarea" v-model="anvalue" autosize style="width:700px" @keyup.native.enter="anClick"></el-input>
       </el-form-item>
       <el-button @click="anClick">发送</el-button>
     </el-form>

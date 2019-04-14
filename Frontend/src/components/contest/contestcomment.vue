@@ -25,7 +25,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="提问内容：">
-        <el-input type="textarea" v-model="contestcomment.message" autosize style="width:700px"></el-input>
+        <el-input type="textarea" v-model="contestcomment.message" autosize style="width:700px" @keyup.native.enter="commentClick"></el-input>
       </el-form-item>
       <el-button @click="commentClick">提问</el-button>
     </el-form>
@@ -33,7 +33,7 @@
     <br>
     <el-form label-position="right" v-if="isadmin">
       <el-form-item label="提问编号">
-        <el-input v-model="commentid" style="width:700px"></el-input>
+        <el-input v-model="commentid" style="width:700px" ></el-input>
       </el-form-item>
 
       <el-form-item label="回复他：">

@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import statue from "@/components/statue";
+import statue from "@/components/mainpage/statue";
 export default {
   name: "contestsubmit",
   data() {

@@ -152,87 +152,7 @@
         </el-card>
       </el-row>
       <el-row :gutter="15">
-        <el-card shadow="always">
-          <h2>{{title}}</h2>
-
-          <el-row :gutter="10">
-            <el-col :span="3">
-              <b>AC:</b>
-            </el-col>
-            <el-col :span="21">
-              <el-progress :text-inside="true" :stroke-width="18" :percentage="ac" status="success"></el-progress>
-            </el-col>
-          </el-row>
-
-          <el-row :gutter="10">
-            <el-col :span="3">
-              <b>WA:</b>
-            </el-col>
-            <el-col :span="21">
-              <el-progress
-                :text-inside="true"
-                :stroke-width="18"
-                :percentage="wa"
-                status="exception"
-              ></el-progress>
-            </el-col>
-          </el-row>
-          <el-row :gutter="10">
-            <el-col :span="3">
-              <b>PE:</b>
-            </el-col>
-            <el-col :span="21">
-              <el-progress :text-inside="true" :stroke-width="18" :percentage="pe" color="#FF9800"></el-progress>
-            </el-col>
-          </el-row>
-          <el-row :gutter="10">
-            <el-col :span="3">
-              <b>TLE:</b>
-            </el-col>
-            <el-col :span="21">
-              <el-progress :text-inside="true" :stroke-width="18" :percentage="tle" color="#FF9800"></el-progress>
-            </el-col>
-          </el-row>
-          <el-row :gutter="10">
-            <el-col :span="3">
-              <b>RTE:</b>
-            </el-col>
-            <el-col :span="21">
-              <el-progress :text-inside="true" :stroke-width="18" :percentage="rte" color="#FF9800"></el-progress>
-            </el-col>
-          </el-row>
-          <el-row :gutter="10">
-            <el-col :span="3">
-              <b>MLE:</b>
-            </el-col>
-            <el-col :span="21">
-              <el-progress :text-inside="true" :stroke-width="18" :percentage="mle" color="#795548"></el-progress>
-            </el-col>
-          </el-row>
-
-          <el-row :gutter="10">
-            <el-col :span="3">
-              <b>CE:</b>
-            </el-col>
-            <el-col :span="21">
-              <el-progress :text-inside="true" :stroke-width="18" :percentage="ce" color="#FFC107"></el-progress>
-            </el-col>
-          </el-row>
-
-          <el-row :gutter="10">
-            <el-col :span="3">
-              <b>SE:</b>
-            </el-col>
-            <el-col :span="21">
-              <el-progress
-                :text-inside="true"
-                :stroke-width="18"
-                :percentage="se"
-                status="exception"
-              ></el-progress>
-            </el-col>
-          </el-row>
-        </el-card>
+        <prostatistice ref="prosta"></prostatistice>
       </el-row>
       <el-row :gutter="15">
         <el-card>
@@ -247,7 +167,8 @@
 <script>
 import moment from "moment";
 import { codemirror } from "vue-codemirror";
-import statusmini from "@/components/statusmini";
+import statusmini from "@/components/utils/statusmini";
+import prostatistice from "@/components/utils/prostatistice";
 require("codemirror/lib/codemirror.css");
 require("codemirror/theme/base16-light.css");
 require("codemirror/mode/clike/clike");
@@ -256,7 +177,8 @@ export default {
   name: "problemdetail",
   components: {
     codemirror,
-    statusmini
+    statusmini,
+    prostatistice
   },
   data() {
     return {
@@ -389,6 +311,7 @@ export default {
             this.title = response.data.title;
             this.level = response.data.level;
             this.tagnames = response.data.tag;
+            this.$refs.prosta.setdata(this.$data)
           })
           .catch(error => {
             this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
