@@ -13,6 +13,9 @@ import admin from '@/components/mainpage/admin'
 import billboard from '@/components/mainpage/billboard'
 import blog from '@/components/mainpage/blog'
 import wiki from '@/components/mainpage/wiki'
+import algorithm from '@/components/wiki/algorithm'
+import mbcode from '@/components/wiki/code'
+import ojcode from '@/components/wiki/ojcode'
 Vue.use(Router)
 
 export default new Router({
@@ -87,6 +90,21 @@ export default new Router({
       path: '/wiki',
       name: 'wiki',
       component: wiki,
-    }
+    },
+    {
+      path: '/wiki/algorithm',
+      name: 'algorithm',
+      component: algorithm,
+    },
+    {
+      path: '/wiki/code',
+      name: 'mbcode',
+      component: mbcode,
+    },
+    {
+      path: '/wiki/ojcode',
+      name: 'ojcode',
+      component: ojcode,
+    },
   ]
 })
