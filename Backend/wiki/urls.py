@@ -8,6 +8,9 @@ from rest_framework import routers
 routers = routers.DefaultRouter()
 routers.register('wiki', views.WikiView)
 routers.register('wikicount', views.WikiCountView)
+routers.register('mbcode', views.MBCodeView)
+routers.register('mbcodedetail', views.MBCodeDetailView)
+routers.register('mbcodedetailnocode', views.MBCodeDetailNoCodeView)
 
 urlpatterns = [
     url('', include(routers.urls)),

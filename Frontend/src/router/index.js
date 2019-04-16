@@ -16,6 +16,9 @@ import wiki from '@/components/mainpage/wiki'
 import algorithm from '@/components/wiki/algorithm'
 import mbcode from '@/components/wiki/code'
 import ojcode from '@/components/wiki/ojcode'
+import viewcode from '@/components/wiki/mbcode/viewcode'
+import viewcodedetail from '@/components/wiki/mbcode/viewcodedetail'
+import codeedit from '@/components/wiki/mbcode/codeedit'
 Vue.use(Router)
 
 export default new Router({
@@ -105,6 +108,21 @@ export default new Router({
       path: '/wiki/ojcode',
       name: 'ojcode',
       component: ojcode,
+    },
+    {
+      path: '/wiki/mbcode/:username',
+      name: 'viewcode',
+      component: viewcode,
+    },
+    {
+      path: '/wiki/mbcodedetail/:codeID',
+      name: 'viewcodedetail',
+      component: viewcodedetail,
+    },
+    {
+      path: '/wiki/mbcodeedit',
+      name: 'codeedit',
+      component: codeedit,
     },
   ]
 })
