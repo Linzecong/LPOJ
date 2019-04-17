@@ -1,5 +1,5 @@
 <template>
-    <el-card>
+    <el-card v-loading="loading">
       <el-row :gutter="15">
         <el-carousel :interval="2000" type="card">
           <el-carousel-item v-for="(item,index) in carouselData" :key="index">
@@ -53,7 +53,8 @@ export default {
       pagesize: 20,
       totaluser: 10,
       tableData: [],
-      carouselData:[]
+      carouselData:[],
+      loading:true
     }
   },
   methods: {
@@ -95,7 +96,7 @@ export default {
         }
         this.tableData = response.data.results;
         this.totaluser = response.data.count;
-        
+        this.loading=false
       })
       .catch(error => {
         this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");

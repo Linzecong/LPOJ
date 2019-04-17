@@ -20,7 +20,7 @@
       <el-button type="primary" @click="getcode" style="margin-left:30px;">获取代码</el-button>
     </el-row>
     <el-row>
-      <el-input placeholder="请输入代码介绍" v-model="des" style="width:300px;"></el-input>
+      <el-input type="textarea" placeholder="请输入代码介绍，支持MD格式，在导出时有效" v-model="des" style="width:300px;"></el-input>
     </el-row>
     <el-row>
       <codemirror v-model="code" :options="cmOptions"></codemirror>

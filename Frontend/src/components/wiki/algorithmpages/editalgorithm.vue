@@ -235,6 +235,7 @@
       :toolbars="toolbars"
       @save="savemethod"
       @imgAdd="$imgAdd"
+      v-loading="loading"
     />
   </div>
 </template>
@@ -255,6 +256,7 @@ export default {
       editpage: "",
       username: "",
       curid: 0,
+      loading:false,
       toolbars: {
         bold: true, // 粗体
         italic: true, // 斜体
@@ -345,9 +347,11 @@ export default {
       }
     },
     typechange(value) {
+      this.loading=true
       this.$axios
         .get("/wiki/?username=" + this.username + "&type=" + value)
         .then(response => {
+          this.loading=false
           this.context =
             response.data.length > 0 ? response.data[0].value : "# 暂无数据";
           this.curid = response.data.length > 0 ? response.data[0].id : 0;

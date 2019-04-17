@@ -1,6 +1,5 @@
 <template>
-<el-card>
-  
+  <el-card v-loading="loading">
     <el-dialog title="申报" :visible.sync="dialogVisible">
       <el-form :model="form">
         <el-row :gutter="10">
@@ -35,31 +34,36 @@
     </el-dialog>
 
     <center>
-      <h3>广东外语外贸大学 ACM集训队排名<el-button @click="dialogVisible = true" type="primary" style="float:right;margin:10px;">其他申报</el-button></h3>
+      <h3>
+        广东外语外贸大学 ACM集训队排名
+        <el-button
+          @click="dialogVisible = true"
+          type="primary"
+          style="float:right;margin:10px;"
+        >其他申报</el-button>
+      </h3>
     </center>
 
-      <el-table :data="tableData" border stripe size="small">
-        <el-table-column prop="username" label="User" fixed></el-table-column>
-        
-        <!-- <el-table-column prop="classes" label="Class" fixed></el-table-column> -->
-        <el-table-column prop="number" label="Number" fixed></el-table-column>
-        <el-table-column
-          v-for="(item,index) in boardinfo"
-          :key="index"
-          :prop="item.prop"
-          :label="item.label"
-          style="white-space: pre-line;"
-        >
-          <template slot-scope="scope">
-            <div style="white-space:pre-line;">{{scope.row[item.prop]}}</div>
-          </template>
-        </el-table-column>
+    <el-table :data="tableData" border stripe size="small">
+      <el-table-column prop="username" label="User" fixed></el-table-column>
 
-        <el-table-column prop="total" label="AC/Submit" fixed></el-table-column>
-      </el-table>
-   
-  
-</el-card>
+      <!-- <el-table-column prop="classes" label="Class" fixed></el-table-column> -->
+      <el-table-column prop="number" label="Number" fixed></el-table-column>
+      <el-table-column
+        v-for="(item,index) in boardinfo"
+        :key="index"
+        :prop="item.prop"
+        :label="item.label"
+        style="white-space: pre-line;"
+      >
+        <template slot-scope="scope">
+          <div style="white-space:pre-line;">{{scope.row[item.prop]}}</div>
+        </template>
+      </el-table-column>
+
+      <el-table-column prop="total" label="AC/Submit" fixed></el-table-column>
+    </el-table>
+  </el-card>
 </template>
 
 <script>
@@ -67,33 +71,38 @@ export default {
   name: "billboard",
   data() {
     return {
-      dialogVisible:false,
+      dialogVisible: false,
       ojcount: 3,
       boardinfo: [],
       tableData: [{}],
-      form:{
-          username:"",
-          count:0,
-          msg:""
-      }
+      form: {
+        username: "",
+        count: 0,
+        msg: ""
+      },
+      loading:true
     };
   },
   created() {
     this.setdata();
   },
   methods: {
-      PushOtherClick(){
-           this.$axios.post("/otherssubmit/",this.form).then(response => {
-               this.dialogVisible=false
-               this.$message({
-          message: "提交成功！",
-          type: "success"
+    PushOtherClick() {
+      this.$axios
+        .post("/otherssubmit/", this.form)
+        .then(response => {
+          this.dialogVisible = false;
+          this.$message({
+            message: "提交成功！",
+            type: "success"
+          });
+        })
+        .catch(error => {
+          this.$message.error(
+            "服务器错误！请联系管理员！" + JSON.stringify(error.response.data)
+          );
         });
-           }).catch(error=>{
-               this.$message.error("服务器错误！请联系管理员！"+JSON.stringify(error.response.data))
-           });
-
-      },
+    },
     sortByProperty(p1, p2) {
       function sortfun(obj1, obj2) {
         //核心代码
@@ -118,7 +127,7 @@ export default {
         for (var i = 0; i < props.length; i++) {
           this.boardinfo.push({ prop: props[i], label: props[i] });
         }
-        var data = []
+        var data = [];
         for (var i = 0; i < response.data.length; i++) {
           var k = {
             username: response.data[i]["username"],
@@ -152,6 +161,9 @@ export default {
         this.tableData = data;
       });
     }
+  },
+  mounted(){
+    this.loading=false
   }
 };
 </script>

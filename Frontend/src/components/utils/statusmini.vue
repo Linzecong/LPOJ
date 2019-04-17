@@ -103,7 +103,9 @@
   text-align: center;
   font-weight: bold;
 }
+
 </style>
+
 
 
 <script>
@@ -290,7 +292,9 @@ export default {
         mode: "text/x-c++src",
         theme: "base16-light",
         lineNumbers: true,
-        readOnly: true
+        readOnly: true,
+        viewportMargin:Infinity,
+        lineWrapping:true,
       },
       tableData: [],
       username: "",

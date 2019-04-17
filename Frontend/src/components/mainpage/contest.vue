@@ -1,5 +1,5 @@
 <template>
-<el-card>
+<el-card v-loading="loading">
   <el-row>
     <el-table
       :data="tableData"
@@ -58,7 +58,8 @@ export default {
       currentpage: 1,
       pagesize: 10,
       totalcontest: 10,
-      tableData: []
+      tableData: [],
+      loading:true
     };
   },
   methods: {
@@ -211,6 +212,7 @@ export default {
         }
         this.tableData = response.data.results;
         this.totalcontest = response.data.count;
+        this.loading=false
       })
       .catch(error => {
         this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");

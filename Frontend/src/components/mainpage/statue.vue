@@ -128,6 +128,7 @@
       :row-style="ratingcolor"
       @row-click="rowClick"
       size="small"
+      v-loading="loading"
     >
       <el-table-column prop="id" label="ID" :width="70"></el-table-column>
       <el-table-column prop="user" label="User" :width="140"></el-table-column>
@@ -168,7 +169,6 @@
   font-weight: bold;
 }
 </style>
-
 
 <script>
 import moment from "moment";
@@ -312,9 +312,11 @@ export default {
         this.showall = true;
       else this.showall = false;
       this.getstatusdata();
+      this.loading = false;
     },
 
     getstatusdata() {
+      this.loading = true;
       this.$axios
         .get(
           "/judgestatus/?user=" +
@@ -393,6 +395,7 @@ export default {
           }
           this.tableData = response.data.results;
           this.totalstatus = response.data.count;
+          this.loading = false;
         });
     },
 
@@ -422,7 +425,9 @@ export default {
         mode: "text/x-c++src",
         theme: "base16-light",
         lineNumbers: true,
-        readOnly: true
+        readOnly: true,
+        viewportMargin:Infinity,
+        lineWrapping:true,
       },
       tableData: [],
       currentpage: 1,
@@ -436,6 +441,7 @@ export default {
       code: "",
       compilemsg: "",
       dialogdata: [],
+      loading: false,
       searchform: {
         user: "",
         result: "",

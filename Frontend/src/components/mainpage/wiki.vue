@@ -35,13 +35,13 @@
       <el-col :span="8">
         <el-card>
           <div slot="header">
-            <b>OJ开发教程</b>
+            <b>LPOJ试炼谷</b>
           </div>
-          <div style=" margin-bottom: 18px;">在这里你可以找到LPOJ的源代码</div>
-          <div style=" margin-bottom: 18px;">在这里你可以学习如何从零开发一个OJ</div>
-          <div style=" margin-bottom: 18px;">在这里你可以学习到一些算法以外的东西</div>
+          <div style=" margin-bottom: 18px;">在这里你可以找到ACM的入门方法</div>
+          <div style=" margin-bottom: 18px;">在这里你可以得到完整的历练</div>
+          <div style=" margin-bottom: 18px;">在这里你可以看到自己变成大神的轨迹</div>
           <div style=" margin-bottom: 18px;">
-            <el-button @click="ojClick" type="primary">开始学习</el-button>
+            <el-button @click="ojClick" type="primary">开始试炼</el-button>
           </div>
         </el-card>
       </el-col>

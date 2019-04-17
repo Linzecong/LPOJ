@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="problemform" :model="problemform" label-position="right">
+  <el-form ref="problemform" :model="problemform" label-position="right" v-loading="loading">
     <el-form-item label="题目编号：">
       <el-input v-model="problemform.problem" @change="problemchange" placeholder="请输入题目编号"></el-input>
       <el-button type="danger" @click="onDelProblem">删除题目</el-button>
@@ -88,6 +88,7 @@ export default {
       problemcount: 0,
       uploadaddress: "/uploadfile/",
       fileList: [],
+      loading:false,
       problemform: {
         problem: "",
         author: localStorage.name,
@@ -224,6 +225,7 @@ export default {
                 type: "success"
               });
               this.fileList=[]
+              this.loading=false
             });
         });
     },
@@ -245,6 +247,7 @@ export default {
         cancelButtonText: "取消",
         type: "warning"
       }).then(() => {
+        this.loading=true
         this.$refs.upload.submit();
       });
     }

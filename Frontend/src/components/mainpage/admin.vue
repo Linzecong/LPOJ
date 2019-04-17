@@ -1,5 +1,5 @@
 <template>
-  <el-tabs type="border-card" v-show="canshow">
+  <el-tabs type="border-card" v-show="canshow" v-loading="loading">
     <el-tab-pane label="添加题目">
       <adminaddproblem></adminaddproblem>
     </el-tab-pane>
@@ -34,6 +34,7 @@ export default {
       type: 1,
       isadmin: false,
       canshow: false,
+      loading:true
     };
   },
   methods: {
@@ -50,7 +51,10 @@ export default {
     if (this.type == 3) {
       this.isadmin = true;
     }
-  }
+  },
+  mounted() {
+    this.loading=false
+  },
 };
 </script>
 

@@ -164,6 +164,11 @@
   </el-row>
 </template>
 
+<style scope>
+.CodeMirror {
+  height: 500px;
+}
+</style>
 <script>
 import moment from "moment";
 import { codemirror } from "vue-codemirror";
@@ -215,7 +220,7 @@ export default {
       ce: 100,
       wa: 100,
       se: 100,
-      submitbuttontext: "提交后请勿重复刷新",
+      submitbuttontext: "提交后请勿重复刷新/支持将文件拖入代码框",
       judgetype: "primary",
       loadingshow: false,
       submitid: -1
@@ -404,7 +409,7 @@ export default {
       });
     },
     timer: function() {
-      if (this.submitbuttontext == "提交后请勿重复刷新") return;
+      if (this.submitbuttontext == "提交后请勿重复刷新/支持将文件拖入代码框") return;
       this.$axios.get("/judgestatus/" + this.submitid + "/").then(response => {
         this.loadingshow = false;
         var testcase = response.data["testcase"];

@@ -157,7 +157,9 @@ export default {
         mode: "text/x-c++src",
         theme: "base16-light",
         lineNumbers: true,
-        extraKeys: { Ctrl: "autocomplete" }
+        extraKeys: { Ctrl: "autocomplete" },
+        viewportMargin:Infinity,
+        lineWrapping:true,
       },
       begintime: "",
       currenttime: "",
@@ -184,7 +186,7 @@ export default {
       code: "",
       language: "C++",
 
-      submitbuttontext: "提交后请勿重复刷新",
+      submitbuttontext: "提交后请勿重复刷新/支持将文件拖入代码框",
       judgetype: "primary",
       loadingshow: false,
       submitid: -1,
@@ -217,7 +219,7 @@ export default {
     },
     problemtabClick(tab) {
       clearInterval(this.$store.state.submittimer);
-      this.submitbuttontext = "提交后请勿重复刷新";
+      this.submitbuttontext = "提交后请勿重复刷新/支持将文件拖入代码框";
       this.judgetype = "primary";
       this.loadingshow = false;
       this.submitid = -1;
@@ -270,7 +272,7 @@ export default {
     },
     getproblem(id) {
       clearInterval(this.$store.state.submittimer);
-      this.submitbuttontext = "提交后请勿重复刷新";
+      this.submitbuttontext = "提交后请勿重复刷新/支持将文件拖入代码框";
       this.judgetype = "primary";
       this.loadingshow = false;
       this.submitid = -1;
@@ -555,7 +557,7 @@ export default {
       });
     },
     timer: function() {
-      if (this.submitbuttontext == "提交后请勿重复刷新") return;
+      if (this.submitbuttontext == "提交后请勿重复刷新/支持将文件拖入代码框") return;
       this.$axios.get("/judgestatus/" + this.submitid + "/").then(response => {
         this.loadingshow = false;
         var testcase = response.data["testcase"];

@@ -1,6 +1,6 @@
 <template>
  
-      <el-form ref="addproblemform" :model="addproblemform" label-position="right">
+      <el-form ref="addproblemform" :model="addproblemform" label-position="right" v-loading="loading">
         <el-form-item label="题目编号：">
           <el-input v-model="addproblemform.problem"></el-input>
         </el-form-item>
@@ -87,6 +87,7 @@ export default {
       problemcount: 0,
       uploadaddress: "/uploadfile/",
       fileList: [],
+      loading:false,
       addproblemform: {
         problem: this.problemcount + 1,
         author: localStorage.name,
@@ -190,6 +191,7 @@ export default {
                 message: "提交成功！题目编号为：" + response2.data.problem,
                 type: "success"
               });
+              this.loading=false
               this.$router.go(0)
             });
         });
@@ -221,6 +223,7 @@ export default {
         cancelButtonText: "取消",
         type: "warning"
       }).then(() => {
+        this.loading=true
         this.$refs.upload.submit();
       });
     }

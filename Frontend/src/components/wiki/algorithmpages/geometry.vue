@@ -27,6 +27,7 @@
           :editable="prop.editable"
           :scrollStyle="prop.scrollStyle"
           :autofocus="false"
+          v-loading="loading"
         ></mavon-editor>
       </el-col>
     </el-row>
@@ -68,7 +69,8 @@ export default {
       geometryvalue: "",
       tableData: [],
       curTypeValue: "",
-      curUserValue: ""
+      curUserValue: "",
+      loading: false
     };
   },
   created() {
@@ -84,7 +86,7 @@ export default {
         this.curUserValue = username;
         this.curTypeValue = type;
       } else return;
-
+      this.loading = true;
       this.$axios
         .get("/wikicount/?type=" + type)
         .then(response => {
@@ -103,7 +105,9 @@ export default {
       this.$axios
         .get("/wiki/?username=" + username + "&type=" + type)
         .then(response => {
-          this.geometryvalue = response.data.length>0?response.data[0].value:"# 暂无数据";
+          this.geometryvalue =
+            response.data.length > 0 ? response.data[0].value : "# 暂无数据";
+            this.loading=false
         })
         .catch(error => {
           this.$message.error(
