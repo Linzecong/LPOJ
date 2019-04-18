@@ -37,3 +37,20 @@ class MBCodeDetail(models.Model):
 
     def __str__(self):
         return self.username
+
+
+class TrainningContest(models.Model):
+
+    title = models.CharField(max_length=50) # 标题
+    des = models.CharField(max_length=500)
+    tips = models.CharField(max_length=500)#教程 | 隔开
+    group = models.IntegerField() # 第几章
+    num = models.IntegerField() # 第几关
+    problem = models.CharField(max_length=500) #题目 | 隔开
+
+    objects = models.Manager()
+
+    def __str__(self):
+        return self.title
+
+

@@ -85,18 +85,21 @@ export default {
   created() {
     this.isadmin = localStorage.type == 2 || localStorage.type == 3;
 
-    if (localStorage.username != "") {
-      this.$axios
-        .get("/userdata/?username=" + localStorage.username)
-        .then(response => {
-          localStorage.setItem("rating", response.data[0].rating);
-        });
-    } else {
-      localStorage.setItem("username", "");
-      localStorage.setItem("name", "");
-      localStorage.setItem("rating", "");
-      localStorage.setItem("type", "");
-    }
+    // if (localStorage.username != "") {
+    //   this.$axios
+    //     .get("/userdata/?username=" + localStorage.username)
+    //     .then(response => {
+    //       localStorage.setItem("rating", response.data[0].rating);
+    //       var acpro = response.data[0].acpro.split("|")
+    //       acpro.shift()
+    //       this.$store.state.acpro=acpro
+    //     });
+    // } else {
+    //   localStorage.setItem("username", "");
+    //   localStorage.setItem("name", "");
+    //   localStorage.setItem("rating", "");
+    //   localStorage.setItem("type", "");
+    // }
   },
   methods: {
     loginopen() {

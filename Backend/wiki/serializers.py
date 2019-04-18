@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from rest_framework import serializers
-from .models import Wiki,MBCode,MBCodeDetail
+from .models import Wiki,MBCode,MBCodeDetail,TrainningContest
 
 class WikiSerializer(serializers.ModelSerializer):
     class Meta:
@@ -27,3 +27,8 @@ class MBCodeDetailNoCodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = MBCodeDetail
         exclude = ['code']
+
+class TrainningContestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TrainningContest
+        fields = '__all__'

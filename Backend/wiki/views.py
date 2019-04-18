@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from .serializers import WikiSerializer,WikiCountSerializer,MBCodeSerializer,MBCodeDetailSerializer,MBCodeDetailNoCodeSerializer
-from .permission import UserOnly
-from .models import Wiki,MBCode,MBCodeDetail
+from .serializers import TrainningContestSerializer, WikiSerializer,WikiCountSerializer,MBCodeSerializer,MBCodeDetailSerializer,MBCodeDetailNoCodeSerializer
+from .permission import UserOnly,AdminOnly
+from .models import Wiki,MBCode,MBCodeDetail,TrainningContest
 from rest_framework.throttling import ScopedRateThrottle
 
 # Create your views here.
@@ -43,5 +43,13 @@ class MBCodeDetailNoCodeView(viewsets.ModelViewSet):
     serializer_class = MBCodeDetailNoCodeSerializer
     filter_fields = ('username','group','des','title')
     permission_classes = (UserOnly,)
+    throttle_scope  = "post"
+    throttle_classes =[ScopedRateThrottle,]
+
+class TrainningContestView(viewsets.ModelViewSet):
+    queryset = TrainningContest.objects.all().order_by("num")
+    serializer_class = TrainningContestSerializer
+    filter_fields = ('group','title',)
+    permission_classes = (AdminOnly,)
     throttle_scope  = "post"
     throttle_classes =[ScopedRateThrottle,]

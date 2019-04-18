@@ -15,10 +15,13 @@ import blog from '@/components/mainpage/blog'
 import wiki from '@/components/mainpage/wiki'
 import algorithm from '@/components/wiki/algorithm'
 import mbcode from '@/components/wiki/code'
-import ojcode from '@/components/wiki/ojcode'
+import trainning from '@/components/wiki/trainning'
 import viewcode from '@/components/wiki/mbcode/viewcode'
 import viewcodedetail from '@/components/wiki/mbcode/viewcodedetail'
 import codeedit from '@/components/wiki/mbcode/codeedit'
+import wikidetail from '@/components/utils/wikidetail'
+import trainningdetail from '@/components/wiki/trainning/trainningdetail'
+
 Vue.use(Router)
 
 export default new Router({
@@ -105,9 +108,9 @@ export default new Router({
       component: mbcode,
     },
     {
-      path: '/wiki/ojcode',
-      name: 'ojcode',
-      component: ojcode,
+      path: '/wiki/trainning',
+      name: 'trainning',
+      component: trainning,
     },
     {
       path: '/wiki/mbcode/:username',
@@ -124,5 +127,15 @@ export default new Router({
       name: 'codeedit',
       component: codeedit,
     },
+    {
+      path: '/wikidetail/:wikiid',
+      name: 'wikidetail',
+      component: wikidetail,
+    },
+    {
+      path: '/trainningdetail/:trainningid',
+      name: 'trainningdetail',
+      component: trainningdetail,
+    }
   ]
 })

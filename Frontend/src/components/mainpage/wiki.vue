@@ -41,7 +41,7 @@
           <div style=" margin-bottom: 18px;">在这里你可以得到完整的历练</div>
           <div style=" margin-bottom: 18px;">在这里你可以看到自己变成大神的轨迹</div>
           <div style=" margin-bottom: 18px;">
-            <el-button @click="ojClick" type="primary">开始试炼</el-button>
+            <el-button @click="trainningClick" type="primary">开始试炼</el-button>
           </div>
         </el-card>
       </el-col>
@@ -66,9 +66,9 @@ export default {
           name: "mbcode"
       });
     },
-    ojClick(){
+    trainningClick(){
       this.$router.push({
-          name: "ojcode"
+          name: "trainning"
       });
     }
   },

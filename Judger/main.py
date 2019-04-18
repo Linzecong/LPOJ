@@ -450,6 +450,9 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 "UPDATE user_userdata SET score = score+%d WHERE username = '%s'" % (score, username))
             cursor.execute(
                 "UPDATE user_userdata SET ac = ac+1 WHERE username = '%s'" % username)
+            cursor.execute(
+                "UPDATE user_userdata SET acpro = concat(acpro,'|%s') WHERE username = '%s'" % (str(problem),username))
+
         if contest is not 0:
             cursor.execute(
                 "UPDATE contest_contestboard SET type =1 WHERE submitid = '%s'" % id)
