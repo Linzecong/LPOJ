@@ -50,11 +50,11 @@
     <el-row :gutter="15" v-for="(item,i) in rownum" :key="i">
       <el-col :span="6" :key="i*4+j" v-for="(item,j) in (i+1)*4>totalpro?(totalpro%4):4">
         <el-card class="box-card" :body-style="{ padding: '0px' }">
-          <div style="background:#e6ffdf;height:40px;vertical-align: middle;">
-            <b style="color:green;">{{trainningdata[i*4+j].title}}</b>
-          </div>
+          <el-row style="background:#e6ffdf;height:40px;">
+            <b style="color:green;margin:15px;font-size:20px;">{{trainningdata[i*4+j].title}}</b>
+          </el-row >
           <b
-            style="margin-left:10px;margin-top:20px;"
+            style="margin-left:10px;"
           >{{'关卡' + trainningdata[i*4+j].group+'-'+trainningdata[i*4+j].num+', 共 '+trainningdata[i*4+j].totnum+' 道题' }}</b>
           <p style="margin-left:10px;margin-top:10px;color:#909399">{{trainningdata[i*4+j].des}}</p>
           <el-row style="float:bottom;margin:5px">

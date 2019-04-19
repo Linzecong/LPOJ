@@ -13,7 +13,9 @@
         </el-menu>
       </el-col>
       <el-col :span="20">
+        <el-button style="width:100%;"  icon="el-icon-search" @click="searchtitle">点击此处搜索算法</el-button>
         <mavon-editor
+        style="margin-top:15px;"
           :boxShadow="false"
           :value="introvalue"
           :subfield="prop.subfield"
@@ -111,6 +113,12 @@ export default {
     },
     userclick(row, column, cell, event) {
       this.getdata(row.username, this.curTypeValue);
+    },
+    searchtitle(){
+      this.$router.push({
+        name: "wikidetail",
+        params: { wikiid: "intro_index" }
+      });
     }
   }
 };

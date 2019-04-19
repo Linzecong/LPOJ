@@ -350,7 +350,7 @@ export default {
       searchtext: ""
     };
   },
-  created() {
+  mounted() {
     this.$axios
       .get("/problemdata/?limit=15&offset=0" + "&auth=1")
       .then(response => {

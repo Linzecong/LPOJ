@@ -5,8 +5,8 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.pagination import LimitOffsetPagination
 from .permission import ManagerOnly,LoginOnly,UserOnly,UserOnly2
-from .models import ContestAnnouncement,ContestRank,ContestRatingChange, ContestBoard, ContestComment, ContestInfo, ContestProblem, ContestRegister
-from .serializers import ContestRankSerializer,ContestRatingChangeSerializer, ContestAnnouncementSerializer,ContestBoardSerializer,ContestCommentSerializer,ContestInfoSerializer,ContestProblemSerializer, ContestRegisterSerializer
+from .models import ContestComingInfo,ContestAnnouncement,ContestRank,ContestRatingChange, ContestBoard, ContestComment, ContestInfo, ContestProblem, ContestRegister
+from .serializers import ContestComingInfoSerializer, ContestRankSerializer,ContestRatingChangeSerializer, ContestAnnouncementSerializer,ContestBoardSerializer,ContestCommentSerializer,ContestInfoSerializer,ContestProblemSerializer, ContestRegisterSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 import datetime
 from rest_framework.response import Response
@@ -66,8 +66,8 @@ class ContestInfoView(viewsets.ModelViewSet):
     throttle_classes =[ScopedRateThrottle,]
 
 class ContestComingInfoView(viewsets.ModelViewSet):
-    queryset = ContestInfo.objects.filter(begintime__gte=datetime.datetime.now())
-    serializer_class = ContestInfoSerializer
+    queryset = ContestComingInfo.objects.all().order_by('startTime')
+    serializer_class = ContestComingInfoSerializer
     pagination_class = LimitOffsetPagination
     permission_classes = (ManagerOnly,)
     throttle_scope  = "post"

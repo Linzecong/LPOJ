@@ -113,3 +113,17 @@ class ContestRatingChange(models.Model):
 
     def __str__(self):
         return self.contestid
+
+
+class ContestComingInfo(models.Model):
+
+    ojName = models.CharField(max_length=100)
+    link = models.CharField(max_length=200)
+    startTime = models.BigIntegerField()
+    endTime = models.BigIntegerField()
+    contestName = models.CharField(max_length=100)
+    
+    objects = models.Manager()
+
+    def __str__(self):
+        return self.contestName
