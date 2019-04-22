@@ -76,10 +76,11 @@ for i,data in enumerate(lastteamdata):
 
 print(lastteamdata)
 
+file = open("1.in","w")
+
 problemcount = xls.SheetDatas[0]["col"]-1
 
-inputstring = []
-inputstring.append(str(problemcount))
+file.write(str(problemcount)+'\n')
 
 for data in lastteamdata:
     for d in range(xls.SheetDatas[0]["row"]):
@@ -95,12 +96,17 @@ for data in lastteamdata:
             wacount = subString(text)
             wacount = int(wacount)
             wacount = -wacount
-        inputstring.append(str(wacount))
+        file.write(str(wacount)+'\n')
+
         actime = 0
         if text.find(":") >=0:
             actime = text[0:8]
-        inputstring.append(str(actime))
+        file.write(str(actime)+'\n')
 
+file.close()
+
+
+file = open("1.in","r")
 
 cursor.execute("SELECT * from board_teamboard")
 datas = cursor.fetchall()
@@ -125,9 +131,7 @@ for i, data in enumerate(lastteamdata):
 
 # print(lastteamdata)
 
-inputindex = 0
-problemcount = int(inputstring[inputindex])
-inputindex = inputindex + 1
+problemcount = int(file.readline())
 
 newteamdata = []
 
@@ -138,10 +142,8 @@ for data in lastteamdata:
     watime = []
 
     for i in range(problemcount):
-        wa = inputstring[inputindex]
-        inputindex = inputindex + 1
-        ac = inputstring[inputindex]
-        inputindex = inputindex + 1
+        wa = int(file.readline())
+        ac = file.readline()
         if ac != "0":
             aclist.append(chr(i+ord('A')))
             actime.append(ac)
@@ -216,7 +218,7 @@ for i in range(problemcount):
             for j, d in enumerate(data["walist"]):
                 if d == chr(i+ord('A')):
                     teamscore[data["name"]] = teamscore[data["name"]
-                                                        ] - 100 * min(data["watime"][j], 10)
+                                                        ] - 50 * min(data["watime"][j], 10)
 
 
 teamscorefinal = []
