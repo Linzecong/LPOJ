@@ -19,7 +19,7 @@ class UserOnly(permissions.BasePermission):
         # Read permissions are allowed to any request,
         # so we'll always allow GET, HEAD or OPTIONS requests.
         data = request.data
-        username = data.get('user')
+        username = blog.user
         userid = request.session.get('user_id', None)
         r1 = data.get('rating')
         r2 = request.session.get('rating', None)

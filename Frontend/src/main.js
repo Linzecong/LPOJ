@@ -24,10 +24,31 @@ axios.defaults.baseURL = process.env.API_ROOT
 Vue.prototype.$axios = axios;
 
 
+
 const store = new Vuex.Store({
   state: {
   },
 })
+
+if(localStorage.acpro!="")
+  store.state.acpro=localStorage.acpro
+
+if (localStorage.username != "") {
+  axios
+    .get("/userdata/?username=" + localStorage.username)
+    .then(response => {
+      localStorage.setItem("rating", response.data[0].rating);
+      var acpro = response.data[0].acpro.split("|")
+      acpro.shift()
+      store.state.acpro=acpro
+      localStorage.setItem("acpro", acpro);
+    });
+} else {
+  localStorage.setItem("username", "");
+  localStorage.setItem("name", "");
+  localStorage.setItem("rating", "");
+  localStorage.setItem("type", "");
+}
 
 new Vue({
   el: '#app',

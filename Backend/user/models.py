@@ -33,6 +33,7 @@ class UserData(models.Model):
     score = models.IntegerField(default=0)
     des = models.CharField(max_length=500,null=True)
     rating = models.IntegerField(default=1500)
+    acpro = models.TextField(null=True,default="")
     
     objects = models.Manager()
 

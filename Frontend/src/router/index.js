@@ -1,17 +1,26 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import main from '@/components/main'
-import problem from '@/components/problem'
-import statue from '@/components/statue'
-import user from '@/components/user'
-import setting from '@/components/setting'
-import contest from '@/components/contest'
-import contestdetail from '@/components/contestdetail'
-import problemdetail from '@/components/problemdetail'
-import rank from '@/components/rank'
-import admin from '@/components/admin'
-import billboard from '@/components/billboard'
-import blog from '@/components/blog'
+import problem from '@/components/mainpage/problem'
+import statue from '@/components/mainpage/statue'
+import user from '@/components/mainpage/user'
+import setting from '@/components/mainpage/setting'
+import contest from '@/components/mainpage/contest'
+import contestdetail from '@/components/contest/contestdetail'
+import problemdetail from '@/components/problem/problemdetail'
+import rank from '@/components/mainpage/rank'
+import admin from '@/components/mainpage/admin'
+import billboard from '@/components/mainpage/billboard'
+import blog from '@/components/mainpage/blog'
+import wiki from '@/components/mainpage/wiki'
+import algorithm from '@/components/wiki/algorithm'
+import mbcode from '@/components/wiki/code'
+import trainning from '@/components/wiki/trainning'
+import viewcode from '@/components/wiki/mbcode/viewcode'
+import viewcodedetail from '@/components/wiki/mbcode/viewcodedetail'
+import codeedit from '@/components/wiki/mbcode/codeedit'
+import wikidetail from '@/components/utils/wikidetail'
+import trainningdetail from '@/components/wiki/trainning/trainningdetail'
 
 Vue.use(Router)
 
@@ -82,6 +91,51 @@ export default new Router({
       path: '/blog',
       name: 'blog',
       component: blog,
+    },
+    {
+      path: '/wiki',
+      name: 'wiki',
+      component: wiki,
+    },
+    {
+      path: '/wiki/algorithm',
+      name: 'algorithm',
+      component: algorithm,
+    },
+    {
+      path: '/wiki/code',
+      name: 'mbcode',
+      component: mbcode,
+    },
+    {
+      path: '/wiki/trainning',
+      name: 'trainning',
+      component: trainning,
+    },
+    {
+      path: '/wiki/mbcode/:username',
+      name: 'viewcode',
+      component: viewcode,
+    },
+    {
+      path: '/wiki/mbcodedetail/:codeID',
+      name: 'viewcodedetail',
+      component: viewcodedetail,
+    },
+    {
+      path: '/wiki/mbcodeedit',
+      name: 'codeedit',
+      component: codeedit,
+    },
+    {
+      path: '/wikidetail/:wikiid',
+      name: 'wikidetail',
+      component: wikidetail,
+    },
+    {
+      path: '/trainningdetail/:trainningid',
+      name: 'trainningdetail',
+      component: trainningdetail,
     }
   ]
 })
