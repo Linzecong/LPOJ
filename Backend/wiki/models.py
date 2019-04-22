@@ -7,6 +7,9 @@ class Wiki(models.Model):
     type = models.CharField(max_length=50) # 发布了哪篇文章
     value = models.TextField(default="暂无文本")
     time = models.DateTimeField(auto_now=True)
+    group = models.CharField(max_length=50,null=True,default="") # 新添加的算法的分类
+    std = models.IntegerField(default=0) # 是否是标准算法，0代表是，1代表新添加的算法
+    title = models.CharField(max_length=50,null=True,default="") # 新添加的算法标题
 
     objects = models.Manager()
 

@@ -10,7 +10,7 @@
         {{name}}
       </span>
 
-      <el-col :span="24" v-show="begin">
+      <el-col :span="24" v-show="begin" v-loading="loading">
         <el-row>
           <el-card shadow="always">
             <el-row :gutter="18" id="title">
@@ -56,7 +56,9 @@
             <el-row :gutter="18" style="left:10px">
               <el-row :gutter="18" v-for="(item,index) in sinput.length" :key="index">
                 <el-col :span="11" id="text">
-                  <el-row :gutter="18" id="des" style="margin-bottom: 0px;">Sample Input {{item}}<el-button
+                  <el-row :gutter="18" id="des" style="margin-bottom: 0px;">
+                    Sample Input {{item}}
+                    <el-button
                       size="mini"
                       v-clipboard:copy="sinput[index]"
                       v-clipboard:success="onCopy"
@@ -80,9 +82,9 @@
             <el-row :gutter="18" id="des">Hint</el-row>
             <el-row :gutter="18" id="detail">
               <div
-              style="margin-right:50px;word-break:break-all;white-space:pre-line;"
-              v-html="hint"
-            ></div>
+                style="margin-right:50px;word-break:break-all;white-space:pre-line;"
+                v-html="hint"
+              ></div>
             </el-row>
           </el-card>
         </el-row>
@@ -158,8 +160,8 @@ export default {
         theme: "base16-light",
         lineNumbers: true,
         extraKeys: { Ctrl: "autocomplete" },
-        viewportMargin:Infinity,
-        lineWrapping:true,
+        viewportMargin: Infinity,
+        lineWrapping: true
       },
       begintime: "",
       currenttime: "",
@@ -194,7 +196,8 @@ export default {
       currentproblem: -1,
       currentcontest: this.$route.params.contestID,
       currentrank: -1,
-      currentrankE: "A"
+      currentrankE: "A",
+      loading: false
     };
   },
   filters: {
@@ -218,6 +221,7 @@ export default {
       this.$message.error("复制失败：" + e);
     },
     problemtabClick(tab) {
+      this.loading = true;
       clearInterval(this.$store.state.submittimer);
       this.submitbuttontext = "提交后请勿重复刷新/支持将文件拖入代码框";
       this.judgetype = "primary";
@@ -243,6 +247,7 @@ export default {
           this.time = response.data.time + "MS";
           this.memory = response.data.memory + "MB";
           this.hint = response.data.hint;
+          this.loading = false;
         });
       this.$axios
         .get(
@@ -271,6 +276,7 @@ export default {
         });
     },
     getproblem(id) {
+      this.loading = true;
       clearInterval(this.$store.state.submittimer);
       this.submitbuttontext = "提交后请勿重复刷新/支持将文件拖入代码框";
       this.judgetype = "primary";
@@ -326,6 +332,7 @@ export default {
                   this.memory = response.data.memory + "MB";
                   this.hint = response.data.hint;
                   this.$refs["Statusmini0"][0].setstatus(this.currentproblem);
+                  this.loading = false;
                 });
             });
         });
@@ -401,7 +408,12 @@ export default {
                 this.$store.state.submittimer = setInterval(this.timer, 1000);
               })
               .catch(error => {
-                this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
+                this.$message.error(
+                  "服务器错误！" +
+                    "(" +
+                    JSON.stringify(error.response.data) +
+                    ")"
+                );
               });
           } else {
             this.$axios
@@ -468,7 +480,12 @@ export default {
                         });
                     })
                     .catch(error => {
-                      this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
+                      this.$message.error(
+                        "服务器错误！" +
+                          "(" +
+                          JSON.stringify(error.response.data) +
+                          ")"
+                      );
                     });
                 } else {
                   var str = "";
@@ -540,24 +557,38 @@ export default {
                         })
                         .catch(error => {
                           this.$message.error(
-                            "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
+                            "服务器错误！" +
+                              "(" +
+                              JSON.stringify(error.response.data) +
+                              ")"
                           );
                         });
                     })
                     .catch(error => {
-                      this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
+                      this.$message.error(
+                        "服务器错误！" +
+                          "(" +
+                          JSON.stringify(error.response.data) +
+                          ")"
+                      );
                     });
                 }
               })
               .catch(error => {
-                this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
+                this.$message.error(
+                  "服务器错误！" +
+                    "(" +
+                    JSON.stringify(error.response.data) +
+                    ")"
+                );
               });
           }
         });
       });
     },
     timer: function() {
-      if (this.submitbuttontext == "提交后请勿重复刷新/支持将文件拖入代码框") return;
+      if (this.submitbuttontext == "提交后请勿重复刷新/支持将文件拖入代码框")
+        return;
       this.$axios.get("/judgestatus/" + this.submitid + "/").then(response => {
         this.loadingshow = false;
         var testcase = response.data["testcase"];

@@ -17,6 +17,16 @@
           <el-menu-item index="string_manacher">Manacher</el-menu-item>
           <el-menu-item index="string_minimalstring">最小表示法</el-menu-item>
           <el-menu-item index="string_zfunction">Z 函数（扩展 KMP）</el-menu-item>
+          <el-submenu index="8">
+            <template slot="title">其他（额外添加）</template>
+            <el-menu-item-group>
+              <el-menu-item
+                :key="index"
+                v-for="(item,index) in menulist"
+                :index="item.type"
+              >{{item.title}}</el-menu-item>
+            </el-menu-item-group>
+          </el-submenu>
         </el-menu>
       </el-col>
       <el-col :span="20">
@@ -72,11 +82,22 @@ export default {
       tableData: [],
       curTypeValue: "",
       curUserValue: "",
-      loading:false
+      loading:false,
+      menulist: []
     };
   },
   created() {
     this.getdata("std", "string_index");
+    this.$axios
+      .get("/wiki/?group=string&std=1")
+      .then(response => {
+        this.menulist = response.data;
+      })
+      .catch(error => {
+        this.$message.error(
+          "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
+        );
+      });
   },
   methods: {
     handleSelect(key, keyPath) {
@@ -107,7 +128,7 @@ export default {
       this.$axios
         .get("/wiki/?username=" + username + "&type=" + type)
         .then(response => {
-          this.stringvalue = response.data.length>0?response.data[0].value:"# 暂无数据";
+          this.stringvalue = response.data.length>0?response.data[0].value:"# 暂无标准数据，请切换版本你想要的版本！";
           this.loading=false
         })
         .catch(error => {

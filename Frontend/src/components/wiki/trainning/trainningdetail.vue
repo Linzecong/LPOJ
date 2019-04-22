@@ -52,7 +52,7 @@
         <el-card class="box-card" :body-style="{ padding: '0px' }">
           <el-row style="background:#e6ffdf;height:40px;">
             <b style="color:green;margin:15px;font-size:20px;">{{trainningdata[i*4+j].title}}</b>
-          </el-row >
+          </el-row>
           <b
             style="margin-left:10px;"
           >{{'关卡' + trainningdata[i*4+j].group+'-'+trainningdata[i*4+j].num+', 共 '+trainningdata[i*4+j].totnum+' 道题' }}</b>
@@ -99,46 +99,37 @@ export default {
     };
   },
   mounted() {
-
-    if(parseInt(this.$route.params.trainningid)==1)
-    {
-      this.title="新手村落"
-      this.des="这里是新手村！在这里你可以学习到基本的编程支持，赶快上路吧！"
+    if (parseInt(this.$route.params.trainningid) == 1) {
+      this.title = "新手村落";
+      this.des = "这里是新手村！在这里你可以学习到基本的编程支持，赶快上路吧！";
     }
-    if(parseInt(this.$route.params.trainningid)==2)
-    {
-      this.title="蓝桥林地"
-      this.des="蓝桥林地聚集了许许多多的小怪物！快去消灭它们吧！"
+    if (parseInt(this.$route.params.trainningid) == 2) {
+      this.title = "蓝桥林地";
+      this.des = "蓝桥林地聚集了许许多多的小怪物！快去消灭它们吧！";
     }
-    if(parseInt(this.$route.params.trainningid)==3)
-    {
-      this.title="天梯孤岛"
-      this.des="孤岛中有很多的小恶魔，快去征服他们吧！"
+    if (parseInt(this.$route.params.trainningid) == 3) {
+      this.title = "天梯孤岛";
+      this.des = "孤岛中有很多的小恶魔，快去征服他们吧！";
     }
-    if(parseInt(this.$route.params.trainningid)==4)
-    {
-      this.title="省历练场"
-      this.des="省历练场汇聚了许多精英，快来打败他们，参加国选吧！"
+    if (parseInt(this.$route.params.trainningid) == 4) {
+      this.title = "省历练场";
+      this.des = "省历练场汇聚了许多精英，快来打败他们，参加国选吧！";
     }
-    if(parseInt(this.$route.params.trainningid)==5)
-    {
-      this.title="国选营地"
-      this.des="这里是国家选拔精英的地方，快快脱颖而出，一举成名吧！"
+    if (parseInt(this.$route.params.trainningid) == 5) {
+      this.title = "国选营地";
+      this.des = "这里是国家选拔精英的地方，快快脱颖而出，一举成名吧！";
     }
-    if(parseInt(this.$route.params.trainningid)==6)
-    {
-      this.title="国斗兽场"
-      this.des="在这里成为全国瞩目的编程小战士吧！打败他们，获取至高的荣耀"
+    if (parseInt(this.$route.params.trainningid) == 6) {
+      this.title = "国斗兽场";
+      this.des = "在这里成为全国瞩目的编程小战士吧！打败他们，获取至高的荣耀";
     }
-    if(parseInt(this.$route.params.trainningid)==7)
-    {
-      this.title="遗忘之都"
-      this.des="全球的精英通过筛选，都会来这里历练，你还等什么？"
+    if (parseInt(this.$route.params.trainningid) == 7) {
+      this.title = "遗忘之都";
+      this.des = "全球的精英通过筛选，都会来这里历练，你还等什么？";
     }
-    if(parseInt(this.$route.params.trainningid)==8)
-    {
-      this.title="威风之城"
-      this.des="Becoming world finalist..."
+    if (parseInt(this.$route.params.trainningid) == 8) {
+      this.title = "威风之城";
+      this.des = "Becoming world finalist...";
     }
 
     this.$axios
@@ -148,10 +139,13 @@ export default {
         var acpro = this.$store.state.acpro;
         for (let i = 0; i < this.totalpro; i++) {
           var proli = response.data[i].problem.split("|");
+          if (proli[0] == "") proli = [];
           response.data[i]["acnum"] = 0;
           response.data[i]["totnum"] = proli.length;
           response.data[i]["prolist"] = proli;
           response.data[i]["tiplist"] = response.data[i].tips.split("|");
+          if (response.data[i]["tiplist"][0] == "")
+            response.data[i]["tiplist"] = [];
           for (let j = 0; j < proli.length; j++) {
             response.data[i][proli[j]] = false;
             if (acpro.indexOf(proli[j]) != -1) {
@@ -159,12 +153,14 @@ export default {
               response.data[i][proli[j]] = true;
             }
           }
-          this.trainper[i] = parseInt(
-            ((response.data[i]["acnum"] * 1.0) / response.data[i]["totnum"]) *
-              1.0 *
-              100
-          );
-          if (response.data[i]["totnum"] == response.data[i]["acnum"])
+          if (response.data[i]["totnum"] == 0) this.trainper[i] = 0;
+          else
+            this.trainper[i] = parseInt(
+              ((response.data[i]["acnum"] * 1.0) / response.data[i]["totnum"]) *
+                1.0 *
+                100
+            );
+          if (response.data[i]["totnum"] == response.data[i]["acnum"]&&response.data[i]["totnum"]!=0)
             this.donepro++;
         }
 

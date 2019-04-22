@@ -16,7 +16,7 @@
               <el-menu-item index="misc_moalgo">莫队算法</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
-          
+
           <el-submenu index="2">
             <template slot="title">随机化算法</template>
             <el-menu-item-group>
@@ -29,7 +29,16 @@
 
           <el-menu-item index="misc_largestmatrix">悬线法</el-menu-item>
           <el-menu-item index="misc_ccbasic">计算理论基础</el-menu-item>
-
+          <el-submenu index="8">
+            <template slot="title">其他（额外添加）</template>
+            <el-menu-item-group>
+              <el-menu-item
+                :key="index"
+                v-for="(item,index) in menulist"
+                :index="item.type"
+              >{{item.title}}</el-menu-item>
+            </el-menu-item-group>
+          </el-submenu>
         </el-menu>
       </el-col>
       <el-col :span="20">
@@ -85,11 +94,22 @@ export default {
       tableData: [],
       curTypeValue: "",
       curUserValue: "",
-      loading:false
+      loading: false,
+      menulist: []
     };
   },
   created() {
     this.getdata("std", "misc_index");
+    this.$axios
+      .get("/wiki/?group=misc&std=1")
+      .then(response => {
+        this.menulist = response.data;
+      })
+      .catch(error => {
+        this.$message.error(
+          "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
+        );
+      });
   },
   methods: {
     handleSelect(key, keyPath) {
@@ -101,7 +121,7 @@ export default {
         this.curUserValue = username;
         this.curTypeValue = type;
       } else return;
-      this.loading=true
+      this.loading = true;
       this.$axios
         .get("/wikicount/?type=" + type)
         .then(response => {
@@ -120,8 +140,9 @@ export default {
       this.$axios
         .get("/wiki/?username=" + username + "&type=" + type)
         .then(response => {
-          this.miscvalue = response.data.length>0?response.data[0].value:"# 暂无数据";
-          this.loading=false
+          this.miscvalue =
+            response.data.length > 0 ? response.data[0].value : "# 暂无标准数据，请切换版本你想要的版本！";
+          this.loading = false;
         })
         .catch(error => {
           this.$message.error(

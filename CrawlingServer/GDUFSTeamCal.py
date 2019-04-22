@@ -219,7 +219,7 @@ for i in range(problemcount):
             for j, d in enumerate(data["walist"]):
                 if d == chr(i+ord('A')):
                     teamscore[data["name"]] = teamscore[data["name"]
-                                                        ] - 50 * min(data["watime"][j], 10)
+                                                        ] - 100 * min(data["watime"][j], 10)
 
 
 teamscorefinal = []

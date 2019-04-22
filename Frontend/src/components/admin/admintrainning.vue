@@ -3,11 +3,22 @@
     <el-row>
       <el-form label-position="right">
         <el-form-item label="标题与介绍">
-          <el-input v-model="title" placeholder="训练标题" style="width:200px" @change="change"></el-input>
+          <el-input v-model="title" placeholder="修改或添加的标题" style="width:200px" @change="change"></el-input>
           <el-input v-model="des" placeholder="训练说明" style="width:500px"></el-input>
         </el-form-item>
         <el-form-item label="教程链接">
           <el-input v-model="tips" placeholder="| 号隔开，如 intro_index|dp_index" style="width:200px"></el-input>
+
+          <el-select
+            placeholder="选择教程"
+            @keyup.native.enter="addtype"
+            v-model="curtype"
+            filterable
+            style="width:200px"
+          >
+            <algorithmselect></algorithmselect>
+          </el-select>
+          <el-button type="primary" @click="addtype">添加教程</el-button>
         </el-form-item>
         <el-form-item label="分组与序号">
           <el-input v-model="group" placeholder="1,2,3,4" style="width:200px"></el-input>
@@ -23,8 +34,12 @@
 </template>
 
 <script>
+import algorithmselect from "@/components/utils/algorithmselect";
 export default {
   name: "adminrejudge",
+  components: {
+    algorithmselect
+  },
   data() {
     return {
       title: "",
@@ -32,10 +47,15 @@ export default {
       tips: "",
       group: "",
       num: "",
-      problem: ""
+      problem: "",
+      curtype: ""
     };
   },
   methods: {
+    addtype() {
+      if (this.tips == "") this.tips = this.curtype;
+      else this.tips += "|" + this.curtype;
+    },
     click() {
       this.$axios
         .get("/trainning/?title=" + this.title)

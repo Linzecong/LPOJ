@@ -15,6 +15,16 @@
           <el-menu-item index="geometry_halfplaneintersection">半平面交</el-menu-item>
           <el-menu-item index="geometry_nearestpoints">平面最近点对</el-menu-item>
           <el-menu-item index="geometry_magic">计算几何杂项</el-menu-item>
+          <el-submenu index="8">
+            <template slot="title">其他（额外添加）</template>
+            <el-menu-item-group>
+              <el-menu-item
+                :key="index"
+                v-for="(item,index) in menulist"
+                :index="item.type"
+              >{{item.title}}</el-menu-item>
+            </el-menu-item-group>
+          </el-submenu>
         </el-menu>
       </el-col>
       <el-col :span="20">
@@ -70,11 +80,22 @@ export default {
       tableData: [],
       curTypeValue: "",
       curUserValue: "",
-      loading: false
+      loading: false,
+      menulist: []
     };
   },
   created() {
     this.getdata("std", "geometry_index");
+    this.$axios
+      .get("/wiki/?group=geometry&std=1")
+      .then(response => {
+        this.menulist = response.data;
+      })
+      .catch(error => {
+        this.$message.error(
+          "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
+        );
+      });
   },
   methods: {
     handleSelect(key, keyPath) {
@@ -106,7 +127,7 @@ export default {
         .get("/wiki/?username=" + username + "&type=" + type)
         .then(response => {
           this.geometryvalue =
-            response.data.length > 0 ? response.data[0].value : "# 暂无数据";
+            response.data.length > 0 ? response.data[0].value : "# 暂无标准数据，请切换版本你想要的版本！";
             this.loading=false
         })
         .catch(error => {

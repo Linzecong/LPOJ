@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 from .serializers import TrainningContestSerializer, WikiSerializer,WikiCountSerializer,MBCodeSerializer,MBCodeDetailSerializer,MBCodeDetailNoCodeSerializer
-from .permission import UserOnly,AdminOnly
+from .permission import UserOnly,AdminOnly,WikiUserOnly
 from .models import Wiki,MBCode,MBCodeDetail,TrainningContest
 from rest_framework.throttling import ScopedRateThrottle
 
@@ -9,8 +9,8 @@ from rest_framework.throttling import ScopedRateThrottle
 class WikiView(viewsets.ModelViewSet):
     queryset = Wiki.objects.all()
     serializer_class = WikiSerializer
-    filter_fields = ('username','type')
-    permission_classes = (UserOnly,)
+    filter_fields = ('username','type','group','std',)
+    permission_classes = (WikiUserOnly,)
     throttle_scope  = "post"
     throttle_classes =[ScopedRateThrottle,]
 
