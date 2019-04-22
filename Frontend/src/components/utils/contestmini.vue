@@ -18,6 +18,7 @@
 
 <script>
 import moment from "moment";
+import contestVue from '../mainpage/contest.vue';
 export default {
   name: "ratingrule",
   data() {
@@ -29,7 +30,14 @@ export default {
       )
       .then(response => {
         console.log(response)
+        var timestamp=new Date().getTime()
         for (var i = 0; i < response.data.length; i++) {
+          if(response.data[i]["startTime"]<timestamp-77330000){
+            i--;
+            response.data.shift()
+            continue;
+          }
+
           response.data[i]["startTime"] = moment(
             response.data[i]["startTime"]
           ).format("YYYY-MM-DD HH:mm:ss");

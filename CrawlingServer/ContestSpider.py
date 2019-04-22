@@ -14,9 +14,12 @@ datajson = json.loads(data.read())
 
 cursor = db.cursor()
 
+cursor.execute("truncate table contest_contestcominginfo")
+db.commit()
+
 for d in datajson["data"]:
     print(d)
-    cursor.execute("INSERT INTO contest_contestcominginfo(ojName,link,startTime,endTime,contestName) SELECT %s, %s,%s,%s,%s FROM DUAL WHERE NOT EXISTS(SELECT * FROM contest_contestcominginfo WHERE link= %s)",
-                        (d["ojName"], d['link'], d['startTime'], d['endTime'], d['contestName'], d['link']))
+    cursor.execute("INSERT INTO contest_contestcominginfo(ojName,link,startTime,endTime,contestName) SELECT %s, %s,%s,%s,%s FROM DUAL WHERE NOT EXISTS(SELECT * FROM contest_contestcominginfo WHERE contestName= %s)",
+                        (d["ojName"], d['link'], d['startTime'], d['endTime'], d['contestName'], d['contestName']))
 
 db.commit()

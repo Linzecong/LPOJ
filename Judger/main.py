@@ -134,7 +134,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 msg = str(filece.read())
                 filece.close()
                 cursor.execute(
-                    "UPDATE judgestatus_judgestatus SET result = '-4',message='%s' WHERE id = '%s'" % (msg, id))
+                    "UPDATE judgestatus_judgestatus SET result = '-4',message=%s WHERE id = %s" , (msg, id))
                 cursor.execute(
                     "UPDATE problem_problemdata SET ce = ce+1 WHERE problem = '%s'" % problem)
                 db.commit()
@@ -157,7 +157,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 msg = str(filece.read())
                 filece.close()
                 cursor.execute(
-                    "UPDATE judgestatus_judgestatus SET result = '-4',message='%s' WHERE id = '%s'" % (msg, id))
+                    "UPDATE judgestatus_judgestatus SET result = '-4',message=%s WHERE id = %s" , (msg, id))
                 cursor.execute(
                     "UPDATE problem_problemdata SET ce = ce+1 WHERE problem = '%s'" % problem)
                 db.commit()
@@ -184,7 +184,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 msg = str(filece.read())
                 filece.close()
                 cursor.execute(
-                    "UPDATE judgestatus_judgestatus SET result = '-4',message='%s' WHERE id = '%s'" % (msg, id))
+                    "UPDATE judgestatus_judgestatus SET result = '-4',message=%s WHERE id = %s" , (msg, id))
                 cursor.execute(
                     "UPDATE problem_problemdata SET ce = ce+1 WHERE problem = '%s'" % problem)
                 db.commit()
