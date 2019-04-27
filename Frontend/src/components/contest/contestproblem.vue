@@ -56,9 +56,7 @@
             <el-row :gutter="18" style="left:10px">
               <el-row :gutter="18" v-for="(item,index) in sinput.length" :key="index">
                 <el-col :span="11" id="text">
-                  <el-row :gutter="18" id="des" style="margin-bottom: 0px;">
-                    Sample Input {{item}}
-                    <el-button
+                  <el-row :gutter="18" id="des" style="margin-bottom: 0px;">Sample Input {{item}}<el-button
                       size="mini"
                       v-clipboard:copy="sinput[index]"
                       v-clipboard:success="onCopy"

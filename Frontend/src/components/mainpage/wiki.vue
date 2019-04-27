@@ -2,7 +2,7 @@
   <el-card shadow="always" id="card">
     <center>
       <h1>欢迎来到某大型在线游戏攻略网站LPOJ Wiki</h1>
-      <h2>在这里你可以找到算法竞赛的学习教程，代码模板，和OJ开发教程</h2>
+      <h2>在这里你可以找到算法竞赛的学习教程，代码模板，和算法试炼</h2>
       <h2>现在让我们开始吧！</h2>
     </center>
     <el-row :gutter="10">

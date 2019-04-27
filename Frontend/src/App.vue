@@ -27,12 +27,7 @@
         <i class="el-icon-star-off"></i>Wiki
       </el-menu-item>
 
-      <el-button
-        round
-        id="button"
-        @click="registeropen"
-        v-show="!loginshow"
-      >Register</el-button>
+      <el-button round id="button" @click="registeropen" v-show="!loginshow">Register</el-button>
       <el-button round id="button" @click="loginopen" v-show="!loginshow">Login</el-button>
 
       <el-dropdown
@@ -60,6 +55,16 @@
     <transition name="el-fade-in-linear" mode="out-in">
       <router-view id="route"></router-view>
     </transition>
+    <div class="footer">
+      <p>
+        <a href="http://www.miitbeian.gov.cn" target="_blank" style="text-decoration: none;color:#409EFF;">粤ICP备19042174号-1</a>
+      </p>
+      <p>
+        Powered by
+        <a href="https://github.com/Linzecong/LPOJ"  target="_blank" style="text-decoration: none;color:#409EFF;">Linzecong</a>
+        <span>&nbsp; Version: 1.7</span>
+      </p>
+    </div>
   </div>
 </template>
 
@@ -196,5 +201,11 @@ export default {
 }
 .el-row {
   margin-bottom: 20px;
+}
+.footer {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: small;
 }
 </style>
