@@ -1,34 +1,160 @@
+# LPOJ     （先点个赞呗）
+[![Python](https://img.shields.io/badge/python-3.7.2-green.svg?style=flat-square)](https://www.python.org/downloads/release/python-362/)
+[![Django](https://img.shields.io/badge/django-2.1.5-green.svg?style=flat-square)](https://www.djangoproject.com/)
+[![Django Rest Framework](https://img.shields.io/badge/django_rest_framework-3.9.1-green.svg?style=flat-square)](http://www.django-rest-framework.org/)
+> 一个基于Vue.js和Django的轻量级在线评测系统
 
-# GDUFS OJ
+> 目前应用于广东外语外贸大学
+## Demo地址：[www.lpoj.cn](www.lpoj.cn)
+## 简述
++ 轻量级，易于部署和自定义定制
++ 前后端分离，提高服务器性能
++ 支持多进程判题，判题更高效
++ 支持 C/C++和Java语言
++ 丰富的API，开放的源代码
++ 实时爬取用户的博客和其他OJ的做题数
++ 丰富的算法知识和体系化的套题训练
++ 一键保存和导出代码模板
++ 包含类CF的积分体系和比赛机制
 
-# 我的毕业设计
+## 模块列表
++ [前端 Vue.js](https://github.com/Linzecong/LPOJ/tree/master/Frontend)
++ [后端 Djangorestframework](https://github.com/Linzecong/LPOJ/tree/master/Backend)
++ [判题服务器 Python](https://github.com/Linzecong/LPOJ/tree/master/JudgerServer)
++ [判题程序 Python](https://github.com/Linzecong/LPOJ/tree/master/Judger)
++ [爬虫程序 Python](https://github.com/Linzecong/LPOJ/tree/master/CrawlingServer)
 
-# 项目架构
+## 部署（判题程序仅能部署在Linux系统，推荐将所有东西部署在同一个服务器中）
+#### 前端部署
+```
+cd Frontend
+npm install
+npm run-script build
+```
+编译完毕后，网站文件保存在dist目录中，接下来部署到服务器中
++ 推荐使用Nginx
+```
+sudo apt-get install nginx
+```
+将dist文件夹中的文件复制到Web服务器目录中（默认根目录 **/var/www/html/**）
+接下来修改Nginx配置文件（不同版本可能在不同的地方）
+```
+sudo nano /etc/nginx/nginx.conf
+```
+主要修改如下几个配置
+1. 路由重定向
+2. API重定向
 
-## 服务器1
+将如下配置复制到http{}中
+```
+server{
+    listen 80;
+    server_name www.lpoj.cn;  # 此处填写你的域名或IP
+    root /var/www/html;   # 此处填写你的网页根目录
+    location /api {  # 将API重定向到后台服务器（如果你修改了前端中的代理配置，这里需要对应的修改）
+        rewrite ^.*api/?(.*)$ /$1 break;
+        proxy_pass http://localhost:8000; # 填写你的后端地址和端口
+    }
+    location / {  # 路由重定向以适应Vue中的路由
+        index index.html;
+        try_files $uri $uri/ /index.html;
+    }
+}
+```
 
-**前端采用** vue.js
+至此，前端部署完毕。**如要进行OJ二次开发，请参阅文档**
 
-**后端采用** django RESTful framework
+#### 后端与数据库部署
+首先安装Mysql数据库
+然后以UTF-8编码新建数据库 lpoj 
+然后按顺序安装Django，如已安装，可跳过
 
-**数据库** mysql
+1. 首先安装Django
+```
+pip install django
 
-## 服务器2 (可部署多个以提高性能)
+pip install djangorestframework
 
-**JudgerServer** python tcp + docker
+pip install django-filter
+
+sudo apt-get install python-django
+
+pip install django-cors-headers
+```
+2. 安装数据库，已安装的可跳过
+```
+sudo apt-get install libmysqlclient-dev
+
+pip install mysqlclient
+
+sudo apt-get install mysql-server 
+
+为了能公网访问，可以执行以下数据库语句
+CREATE DATABASE LPOJ DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%'  IDENTIFIED BY 'you_password'  WITH GRANT OPTION;
+flush privileges;
+
+然后
+sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf 
+修改bind-address 为 0.0.0.0
+```
+3. 部署后端
+```
+cd Backend
+
+python manage.py makemigrations
+
+python manage.py migrate
+
+python manage.py runserver 0.0.0.0:8000
+```
+
+#### 部署判题服务器
+首先修改配置文件
+``` 
+cd JudgeServer
+nano setting.json
+```
+修改对应的数据库IP和端口保存退出
+```
+sudo python main.py
+```
+
+#### 部署判题机
+首先修改配置文件
+``` 
+cd Judger
+nano setting.json
+```
+然后运行判题机，支持多个运行，注意 **目前需与后端在同一个目录下运行**
+以下是目录结构
+Backend/
+······manage.py
+DataServer/problemdata/
+Judger/
+······main.py
+必须在这个目录结构下运行main.py
+```
+sudo python main.py
+必须添加sudo，然后不同判题机，必须要用不同的名字命名。
+```
+
+## 如无意外，部署成功！
+具体使用，请参阅使用文档
+
+## 浏览器支持
+
+Modern browsers(chrome, firefox)
+
+## 特别感谢
+
++ 广东外语外贸大学ACM集训队所有成员
++ 广东外语外贸大学集训队所有老师
++ [青岛大学在线评测系统](https://github.com/QingdaoU/OnlineJudge)
++ [24OI/OI-wiki](https://github.com/24OI/OI-wiki)
 
 
-## 服务器3  (可部署多个以提高性能)
-**Judger** python tcp + docker
 
+## 许可
 
-
-后端直接向数据库提交数据和获取数据
-
-JudgerServer不断的从数据库中获取未判题的列表（使用TCP通讯）（仅进行通知操作）
-
-并通知各个Judger进行判题并将结果通过后端保存到数据库
-
-文件数据保存在DataServer目录,后端将数据文件保存到DataServer，然后解压缩！
-
-
+The [MIT](http://opensource.org/licenses/MIT) License
