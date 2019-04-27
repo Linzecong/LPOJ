@@ -5,7 +5,8 @@
 > 一个基于Vue.js和Django的轻量级在线评测系统
 
 > 目前应用于广东外语外贸大学
-## Demo地址：[www.lpoj.cn](www.lpoj.cn)
+## Demo地址：[www.lpoj.cn](http://www.lpoj.cn)
+## 说明文档：[docs.lpoj.cn](http://docs.lpoj.cn)
 ## 简述
 + 轻量级，易于部署和自定义定制
 + 前后端分离，提高服务器性能
@@ -62,7 +63,7 @@ server{
 }
 ```
 
-至此，前端部署完毕。**如要进行OJ二次开发，请参阅文档**
+至此，前端部署完毕。**如要进行OJ二次开发，请参阅[文档](http://docs.lpoj.cn)**
 
 #### 后端与数据库部署
 首先安装Mysql数据库
@@ -140,7 +141,7 @@ sudo python main.py
 ```
 
 ## 如无意外，部署成功！
-具体使用，请参阅使用文档
+具体使用，请参阅使用[文档](http://docs.lpoj.cn)
 
 ## 浏览器支持
 
