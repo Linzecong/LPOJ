@@ -1,9 +1,10 @@
 ---
 home: true
+heroImage: /img/logo.jpg
 heroText: LPOJ 使用与开发文档
 tagline: 帮助你快速的了解LPOJ
 actionText: 快速了解
-actionLink: /FAQ/
+actionLink: /faq/
 features:
 - title: 开源
   details: 一个开源的程序在线评测系统。
