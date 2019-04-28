@@ -36,13 +36,15 @@ def getSubmition():
                 db.commit()
             except:
                 db.rollback()
-            #queue.sort(reverse=True)
             mutex.release()
     db.close()
 
-fir=True
-def deal_client(newSocket: socket, addr,first):
-    global mutex, queue,fir
+
+fir = True
+
+
+def deal_client(newSocket: socket, addr, first):
+    global mutex, queue, fir
     statue = False
     cursor = db.cursor()
     while True:
@@ -53,12 +55,12 @@ def deal_client(newSocket: socket, addr,first):
                     id = queue.get()
                     statue = False
                     # 只允许一个测评机测JAVA，否则时间会判断失败
-                    
+
                     cursor.execute(
-                        "SELECT language from judgestatus_judgestatus where id = '%d'"%(id))
+                        "SELECT language from judgestatus_judgestatus where id = '%d'" % (id))
                     data = cursor.fetchall()
                     print(data[0][0])
-                    if data[0][0] == "Java" and first==True:
+                    if data[0][0] == "Java" and first == True:
                         newSocket.send(("judge|%d" % id).encode("utf-8"))
                     elif data[0][0] != "Java":
                         newSocket.send(("judge|%d" % id).encode("utf-8"))
@@ -72,7 +74,7 @@ def deal_client(newSocket: socket, addr,first):
                         statue = True
                     else:
                         statue = False
-                    print(addr,statue)
+                    print(addr, statue)
 
             except socket.error:
                 newSocket.close()
@@ -102,47 +104,54 @@ t.start()
 
 # 记得添加contest开始时，自动设置题目为auth=3，比赛结束自动设置auth=1
 def changeauth():
-    global db,mutex
+    global db, mutex
     curcontest = set()
     cursor = db.cursor()
     while True:
         sleep(2)
         if mutex.acquire():
-            cursor.execute("SELECT * from contest_contestinfo where TO_SECONDS(NOW()) - TO_SECONDS(begintime) <= lasttime")
+            cursor.execute(
+                "SELECT * from contest_contestinfo where TO_SECONDS(NOW()) - TO_SECONDS(begintime) <= lasttime")
             data = cursor.fetchall()
             getcontest = set()
             for d in data:
-                getcontest.add(d[0]) # 用于求结束的比赛
-                cursor.execute("SELECT * from contest_contestproblem where contestid=%d" % d[0])
+                getcontest.add(d[0])  # 用于求结束的比赛
+                cursor.execute(
+                    "SELECT * from contest_contestproblem where contestid=%d" % d[0])
                 pros = cursor.fetchall()
                 for pid in pros:
-                    cursor.execute( "UPDATE  problem_problemdata SET auth = 3 WHERE problem = %s" % pid[2])
-                    cursor.execute( "UPDATE  problem_problem SET auth = 3 WHERE problem = %s" % pid[2])
+                    cursor.execute(
+                        "UPDATE  problem_problemdata SET auth = 3 WHERE problem = %s" % pid[2])
+                    cursor.execute(
+                        "UPDATE  problem_problem SET auth = 3 WHERE problem = %s" % pid[2])
                 db.commit()
-            
+
             endcontest = curcontest.difference(getcontest)
-            print("curcontest",curcontest)
+            print("curcontest", curcontest)
             for eid in endcontest:
-                cursor.execute( "SELECT * from contest_contestproblem where contestid=%d" % eid)
+                cursor.execute(
+                    "SELECT * from contest_contestproblem where contestid=%d" % eid)
                 pros = cursor.fetchall()
                 for pid in pros:
                     print(pid[2])
-                    cursor.execute("UPDATE  problem_problemdata SET auth = 1 WHERE problem = %s" % pid[2])
-                    cursor.execute("UPDATE  problem_problem SET auth = 1 WHERE problem = %s" % pid[2])
+                    cursor.execute(
+                        "UPDATE  problem_problemdata SET auth = 1 WHERE problem = %s" % pid[2])
+                    cursor.execute(
+                        "UPDATE  problem_problem SET auth = 1 WHERE problem = %s" % pid[2])
                 db.commit()
             curcontest = getcontest
             mutex.release()
+
 
 t1 = threading.Thread(target=changeauth, args=())
 t1.setDaemon(True)
 t1.start()
 
 
-
 while True:
     newSocket, addr = server.accept()
     print("client [%s] is connected!" % str(addr))
-    client = threading.Thread(target=deal_client, args=(newSocket, addr,fir))
-    fir=False
+    client = threading.Thread(target=deal_client, args=(newSocket, addr, fir))
+    fir = False
     client.setDaemon(True)
     client.start()

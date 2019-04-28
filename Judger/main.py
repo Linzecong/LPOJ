@@ -30,11 +30,11 @@ cursor = db.cursor()
 
 
 def reconnect():
-    global statue, clientsocket,db,cursor
+    global statue, clientsocket, db, cursor
     clientsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
         db = MySQLdb.connect(judgerjson["db_ip"], judgerjson["db_user"], judgerjson["db_pass"],
-                     judgerjson["db_database"], int(judgerjson["db_port"]), charset='utf8')
+                             judgerjson["db_database"], int(judgerjson["db_port"]), charset='utf8')
         cursor = db.cursor()
         clientsocket.connect((host, port))
         statue = True
@@ -50,9 +50,8 @@ def judgeJava(timelimit, memorylimit, inputpath, outputpath, errorpath):
 
     com1 = "/usr/bin/time -f '"+"%"+"U' -o %stime.txt " % (judgername)
     com2 = "timeout %s java -cp %s -Xss1M -XX:MaxPermSize=16M -XX:PermSize=8M -Xms16M -Xmx%sM -Djava.security.manager -Djava.security.policy==policy -Djava.awt.headless=true Main 1>%s 2>%s<%s" % (
-        str(timelimit/1000.0), judgername,memorylimit, outputpath, errorpath, inputpath)
+        str(timelimit/1000.0), judgername, memorylimit, outputpath, errorpath, inputpath)
     com = com1 + com2
-    #print(com)
     result = os.system(com)
 
     ret = dict()
@@ -60,7 +59,6 @@ def judgeJava(timelimit, memorylimit, inputpath, outputpath, errorpath):
     if result == 0:
         tf = open(judgername+"time.txt", "r")
         time = tf.read()
-        #print(time)
         time = float(str(time).strip())*1000
         ret["cpu_time"] = int(time)
         ret["memory"] = 5201314
@@ -68,7 +66,7 @@ def judgeJava(timelimit, memorylimit, inputpath, outputpath, errorpath):
         ret["exit_code"] = result
         ret["signal"] = 0
     elif result == 31744:
-        
+
         ret["cpu_time"] = timelimit
         ret["memory"] = 5201314
         ret["result"] = 1
@@ -101,7 +99,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
     li = []
     if contest is not 0:
         cursor.execute(
-                "UPDATE contest_contestboard SET type = -1 WHERE submitid = '%s'" % id)
+            "UPDATE contest_contestboard SET type = -1 WHERE submitid = '%s'" % id)
         cursor.execute(
             "SELECT * from contest_contestrank where username = '%s'  and contestid = %d" % (username, int(contest)))
         r = cursor.fetchone()
@@ -126,15 +124,14 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
         file.write(code)
         file.close()
         result = os.system("gcc %s.c -o %s.out -O2 -std=c11 2>%sce.txt" %
-                           (judgername, judgername,judgername))
-        # print(result)
+                           (judgername, judgername, judgername))
         if result:
             try:
                 filece = open("%sce.txt" % judgername, "r")
                 msg = str(filece.read())
                 filece.close()
                 cursor.execute(
-                    "UPDATE judgestatus_judgestatus SET result = '-4',message=%s WHERE id = %s" , (msg, id))
+                    "UPDATE judgestatus_judgestatus SET result = '-4',message=%s WHERE id = %s", (msg, id))
                 cursor.execute(
                     "UPDATE problem_problemdata SET ce = ce+1 WHERE problem = '%s'" % problem)
                 db.commit()
@@ -149,15 +146,14 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
         file.write(code)
         file.close()
         result = os.system("g++ %s.cpp -o %s.out -O2 -std=c++11 2>%sce.txt" %
-                           (judgername, judgername,judgername))
-        # print(result)
+                           (judgername, judgername, judgername))
         if result:
             try:
                 filece = open("%sce.txt" % judgername, "r")
                 msg = str(filece.read())
                 filece.close()
                 cursor.execute(
-                    "UPDATE judgestatus_judgestatus SET result = '-4',message=%s WHERE id = %s" , (msg, id))
+                    "UPDATE judgestatus_judgestatus SET result = '-4',message=%s WHERE id = %s", (msg, id))
                 cursor.execute(
                     "UPDATE problem_problemdata SET ce = ce+1 WHERE problem = '%s'" % problem)
                 db.commit()
@@ -176,7 +172,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
             os.makedirs(judgername)
 
         result = os.system("javac Main.java -d %s 2>%sce.txt" %
-                           (judgername,judgername))
+                           (judgername, judgername))
 
         if result:
             try:
@@ -184,7 +180,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 msg = str(filece.read())
                 filece.close()
                 cursor.execute(
-                    "UPDATE judgestatus_judgestatus SET result = '-4',message=%s WHERE id = %s" , (msg, id))
+                    "UPDATE judgestatus_judgestatus SET result = '-4',message=%s WHERE id = %s", (msg, id))
                 cursor.execute(
                     "UPDATE problem_problemdata SET ce = ce+1 WHERE problem = '%s'" % problem)
                 db.commit()
@@ -218,7 +214,14 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
     datat = cursor.fetchone()
     score = int(datat[13])
 
-    files = os.listdir("../DataServer/problemdata/%s/" % problem)
+    try:
+        files = os.listdir("../DataServer/problemdata/%s/" % problem)
+    except:
+        cursor.execute(
+            "UPDATE judgestatus_judgestatus SET memory =0, time=0, result = '5',testcase='0'  WHERE id = '%s'" % (id))
+        db.commit()
+        statue = True
+        return
 
     tempset = set()  # 用于判读数据是否都有in,out
     newfiles = set()
@@ -451,7 +454,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
             cursor.execute(
                 "UPDATE user_userdata SET ac = ac+1 WHERE username = '%s'" % username)
             cursor.execute(
-                "UPDATE user_userdata SET acpro = concat(acpro,'|%s') WHERE username = '%s'" % (str(problem),username))
+                "UPDATE user_userdata SET acpro = concat(acpro,'|%s') WHERE username = '%s'" % (str(problem), username))
 
         if contest is not 0:
             cursor.execute(
@@ -492,7 +495,6 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 li[contestproblem] = int(li[contestproblem])
                 li[contestproblem] = li[contestproblem]-1
                 sta = '|'.join(str(i) for i in li)
-                # print(contest)
                 cursor.execute("UPDATE  contest_contestrank  SET statue = '%s' where username = '%s'  and contestid = %d" % (
                     sta, username, contest))
 
@@ -511,7 +513,6 @@ while True:
                     clientsocket.send("ok".encode("utf-8"))
                 else:
                     clientsocket.send("notok".encode("utf-8"))
-                # print(statue)
 
             elif data.find("judge") != -1:
                 statue = False
@@ -543,4 +544,3 @@ while True:
     except Exception as e:
         print(e)
         reconnect()
-
