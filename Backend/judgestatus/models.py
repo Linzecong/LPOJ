@@ -2,6 +2,7 @@
 
 from django.db import models
 
+
 class JudgeStatus(models.Model):
 
     user = models.CharField(max_length=50)
@@ -15,13 +16,12 @@ class JudgeStatus(models.Model):
     submittime = models.DateTimeField()
     judger = models.CharField(max_length=50)
     contest = models.IntegerField()
-    contestproblem = models.IntegerField(default=-1) # 对应比赛里的哪一题
+    contestproblem = models.IntegerField(default=-1)  # 对应比赛里的哪一题
     code = models.TextField(max_length=50000)
-    testcase = models.CharField(max_length=50,default="0")
+    testcase = models.CharField(max_length=50, default="0")
     message = models.TextField()
-    problemtitle = models.CharField(max_length=100,default="")
+    problemtitle = models.CharField(max_length=100, default="")
     rating = models.IntegerField(default=1500)
-    
 
     objects = models.Manager()
 
@@ -34,14 +34,16 @@ class CaseStatus(models.Model):
     statusid = models.IntegerField()
     username = models.CharField(max_length=50)
     problem = models.CharField(max_length=50)
-    result = models.CharField(max_length=50,default="System Error")
+    result = models.CharField(max_length=50, default="System Error")
     time = models.IntegerField(default=0)
     memory = models.IntegerField(default=0)
-    testcase = models.CharField(max_length=50,default="unknow")
-    casedata = models.CharField(max_length=500) # 非比赛才能查看，Judger中控制
-    outputdata = models.CharField(max_length=500,default="") # 非比赛才能查看，Judger中控制
-    useroutput = models.CharField(max_length=500,default="") # 非比赛才能查看，Judger中控制
-    
+    testcase = models.CharField(max_length=50, default="unknow")
+    casedata = models.CharField(max_length=500)  # 非比赛才能查看，Judger中控制
+    outputdata = models.CharField(
+        max_length=500, default="")  # 非比赛才能查看，Judger中控制
+    useroutput = models.CharField(
+        max_length=500, default="")  # 非比赛才能查看，Judger中控制
+
     objects = models.Manager()
 
     def __str__(self):

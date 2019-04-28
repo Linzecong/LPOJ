@@ -103,6 +103,13 @@ sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
 ```
 cd Backend
 
+cd Backend
+
+sudo nano setting.py
+//修改数据库配置为你自己的数据库IP和用户名密码
+
+cd ..
+
 python manage.py makemigrations
 
 python manage.py migrate

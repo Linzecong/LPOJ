@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-
-
-from django.conf.urls import url,include
+from django.conf.urls import url, include
 from . import views
 from rest_framework import routers
 
@@ -18,6 +16,5 @@ routers.register('contestratingchange', views.ContestRatingChangeView)
 
 urlpatterns = [
     url('', include(routers.urls)),
-    url(r'^currenttime',views.CurrentTimeView.as_view()),
+    url(r'^currenttime', views.CurrentTimeView.as_view()),
 ]
-

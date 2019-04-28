@@ -1,28 +1,27 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
-from django.shortcuts import render
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
-from .models import User, UserData
-from .serializers import UserSerializer, UserDataSerializer,UserNoPassSerializer,UserNoTypeSerializer
-from .permission import LoginOnly, UserOnly,UserPUTOnly,AuthPUTOnly
-from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.throttling import ScopedRateThrottle
+from .models import User, UserData
+from .serializers import UserSerializer, UserDataSerializer, UserNoPassSerializer, UserNoTypeSerializer
+from .permission import UserSafePostOnly, UserPUTOnly, AuthPUTOnly
+
+
 
 class UserDataView(viewsets.ModelViewSet):
     queryset = UserData.objects.all().order_by('-rating')
     serializer_class = UserDataSerializer
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('username',)
-    permission_classes = (UserOnly,)
+    permission_classes = (UserSafePostOnly,)
     pagination_class = LimitOffsetPagination
-    throttle_scope  = "post"
-    throttle_classes =[ScopedRateThrottle,]
+    throttle_scope = "post"
+    throttle_classes = [ScopedRateThrottle, ]
 
 
 class UserView(viewsets.ModelViewSet):
@@ -30,31 +29,35 @@ class UserView(viewsets.ModelViewSet):
     serializer_class = UserNoPassSerializer
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('username',)
-    permission_classes = (UserOnly,)
+    permission_classes = (UserSafePostOnly,)
     pagination_class = LimitOffsetPagination
-    throttle_scope  = "post"
-    throttle_classes =[ScopedRateThrottle,]
+    throttle_scope = "post"
+    throttle_classes = [ScopedRateThrottle, ]
+
 
 class UserChangeView(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserNoTypeSerializer
     permission_classes = (UserPUTOnly,)
-    throttle_scope  = "post"
-    throttle_classes =[ScopedRateThrottle,]
+    throttle_scope = "post"
+    throttle_classes = [ScopedRateThrottle, ]
+
 
 class UserChangeAllView(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (AuthPUTOnly,)
-    throttle_scope  = "post"
-    throttle_classes =[ScopedRateThrottle,]
+    throttle_scope = "post"
+    throttle_classes = [ScopedRateThrottle, ]
+
 
 class UserLoginAPIView(APIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (AllowAny,)
-    throttle_scope  = "post"
-    throttle_classes =[ScopedRateThrottle,]
+    throttle_scope = "post"
+    throttle_classes = [ScopedRateThrottle, ]
+
     def post(self, request, format=None):
         data = request.data
         username = data.get('username')
@@ -70,15 +73,34 @@ class UserLoginAPIView(APIView):
             return Response(new_data, status=HTTP_200_OK)
         return Response('passworderror', HTTP_200_OK)
 
+
+class UserUpdateRatingAPIView(APIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = (AllowAny,)
+    throttle_scope = "post"
+    throttle_classes = [ScopedRateThrottle, ]
+
+    def get(self, request, format=None):
+        if request.session.get('user_id', None) is not None:
+            username = request.session.get('user_id', None)
+            userdata = UserData.objects.get(username__exact=username)
+            request.session['rating'] = userdata.rating
+            return Response('updated', HTTP_200_OK)
+        else:
+            return Response('ok', HTTP_200_OK)
+
+
 class UserLogoutAPIView(APIView):
-    throttle_scope  = "post"
-    throttle_classes =[ScopedRateThrottle,]
-    def get(self,request):
-        if request.session.get('user_id',None) is not None:
+    throttle_scope = "post"
+    throttle_classes = [ScopedRateThrottle, ]
+
+    def get(self, request):
+        if request.session.get('user_id', None) is not None:
             del request.session['user_id']
-        if request.session.get('type',None) is not None:
+        if request.session.get('type', None) is not None:
             del request.session['type']
-        if request.session.get('rating',None) is not None:
+        if request.session.get('rating', None) is not None:
             del request.session['rating']
         return Response('ok', HTTP_200_OK)
 
@@ -87,21 +109,17 @@ class UserRegisterAPIView(APIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (AllowAny,)
-    throttle_scope  = "post"
-    throttle_classes =[ScopedRateThrottle,]
+    throttle_scope = "post"
+    throttle_classes = [ScopedRateThrottle, ]
 
     def post(self, request, format=None):
         data = request.data.copy()
-        data['type']=1
+        data['type'] = 1
         username = data.get('username')
         if User.objects.filter(username__exact=username):
-            return Response("usererror",HTTP_200_OK)
+            return Response("usererror", HTTP_200_OK)
         serializer = UserSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
-            return Response(serializer.data,status=HTTP_200_OK)
+            return Response(serializer.data, status=HTTP_200_OK)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
-
-
-
-

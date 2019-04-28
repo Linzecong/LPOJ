@@ -2,9 +2,9 @@
 
 from django.db import models
 
-class Problem(models.Model):
 
-    problem = models.CharField(max_length=50,primary_key=True)
+class Problem(models.Model):
+    problem = models.CharField(max_length=50, primary_key=True)
     author = models.CharField(max_length=50, default="admin")
     addtime = models.DateTimeField(auto_now=True)
     oj = models.CharField(max_length=50, default="LPOJ")
@@ -18,15 +18,16 @@ class Problem(models.Model):
     time = models.IntegerField()
     memory = models.IntegerField()
     hint = models.TextField(null=True)
-    auth = models.IntegerField(default=1) # 1公开 2私密 3 比赛中的题
+    auth = models.IntegerField(default=1)  # 1公开 2私密 3 比赛中的题
 
     objects = models.Manager()
 
     def __str__(self):
         return self.title
 
+
 class ProblemData(models.Model):
-    problem = models.CharField(max_length=50,primary_key=True)
+    problem = models.CharField(max_length=50, primary_key=True)
     title = models.CharField(max_length=50)
     level = models.IntegerField(default=5)
     submission = models.IntegerField(default=0)
@@ -38,20 +39,18 @@ class ProblemData(models.Model):
     ce = models.IntegerField(default=0)
     wa = models.IntegerField(default=0)
     se = models.IntegerField(default=0)
-
     tag = models.TextField(null=True)
-
     score = models.IntegerField(default=1000)
-
-    auth = models.IntegerField(default=1) # 1公开 2私密 3 比赛中的题
+    auth = models.IntegerField(default=1)  # 1公开 2私密 3 比赛中的题
 
     objects = models.Manager()
 
     def __str__(self):
         return self.title
 
+
 class ProblemTag(models.Model):
-    tagname = models.CharField(max_length=50,unique=True)
+    tagname = models.CharField(max_length=50, unique=True)
     count = models.IntegerField()
 
     objects = models.Manager()

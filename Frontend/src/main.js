@@ -19,10 +19,9 @@ Vue.prototype.$md5 = md5;
 
 //开启debug模式
 Vue.config.debug = true;
-axios.defaults.withCredentials=true;
+axios.defaults.withCredentials = true;
 axios.defaults.baseURL = process.env.API_ROOT
 Vue.prototype.$axios = axios;
-
 
 
 const store = new Vuex.Store({
@@ -30,13 +29,13 @@ const store = new Vuex.Store({
   },
 })
 
-if(localStorage.acpro!="")
-  store.state.acpro=localStorage.acpro
+if (localStorage.acpro != "")
+  store.state.acpro = localStorage.acpro
 
 var curTime = new Date()
 var secs = curTime.getTime()
 var lastsecs = localStorage.storagetime
-if(secs-lastsecs>14*24*60*60*1000&&lastsecs!=undefined)
+if (secs - lastsecs > 14 * 24 * 60 * 60 * 1000 && lastsecs != undefined)
   localStorage.setItem("username", "");
 localStorage.setItem("storagetime", secs);
 
@@ -48,8 +47,20 @@ if (localStorage.username != "") {
       localStorage.setItem("rating", response.data[0].rating);
       var acpro = response.data[0].acpro.split("|")
       acpro.shift()
-      store.state.acpro=acpro
+      store.state.acpro = acpro
       localStorage.setItem("acpro", acpro);
+    });
+  axios
+    .get("/updaterating/")
+    .then(response => {
+      if (response.data == "ok") {
+        localStorage.setItem("username", "");
+        localStorage.setItem("name", "");
+        localStorage.setItem("rating", "");
+        localStorage.setItem("type", "");
+        localStorage.setItem("acpro", "");
+        router.go(0)
+      }
     });
 } else {
   localStorage.setItem("username", "");
@@ -68,7 +79,7 @@ new Vue({
   template: '<App/>',
   render: h => h(App),
   created() {
-    
+
   }
 })
 

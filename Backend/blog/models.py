@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class OJMessage(models.Model):
 
     username = models.CharField(max_length=50)
@@ -11,6 +12,7 @@ class OJMessage(models.Model):
 
     def __str__(self):
         return self.username
+
 
 class Blog(models.Model):
 
