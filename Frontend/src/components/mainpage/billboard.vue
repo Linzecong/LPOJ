@@ -1,46 +1,8 @@
 <template>
   <el-card v-loading="loading">
-    <el-dialog title="申报" :visible.sync="dialogVisible">
-      <el-form :model="form">
-        <el-row :gutter="10">
-          <el-col :span="3">
-            <div style="text-align:center;margin:5px;">姓名</div>
-          </el-col>
-          <el-col :span="12">
-            <el-input v-model="form.username" placeholder="真实姓名"></el-input>
-          </el-col>
-        </el-row>
-        <el-row :gutter="10">
-          <el-col :span="3">
-            <div style="text-align:center;margin:5px;">申请AC题目数</div>
-          </el-col>
-          <el-col :span="12">
-            <el-input v-model="form.count" placeholder="添整数"></el-input>
-          </el-col>
-        </el-row>
-        <el-row :gutter="10">
-          <el-col :span="3">
-            <div style="text-align:center;margin:5px;">证明</div>
-          </el-col>
-          <el-col :span="12">
-            <el-input v-model="form.msg" placeholder="填入必要的证明，如比赛网址和你的比赛ID"></el-input>
-          </el-col>
-        </el-row>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="PushOtherClick">确 定</el-button>
-      </div>
-    </el-dialog>
-
     <center>
       <h3>
         广东外语外贸大学 ACM集训队排名
-        <el-button
-          @click="dialogVisible = true"
-          type="primary"
-          style="float:right;margin:10px;"
-        >其他申报</el-button>
       </h3>
     </center>
 
@@ -87,22 +49,6 @@ export default {
     this.setdata();
   },
   methods: {
-    PushOtherClick() {
-      this.$axios
-        .post("/otherssubmit/", this.form)
-        .then(response => {
-          this.dialogVisible = false;
-          this.$message({
-            message: "提交成功！",
-            type: "success"
-          });
-        })
-        .catch(error => {
-          this.$message.error(
-            "服务器错误！请联系管理员！" + JSON.stringify(error.response.data)
-          );
-        });
-    },
     sortByProperty(p1, p2) {
       function sortfun(obj1, obj2) {
         //核心代码

@@ -12,13 +12,8 @@ module.exports = {
         sidebarDepth: 2,
         nav: [
             { text: 'Demo', link: 'http://www.lpoj.cn/' },
-            {
-                text: 'GitHub',
-                items: [
-                    { text: 'GitHub首页', link: 'https://github.com/Linzecong/LPOJ/' },
-                    { text: '作者首页', link: 'https://github.com/Linzecong/' },
-                ]
-            },
+            { text: 'GitHub首页', link: 'https://github.com/Linzecong/LPOJ/' },
+            { text: '作者首页', link: 'https://github.com/Linzecong/' },
         ],
 
         sidebar: [
@@ -27,7 +22,9 @@ module.exports = {
                 collapsable: true,
                 children: [
                     '/faq/',
-                    '/faq/intro'
+                    '/faq/intro',
+                    '/faq/whatisoj',
+                    '/faq/systemstruct'
                 ]
             },
             {
@@ -35,6 +32,7 @@ module.exports = {
                 collapsable: true,
                 children: [
                     '/deploy/',
+                    '/deploy/frontend',
                 ]
             },
             {
