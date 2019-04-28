@@ -33,6 +33,14 @@ const store = new Vuex.Store({
 if(localStorage.acpro!="")
   store.state.acpro=localStorage.acpro
 
+var curTime = new Date()
+var secs = curTime.getTime()
+var lastsecs = localStorage.storagetime
+if(secs-lastsecs>14*24*60*60*1000&&lastsecs!=undefined)
+  localStorage.setItem("username", "");
+localStorage.setItem("storagetime", secs);
+
+
 if (localStorage.username != "") {
   axios
     .get("/userdata/?username=" + localStorage.username)
@@ -48,7 +56,9 @@ if (localStorage.username != "") {
   localStorage.setItem("name", "");
   localStorage.setItem("rating", "");
   localStorage.setItem("type", "");
+  localStorage.setItem("acpro", "");
 }
+
 
 new Vue({
   el: '#app',

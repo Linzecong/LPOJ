@@ -40,9 +40,9 @@ def getSubmition():
             mutex.release()
     db.close()
 
-
-def deal_client(newSocket: socket, addr,fir):
-    global mutex, queue
+fir=True
+def deal_client(newSocket: socket, addr,first):
+    global mutex, queue,fir
     statue = False
     cursor = db.cursor()
     while True:
@@ -58,7 +58,7 @@ def deal_client(newSocket: socket, addr,fir):
                         "SELECT language from judgestatus_judgestatus where id = '%d'"%(id))
                     data = cursor.fetchall()
                     print(data[0][0])
-                    if data[0][0] == "Java" and fir==True:
+                    if data[0][0] == "Java" and first==True:
                         newSocket.send(("judge|%d" % id).encode("utf-8"))
                     elif data[0][0] != "Java":
                         newSocket.send(("judge|%d" % id).encode("utf-8"))
@@ -77,10 +77,14 @@ def deal_client(newSocket: socket, addr,fir):
             except socket.error:
                 newSocket.close()
                 mutex.release()
+                if first == True:
+                    fir = True
                 return
             except:
                 print("error!")
                 mutex.release()
+                if first == True:
+                    fir = True
                 return
             mutex.release()
 
@@ -134,7 +138,7 @@ t1.setDaemon(True)
 t1.start()
 
 
-fir=True
+
 while True:
     newSocket, addr = server.accept()
     print("client [%s] is connected!" % str(addr))

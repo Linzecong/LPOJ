@@ -516,10 +516,15 @@ while True:
             elif data.find("judge") != -1:
                 statue = False
                 tp = data.split("|")
-                cursor.execute(
-                    "SELECT * from judgestatus_judgestatus where id = '%s'" % tp[1])
-                data = cursor.fetchone()
 
+                try:
+                    cursor.execute(
+                        "SELECT * from judgestatus_judgestatus where id = '%s'" % tp[1])
+                except:
+                    reconnect()
+                    cursor.execute(
+                        "SELECT * from judgestatus_judgestatus where id = '%s'" % tp[1])
+                data = cursor.fetchone()
                 try:
                     cursor.execute(
                         "UPDATE judgestatus_judgestatus SET result = '-2',judger='%s' WHERE id = '%s'" % (judgername, tp[1]))
@@ -539,13 +544,3 @@ while True:
         print(e)
         reconnect()
 
-
-# #include<iostream>
-# using namespace std;
-# int main(){
-# int a,b;
-# cin>>a>>b;
-# cout<<a+b<<endl;
-
-# return 0;
-# }
