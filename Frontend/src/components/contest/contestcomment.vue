@@ -25,7 +25,13 @@
         </el-select>
       </el-form-item>
       <el-form-item label="提问内容：">
-        <el-input type="textarea" v-model="contestcomment.message" autosize style="width:700px" @keyup.native.enter="commentClick"></el-input>
+        <el-input
+          type="textarea"
+          v-model="contestcomment.message"
+          autosize
+          style="width:700px"
+          @keyup.native.enter="commentClick"
+        ></el-input>
       </el-form-item>
       <el-button @click="commentClick">提问</el-button>
     </el-form>
@@ -33,7 +39,7 @@
     <br>
     <el-form label-position="right" v-if="isadmin">
       <el-form-item label="提问编号">
-        <el-input v-model="commentid" style="width:700px" ></el-input>
+        <el-input v-model="commentid" style="width:700px"></el-input>
       </el-form-item>
 
       <el-form-item label="回复他：">
@@ -66,7 +72,7 @@ export default {
     };
   },
   methods: {
-    ratingcolor({row, rowIndex}){
+    ratingcolor({ row, rowIndex }) {
       if (row.rating >= 3000) return "color:red;font-weight: bold;";
       if (row.rating >= 2600) return "color:#BB5E00;font-weight: bold;";
       if (row.rating >= 2200) return "color:#E6A23C;font-weight: bold;";
@@ -95,11 +101,15 @@ export default {
                 this.reflash();
               })
               .catch(error => {
-                this.$message.error("服务器出错！" + JSON.stringify(error.response.data));
+                this.$message.error(
+                  "服务器出错！" + JSON.stringify(error.response.data)
+                );
               });
           })
           .catch(error => {
-            this.$message.error("服务器出错！" + JSON.stringify(error.response.data));
+            this.$message.error(
+              "服务器出错！" + JSON.stringify(error.response.data)
+            );
           });
       });
     },
@@ -120,7 +130,9 @@ export default {
             this.reflash();
           })
           .catch(error => {
-            this.$message.error("服务器出错！" + JSON.stringify(error.response.data));
+            this.$message.error(
+              "服务器出错！" + JSON.stringify(error.response.data)
+            );
           });
       });
     },
@@ -135,6 +147,11 @@ export default {
           }
 
           this.tableData = response.data;
+        })
+        .catch(error => {
+          this.$message.error(
+            "服务器出错！" + JSON.stringify(error.response.data)
+          );
         });
     }
   },

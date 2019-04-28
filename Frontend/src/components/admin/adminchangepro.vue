@@ -88,7 +88,7 @@ export default {
       problemcount: 0,
       uploadaddress: "/uploadfile/",
       fileList: [],
-      loading:false,
+      loading: false,
       problemform: {
         problem: "",
         author: localStorage.name,
@@ -117,53 +117,50 @@ export default {
     };
   },
   methods: {
-     myupload(f){
-
+    myupload(f) {
       let param = new FormData(); //创建form对象
-         param.append('file',f.file);//通过append向form对象添加数据
-         let config = {
-           headers:{'Content-Type':'multipart/form-data'}
-         };  //添加请求头
-         this.$axios.post(f.action,param,config)//上传图片
-         .then(response=>{
-           console.log(response.data)
-           f.onSuccess(response.data)
-         })
-         .catch(err => {
-           console.log(err)
-           f.onError(err)
-         })   
-
+      param.append("file", f.file); //通过append向form对象添加数据
+      let config = {
+        headers: { "Content-Type": "multipart/form-data" }
+      }; //添加请求头
+      this.$axios
+        .post(f.action, param, config) //上传图片
+        .then(response => {
+          console.log(response.data);
+          f.onSuccess(response.data);
+        })
+        .catch(err => {
+          console.log(err);
+          f.onError(err);
+        });
     },
-    onDelProblem(){
+    onDelProblem() {
       this.$message.error("请把权限设置为2（私密）即可！");
     },
     problemchange(num) {
       this.$axios
-        .get(
-          "/problem/" +
-            this.problemform.problem +
-            "/"
-        )
+        .get("/problem/" + this.problemform.problem + "/")
         .then(response => {
           this.$axios
-            .get(
-              "/problemdata/" +
-                this.problemform.problem +
-                "/"
-            )
+            .get("/problemdata/" + this.problemform.problem + "/")
             .then(response2 => {
               response.data.level = response2.data.level;
               response.data.tag = response2.data.tag;
               response.data.score = response2.data.score;
               this.problemform = response.data;
-            }).catch(error=>{
-              this.$message.error("服务器错误！"+JSON.stringify(error.response.data));
-              this.problemform={}
-        });
-        }).catch(error=>{
-              this.$message.error("服务器错误！"+JSON.stringify(error.response.data));
-              this.problemform={}
+            })
+            .catch(error => {
+              this.$message.error(
+                "服务器错误！" + JSON.stringify(error.response.data)
+              );
+              this.problemform = {};
+            });
+        })
+        .catch(error => {
+          this.$message.error(
+            "服务器错误！" + JSON.stringify(error.response.data)
+          );
+          this.problemform = {};
         });
     },
     handleRemove(file, fileList) {
@@ -188,12 +185,7 @@ export default {
     },
     handleSuccess(response, file, fileList) {
       this.$axios
-        .put(
-          "/problem/" +
-            this.problemform.problem +
-            "/",
-          this.problemform
-        )
+        .put("/problem/" + this.problemform.problem + "/", this.problemform)
         .then(response => {
           this.problemdataform.problem = this.problemform.problem;
           this.problemdataform.title = this.problemform.title;
@@ -201,22 +193,18 @@ export default {
           this.problemdataform.tag = this.problemform.tag;
           this.problemdataform.score = this.problemform.score;
           this.problemdataform.auth = this.problemform.auth;
-           var tag = this.problemdataform.tag.split("|")
-          for(var i=0;i<tag.length;i++){
+          var tag = this.problemdataform.tag.split("|");
+          for (var i = 0; i < tag.length; i++) {
             this.$axios
-            .post(
-              "/problemtag/",
-              {
-                tagname:tag[i],
-                count:1,
-              }
-            ).catch(error=>{});
+              .post("/problemtag/", {
+                tagname: tag[i],
+                count: 1
+              })
+              .catch(error => {});
           }
           this.$axios
             .put(
-              "/problemdata/" +
-                this.problemform.problem +
-                "/",
+              "/problemdata/" + this.problemform.problem + "/",
               this.problemdataform
             )
             .then(response2 => {
@@ -224,30 +212,48 @@ export default {
                 message: "修改成功！修改题目编号为：" + response2.data.problem,
                 type: "success"
               });
-              this.fileList=[]
-              this.loading=false
+              this.fileList = [];
+              this.loading = false;
+            })
+            .catch(error => {
+              this.$message.error(
+                "服务器出错！" + JSON.stringify(error.response.data)
+              );
             });
+        })
+        .catch(error => {
+          this.$message.error(
+            "服务器出错！" + JSON.stringify(error.response.data)
+          );
         });
     },
 
     onAddProblemSubmit() {
       if (this.fileList.length <= 0) {
-        this.$confirm("确定修改吗？本次修改没有更新数据", "修改题目：" + this.problemform.problem, {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(() => {
-        this.handleSuccess(1,2,3);
-      });
-        
+        this.$confirm(
+          "确定修改吗？本次修改没有更新数据",
+          "修改题目：" + this.problemform.problem,
+          {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning"
+          }
+        ).then(() => {
+          this.handleSuccess(1, 2, 3);
+        });
+
         return;
       }
-      this.$confirm("确定修改吗？本次修改将会用新数据覆盖旧数据", "修改题目：" + this.problemform.problem, {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(() => {
-        this.loading=true
+      this.$confirm(
+        "确定修改吗？本次修改将会用新数据覆盖旧数据",
+        "修改题目：" + this.problemform.problem,
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }
+      ).then(() => {
+        this.loading = true;
         this.$refs.upload.submit();
       });
     }
@@ -258,7 +264,4 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1 {
-  position: relative;
-}
 </style>

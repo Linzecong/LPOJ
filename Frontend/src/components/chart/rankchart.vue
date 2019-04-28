@@ -1,9 +1,12 @@
 <template>
   <center>
-    <b>广东外语外贸大学ACM集训队<br>10天内新增AC情况统计</b>
-    <h2>  </h2>
+    <b>
+      广东外语外贸大学ACM集训队
+      <br>10天内新增AC情况统计
+    </b>
+    <h2></h2>
     <el-button size="mini" @click="seeall" type="primary">查看所有</el-button>
-    <h2>  </h2>
+    <h2></h2>
     <div ref="myEchart" style="height:500px;width:100%"></div>
   </center>
 </template>
@@ -20,7 +23,7 @@ export default {
     };
   },
   methods: {
-    seeall(){
+    seeall() {
       this.$router.push({
         name: "billboard"
       });
@@ -46,7 +49,7 @@ export default {
               }
             };
             parmas.sort(func);
-            var res ="   "+ parmas[0].name+"<br>";
+            var res = "   " + parmas[0].name + "<br>";
             for (var i = 0; i < parmas.length; i++) {
               res +=
                 '<font color="' +
@@ -80,54 +83,61 @@ export default {
         },
         yAxis: {
           type: "value",
-          min:0,
+          min: 0,
           interval: 5
         },
         series: this.series
       });
     }
   },
-  created() {
-    this.$axios.get("/dailyboard/").then(response => {
-      var Xnames = new Set();
-      var Ynames = new Set();
+  mounted() {
+    this.$axios
+      .get("/dailyboard/")
+      .then(response => {
+        var Xnames = new Set();
+        var Ynames = new Set();
 
-      for (var i = 0; i < response.data.length; i++) {
-        Xnames.add(response.data[i]["collecttime"]);
-        Ynames.add(response.data[i]["username"]);
-      }
+        for (var i = 0; i < response.data.length; i++) {
+          Xnames.add(response.data[i]["collecttime"]);
+          Ynames.add(response.data[i]["username"]);
+        }
 
-      for (var name1 of Ynames) {
-        this.yNum.push(name1);
-        this.series.push({ name: name1, type: "line", data: [] });
-      }
+        for (var name1 of Ynames) {
+          this.yNum.push(name1);
+          this.series.push({ name: name1, type: "line", data: [] });
+        }
 
-      for (var name2 of Xnames) {
-        this.xNum.push(name2);
-      }
+        for (var name2 of Xnames) {
+          this.xNum.push(name2);
+        }
 
-      var first = {};
+        var first = {};
 
-
-      for (var i = 0; i < response.data.length; i++) {
-        for (var j = 0; j < this.series.length; j++) {
-          if (this.series[j].name == response.data[i]["username"]) {
-            if(this.series[j].data.length==0){
-              first[this.series[j].name] = response.data[i]["account"];
-              this.series[j].data.push(0);
+        for (var i = 0; i < response.data.length; i++) {
+          for (var j = 0; j < this.series.length; j++) {
+            if (this.series[j].name == response.data[i]["username"]) {
+              if (this.series[j].data.length == 0) {
+                first[this.series[j].name] = response.data[i]["account"];
+                this.series[j].data.push(0);
+              } else
+                this.series[j].data.push(
+                  response.data[i]["account"] - first[this.series[j].name]
+                );
+              break;
             }
-            else
-              this.series[j].data.push(response.data[i]["account"]-first[this.series[j].name]);
-            break;
           }
         }
-      }
 
-      let obj = this.$refs.myEchart;
-      if (obj) {
-        this.initChart();
-      }
-    });
+        let obj = this.$refs.myEchart;
+        if (obj) {
+          this.initChart();
+        }
+      })
+      .catch(error => {
+        this.$message.error(
+          "服务器出错！" + JSON.stringify(error.response.data)
+        );
+      });
   }
 };
 </script>

@@ -17,11 +17,11 @@
         </el-form-item>
         <el-form-item label="根据类型重测：">
           <el-select v-model="resulttype" placeholder="请选择类型">
-                <el-option key="2" label="Waiting" value="-6"></el-option>
-                <el-option key="3" label="Presentation Error" value="-5"></el-option>
-                <el-option key="4" label="Compile Error" value="-4"></el-option>
-                <el-option key="6" label="Judging" value="-2"></el-option>
-                <el-option key="11" label="System Error" value="5"></el-option>
+            <el-option key="2" label="Waiting" value="-6"></el-option>
+            <el-option key="3" label="Presentation Error" value="-5"></el-option>
+            <el-option key="4" label="Compile Error" value="-4"></el-option>
+            <el-option key="6" label="Judging" value="-2"></el-option>
+            <el-option key="11" label="System Error" value="5"></el-option>
           </el-select>
           <el-button type="primary" @click="typerejudge">提交</el-button>
         </el-form-item>
@@ -36,63 +36,71 @@ export default {
   name: "adminrejudge",
   data() {
     return {
-      contestid:"",
-      contestproblem:"",
-      problem:"",
-      statusid:"",
-      resulttype:""
+      contestid: "",
+      contestproblem: "",
+      problem: "",
+      statusid: "",
+      resulttype: ""
     };
   },
   methods: {
     contestrejudge() {
       this.$axios
-        .post("/rejudge/",{
-          contestid:this.contestid,
-          problem:this.contestproblem
+        .post("/rejudge/", {
+          contestid: this.contestid,
+          problem: this.contestproblem
         })
         .then(response => {
           this.$message.success("提交成功！" + response);
         })
         .catch(error => {
-          this.$message.error("服务器错误！" + JSON.stringify(error.response.data));
+          this.$message.error(
+            "服务器错误！" + JSON.stringify(error.response.data)
+          );
         });
     },
     problemrejudge() {
       this.$axios
-        .post("/rejudge/",{
-          problem:this.problem
+        .post("/rejudge/", {
+          problem: this.problem
         })
         .then(response => {
           this.$message.success("提交成功！" + response);
         })
         .catch(error => {
-          this.$message.error("服务器错误！" + JSON.stringify(error.response.data));
+          this.$message.error(
+            "服务器错误！" + JSON.stringify(error.response.data)
+          );
         });
     },
     statusrejudge() {
       this.$axios
-        .post("/rejudge/",{
-          statusid:this.statusid
+        .post("/rejudge/", {
+          statusid: this.statusid
         })
         .then(response => {
           this.$message.success("提交成功！" + response);
         })
         .catch(error => {
-          this.$message.error("服务器错误！" + JSON.stringify(error.response.data));
+          this.$message.error(
+            "服务器错误！" + JSON.stringify(error.response.data)
+          );
         });
     },
     typerejudge() {
       this.$axios
-        .post("/rejudge/",{
-          statustype:this.resulttype
+        .post("/rejudge/", {
+          statustype: this.resulttype
         })
         .then(response => {
           this.$message.success("提交成功！" + response.data);
         })
         .catch(error => {
-          this.$message.error("服务器错误！" + JSON.stringify(error.response.data));
+          this.$message.error(
+            "服务器错误！" + JSON.stringify(error.response.data)
+          );
         });
-    },
+    }
   },
   created() {}
 };

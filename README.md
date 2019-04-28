@@ -1,5 +1,5 @@
 # LPOJ     （先点个赞呗）
-[![Python](https://img.shields.io/badge/python-3.7.2-green.svg?style=flat-square)](https://www.python.org/downloads/release/python-362/)
+[![Python](https://img.shields.io/badge/python-3.7.2-green.svg?style=flat-square)](https://www.python.org/downloads/release/python-372/)
 [![Django](https://img.shields.io/badge/django-2.1.5-green.svg?style=flat-square)](https://www.djangoproject.com/)
 [![Django Rest Framework](https://img.shields.io/badge/django_rest_framework-3.9.1-green.svg?style=flat-square)](http://www.django-rest-framework.org/)
 > 一个基于Vue.js和Django的轻量级在线评测系统

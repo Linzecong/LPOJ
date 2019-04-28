@@ -127,10 +127,7 @@ export default {
     usernamechange() {
       if (this.form.username) {
         this.$axios
-          .get(
-            "/user/?username=" +
-              this.form.username
-          )
+          .get("/user/?username=" + this.form.username)
           .then(response => {
             if (response.data.length <= 0) {
               this.$message.error("用户不存在！");
@@ -140,7 +137,9 @@ export default {
             this.userid = this.form.username;
           })
           .catch(error => {
-            this.$message.error("服务器错误！" + JSON.stringify(error.response.data));
+            this.$message.error(
+              "服务器错误！" + JSON.stringify(error.response.data)
+            );
           });
       }
     },
@@ -186,25 +185,18 @@ export default {
       }
 
       this.form.password = this.$md5(this.form.password);
-      this.$axios
-        .put(
-          "/changeall/" +
-            this.userid +
-            "/",
-          this.form
-        )
-        .then(
-          response => {
-            this.$message({
-              message: "更新成功！",
-              type: "success"
-            });
-            this.form = {};
-          },
-          response => {
-            this.$message.error("更新失败（" + response + "）");
-          }
-        );
+      this.$axios.put("/changeall/" + this.userid + "/", this.form).then(
+        response => {
+          this.$message({
+            message: "更新成功！",
+            type: "success"
+          });
+          this.form = {};
+        },
+        response => {
+          this.$message.error("更新失败（" + response.response.data + "）");
+        }
+      );
     }
   },
   created() {}

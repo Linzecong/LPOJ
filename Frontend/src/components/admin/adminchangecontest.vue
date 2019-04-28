@@ -109,9 +109,7 @@ export default {
   methods: {
     contestchange(num) {
       this.$axios
-        .get(
-          "/contestinfo/" + num + "/"
-        )
+        .get("/contestinfo/" + num + "/")
         .then(response => {
           response.data.timerange = [];
           response.data.timerange.push(response.data.begintime);
@@ -124,10 +122,7 @@ export default {
           this.changecontestform = response.data;
 
           this.$axios
-            .get(
-              "/contestregister/?contestid=" +
-                num
-            )
+            .get("/contestregister/?contestid=" + num)
             .then(response2 => {
               var str = "";
               for (var i = 0; i < response2.data.length; i++) {
@@ -138,10 +133,7 @@ export default {
               this.contestregister = str;
 
               this.$axios
-                .get(
-                  "/contestproblem/?contestid=" +
-                    num
-                )
+                .get("/contestproblem/?contestid=" + num)
                 .then(response3 => {
                   var li = [];
                   for (var i = 0; i < response3.data.length; i++) {
@@ -152,11 +144,23 @@ export default {
                     );
                   }
                   this.problemnames = li;
+                })
+                .catch(error => {
+                  this.$message.error(
+                    "服务器出错！" + JSON.stringify(error.response.data)
+                  );
                 });
+            })
+            .catch(error => {
+              this.$message.error(
+                "服务器出错！" + JSON.stringify(error.response.data)
+              );
             });
         })
         .catch(error => {
-          this.$message.error("服务器错误！" + JSON.stringify(error.response.data));
+          this.$message.error(
+            "服务器错误！" + JSON.stringify(error.response.data)
+          );
           this.changecontestform = {};
         });
     },
@@ -172,11 +176,7 @@ export default {
           type: "warning"
         }).then(() => {
           this.$axios
-            .delete(
-              "/contestinfo/" +
-                this.contestid +
-                "/"
-            )
+            .delete("/contestinfo/" + this.contestid + "/")
             .then(res => {
               this.$message({
                 message: "删除成功！",
@@ -204,30 +204,22 @@ export default {
         }
       ).then(() => {
         this.$axios
-          .get(
-            "/contestproblem/?contestid=" +
-              this.contestid
-          )
+          .get("/contestproblem/?contestid=" + this.contestid)
           .then(response2 => {
             for (var i = 0; i < response2.data.length; i++) {
               this.$axios.delete(
-                "/contestproblem/" +
-                  response2.data[i].id +
-                  "/"
+                "/contestproblem/" + response2.data[i].id + "/"
               );
             }
 
             for (var i = 0; i < this.problemnames.length; i++) {
               var li = this.problemnames[i].split("|");
-              this.$axios.post(
-                "/contestproblem/",
-                {
-                  contestid: this.contestid,
-                  problemid: li[0],
-                  problemtitle: li[1],
-                  rank: i
-                }
-              );
+              this.$axios.post("/contestproblem/", {
+                contestid: this.contestid,
+                problemid: li[0],
+                problemtitle: li[1],
+                rank: i
+              });
             }
           });
 
@@ -251,16 +243,16 @@ export default {
     },
     addproblemchange(num) {
       this.$axios
-        .get(
-          "/problemdata/" + num + "/"
-        )
+        .get("/problemdata/" + num + "/")
         .then(response2 => {
           this.tmpaddproblemtitle = response2.data.title;
           this.canadd = true;
         })
         .catch(error => {
           this.canadd = false;
-          this.$message.error("服务器错误！" + JSON.stringify(error.response.data));
+          this.$message.error(
+            "服务器错误！" + JSON.stringify(error.response.data)
+          );
         });
     },
     handleClose(tag) {
@@ -304,40 +296,27 @@ export default {
         type: "warning"
       }).then(() => {
         this.$axios
-          .put(
-            "/contestinfo/" +
-              this.contestid +
-              "/",
-            this.changecontestform
-          )
+          .put("/contestinfo/" + this.contestid + "/", this.changecontestform)
           .then(response => {
             this.contestid = response.data.id;
 
             if (response.data.auth != 1) {
               this.$axios
-                .get(
-                  "/contestregister/?contestid=" +
-                    this.contestid
-                )
+                .get("/contestregister/?contestid=" + this.contestid)
                 .then(response2 => {
                   for (var i = 0; i < response2.data.length; i++) {
                     this.$axios.delete(
-                      "/contestregister/" +
-                        response2.data[i].id +
-                        "/"
+                      "/contestregister/" + response2.data[i].id + "/"
                     );
                   }
 
                   var li = this.contestregister.split(",");
 
                   for (var i = 0; i < li.length; i++) {
-                    this.$axios.post(
-                      "/contestregister/",
-                      {
-                        contestid: this.contestid,
-                        user: li[i]
-                      }
-                    );
+                    this.$axios.post("/contestregister/", {
+                      contestid: this.contestid,
+                      user: li[i]
+                    });
                   }
                 });
             }
@@ -348,7 +327,9 @@ export default {
             });
           })
           .catch(error => {
-            this.$message.error("服务器出错！" + JSON.stringify(error.response.data));
+            this.$message.error(
+              "服务器出错！" + JSON.stringify(error.response.data)
+            );
           });
       });
     }

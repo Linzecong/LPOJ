@@ -3,9 +3,14 @@
     <p :key="index" v-for="(item,index) in tabledata" v-html="item"/>
 
     <el-form label-position="right" v-if="isadmin">
-      
       <el-form-item label="Announcement：">
-        <el-input type="textarea" v-model="anvalue" autosize style="width:700px" @keyup.native.enter="anClick"></el-input>
+        <el-input
+          type="textarea"
+          v-model="anvalue"
+          autosize
+          style="width:700px"
+          @keyup.native.enter="anClick"
+        ></el-input>
       </el-form-item>
       <el-button @click="anClick">发送</el-button>
     </el-form>
@@ -19,15 +24,14 @@ export default {
     return {
       tabledata: [],
       isadmin: false,
-      anvalue:""
+      anvalue: ""
     };
   },
-  created(){
+  created() {
     this.isadmin = localStorage.type == 2 || localStorage.type == 3;
-
   },
-  methods:{
-    anClick(){
+  methods: {
+    anClick() {
       this.$confirm("确定提交吗？", "提交", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -35,29 +39,34 @@ export default {
       }).then(() => {
         this.$axios
           .post("/contestannouncement/", {
-            contestid:this.$route.params.contestID,
-            announcement:this.anvalue
+            contestid: this.$route.params.contestID,
+            announcement: this.anvalue
           })
           .then(response => {
             this.$message.success("提交成功！");
             this.reflash();
           })
           .catch(error => {
-            this.$message.error("服务器出错！" + JSON.stringify(error.response.data));
+            this.$message.error(
+              "服务器出错！" + JSON.stringify(error.response.data)
+            );
           });
       });
     },
-    reflash(){
-      this.tabledata=[]
+    reflash() {
+      this.tabledata = [];
       this.$axios
-            .get("/contestannouncement/?contestid=" + this.$route.params.contestID)
-            .then(response => {
-
-              for(let i=0;i<response.data.length;i++){
-              this.tabledata.push(response.data[i]["announcement"]) 
-              }
-
-            });
+        .get("/contestannouncement/?contestid=" + this.$route.params.contestID)
+        .then(response => {
+          for (let i = 0; i < response.data.length; i++) {
+            this.tabledata.push(response.data[i]["announcement"]);
+          }
+        })
+        .catch(error => {
+          this.$message.error(
+            "服务器出错！" + JSON.stringify(error.response.data)
+          );
+        });
     }
   }
 };
@@ -65,5 +74,4 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 </style>
