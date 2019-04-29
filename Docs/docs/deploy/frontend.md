@@ -19,7 +19,7 @@ sudo apt-get install nginx
 这样就安装成功了
 我们将编译成功的dist文件夹下的所有内容，拖到Nginx的默认网站根目录中（通常是/var/www/html）
 
-推荐使用WinSCP进行拖放操作！
+Win下推荐使用WinSCP进行拖放操作！
 
 接下来我们要修改Nginx的配置文件（不同版本可能在不同的地方）
 ```
@@ -56,4 +56,4 @@ Nginx的配置多种多样，比如说开启Gzip支持等等，这些东西大�
 sudo systemctl restart nginx
 ```
 
-如无意外，可以在浏览器中访问你的前端了。
+如无意外，可以在浏览器中访问你的前端了。试一试localhost~

@@ -56,23 +56,23 @@ class UploadFileAPIView(APIView):
         if not myFile:
             return Response("no file", status=HTTP_400_BAD_REQUEST)
 
-        destination = open("../DataServer/problemdata/" +
+        destination = open("./ProblemData/" +
                            myFile.name, 'wb+')    # 打开特定的文件进行二进制的写操作
         for chunk in myFile.chunks():      # 分块写入文件
             destination.write(chunk)
         destination.close()
 
-        dirname = myFile.name.split(".")[0]
-        try:
-            shutil.rmtree("../DataServer/problemdata/" +
-                          dirname+"/", ignore_errors=True)
-            f = zipfile.ZipFile("../DataServer/problemdata/"+myFile.name, 'r')
-            for file1 in f.namelist():
-                f.extract(file1, "../DataServer/problemdata/"+dirname+"/")
-        except:
-            shutil.rmtree("../DataServer/problemdata/" +
-                          dirname+"/", ignore_errors=True)
-            os.remove("../DataServer/problemdata/"+myFile.name)
-            return Response("extract zip fail", status=HTTP_400_BAD_REQUEST)
+        # dirname = myFile.name.split(".")[0]
+        # try:
+        #     shutil.rmtree("../DataServer/problemdata/" +
+        #                   dirname+"/", ignore_errors=True)
+        #     f = zipfile.ZipFile("../DataServer/problemdata/"+myFile.name, 'r')
+        #     for file1 in f.namelist():
+        #         f.extract(file1, "../DataServer/problemdata/"+dirname+"/")
+        # except:
+        #     shutil.rmtree("../DataServer/problemdata/" +
+        #                   dirname+"/", ignore_errors=True)
+        #     os.remove("../DataServer/problemdata/"+myFile.name)
+        #     return Response("extract zip fail", status=HTTP_400_BAD_REQUEST)
 
         return Response('upload success', HTTP_200_OK)

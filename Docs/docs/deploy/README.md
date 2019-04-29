@@ -1,12 +1,12 @@
- # 环境说明
+# 环境说明
 
-前端与判题服务器和爬虫系统没有要求，其他需部署在Linux环境下！
+判题机需部署在Linux环境下！
 
 我使用的环境是：
 
 + 前端： Ubuntu 18.10 + Nginx
-+ 后端： Ubuntu 18.10 + Python 3.7   （由于判题机需在Linux下，所以后端也需要在Linux下 2019.4月）（后面更新后可能会取消这个需求）
-+ 判题服务器： Ubuntu 18.10 + Python 3.7 （必须Linux系统）
++ 后端： Ubuntu 18.10 + Python 3.7
++ 判题服务器： Ubuntu 18.10 + Python 3.7 
 + 判题机： Ubuntu 18.10 + Python 3.7 （必须Linux系统）
 + 爬虫部分： Ubuntu 18.10 + Python 3.7
 

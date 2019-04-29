@@ -33,6 +33,7 @@ module.exports = {
                 children: [
                     '/deploy/',
                     '/deploy/frontend',
+                    '/deploy/backend',
                 ]
             },
             {

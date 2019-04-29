@@ -5,5 +5,10 @@
     "db_port":"3306",
     "db_database":"LPOJ",
     "server_ip":"localhost",
-    "server_port":9906
+    "server_port":9906,
+    "sftp_ip":"localhost",
+    "sftp_port":22,
+    "sftp_username":"ubuntu",
+    "sftp_password":"123456",
+    "backend_path":"/home/ubuntu/LPOJ/Backend/"
 }

@@ -116,6 +116,13 @@ python manage.py migrate
 
 python manage.py runserver 0.0.0.0:8000
 ```
+4. 安装sftp服务（不安装无法判题,一般云服务器会自动安装）
+```
+sudo apt-get install openssh-server
+sftp user@ip //验证是否安装成功！
+```
+然后添加sftp账户和密码等，具体操作自行查阅sftp相关信息.
+
 
 #### 部署判题服务器
 首先修改配置文件
@@ -129,22 +136,14 @@ sudo python main.py
 ```
 
 #### 部署判题机
-首先修改配置文件
+首先修改配置文件，setting,json里的东西都要修改为你的ip，其中sftp应配置为你的后端服务器
 ``` 
 cd Judger
 nano setting.json
-```
-然后运行判题机，支持多个运行，注意 **目前需与后端在同一个目录下运行**
-以下是目录结构
-Backend/
-······manage.py
-DataServer/problemdata/
-Judger/
-······main.py
-必须在这个目录结构下运行main.py
-```
+
+//然后运行判题机，支持多个运行
 sudo python main.py
-必须添加sudo，然后不同判题机，必须要用不同的名字命名。
+//必须添加sudo，然后不同判题机，必须要用不同的名字命名。
 ```
 
 ## 如无意外，部署成功！

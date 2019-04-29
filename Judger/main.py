@@ -1,5 +1,6 @@
 # coding=utf-8
-
+import shutil
+import paramiko
 import MySQLdb
 import socket
 import json
@@ -7,6 +8,7 @@ from time import sleep
 import threading
 import _judger
 import os
+import zipfile
 import time
 import datetime
 
@@ -18,6 +20,11 @@ statue = True
 
 myjsonfile = open("./setting.json", 'r')
 judgerjson = json.loads(myjsonfile.read())
+myjsonfile.close()
+
+datajsonfile = open("./datatime.json", 'r')
+datatimejson = json.loads(datajsonfile.read())
+datajsonfile.close()
 
 judgername = input(
     "Please input judger name(must different or may cause judge problem):  ")
@@ -27,6 +34,48 @@ port = judgerjson["server_port"]
 db = MySQLdb.connect(judgerjson["db_ip"], judgerjson["db_user"], judgerjson["db_pass"],
                      judgerjson["db_database"], int(judgerjson["db_port"]), charset='utf8')
 cursor = db.cursor()
+
+
+sftp_t = paramiko.Transport((judgerjson["sftp_ip"], 22))
+sftp_t.connect(username=judgerjson["sftp_username"],
+               password=judgerjson["sftp_password"])  # 登录远程服务器
+sftp = paramiko.SFTPClient.from_transport(sftp_t)  # sftp传输协议
+
+
+def remote_scp(host_ip, remote_path, local_path, username, password, problem):
+    global sftp, sftp_t
+    try:
+        if sftp_t.is_authenticated() == False:
+            sftp_t = paramiko.Transport((host_ip, 22))
+            sftp_t.connect(username=username, password=password)  # 登录远程服务器
+            sftp = paramiko.SFTPClient.from_transport(sftp_t)  # sftp传输协议
+
+        remt = sftp.stat(remote_path).st_mtime
+        if str(remt) == datatimejson.get(str(problem),"no"):
+            return
+
+        datatimejson[str(problem)] = str(remt)
+        with open("./datatime.json", 'w', encoding='utf-8') as json_file:
+            json.dump(datatimejson, json_file, ensure_ascii=False)
+            json_file.close()
+        print("download……"+remote_path+"……to……"+local_path)
+        sftp.get(remote_path, local_path)  # 下载文件
+        # 解压文件
+        dirname = str(problem)
+        try:
+            shutil.rmtree("./ProblemData/" +
+                          dirname+"/", ignore_errors=True)
+            f = zipfile.ZipFile("./ProblemData/"+str(problem)+".zip", 'r')
+            for file1 in f.namelist():
+                f.extract(file1, "./ProblemData/"+dirname+"/")
+            print("Extract Succeed！")
+        except:
+            shutil.rmtree("./ProblemData/" +
+                          dirname+"/", ignore_errors=True)
+            os.remove("./ProblemData/"+str(problem)+".zip")
+            print("Extract Failed！")
+    except IOError as e:
+        print(e)
 
 
 def reconnect():
@@ -214,8 +263,14 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
     datat = cursor.fetchone()
     score = int(datat[13])
 
+    # 尝试下载数据
+
+    remote_scp(judgerjson["sftp_ip"], judgerjson["backend_path"]+"ProblemData/"+str(problem)+".zip", "./ProblemData/" +
+               str(problem)+".zip", judgerjson["sftp_username"], judgerjson["sftp_password"], problem)
+
+    # 判断有无数据
     try:
-        files = os.listdir("../DataServer/problemdata/%s/" % problem)
+        files = os.listdir("./ProblemData/%s/" % problem)
     except:
         cursor.execute(
             "UPDATE judgestatus_judgestatus SET memory =0, time=0, result = '5',testcase='0'  WHERE id = '%s'" % (id))
@@ -247,7 +302,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
     for filename in newfiles:
         print("judging!!!!!!", id, "/%s/%s.in" % (problem, filename))
         if lang == "Java":
-            ret = judgeJava(timelimit*1.5, memorylimit, "../DataServer/problemdata/%s/%s.in" % (
+            ret = judgeJava(timelimit*1.5, memorylimit, "./ProblemData/%s/%s.in" % (
                             problem, filename), judgername+"temp.out", judgername+"error.out")
         else:
             ret = _judger.run(max_cpu_time=timelimit,
@@ -258,7 +313,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                               max_stack=32 * 1024 * 1024,
                               # five args above can be _judger.UNLIMITED
                               exe_path=judgername+".out",
-                              input_path="../DataServer/problemdata/%s/%s.in" % (
+                              input_path="./ProblemData/%s/%s.in" % (
                                   problem, filename),
                               output_path=judgername+"temp.out",
                               error_path=judgername+"error.out",
@@ -282,7 +337,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
         if contest is 0:
             try:
                 # 计算case
-                inputfile = open("../DataServer/problemdata/%s/%s.in" %
+                inputfile = open("./ProblemData/%s/%s.in" %
                                  (problem, filename), "r")
                 casedata = inputfile.read(400)
                 tmpstr = inputfile.read(10)
@@ -291,7 +346,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 inputfile.close()
 
                 outputfile = open(
-                    "../DataServer/problemdata/%s/%s.out" % (problem, filename), "r")
+                    "./ProblemData/%s/%s.out" % (problem, filename), "r")
                 outputdata = outputfile.read(400)
                 tmpstr = outputfile.read(10)
                 if tmpstr != "":
@@ -363,7 +418,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 break
         else:
             file1 = open(judgername+"temp.out", "r")
-            file2 = open("../DataServer/problemdata/%s/%s.out" %
+            file2 = open("./ProblemData/%s/%s.out" %
                          (problem, filename), "r")
 
             result = 0  # 0 ac -3 wrong -5 presentation
