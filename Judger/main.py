@@ -46,11 +46,19 @@ def remote_scp(host_ip, remote_path, local_path, username, password, problem):
     global sftp, sftp_t
     try:
         if sftp_t.is_authenticated() == False:
+            sftp_t.close()
             sftp_t = paramiko.Transport((host_ip, 22))
             sftp_t.connect(username=username, password=password)  # 登录远程服务器
             sftp = paramiko.SFTPClient.from_transport(sftp_t)  # sftp传输协议
+        remt = 0
+        try:
+            remt = sftp.stat(remote_path).st_mtime
+        except:
+            sftp_t = paramiko.Transport((host_ip, 22))
+            sftp_t.connect(username=username, password=password)  # 登录远程服务器
+            sftp = paramiko.SFTPClient.from_transport(sftp_t)  # sftp传输协议
+            remt = sftp.stat(remote_path).st_mtime
 
-        remt = sftp.stat(remote_path).st_mtime
         if str(remt) == datatimejson.get(str(problem),"no"):
             return
 
