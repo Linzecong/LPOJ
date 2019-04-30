@@ -1,7 +1,7 @@
 # coding=utf-8
 
 import MySQLdb
-import Queue
+from queue import Queue
 import socket
 import json
 from time import sleep
@@ -10,7 +10,7 @@ import threading
 
 mutex = threading.Lock()  # queue mutex
 
-queue = Queue.Queue()
+queue = Queue()
 myjsonfile = open("./setting.json", 'r')
 judgerjson = json.loads(myjsonfile.read())
 

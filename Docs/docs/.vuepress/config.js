@@ -34,6 +34,8 @@ module.exports = {
                     '/deploy/',
                     '/deploy/frontend',
                     '/deploy/backend',
+                    '/deploy/judgeserver',
+                    '/deploy/judger',
                 ]
             },
             {

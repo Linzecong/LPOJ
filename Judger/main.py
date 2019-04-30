@@ -140,6 +140,7 @@ def judgeJava(timelimit, memorylimit, inputpath, outputpath, errorpath):
         ret["exit_code"] = result
         ret["signal"] = 0
     else:
+        tf = open(judgername, "r")
         ret["cpu_time"] = 0
         ret["memory"] = 5201314
         ret["result"] = 4
@@ -170,8 +171,8 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
         cursor.execute(
             "SELECT * from contest_contestrank where username = '%s'  and contestid = %d" % (username, int(contest)))
         r = cursor.fetchone()
-        statue = r[4]
-        li = statue.split("|")
+        statue2 = r[4]
+        li = statue2.split("|")
         if(li[contestproblem].find("$") >= 0):
             acornot = True
 
@@ -336,7 +337,9 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
         try:
             waittime = 0
             while True:
-                if getmem() >= memorylimit + 16:
+                memo = getmem()
+                print(memo,memorylimit)
+                if memo >= memorylimit/2:
                     break
                 waittime = waittime + 1
                 if waittime > 15:
@@ -633,7 +636,7 @@ while True:
                     clientsocket.send("notok".encode("utf-8"))
             elif data == "timeout":
                 print("timeout!")
-                return
+                break
             elif data.find("judge") != -1:
                 statue = False
                 tp = data.split("|")
@@ -654,6 +657,7 @@ while True:
                         data[0], data[13], data[8], data[3], data[11], data[1], data[9], data[12]))
                     t.setDaemon(True)
                     t.start()
+                    
                 except:
                     db.rollback()
                     statue = True
