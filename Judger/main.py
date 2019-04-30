@@ -116,8 +116,8 @@ reconnect()
 def judgeJava(timelimit, memorylimit, inputpath, outputpath, errorpath):
 
     com1 = "/usr/bin/time -f '"+"%"+"U' -o %stime.txt " % (judgername)
-    com2 = "timeout %s java -cp %s -Xss1M -XX:MaxPermSize=16M -XX:PermSize=8M -Xms16M -Xmx%sM -Djava.security.manager -Djava.security.policy==policy -Djava.awt.headless=true Main 1>%s 2>%s<%s" % (
-        str(timelimit/1000.0), judgername, memorylimit, outputpath, errorpath, inputpath)
+    com2 = "timeout %s java -cp %s -Djava.security.manager -Djava.security.policy==policy -Djava.awt.headless=true Main 1>%s 2>%s<%s" % (
+        str(timelimit/1000.0), judgername, outputpath, errorpath, inputpath)
     com = com1 + com2
     result = os.system(com)
 
@@ -631,7 +631,9 @@ while True:
                     clientsocket.send("ok".encode("utf-8"))
                 else:
                     clientsocket.send("notok".encode("utf-8"))
-
+            elif data == "timeout":
+                print("timeout!")
+                return
             elif data.find("judge") != -1:
                 statue = False
                 tp = data.split("|")

@@ -47,6 +47,7 @@ def deal_client(newSocket: socket, addr, first):
     global mutex, queue, fir
     statue = False
     cursor = db.cursor()
+    falsetime = 0 
     while True:
         sleep(1)
         if mutex.acquire():
@@ -71,9 +72,19 @@ def deal_client(newSocket: socket, addr, first):
                     data = newSocket.recv(1024)
                     recv_data = data.decode('utf-8')
                     if recv_data == "ok":
+                        falsetime = 0
                         statue = True
                     else:
+                        falsetime = falsetime + 1
                         statue = False
+                        if falsetime >= 60:
+                            newSocket.send("timeout".encode("utf-8"))
+                            print(addr,"timeout!")
+                            newSocket.close()
+                            mutex.release()
+                            if first == True:
+                                fir = True
+                            return
                     print(addr, statue)
 
             except socket.error:
