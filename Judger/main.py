@@ -26,8 +26,8 @@ datajsonfile = open("./datatime.json", 'r')
 datatimejson = json.loads(datajsonfile.read())
 datajsonfile.close()
 
-judgername = input(
-    "Please input judger name(must different or may cause judge problem):  ")
+judgername = socket.gethostbyname(socket.gethostname())
+
 host = judgerjson["server_ip"]
 port = judgerjson["server_port"]
 
@@ -84,6 +84,16 @@ def remote_scp(host_ip, remote_path, local_path, username, password, problem):
             print("Extract Failed！")
     except IOError as e:
         print(e)
+
+
+def getmem():
+    with open('/proc/meminfo') as fd:
+        for line in fd:
+            if line.startswith('MemAvailable'):
+                free = line.split()[1]
+                fd.close()
+                break
+    return int(free)/1024.0
 
 
 def reconnect():
@@ -176,19 +186,82 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
             "UPDATE user_userdata SET submit = submit+1 WHERE username = '%s'" % username)
     db.commit()
 
-    if lang == "C":
-        file = open("%s.c" % judgername, "w")
-        file.write(code)
-        file.close()
-        result = os.system("gcc %s.c -o %s.out -O2 -std=c11 2>%sce.txt" %
-                           (judgername, judgername, judgername))
-        if result:
+    try:
+
+        if lang == "C":
+            file = open("%s.c" % judgername, "w")
+            file.write(code)
+            file.close()
+            result = os.system("gcc %s.c -o %s.out -O2 -std=c11 2>%sce.txt" %
+                            (judgername, judgername, judgername))
+            if result:
+                try:
+                    filece = open("%sce.txt" % judgername, "r")
+                    msg = str(filece.read())
+                    filece.close()
+                    cursor.execute(
+                        "UPDATE judgestatus_judgestatus SET result = '-4',message=%s WHERE id = %s", (msg, id))
+                    cursor.execute(
+                        "UPDATE problem_problemdata SET ce = ce+1 WHERE problem = '%s'" % problem)
+                    db.commit()
+                    statue = True
+                except:
+                    db.rollback()
+                    statue = True
+                return
+
+        elif lang == "C++":
+            file = open("%s.cpp" % judgername, "w")
+            file.write(code)
+            file.close()
+            result = os.system("g++ %s.cpp -o %s.out -O2 -std=c++11 2>%sce.txt" %
+                            (judgername, judgername, judgername))
+            if result:
+                try:
+                    filece = open("%sce.txt" % judgername, "r")
+                    msg = str(filece.read())
+                    filece.close()
+                    cursor.execute(
+                        "UPDATE judgestatus_judgestatus SET result = '-4',message=%s WHERE id = %s", (msg, id))
+                    cursor.execute(
+                        "UPDATE problem_problemdata SET ce = ce+1 WHERE problem = '%s'" % problem)
+                    db.commit()
+                    statue = True
+                except:
+                    db.rollback()
+                    statue = True
+                return
+        elif lang == "Java":
+            file = open("Main.java", "w")
+            file.write(code)
+            file.close()
+
+            isExists = os.path.exists(judgername)
+            if not isExists:
+                os.makedirs(judgername)
+
+            result = os.system("javac Main.java -d %s 2>%sce.txt" %
+                            (judgername, judgername))
+
+            if result:
+                try:
+                    filece = open("%sce.txt" % judgername, "r")
+                    msg = str(filece.read())
+                    filece.close()
+                    cursor.execute(
+                        "UPDATE judgestatus_judgestatus SET result = '-4',message=%s WHERE id = %s", (msg, id))
+                    cursor.execute(
+                        "UPDATE problem_problemdata SET ce = ce+1 WHERE problem = '%s'" % problem)
+                    db.commit()
+                    statue = True
+                except:
+                    db.rollback()
+                    statue = True
+                return
+        else:
             try:
-                filece = open("%sce.txt" % judgername, "r")
-                msg = str(filece.read())
-                filece.close()
                 cursor.execute(
-                    "UPDATE judgestatus_judgestatus SET result = '-4',message=%s WHERE id = %s", (msg, id))
+                    "UPDATE judgestatus_judgestatus SET result = '-4',message='%s' WHERE id = '%s'" % ("Unknow language", id))
                 cursor.execute(
                     "UPDATE problem_problemdata SET ce = ce+1 WHERE problem = '%s'" % problem)
                 db.commit()
@@ -197,56 +270,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 db.rollback()
                 statue = True
             return
-
-    elif lang == "C++":
-        file = open("%s.cpp" % judgername, "w")
-        file.write(code)
-        file.close()
-        result = os.system("g++ %s.cpp -o %s.out -O2 -std=c++11 2>%sce.txt" %
-                           (judgername, judgername, judgername))
-        if result:
-            try:
-                filece = open("%sce.txt" % judgername, "r")
-                msg = str(filece.read())
-                filece.close()
-                cursor.execute(
-                    "UPDATE judgestatus_judgestatus SET result = '-4',message=%s WHERE id = %s", (msg, id))
-                cursor.execute(
-                    "UPDATE problem_problemdata SET ce = ce+1 WHERE problem = '%s'" % problem)
-                db.commit()
-                statue = True
-            except:
-                db.rollback()
-                statue = True
-            return
-    elif lang == "Java":
-        file = open("Main.java", "w")
-        file.write(code)
-        file.close()
-
-        isExists = os.path.exists(judgername)
-        if not isExists:
-            os.makedirs(judgername)
-
-        result = os.system("javac Main.java -d %s 2>%sce.txt" %
-                           (judgername, judgername))
-
-        if result:
-            try:
-                filece = open("%sce.txt" % judgername, "r")
-                msg = str(filece.read())
-                filece.close()
-                cursor.execute(
-                    "UPDATE judgestatus_judgestatus SET result = '-4',message=%s WHERE id = %s", (msg, id))
-                cursor.execute(
-                    "UPDATE problem_problemdata SET ce = ce+1 WHERE problem = '%s'" % problem)
-                db.commit()
-                statue = True
-            except:
-                db.rollback()
-                statue = True
-            return
-    else:
+    except:
         try:
             cursor.execute(
                 "UPDATE judgestatus_judgestatus SET result = '-4',message='%s' WHERE id = '%s'" % ("Unknow language", id))
@@ -309,31 +333,60 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
 
     for filename in newfiles:
         print("judging!!!!!!", id, "/%s/%s.in" % (problem, filename))
+        try:
+            waittime = 0
+            while True:
+                if getmem() >= memorylimit + 16:
+                    break
+                waittime = waittime + 1
+                if waittime > 15:
+                    print("memory error!")
+                    cursor.execute(
+                        "UPDATE judgestatus_judgestatus SET memory =0, time=0, result = '5',testcase='0'  WHERE id = '%s'" % (id))
+                    db.commit()
+                    statue = True
+                    return
+                sleep(1)
+        except Exception as e:
+            print(e)
+            cursor.execute(
+                "UPDATE judgestatus_judgestatus SET memory =0, time=0, result = '5',testcase='0'  WHERE id = '%s'" % (id))
+            db.commit()
+            statue = True
+            return
+
         if lang == "Java":
-            ret = judgeJava(timelimit*1.5, memorylimit, "./ProblemData/%s/%s.in" % (
+            ret = judgeJava(timelimit*2, memorylimit, "./ProblemData/%s/%s.in" % (
                             problem, filename), judgername+"temp.out", judgername+"error.out")
         else:
-            ret = _judger.run(max_cpu_time=timelimit,
-                              max_real_time=_judger.UNLIMITED,
-                              max_memory=memorylimit * 1024 * 1024,
-                              max_process_number=200,
-                              max_output_size=32 * 1024 * 1024,
-                              max_stack=32 * 1024 * 1024,
-                              # five args above can be _judger.UNLIMITED
-                              exe_path=judgername+".out",
-                              input_path="./ProblemData/%s/%s.in" % (
-                                  problem, filename),
-                              output_path=judgername+"temp.out",
-                              error_path=judgername+"error.out",
-                              args=[],
-                              # can be empty list
-                              env=[],
-                              log_path=judgername+"judger.log",
-                              # can be None
-                              seccomp_rule_name="c_cpp",
-                              uid=0,
-                              gid=0
-                              )
+            try:
+                ret = _judger.run(max_cpu_time=timelimit,
+                                max_real_time=timelimit*10,
+                                max_memory=memorylimit * 1024 * 1024,
+                                max_process_number=200,
+                                max_output_size=32 * 1024 * 1024,
+                                max_stack=32 * 1024 * 1024,
+                                # five args above can be _judger.UNLIMITED
+                                exe_path=judgername+".out",
+                                input_path="./ProblemData/%s/%s.in" % (
+                                    problem, filename),
+                                output_path=judgername+"temp.out",
+                                error_path=judgername+"error.out",
+                                args=[],
+                                # can be empty list
+                                env=[],
+                                log_path=judgername+"judger.log",
+                                # can be None
+                                seccomp_rule_name="c_cpp",
+                                uid=0,
+                                gid=0
+                                )
+            except:
+                cursor.execute(
+                    "UPDATE judgestatus_judgestatus SET memory =0, time=0, result = '5',testcase='0'  WHERE id = '%s'" % (id))
+                db.commit()
+                statue = True
+                return
 
         print(ret)
         maxmemory = max(ret["memory"], maxmemory)
@@ -347,23 +400,23 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 # 计算case
                 inputfile = open("./ProblemData/%s/%s.in" %
                                  (problem, filename), "r")
-                casedata = inputfile.read(400)
-                tmpstr = inputfile.read(10)
+                casedata = inputfile.read(300)
+                tmpstr = inputfile.read(5)
                 if tmpstr != "":
                     casedata = casedata + '\n......'
                 inputfile.close()
 
                 outputfile = open(
                     "./ProblemData/%s/%s.out" % (problem, filename), "r")
-                outputdata = outputfile.read(400)
-                tmpstr = outputfile.read(10)
+                outputdata = outputfile.read(300)
+                tmpstr = outputfile.read(5)
                 if tmpstr != "":
                     outputdata = outputdata + '\n......'
                 outputfile.close()
 
                 useroutputfile = open(judgername+"temp.out", "r")
-                useroutputdata = useroutputfile.read(400)
-                tmpstr = useroutputfile.read(10)
+                useroutputdata = useroutputfile.read(300)
+                tmpstr = useroutputfile.read(5)
                 if tmpstr != "":
                     useroutputdata = useroutputdata + '\n......'
                 useroutputfile.close()
@@ -461,6 +514,8 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
 
             file1.close()
             file2.close()
+            del stdout
+            del answer
 
             if result != 0:
                 if myresult == 100:
