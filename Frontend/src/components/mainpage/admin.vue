@@ -4,12 +4,13 @@
       <adminaddproblem></adminaddproblem>
     </el-tab-pane>
 
-    <el-tab-pane label="添加比赛"><adminaddcontest></adminaddcontest></el-tab-pane>
-    <el-tab-pane label="题目修改"><adminchangepro></adminchangepro></el-tab-pane>
-    <el-tab-pane label="比赛设置"><adminchangecontest></adminchangecontest></el-tab-pane>
-    <el-tab-pane label="管理用户" :disabled="!isadmin"><adminmanageuser></adminmanageuser></el-tab-pane>
-    <el-tab-pane label="Rejudge" :disabled="!isadmin"><adminrejudge></adminrejudge></el-tab-pane>
-    <el-tab-pane label="添加与修改训练" :disabled="!isadmin"><admintrainning></admintrainning></el-tab-pane>
+    <el-tab-pane label="添加比赛" :lazy="true"><adminaddcontest></adminaddcontest></el-tab-pane>
+    <el-tab-pane label="题目修改" :lazy="true"><adminchangepro></adminchangepro></el-tab-pane>
+    <el-tab-pane label="比赛设置" :lazy="true"><adminchangecontest></adminchangecontest></el-tab-pane>
+    <el-tab-pane label="管理用户" :disabled="!isadmin" :lazy="true"><adminmanageuser></adminmanageuser></el-tab-pane>
+    <el-tab-pane label="Rejudge" :disabled="!isadmin" :lazy="true"><adminrejudge></adminrejudge></el-tab-pane>
+    <el-tab-pane label="添加与修改训练" :disabled="!isadmin" :lazy="true"><admintrainning></admintrainning></el-tab-pane>
+    <el-tab-pane label="爬虫信息管理" :disabled="!isadmin" :lazy="true"><adminboard></adminboard></el-tab-pane>
   </el-tabs>
 </template>
 
@@ -21,6 +22,7 @@ import adminchangecontest from "@/components/admin/adminchangecontest";
 import adminmanageuser from "@/components/admin/adminmanageuser";
 import adminrejudge from "@/components/admin/adminrejudge";
 import admintrainning from "@/components/admin/admintrainning";
+import adminboard from "@/components/admin/adminboard";
 export default {
   name: "admin",
   components: {
@@ -30,7 +32,8 @@ export default {
     adminchangecontest,
     adminmanageuser,
     adminrejudge,
-    admintrainning
+    admintrainning,
+    adminboard
   },
   data() {
     return {

@@ -56,8 +56,8 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_THROTTLE_RATES': {
         'anon': '300/m',
-        'judge': '300/day',
-        'post': '2000/day',
+        'judge': '300/m',
+        'post': '2000/m',
     }
 
 }

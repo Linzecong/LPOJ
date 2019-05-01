@@ -70,6 +70,14 @@ python manage.py migrate
 python manage.py runserver 0.0.0.0:8000
 ```
 
+### 添加超级用户
+```
+# 首先在前端中注册一个普通账户，然后进入数据库
+mysql -uroot -p
+
+mysql > UPDATE user_user SET type=3 WHERE username = yourusername;
+```
+
 
 ### 部署SFTP服务
 不安装无法判题,一般云服务器会自动安装

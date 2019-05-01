@@ -6,12 +6,12 @@ class Board(models.Model):
     username = models.CharField(max_length=50, primary_key=True)
     classes = models.CharField(max_length=50, default="")
     number = models.CharField(max_length=50, default="")
-    OJCount = models.IntegerField(default=3)
+    OJCount = models.IntegerField(default=4)
     OJ = models.CharField(
-        max_length=50, default="Codeforces|HDU|Vjudge|Others")
-    account = models.CharField(max_length=50, default="###|###|###|###")
-    acnum = models.CharField(max_length=50, default="0|0|0|0")
-    submitnum = models.CharField(max_length=50, default="0|0|0|0")
+        max_length=50, default="Codeforces|HDU|Vjudge|LPOJ|Others")
+    account = models.CharField(max_length=50, default="###|###|###|###|###")
+    acnum = models.CharField(max_length=50, default="0|0|0|0|0")
+    submitnum = models.CharField(max_length=50, default="0|0|0|0|0")
     blogaddress = models.CharField(max_length=500, default="")
 
     objects = models.Manager()
@@ -35,7 +35,7 @@ class DailyBoard(models.Model):
 class TeamBoard(models.Model):
 
     teammember = models.CharField(max_length=100)
-    score = models.IntegerField(default=0)
+    score = models.IntegerField(default=1500)
     collecttime = models.DateField(auto_now=True)
 
     objects = models.Manager()

@@ -20,6 +20,7 @@
 
 
 > 一个基于Vue.js和Django的轻量级在线评测系统
+
 > 目前应用于广东外语外贸大学
 ## Demo地址：[www.lpoj.cn](http://www.lpoj.cn)
 ## 说明文档：[docs.lpoj.cn](http://docs.lpoj.cn)
