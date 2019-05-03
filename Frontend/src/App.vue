@@ -7,7 +7,7 @@
       v-bind:router="true"
       id="nav"
     >
-      <el-menu-item index="/" id="title">GDUFS Online Judge</el-menu-item>
+      <el-menu-item index="/" id="title">LPOJ</el-menu-item>
       <el-menu-item index="/main">
         <i class="el-icon-star-off"></i>Home
       </el-menu-item>
