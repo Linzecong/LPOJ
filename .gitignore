@@ -5,10 +5,9 @@ Judger/test
 Judger/*.cpp
 Judger/*.c
 Judger/*out
-Judger/judger.log
-Judger/error.out
-Judger/temp.out
-Judger/temp.out
+Judger/*.log
+Judger/*.out
+Judger/*.txt
 *.in
 *.out
 *.log
@@ -21,3 +20,5 @@ migrations
 # GDUFSTeamScore.py
 # GDUFSTeamExport.py
 CrawlingServer/contest.json
+Database/data
+

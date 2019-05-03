@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -31,6 +32,7 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
+     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -102,12 +104,13 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'LPOJ',
-        'USER':'root',
-        'PASSWORD':'504603913',
-        'HOST':'localhost',
-        'PORT':'3306',
+        'USER': os.environ.get("DB_USER")  if os.environ.get("DB_USER") else 'root' ,
+        'PASSWORD':os.environ.get("DB_PASSWORD")  if os.environ.get("DB_PASSWORD") else 'lpojdatabase',
+        'HOST': os.environ.get("DB_HOST")  if os.environ.get("DB_HOST") else 'lpojdatabase',
+        'PORT': os.environ.get("DB_PORT")  if os.environ.get("DB_PORT") else 3306,
     }
 }
+
 
 
 # Password validation

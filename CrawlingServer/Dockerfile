@@ -3,5 +3,5 @@ MAINTAINER linzecong
 ADD . .
 WORKDIR /
 RUN pip install feedparser
-RUN apt-get install libmysqlclient-dev -y && pip install mysqlclient
+RUN pip install mysqlclient
 CMD ["python", "main.py"]

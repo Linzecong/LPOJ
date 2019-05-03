@@ -22,6 +22,19 @@ myjsonfile = open("./setting.json", 'r')
 judgerjson = json.loads(myjsonfile.read())
 myjsonfile.close()
 
+if os.environ.get("DB_USER"):
+    judgerjson["db_ip"] = os.environ.get("DB_HOST")
+    judgerjson["db_pass"] = os.environ.get("DB_PASSWORD")
+    judgerjson["db_user"] = os.environ.get("DB_USER")
+    judgerjson["db_port"] = os.environ.get("DB_PORT")
+
+    judgerjson["server_ip"] = os.environ.get("SERVER_IP")
+    judgerjson["sftp_ip"] = os.environ.get("SFTP_IP")
+    judgerjson["sftp_port"] = os.environ.get("SFTP_PORT")
+    judgerjson["sftp_username"] = os.environ.get("SFTP_USER")
+    judgerjson["sftp_password"] = os.environ.get("SFTP_PASSWORD")
+    judgerjson["backend_path"] = os.environ.get("BACKEND_PATH")
+
 datajsonfile = open("./datatime.json", 'r')
 datatimejson = json.loads(datajsonfile.read())
 datajsonfile.close()

@@ -5,6 +5,7 @@ import socket
 import json
 import time
 import feedparser
+import os
 from time import sleep
 from Codeforces import get_CF_data
 from HDU import get_HDU_data
@@ -12,11 +13,22 @@ from Vjudge import get_VJ_data
 from LPOJ import get_LPOJ_data
 
 
+
 myjsonfile = open("./setting.json", 'r')
 judgerjson = json.loads(myjsonfile.read())
 
-db = MySQLdb.connect(judgerjson["db_ip"], judgerjson["db_user"], judgerjson["db_pass"],
-                     judgerjson["db_database"], int(judgerjson["db_port"]), charset='utf8')
+if os.environ.get("DB_USER"):
+    judgerjson["db_ip"] = os.environ.get("DB_HOST")
+    judgerjson["db_pass"] = os.environ.get("DB_PASSWORD")
+    judgerjson["db_user"] = os.environ.get("DB_USER")
+    judgerjson["db_port"] = os.environ.get("DB_PORT")
+
+try:
+    db = MySQLdb.connect(judgerjson["db_ip"], judgerjson["db_user"], judgerjson["db_pass"],
+                         judgerjson["db_database"], int(judgerjson["db_port"]), charset='utf8')
+except Exception as e:
+    print(e)
+    exit(1)
 
 while True:
     cursor = db.cursor()

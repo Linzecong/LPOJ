@@ -1,7 +1,11 @@
 FROM node
 MAINTAINER linzecong
-ADD . .
-WORKDIR /
+ADD . ./Frontend
+WORKDIR /Frontend
+RUN apt-get update
+ADD default.conf /etc/nginx/conf.d/default.conf
 RUN npm install
-EXPOSE 8080-8080
-CMD ["npm", "run","dev"]
+RUN npm run-script build
+RUN apt-get install nginx -y
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

@@ -1,0 +1,124 @@
+version: '2'
+services:
+  db:
+    build: ./Database
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+            MYSQL_ROOT_PASSWORD: "lpojdatabase"
+    ports:
+     - "3306:3306"
+    restart: always
+    volumes:
+        - "./Database/data:/var/lib/mysql"
+        - "./Database/conf:/etc/mysql/mysql.conf.d"
+
+  backend:
+    build: ./Backend
+    depends_on: 
+       - db
+    command: >
+      /bin/bash -c '
+      sleep 40 ;
+      python manage.py makemigrations &&
+      python manage.py makemigrations judgestatus problem user contest board blog wiki &&
+      python manage.py migrate &&
+      echo "from django.contrib.auth.models import User; User.objects.filter(email=\"admin@example.com\").delete(); User.objects.create_superuser(\"admin\", \"admin@example.com\", \"admin\")" | python manage.py shell &&
+      python manage.py runserver 0.0.0.0:8000
+      '
+    
+    links: 
+      - db:lpojdatabase 
+    environment:
+            DB_PASSWORD: "lpojdatabase"
+            DB_HOST: "lpojdatabase"
+            DB_USER: 'root'
+            DB_PORT: 3306
+    ports:
+     - "8000:8000"
+    restart: always
+    volumes:
+        - "./Backend:/Backend"
+
+  frontend:
+    build: ./Frontend
+    depends_on: 
+      - backend
+    command: >
+      /bin/bash -c '
+      sleep 60 ;
+      nginx -g "daemon off;"
+      '
+    links: 
+      - backend:lpojbackend
+    ports:
+     - "80:80"
+    restart: always
+
+  judgeserver:
+    build: ./JudgerServer
+    depends_on: 
+      - db
+    command: >
+      /bin/bash -c '
+      sleep 60 ;
+      python main.py
+      '
+    links: 
+      - db:lpojdatabase
+    environment:
+            DB_PASSWORD: "lpojdatabase"
+            DB_HOST: "lpojdatabase"
+            DB_USER: 'root'
+            DB_PORT: 3306
+    ports:
+     - "9906:9906"
+    restart: always
+
+  crawlingserver:
+    build: ./CrawlingServer
+    depends_on: 
+      - backend 
+    command: >
+      /bin/bash -c '
+      sleep 60 ;
+      python main.py
+      '
+    links: 
+      - db:lpojdatabase
+    environment:
+            DB_PASSWORD: "lpojdatabase"
+            DB_HOST: "lpojdatabase"
+            DB_USER: 'root'
+            DB_PORT: 3306
+    restart: always
+    
+  judger:
+    build: ./Judger
+    depends_on: 
+      - judgeserver 
+    command: >
+      /bin/bash -c '
+      sleep 65 ;
+      python main.py
+      '
+    links: 
+      - judgeserver:lpojjudgerserver
+      - db:lpojdatabase
+    environment:
+      DB_PASSWORD: "lpojdatabase"
+      DB_HOST: "lpojdatabase"
+      DB_USER: 'root'
+      DB_PORT: 3306
+      SERVER_IP: "lpojjudgerserver"
+      SFTP_IP: "172.17.0.1"
+      SFTP_PORT: 22
+
+      
+      SFTP_USER: 'lzc'
+      SFTP_PASSWORD: '504603913'
+      BACKEND_PATH: "/home/lzc/LPOJ/Backend/"
+
+    restart: always
+    volumes:
+        - "./Judger:/Judger"
+    
