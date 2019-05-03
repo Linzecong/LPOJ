@@ -10,6 +10,8 @@
 [![element-ui](https://img.shields.io/badge/element-2.4.11-green.svg?style=flat-square)](https://github.com/ElemeFE/element)
 ![mavon-editor](https://img.shields.io/badge/mavoneditor-2.7.3-green.svg?style=flat-square)
 
+![travis-ci](https://travis-ci.org/Linzecong/LPOJ.svg?branch=master)
+
 > 一个基于Vue.js和Django的轻量级在线评测系统
 
 > 目前应用于广东外语外贸大学
