@@ -1,16 +1,8 @@
-# LPOJ     （先点个赞呗）
-[![Python](https://img.shields.io/badge/python-3.7.2-green.svg?style=flat-square)](https://www.python.org/downloads/release/python-372/)
-[![Django](https://img.shields.io/badge/django-2.1.5-green.svg?style=flat-square)](https://www.djangoproject.com/)
-[![Django Rest Framework](https://img.shields.io/badge/django_rest_framework-3.9.1-green.svg?style=flat-square)](http://www.django-rest-framework.org/)
-[![vue](https://img.shields.io/badge/vue-2.5.2-green.svg?style=flat-square)](https://github.com/vuejs/vue)
-
-
-[![vuex](https://img.shields.io/badge/vuex-3.1.0-green.svg?style=flat-square)](https://vuex.vuejs.org/)
-[![echarts](https://img.shields.io/badge/echarts-4.2.1-green.svg?style=flat-square)](https://github.com/ecomfe/echarts)
-[![element-ui](https://img.shields.io/badge/element-2.4.11-green.svg?style=flat-square)](https://github.com/ElemeFE/element)
-![mavon-editor](https://img.shields.io/badge/mavoneditor-2.7.3-green.svg?style=flat-square)
-
-![travis-ci](https://travis-ci.org/Linzecong/LPOJ.svg?branch=master)
+# LPOJ
+[![Python](https://img.shields.io/badge/python-3.7.2-success.svg?style=flat-square)](https://www.python.org/downloads/release/python-372/)
+[![Django Rest Framework](https://img.shields.io/badge/django_rest_framework-3.9.1-success.svg?style=flat-square)](http://www.django-rest-framework.org/)
+[![vue](https://img.shields.io/badge/vue-2.5.2-success.svg?style=flat-square)](https://github.com/vuejs/vue)
+[![travis-ci](https://travis-ci.org/Linzecong/LPOJ.svg?branch=master)](https://travis-ci.org/Linzecong/LPOJ)
 
 > 一个基于Vue.js和Django的轻量级在线评测系统
 
@@ -20,7 +12,7 @@
 ## 简述
 + 轻量级，易于部署和自定义定制
 + 前后端分离，提高服务器性能
-+ 支持多进程判题，判题更高效
++ 支持多机器多进程判题，判题更高效
 + 支持 C/C++和Java语言
 + 丰富的API，开放的源代码
 + 实时爬取用户的博客和其他OJ的做题数
@@ -35,7 +27,42 @@
 + [判题程序 Python](https://github.com/Linzecong/LPOJ/tree/master/Judger)
 + [爬虫程序 Python](https://github.com/Linzecong/LPOJ/tree/master/CrawlingServer)
 
-## 部署（判题程序仅能部署在Linux系统）
+## 部署（两种方式）
+
+### 使用Docker部署
+#### 环境准备
+1. 安装必要的依赖
+```
+sudo apt-get update && sudo apt-get install -y vim python-pip curl git
+pip install docker-compose
+sudo apt-get install openssh-server
+sftp yourusername@localhost # 验证是否安装成功！
+```
+2. 安装Docker
+```
+sudo curl -sSL https://get.daocloud.io/docker | sh
+```
+3. 开始安装
+```
+git clone https://github.com/Linzecong/LPOJ.git && cd LPOJ
+# 如有需要，修改docker-compose.yml中的数据库密码（DB_PASSWORD，MYSQL_ROOT_PASSWORD）
+# 必须修改docker-compose.yml中的BACKEND_PATH,SFTP_USER,SFTP_PASSWORD为你的LPOJ/Backend文件夹路径和服务器的用户名密码
+docker-compose up -d
+```
+根据网速和配置情况，大约10到20分钟就可以自动搭建完成，全程无需人工干预。
+
+如安装较慢，可以使用docker-compose-no-build.yml来进行构建（复制内容到docker-compose.yml中）
+
+等命令执行完成，然后运行 **docker ps -a** 当看到所有的容器的状态均为 Up 就代表 OJ 已经启动成功。
+
+> 安装成功后，先通过127.0.0.1访问OJ，注册一个超级用户
+> 
+> 然后进入 127.0.0.1:8000 以用户名admin 密码admin 登录后台（请及时修改后台密码）
+> 
+> 修改User表中，你注册的超级用户的type为3，使得你注册的用户变为超级管理员
+
+### 一般部署
+
 #### 前端部署
 ```
 cd Frontend
@@ -60,7 +87,7 @@ sudo nano /etc/nginx/nginx.conf
 ```
 server{
     listen 80;
-    server_name www.lpoj.cn;  # 此处填写你的域名或IP
+    server_name www.lpoj.cn;  # 此处填写你的域名或IP 或直接填写 *.1
     root /var/www/html;   # 此处填写你的网页根目录
     location /api {  # 将API重定向到后台服务器（如果你修改了前端中的代理配置，这里需要对应的修改）
         rewrite ^.*api/?(.*)$ /$1 break;
@@ -102,7 +129,9 @@ sudo apt-get install mysql-server
 
 为了能公网访问，可以执行以下数据库语句
 CREATE DATABASE LPOJ DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'%'  IDENTIFIED BY 'you_password'  WITH GRANT OPTION;
+USE mysql
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%'  IDENTIFIED BY 'your_password'  WITH GRANT OPTION;
+ALTER user 'root'@'%' IDENTIFIED WITH mysql_native_password by 'your_password';
 flush privileges;
 
 然后
@@ -124,14 +153,21 @@ python manage.py makemigrations
 
 python manage.py migrate
 
+echo "from django.contrib.auth.models import User; User.objects.filter(email=\"admin@example.com\").delete(); User.objects.create_superuser(\"admin\", \"admin@example.com\", \"admin\")" | python manage.py shell
+
 python manage.py runserver 0.0.0.0:8000
 ```
 4. 安装sftp服务（不安装无法判题,一般云服务器会自动安装）
 ```
 sudo apt-get install openssh-server
-sftp user@ip //验证是否安装成功！
+sftp yourusername@localhost # 验证是否安装成功！
 ```
-然后添加sftp账户和密码等，具体操作自行查阅sftp相关信息.
+5. 添加管理员
+> 安装成功后，先通过127.0.0.1访问OJ，注册一个超级用户
+> 
+> 然后进入 127.0.0.1:8000 以用户名admin 密码admin 登录后台（请及时修改后台密码）
+> 
+> 修改User表中，你注册的超级用户的type为3，使得你注册的用户变为超级管理员
 
 
 #### 部署判题服务器
@@ -146,14 +182,14 @@ sudo python main.py
 ```
 
 #### 部署判题机
-首先修改配置文件，setting,json里的东西都要修改为你的ip，其中sftp应配置为你的后端服务器
+首先修改配置文件，setting.json里的东西都要修改为你的ip，其中sftp应配置为你的后端服务器的用户名和密码和ip
 ``` 
 cd Judger
 nano setting.json
 
 //然后运行判题机，支持多个运行
 sudo python main.py
-//必须添加sudo，然后不同判题机，必须要用不同的名字命名。
+//必须添加sudo
 ```
 
 ## 如无意外，部署成功！

@@ -13,17 +13,16 @@
     </el-col>
     <el-col :span="18">
       <soulrow></soulrow>
-
-      <el-row>
+      <!-- <el-row>
         <blogmini></blogmini>
-      </el-row>
+      </el-row> -->
       <el-row>
         <el-tabs type="border-card">
-          <el-tab-pane label="队伍">
-            <teamchart></teamchart>
-          </el-tab-pane>
-          <el-tab-pane label="个人" :lazy="true">
+          <el-tab-pane label="个人" >
             <rankchart></rankchart>
+          </el-tab-pane>
+          <el-tab-pane label="队伍" :lazy="true">
+            <teamchart></teamchart>
           </el-tab-pane>
           <el-tab-pane label="规则" :lazy="true">
             <ratingrule></ratingrule>
@@ -46,7 +45,7 @@ import ojmessage from "@/components/utils/ojmessage";
 import welcomemessage from "@/components/utils/welcomemessage";
 import topuser from "@/components/utils/topuser";
 import soulrow from "@/components/utils/soulrow";
-import blogmini from "@/components/utils/blogmini";
+// import blogmini from "@/components/utils/blogmini";
 import ratingrule from "@/components/utils/ratingrule";
 import contestmini from "@/components/utils/contestmini";
 export default {
@@ -57,7 +56,7 @@ export default {
     welcomemessage,
     topuser,
     soulrow,
-    blogmini,
+    // blogmini,
     ratingrule,
     contestmini
   },

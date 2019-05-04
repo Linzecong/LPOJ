@@ -5,7 +5,7 @@
       <br>10天内新增AC情况统计
     </b>
     <h2></h2>
-    <el-button size="mini" @click="seeall" type="primary">查看所有</el-button>
+    <el-button size="mini" @click="seeall" type="primary">查看所有</el-button><el-button style="margin-left:15px;" size="mini" @click="seeallblog" type="primary">查看博客</el-button>
     <h2></h2>
     <div ref="myEchart" style="height:500px;width:100%"></div>
   </center>
@@ -23,6 +23,11 @@ export default {
     };
   },
   methods: {
+    seeallblog(){
+      this.$router.push({
+        name: "blog"
+      });
+    },
     seeall() {
       this.$router.push({
         name: "billboard"

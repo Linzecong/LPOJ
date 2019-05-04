@@ -114,9 +114,9 @@ services:
       SFTP_PORT: 22
 
       
-      SFTP_USER: 'lzc'
-      SFTP_PASSWORD: '504603913'
-      BACKEND_PATH: "/home/lzc/LPOJ/Backend/"
+      SFTP_USER: 'ubuntu'
+      SFTP_PASSWORD: 'ubuntuubuntu'
+      BACKEND_PATH: "/home/ubuntu/LPOJ/Backend/"
 
     restart: always
     volumes:

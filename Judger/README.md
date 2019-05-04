@@ -9,6 +9,7 @@
     3. cd ..
     4. cd JudgerCore
     5. sudo python setup.py install
+    6. pip install paramiko
 
 # 运行
     1. sudo python main.py

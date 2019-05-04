@@ -90,9 +90,9 @@ while True:
             title = e.title
             url = e.links[0].href
             summary = e.summary
-            time = e.published
+            time2 = e.published
             cursor.execute("INSERT INTO blog_blog(username,title,url,summary,time) SELECT %s, %s,%s,%s,%s FROM DUAL WHERE NOT EXISTS(SELECT * FROM blog_blog WHERE url= %s)",
-                           (username, title, url, summary, time, url))
+                           (username, title, url, summary, time2, url))
         db.commit()
         print(user, " Done!")
 

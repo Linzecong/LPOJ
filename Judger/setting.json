@@ -8,7 +8,7 @@
     "server_port":9906,
     "sftp_ip":"172.17.0.1",
     "sftp_port":22,
-    "sftp_username":"lzc",
-    "sftp_password":"504603913",
-    "backend_path":"/home/lzc/LPOJ/Backend/"
+    "sftp_username":"ubuntu",
+    "sftp_password":"ubuntuubuntu",
+    "backend_path":"/home/ubuntu/LPOJ/Backend/"
 }
