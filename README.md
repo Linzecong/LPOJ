@@ -1,7 +1,7 @@
 # LPOJ
-[![Python](https://img.shields.io/badge/python-3.7.2-success.svg?style=flat-square)](https://www.python.org/downloads/release/python-372/)
-[![Django Rest Framework](https://img.shields.io/badge/django_rest_framework-3.9.1-success.svg?style=flat-square)](http://www.django-rest-framework.org/)
-[![vue](https://img.shields.io/badge/vue-2.5.2-success.svg?style=flat-square)](https://github.com/vuejs/vue)
+[![Python](https://img.shields.io/badge/python-3.7.2-success.svg?style=flat-round)](https://www.python.org/downloads/release/python-372/)
+[![Django Rest Framework](https://img.shields.io/badge/django_rest_framework-3.9.1-success.svg?style=flat-round)](http://www.django-rest-framework.org/)
+[![vue](https://img.shields.io/badge/vue-2.5.2-success.svg?style=flat-round)](https://github.com/vuejs/vue)
 [![travis-ci](https://travis-ci.org/Linzecong/LPOJ.svg?branch=master)](https://travis-ci.org/Linzecong/LPOJ)
 
 > 一个基于Vue.js和Django的轻量级在线评测系统
@@ -33,16 +33,14 @@
 #### 环境准备
 1. 安装必要的依赖
 ```
-sudo apt-get update && sudo apt-get install -y vim python-pip curl git
-pip install docker-compose
-sudo apt-get install openssh-server
+sudo apt-get update
+sudo apt-get install -y git
+sudo apt install docker.io -y
+sudo apt install docker-compose -y
+sudo apt-get install openssh-server -y
 sftp yourusername@localhost # 验证是否安装成功！
 ```
-2. 安装Docker
-```
-sudo curl -sSL https://get.daocloud.io/docker | sh
-```
-3. 开始安装
+2. 开始安装
 ```
 git clone https://github.com/Linzecong/LPOJ.git && cd LPOJ
 # 如有需要，修改docker-compose.yml中的数据库密码（DB_PASSWORD，MYSQL_ROOT_PASSWORD）
