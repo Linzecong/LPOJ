@@ -54,8 +54,8 @@ services:
      - "80:80"
     restart: always
 
-  judgeserver:
-    image: ccr.ccs.tencentyun.com/lpoj/judgeserver
+  judgerserver:
+    image: ccr.ccs.tencentyun.com/lpoj/judgerserver
     depends_on: 
       - db
     command: >
@@ -95,14 +95,14 @@ services:
   judger:
     image: ccr.ccs.tencentyun.com/lpoj/judger
     depends_on: 
-      - judgeserver 
+      - judgerserver 
     command: >
       /bin/bash -c '
       sleep 65 ;
       python main.py
       '
     links: 
-      - judgeserver:lpojjudgerserver
+      - judgerserver:lpojjudgerserver
       - db:lpojdatabase
     environment:
       DB_PASSWORD: "lpojdatabase"

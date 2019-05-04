@@ -635,7 +635,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
     db.commit()
     statue = True
 
-
+cur = 1
 while True:
     sleep(1)
     try:
@@ -649,11 +649,14 @@ while True:
                     clientsocket.send("notok".encode("utf-8"))
             elif data == "timeout":
                 print("timeout!")
+                cursor.execute(
+                    "UPDATE judgestatus_judgestatus SET memory =0, time=0, result = '5',testcase='0'  WHERE id = '%s'" % (cur))
+                db.commit()
                 break
             elif data.find("judge") != -1:
                 statue = False
                 tp = data.split("|")
-
+                cur = tp[1]
                 try:
                     cursor.execute(
                         "SELECT * from judgestatus_judgestatus where id = '%s'" % tp[1])

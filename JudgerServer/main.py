@@ -88,7 +88,7 @@ def deal_client(newSocket: socket, addr, first):
                     else:
                         falsetime = falsetime + 1
                         statue = False
-                        if falsetime >= 60:
+                        if falsetime >= 120:
                             newSocket.send("timeout".encode("utf-8"))
                             print(addr, "timeout!")
                             newSocket.close()
