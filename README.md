@@ -5,7 +5,7 @@
 [![travis-ci](https://travis-ci.org/Linzecong/LPOJ.svg?branch=master)](https://travis-ci.org/Linzecong/LPOJ)
 
 > 一个基于Vue.js和Django的轻量级在线评测系统
-
+>
 > 目前应用于广东外语外贸大学
 ## Demo地址：[www.lpoj.cn](http://www.lpoj.cn)
 ## 说明文档：[docs.lpoj.cn](http://docs.lpoj.cn)
@@ -44,20 +44,20 @@ sftp yourusername@localhost # 验证是否安装成功！
 ```
 git clone https://github.com/Linzecong/LPOJ.git && cd LPOJ
 # 如有需要，修改docker-compose.yml中的数据库密码（DB_PASSWORD，MYSQL_ROOT_PASSWORD）
-# 必须修改docker-compose.yml中的BACKEND_PATH,SFTP_USER,SFTP_PASSWORD为你的LPOJ/Backend文件夹路径和服务器的用户名密码
+# 必须修改docker-compose.yml中的BACKEND_PATH,SFTP_USER,SFTP_PASSWORD为你的LPOJ/Backend文件夹的绝对路径和服务器的用户名密码
 docker-compose up -d
 ```
 根据网速和配置情况，大约10到20分钟就可以自动搭建完成，全程无需人工干预。
 
-如安装较慢，可以使用docker-compose-no-build.yml来进行构建（复制内容到docker-compose.yml中）
-
 等命令执行完成，然后运行 **docker ps -a** 当看到所有的容器的状态均为 Up 就代表 OJ 已经启动成功。
 
-> 安装成功后，先通过127.0.0.1访问OJ，注册一个超级用户
+> 安装成功后，先通过IP:80访问OJ，注册一个用户
 > 
-> 然后进入 127.0.0.1:8000 以用户名admin 密码admin 登录后台（请及时修改后台密码）
+> 然后进入 IP:8000/admin 以用户名admin 密码admin 登录后台（请及时修改后台密码）
 > 
 > 修改User表中，你注册的超级用户的type为3，使得你注册的用户变为超级管理员
+
+**容易运行时产生的数据会保存在对应的文件夹中，如数据库文件，题目数据等**
 
 ### 一般部署
 
@@ -85,7 +85,7 @@ sudo nano /etc/nginx/nginx.conf
 ```
 server{
     listen 80;
-    server_name www.lpoj.cn;  # 此处填写你的域名或IP 或直接填写 *.1
+    server_name www.lpoj.cn;  # 此处填写你的域名或IP地址
     root /var/www/html;   # 此处填写你的网页根目录
     location /api {  # 将API重定向到后台服务器（如果你修改了前端中的代理配置，这里需要对应的修改）
         rewrite ^.*api/?(.*)$ /$1 break;
@@ -97,13 +97,11 @@ server{
     }
 }
 ```
+其他配置请自行参考Nginx配置
 
 至此，前端部署完毕。**如要进行OJ二次开发，请参阅[文档](http://docs.lpoj.cn)**
 
 #### 后端与数据库部署
-首先安装Mysql数据库
-然后以UTF-8编码新建数据库 lpoj 
-然后按顺序安装Django，如已安装，可跳过
 
 1. 首先安装Django
 ```
@@ -116,25 +114,23 @@ pip install django-filter
 sudo apt-get install python-django
 
 pip install django-cors-headers
+
+pip install mysqlclient
 ```
 2. 安装数据库，已安装的可跳过
 ```
-sudo apt-get install libmysqlclient-dev
-
-pip install mysqlclient
-
 sudo apt-get install mysql-server 
 
-为了能公网访问，可以执行以下数据库语句
-CREATE DATABASE LPOJ DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE mysql
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'%'  IDENTIFIED BY 'your_password'  WITH GRANT OPTION;
-ALTER user 'root'@'%' IDENTIFIED WITH mysql_native_password by 'your_password';
-flush privileges;
+mysql -uroot -p
+mysql > CREATE DATABASE LPOJ DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+mysql > USE mysql
+mysql > GRANT ALL PRIVILEGES ON *.* TO 'root'@'%'  IDENTIFIED BY 'your_password'  WITH GRANT OPTION;
+mysql > ALTER user 'root'@'%' IDENTIFIED WITH mysql_native_password by 'your_password';
+mysql > flush privileges;
 
-然后
 sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf 
-修改bind-address 为 0.0.0.0
+
+#修改bind-address 为 0.0.0.0
 ```
 3. 部署后端
 ```
@@ -143,7 +139,7 @@ cd Backend
 cd Backend
 
 sudo nano setting.py
-//修改数据库配置为你自己的数据库IP和用户名密码
+# 修改数据库配置为你自己的数据库IP和用户名密码
 
 cd ..
 
@@ -161,9 +157,9 @@ sudo apt-get install openssh-server
 sftp yourusername@localhost # 验证是否安装成功！
 ```
 5. 添加管理员
-> 安装成功后，先通过127.0.0.1访问OJ，注册一个超级用户
+> 安装成功后，先通过IP:80访问OJ，注册一个用户
 > 
-> 然后进入 127.0.0.1:8000 以用户名admin 密码admin 登录后台（请及时修改后台密码）
+> 然后进入 IP:8000/admin 以用户名admin 密码admin 登录后台（请及时修改后台密码）
 > 
 > 修改User表中，你注册的超级用户的type为3，使得你注册的用户变为超级管理员
 
@@ -176,6 +172,7 @@ nano setting.json
 ```
 修改对应的数据库IP和端口保存退出
 ```
+pip install mysqlclient
 sudo python main.py
 ```
 
@@ -184,10 +181,28 @@ sudo python main.py
 ``` 
 cd Judger
 nano setting.json
+```
 
-//然后运行判题机，支持多个运行
+##### 安装步骤
+    1. sudo apt-get install libseccomp-dev
+    2. mkdir build && cd build && cmake .. && make && sudo make install
+    3. cd ..
+    4. cd JudgerCore
+    5. sudo python setup.py install
+    6. pip install paramiko
+    7. pip install mysqlclient
+
+##### 运行
+    1. sudo python main.py
+
+#### 爬虫机器人（可选）
+主要用于爬取学生的博客和大OJ的做题数
+``` 
+cd CrawlingServer
+nano setting.json
+# 修改对应的数据库IP和端口保存退出
+pip install mysqlclient
 sudo python main.py
-//必须添加sudo
 ```
 
 ## 如无意外，部署成功！

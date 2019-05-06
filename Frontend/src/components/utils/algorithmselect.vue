@@ -220,7 +220,7 @@
     <el-option key="misc_discrete" label="离散化" value="misc_discrete"></el-option>
     <el-option key="misc_fractionalprogramming" label="分数规划" value="misc_fractionalprogramming"></el-option>
     <el-option key="misc_offline" label="离线算法简介" value="misc_offline"></el-option>
-    <el-option key="misc_cdqdivide" label=">CDQ 分治" value="misc_cdqdivide"></el-option>
+    <el-option key="misc_cdqdivide" label="CDQ 分治" value="misc_cdqdivide"></el-option>
     <el-option key="misc_moalgo" label="莫队算法" value="misc_moalgo"></el-option>
     <el-option key="misc_random" label="随机函数" value="misc_random"></el-option>
     <el-option key="misc_hillclimbing" label="爬山算法" value="misc_hillclimbing"></el-option>

@@ -1,10 +1,10 @@
 version: '2'
 services:
   db:
-    build: ./Database
+    image: ccr.ccs.tencentyun.com/lpoj/database
     command: --default-authentication-plugin=mysql_native_password
     environment:
-            MYSQL_ROOT_PASSWORD: "lpojdatabase"
+            MYSQL_ROOT_PASSWORD: "lpojdatabase" # 选择性修改
     ports:
      - "3306:3306"
     restart: always
@@ -13,7 +13,7 @@ services:
         - "./Database/conf:/etc/mysql/mysql.conf.d"
 
   backend:
-    build: ./Backend
+    image: ccr.ccs.tencentyun.com/lpoj/backend
     depends_on: 
        - db
     command: >
@@ -29,10 +29,10 @@ services:
     links: 
       - db:lpojdatabase 
     environment:
-            DB_PASSWORD: "lpojdatabase"
-            DB_HOST: "lpojdatabase"
-            DB_USER: 'root'
-            DB_PORT: 3306
+            DB_PASSWORD: "lpojdatabase" # 选择性修改
+            DB_HOST: "lpojdatabase" # 选择性修改
+            DB_USER: 'root' # 选择性修改
+            DB_PORT: 3306 # 选择性修改
     ports:
      - "8000:8000"
     restart: always
@@ -40,7 +40,7 @@ services:
         - "./Backend:/Backend"
 
   frontend:
-    build: ./Frontend
+    image: ccr.ccs.tencentyun.com/lpoj/frontend
     depends_on: 
       - backend
     command: >
@@ -54,8 +54,8 @@ services:
      - "80:80"
     restart: always
 
-  judgeserver:
-    build: ./JudgerServer
+  judgerserver:
+    image: ccr.ccs.tencentyun.com/lpoj/judgerserver
     depends_on: 
       - db
     command: >
@@ -66,16 +66,16 @@ services:
     links: 
       - db:lpojdatabase
     environment:
-            DB_PASSWORD: "lpojdatabase"
-            DB_HOST: "lpojdatabase"
-            DB_USER: 'root'
-            DB_PORT: 3306
+            DB_PASSWORD: "lpojdatabase" # 选择性修改
+            DB_HOST: "lpojdatabase" # 选择性修改
+            DB_USER: 'root' # 选择性修改
+            DB_PORT: 3306 # 选择性修改
     ports:
      - "9906:9906"
     restart: always
 
   crawlingserver:
-    build: ./CrawlingServer
+    image: ccr.ccs.tencentyun.com/lpoj/crawlingserver
     depends_on: 
       - backend 
     command: >
@@ -86,37 +86,37 @@ services:
     links: 
       - db:lpojdatabase
     environment:
-            DB_PASSWORD: "lpojdatabase"
-            DB_HOST: "lpojdatabase"
-            DB_USER: 'root'
-            DB_PORT: 3306
+            DB_PASSWORD: "lpojdatabase" # 选择性修改
+            DB_HOST: "lpojdatabase" # 选择性修改
+            DB_USER: 'root' # 选择性修改
+            DB_PORT: 3306 # 选择性修改
     restart: always
     
   judger:
-    build: ./Judger
+    image: ccr.ccs.tencentyun.com/lpoj/judger
     depends_on: 
-      - judgeserver 
+      - judgerserver 
     command: >
       /bin/bash -c '
       sleep 65 ;
       python main.py
       '
     links: 
-      - judgeserver:lpojjudgerserver
+      - judgerserver:lpojjudgerserver
       - db:lpojdatabase
     environment:
-      DB_PASSWORD: "lpojdatabase"
-      DB_HOST: "lpojdatabase"
-      DB_USER: 'root'
+      DB_PASSWORD: "lpojdatabase" # 选择性修改
+      DB_HOST: "lpojdatabase" # 选择性修改
+      DB_USER: 'root' # 选择性修改
       DB_PORT: 3306
       SERVER_IP: "lpojjudgerserver"
       SFTP_IP: "172.17.0.1"
       SFTP_PORT: 22
 
       
-      SFTP_USER: 'ubuntu'
-      SFTP_PASSWORD: 'ubuntuubuntu'
-      BACKEND_PATH: "/home/ubuntu/LPOJ/Backend/"
+      SFTP_USER: 'ubuntu' # 必须修改
+      SFTP_PASSWORD: 'ubuntuubuntu' # 必须修改
+      BACKEND_PATH: "/home/ubuntu/LPOJ/Backend/" # 必须修改
 
     restart: always
     volumes:

@@ -1,3 +1,9 @@
-# 爬虫部分
+# 爬虫机器人
 
-目前由广东外语外贸大学自用，后面再写详细文档
+主要用于爬取学生的博客和大OJ的做题数
+``` 
+cd CrawlingServer
+nano setting.json
+# 修改对应的数据库IP和端口保存退出
+sudo python main.py
+```

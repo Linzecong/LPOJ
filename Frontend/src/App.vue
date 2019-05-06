@@ -57,7 +57,7 @@
     </transition>
     <div class="footer">
       <p>
-        <a href="http://www.miitbeian.gov.cn" target="_blank" style="text-decoration: none;color:#409EFF;">粤ICP备19042174号-1</a>
+        <!-- <a href="http://www.miitbeian.gov.cn" target="_blank" style="text-decoration: none;color:#409EFF;">粤ICP备19042174号-1</a> -->
       </p>
       <p>
         Powered by

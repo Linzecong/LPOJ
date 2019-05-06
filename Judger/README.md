@@ -3,22 +3,43 @@
 
 # 原项目链接 https://github.com/QingdaoU/Judger
 
-# 安装步骤
+
+## Docker部署
+非专业用户不推荐使用Docker单独部署
+
+首先修改配置文件，setting.json里的东西都要修改为你的ip，其中sftp应配置为你的后端服务器的用户名和密码和ip
+``` 
+cd Judger
+nano setting.json
+```
+接着运行容器
+```
+docker build -t lpojjudger .
+docker run -d lpojjudger
+```
+
+## 一般部署
+
+首先修改配置文件，setting.json里的东西都要修改为你的ip，其中sftp应配置为你的后端服务器的用户名和密码和ip
+``` 
+cd Judger
+nano setting.json
+```
+
+##### 安装步骤
     1. sudo apt-get install libseccomp-dev
     2. mkdir build && cd build && cmake .. && make && sudo make install
     3. cd ..
     4. cd JudgerCore
     5. sudo python setup.py install
     6. pip install paramiko
+    7. pip install mysqlclient
 
-# 运行
+###### 运行
     1. sudo python main.py
 
 # 详细测试
     参考 https://github.com/QingdaoU/Judger 中的 unittest
-
-# 用法
-    详见 test/demp.py
 
 # 参数解释
 

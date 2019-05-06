@@ -1,4 +1,16 @@
 # 前端部署
+
+## Docker部署
+非专业用户不推荐使用Docker单独部署
+修改default.conf中proxy_pass的地址为你的后端地址，如有需要，可以修改其他配置
+
+```
+docker build -t lpojfrontend .
+docker run -d -p 80:80 lpojfrontend
+```
+
+## 一般部署
+
 ```
 cd Frontend
 npm install
@@ -22,7 +34,7 @@ sudo nano /etc/nginx/nginx.conf
 ```
 server{
     listen 80;
-    server_name www.lpoj.cn;  # 此处填写你的域名或IP 或直接填写 *.1
+    server_name www.lpoj.cn;  # 此处填写你的域名或IP地址
     root /var/www/html;   # 此处填写你的网页根目录
     location /api {  # 将API重定向到后台服务器（如果你修改了前端中的代理配置，这里需要对应的修改）
         rewrite ^.*api/?(.*)$ /$1 break;
@@ -34,5 +46,6 @@ server{
     }
 }
 ```
+其他配置请自行参考Nginx配置
 
-至此，前端部署完毕。
+至此，前端部署完毕。**如要进行OJ二次开发，请参阅[文档](http://docs.lpoj.cn)**
