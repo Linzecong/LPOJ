@@ -19,8 +19,6 @@ nano setting.json
 需要数据库模块支持！如已安装可跳过
 
 ```
-sudo apt-get install libmysqlclient-dev
-
 pip install mysqlclient
 ```
  安装依赖库
@@ -41,10 +39,22 @@ sudo apt install openjdk-8-jdk
 ```
 
 
- 最后运行
+最后运行
 ```
 sudo python main.py
 ```
 
 ## Docker 部署
-以后再添加！
+
+非专业用户不推荐使用Docker单独部署
+
+首先修改配置文件，setting.json里的东西都要修改为你的ip，其中sftp应配置为你的后端服务器的用户名和密码和ip
+``` 
+cd Judger
+nano setting.json
+```
+接着运行容器
+```
+docker build -t lpojjudger .
+docker run -d lpojjudger
+```

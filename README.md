@@ -201,6 +201,7 @@ nano setting.json
 cd CrawlingServer
 nano setting.json
 # 修改对应的数据库IP和端口保存退出
+pip install feedparser
 pip install mysqlclient
 sudo python main.py
 ```

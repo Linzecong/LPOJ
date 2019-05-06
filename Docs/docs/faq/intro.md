@@ -7,20 +7,21 @@
 **记得点个赞喔！你的点赞是我最大的动力！**
 
 ## LPOJ 简介
-[![Python](https://img.shields.io/badge/python-3.7.2-green.svg?style=flat-square)](https://www.python.org/downloads/release/python-372/)
-[![Django](https://img.shields.io/badge/django-2.1.5-green.svg?style=flat-square)](https://www.djangoproject.com/)
-[![Django Rest Framework](https://img.shields.io/badge/django_rest_framework-3.9.1-green.svg?style=flat-square)](http://www.django-rest-framework.org/)
-[![vue](https://img.shields.io/badge/vue-2.5.2-green.svg?style=flat-square)](https://github.com/vuejs/vue)
+[![Python](https://img.shields.io/badge/python-3.7.2-success.svg?style=flat-round)](https://www.python.org/downloads/release/python-372/)
+[![Django](https://img.shields.io/badge/django-2.1.5-success.svg?style=flat-round)](https://www.djangoproject.com/)
+[![Django Rest Framework](https://img.shields.io/badge/django_rest_framework-3.9.1-success.svg?style=flat-round)](http://www.django-rest-framework.org/)
+[![vue](https://img.shields.io/badge/vue-2.5.2-success.svg?style=flat-round)](https://github.com/vuejs/vue)
 
 
-[![vuex](https://img.shields.io/badge/vuex-3.1.0-green.svg?style=flat-square)](https://vuex.vuejs.org/)
-[![echarts](https://img.shields.io/badge/echarts-4.2.1-green.svg?style=flat-square)](https://github.com/ecomfe/echarts)
-[![element-ui](https://img.shields.io/badge/element-2.4.11-green.svg?style=flat-square)](https://github.com/ElemeFE/element)
-![mavon-editor](https://img.shields.io/badge/mavoneditor-2.7.3-green.svg?style=flat-square)
+[![vuex](https://img.shields.io/badge/vuex-3.1.0-success.svg?style=flat-round)](https://vuex.vuejs.org/)
+[![echarts](https://img.shields.io/badge/echarts-4.2.1-success.svg?style=flat-round)](https://github.com/ecomfe/echarts)
+[![element-ui](https://img.shields.io/badge/element-2.4.11-success.svg?style=flat-round)](https://github.com/ElemeFE/element)
+![mavon-editor](https://img.shields.io/badge/mavoneditor-2.7.3-success.svg?style=flat-round)
 
+[![travis-ci](https://travis-ci.org/Linzecong/LPOJ.svg?branch=master)](https://travis-ci.org/Linzecong/LPOJ)
 
 > 一个基于Vue.js和Django的轻量级在线评测系统
-
+>
 > 目前应用于广东外语外贸大学
 ## Demo地址：[www.lpoj.cn](http://www.lpoj.cn)
 ## 说明文档：[docs.lpoj.cn](http://docs.lpoj.cn)

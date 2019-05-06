@@ -21,4 +21,16 @@ sudo python main.py
 ```
 
 ## Docker 部署
-以后再添加！
+
+非专业用户不推荐使用Docker单独部署
+
+首先修改配置文件，setting.json里的东西都要修改为你的ip，其中sftp应配置为你的后端服务器的用户名和密码和ip
+``` 
+cd Judger
+nano setting.json
+```
+接着运行容器
+```
+docker build -t lpojjudgerserver .
+docker run -d -p 9906:9906 lpojjudgerserver
+```

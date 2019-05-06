@@ -36,6 +36,7 @@ module.exports = {
                     '/deploy/backend',
                     '/deploy/judgeserver',
                     '/deploy/judger',
+                    '/deploy/crawlingserver'
                 ]
             },
             {
