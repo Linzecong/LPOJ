@@ -2,7 +2,7 @@
   <el-card v-loading="loading">
     <center>
       <h3>
-        广东外语外贸大学 ACM集训队排名
+        ACM Training Team Ranking of Guangdong University of Foreign Studies
       </h3>
     </center>
 

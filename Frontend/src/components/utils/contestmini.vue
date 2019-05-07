@@ -1,7 +1,7 @@
 <template>
   <el-card>
     <div slot="header">
-      <b>全网比赛日历</b>
+      <b>Calendar of All Competitions</b>
     </div>
     <el-table
       :data="tableData"

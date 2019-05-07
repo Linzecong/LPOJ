@@ -3,7 +3,7 @@
     <el-select
       @keyup.native.enter="searchtitle"
       v-model="editpage"
-      placeholder="请输入要查看的算法"
+      placeholder="Please enter the algorithm to view..."
       @change="searchtitle"
       filterable
       style="width:100%;"
@@ -24,7 +24,7 @@
     ></mavon-editor>
     <el-row style="margin-left:15px">
       <br>
-      <p>选择其他版本</p>
+      <p>Select other version</p>
       <el-table :data="tableData" @cell-click="userclick" style="float:left;width:100%;">
         <el-table-column type="index"></el-table-column>
         <el-table-column prop="username" label="User" :width="200"></el-table-column>

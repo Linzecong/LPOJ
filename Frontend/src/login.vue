@@ -3,7 +3,7 @@
     <el-form :model="form" @keyup.native.enter="loginClick">
       <el-row :gutter="10">
         <el-col :span="3">
-          <div style="text-align:center;margin:5px;">用户名</div>
+          <div style="text-align:center;margin:5px;">User</div>
         </el-col>
         <el-col :span="12">
           <el-input v-model="form.username" autocomplete="off" :autofocus="true"></el-input>
@@ -11,7 +11,7 @@
       </el-row>
       <el-row :gutter="10">
         <el-col :span="3">
-          <div style="text-align:center;margin:5px;">密码</div>
+          <div style="text-align:center;margin:5px;">Password</div>
         </el-col>
         <el-col :span="12">
           <el-input type="password" v-model="form.password" autocomplete="off"></el-input>
@@ -19,8 +19,8 @@
       </el-row>
     </el-form>
     <div slot="footer" class="dialog-footer">
-      <el-button @click="dialogLoginVisible = false">取 消</el-button>
-      <el-button type="primary" @click="loginClick">确 定</el-button>
+      <el-button @click="dialogLoginVisible = false">Cancel</el-button>
+      <el-button type="primary" @click="loginClick">OK</el-button>
     </div>
   </el-dialog>
 </template>

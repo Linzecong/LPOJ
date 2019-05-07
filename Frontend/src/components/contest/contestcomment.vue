@@ -16,15 +16,15 @@
     <br>
     <br>
     <el-form ref="contestcomment" :model="contestcomment" label-position="right">
-      <el-form-item label="标题：">
+      <el-form-item label="Title：">
         <el-input v-model="contestcomment.title" style="width:700px"></el-input>
       </el-form-item>
-      <el-form-item label="题目编号：">
-        <el-select v-model="contestcomment.problem" placeholder="请选择题目">
+      <el-form-item label="Problem Number：">
+        <el-select v-model="contestcomment.problem" placeholder="Choose Problem">
           <el-option v-for="(index,K) in pros" :key="K" :label="index" :value="index"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="提问内容：">
+      <el-form-item label="Question：">
         <el-input
           type="textarea"
           v-model="contestcomment.message"
@@ -33,19 +33,19 @@
           @keyup.native.enter="commentClick"
         ></el-input>
       </el-form-item>
-      <el-button @click="commentClick">提问</el-button>
+      <el-button @click="commentClick">Send</el-button>
     </el-form>
     <br>
     <br>
     <el-form label-position="right" v-if="isadmin">
-      <el-form-item label="提问编号">
+      <el-form-item label="Question Number">
         <el-input v-model="commentid" style="width:700px"></el-input>
       </el-form-item>
 
-      <el-form-item label="回复他：">
+      <el-form-item label="Reply：">
         <el-input type="textarea" v-model="commentmessage" autosize style="width:700px"></el-input>
       </el-form-item>
-      <el-button @click="huifuClick">回复</el-button>
+      <el-button @click="huifuClick">Reply</el-button>
     </el-form>
   </el-card>
 </template>

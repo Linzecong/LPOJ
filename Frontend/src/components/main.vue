@@ -18,13 +18,13 @@
       </el-row> -->
       <el-row>
         <el-tabs type="border-card">
-          <el-tab-pane label="个人" >
+          <el-tab-pane :label="label.rank" >
             <rankchart></rankchart>
           </el-tab-pane>
-          <el-tab-pane label="队伍" :lazy="true">
+          <el-tab-pane :label="label.team" :lazy="true">
             <teamchart></teamchart>
           </el-tab-pane>
-          <el-tab-pane label="规则" :lazy="true">
+          <el-tab-pane :label="label.rule" :lazy="true">
             <ratingrule></ratingrule>
           </el-tab-pane>
         </el-tabs>
@@ -62,7 +62,13 @@ export default {
   },
   name: "main",
   data() {
-    return {};
+    return {
+      label:{
+        rank:"Individual",
+        team:"Team",
+        rule:"Rule"
+      }
+    };
   },
   created() {},
   methods: {}

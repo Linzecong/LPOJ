@@ -71,7 +71,7 @@
       <el-row>
         <el-card shadow="always">
           <el-input
-            placeholder="请输入搜索内容筛选题目"
+            placeholder="Search..."
             v-model="searchtext"
             @keyup.native.enter="searchtitle"
           >
@@ -82,7 +82,7 @@
       <el-row :gutter="15">
         <el-col>
           <el-card shadow="always">
-            <h4>Tags (点击以筛选)</h4>
+            <h4>Tags (Click to filter)</h4>
             <el-button
               id="tag"
               v-for="(name,index) in tagnames"

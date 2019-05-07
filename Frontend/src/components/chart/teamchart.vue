@@ -1,8 +1,8 @@
 <template>
   <center>
     <b>
-      广东外语外贸大学ACM集训队
-      <br>队伍实时排名
+      {{label.school}}
+      <br>{{label.des}}
     </b>
     <div ref="myEchart" style="height:500px;width:100%"></div>
   </center>
@@ -14,6 +14,10 @@ export default {
   name: "teamchart",
   data() {
     return {
+      label:{
+        school:"Guangdong University of Foreign Studies ACM Training Team",
+        des:"Real-time ranking of teams",
+      },
       xNum: [],
       yNum: [],
       series: [] // 柱状图

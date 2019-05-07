@@ -2,14 +2,14 @@
   <el-card shadow="always" id="card">
     <el-dialog :visible.sync="dialogVisible" width="80%">
       <el-alert
-        title="编译结果"
+        title="Compile Result"
         :type="compilemsg=='编译成功！'?'success':'warning'"
         :description="compilemsg"
         :closable="false"
         show-icon
         :show-close="false"
       ></el-alert>
-      <el-alert title="你的代码：" type="info" :closable="false">
+      <el-alert title="Code：" type="info" :closable="false">
         <el-button
           size="mini"
           v-clipboard:copy="code"
@@ -55,21 +55,21 @@
 
     <el-dialog :visible.sync="searchdialogVisible">
       <el-form :model="searchform" label-position="right" @keyup.native.enter="searchstatus">
-        <el-form-item label="用户:">
-          <el-input v-model="searchform.user" placeholder="请输入用户名"></el-input>
+        <el-form-item label="User:">
+          <el-input v-model="searchform.user" placeholder="User..."></el-input>
         </el-form-item>
-        <el-form-item label="题目编号：">
-          <el-input v-model="searchform.problem" placeholder="请输入题目编号"></el-input>
+        <el-form-item label="Problem Number：">
+          <el-input v-model="searchform.problem" placeholder="Problem Number..."></el-input>
         </el-form-item>
-        <el-form-item label="语言：">
-          <el-select v-model="searchform.language" placeholder="请选择">
+        <el-form-item label="Language：">
+          <el-select v-model="searchform.language" placeholder="Choose...">
             <el-option key="C++" label="C++" value="C%2B%2B"></el-option>
             <el-option key="C" label="C" value="C"></el-option>
             <el-option key="Java" label="Java" value="Java"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="结果：">
-          <el-select v-model="searchform.result" placeholder="请选择">
+        <el-form-item label="Result：">
+          <el-select v-model="searchform.result" placeholder="Choose...">
             <el-option key="0" label="Accepted" value="0"></el-option>
             <el-option key="1" label="Wrong Answer" value="-3"></el-option>
             <el-option key="2" label="Waiting" value="-6"></el-option>
@@ -86,8 +86,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="searchdialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="searchstatus">确 定</el-button>
+        <el-button @click="searchdialogVisible = false">Cancel</el-button>
+        <el-button type="primary" @click="searchstatus">OK</el-button>
       </div>
     </el-dialog>
 
@@ -103,13 +103,13 @@
       @click="resetsearch"
       style="float: right;margin-top:6px;margin-right:10px;"
       size="mini"
-    >重置</el-button>
+    >Reset</el-button>
     <el-button
       type="primary"
       @click="searchdialogVisible = true"
       style="float: right;margin-top:6px;margin-right:15px;"
       size="mini"
-    >筛选</el-button>
+    >Filter</el-button>
 
     <el-pagination
       @size-change="handleSizeChange"

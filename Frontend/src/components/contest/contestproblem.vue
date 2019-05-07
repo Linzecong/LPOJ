@@ -1,7 +1,7 @@
 <template>
   <el-tabs type="card" tab-position="left" @tab-click="problemtabClick">
     <center v-show="!begin">
-      <h1>比赛未开始</h1>
+      <h1>The Contest is Coming</h1>
     </center>
     <el-tab-pane v-for="(name,index) in problemtitles" :key="index">
       <span slot="label" style="float:left;" :ref="'A'+index">

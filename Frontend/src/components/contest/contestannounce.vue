@@ -12,7 +12,7 @@
           @keyup.native.enter="anClick"
         ></el-input>
       </el-form-item>
-      <el-button @click="anClick">发送</el-button>
+      <el-button @click="anClick">{{label.send}}</el-button>
     </el-form>
   </el-card>
 </template>
@@ -22,6 +22,9 @@ export default {
   name: "contestannounce",
   data() {
     return {
+      label:{
+        send:"Send"
+      },
       tabledata: [],
       isadmin: false,
       anvalue: ""

@@ -1,32 +1,31 @@
 <template>
   <el-row :gutter="10">
-    <el-col :span="8">
-      <el-card>
+    <el-col :span="7">
+      <el-card style="height:150px;">
         <div slot="header">
-          <b style="color:#409EFF">进入LPOJ试炼谷</b>
+          <b style="color:#409EFF">Get into Valley of Trials</b>
         </div>
         <b>
-          <el-button style="width:100%;" @click="trainningClick" type="primary">开始试炼</el-button>
+          <el-button style="width:100%;" @click="trainningClick" type="primary">Start trial</el-button>
         </b>
       </el-card>
     </el-col>
-    <el-col :span="8">
-      <el-card>
+    <el-col :span="7">
+      <el-card style="height:150px;">
         <div slot="header">
-          <b style="color:#409EFF">快速查算法</b>
+          <b style="color:#409EFF">Fast search algorithm</b>
         </div>
         <b>
-          <el-button style="width:100%;" icon="el-icon-search" @click="searchtitle">点击此处搜索算法</el-button>
+          <el-button style="width:100%;" icon="el-icon-search" @click="searchtitle">Search algorithm</el-button>
         </b>
       </el-card>
     </el-col>
-    <el-col :span="8">
-      <el-card>
-        <div slot="header">
-          <b style="font-size:14.5px">AC自动机Fail树上DFS序建可持久化线段树</b>
-        </div>
-        <b style="font-size:14.5px;margin-top:10px">后缀自动机Next指针建的DAG上跑SG函数</b>
-        <h2></h2>
+    <el-col :span="10">
+      <el-card style="height:150px;">
+        <b style="font-size:14.5px">Sequential Construction of Persistent Line Segment Tree by DFS on Fail Tree of AC Automata</b>
+        <br>
+        <br>
+        <b style="font-size:14.5px;">SG Functions on DAG Built by Next Pointer of Suffix Automata</b>
       </el-card>
     </el-col>
   </el-row>
