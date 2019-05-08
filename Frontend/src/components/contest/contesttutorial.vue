@@ -1,72 +1,74 @@
 <template>
   <el-card>
+    <mavon-editor
+      :boxShadow="false"
+      :value="value"
+      :subfield="prop.subfield"
+      :defaultOpen="prop.defaultOpen"
+      :toolbarsFlag="prop.toolbarsFlag"
+      :editable="prop.editable"
+      :scrollStyle="prop.scrollStyle"
+      :autofocus="false"
+    ></mavon-editor>
+    <br>
     <el-table :data="tableData" style="width: 100%" :row-style="ratingcolor">
       <el-table-column type="expand" label="Expand Comment" :width="150">
         <template slot-scope="props">
           <span>{{ props.row.huifu }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="ID" prop="id" v-if="isadmin" :width="50"></el-table-column>
-      <el-table-column label="User" prop="user"></el-table-column>
-      <el-table-column label="Title" prop="title"></el-table-column>
-      <el-table-column label="Problem" prop="problem"></el-table-column>
+      <el-table-column label="User" prop="user" :width="200"></el-table-column>
       <el-table-column label="Message" prop="message"></el-table-column>
       <el-table-column label="Time" prop="time"></el-table-column>
     </el-table>
     <br>
     <br>
     <el-form ref="contestcomment" :model="contestcomment" label-position="right">
-      <el-form-item label="Title：">
-        <el-input v-model="contestcomment.title" style="width:700px"></el-input>
-      </el-form-item>
-      <el-form-item label="Problem Number：">
-        <el-select v-model="contestcomment.problem" placeholder="Choose Problem">
-          <el-option v-for="(index,K) in pros" :key="K" :label="index" :value="index"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="Question：">
+      <el-form-item label="Comment：">
         <el-input
           type="textarea"
           v-model="contestcomment.message"
           autosize
           style="width:700px"
           @keyup.native.enter="commentClick"
-        ></el-input><el-button @click="commentClick" type="primary" style="margin-left:10px;" size="small">Send</el-button>
+        ></el-input>
+        <el-button @click="commentClick" type="primary" style="margin-left:10px;" size="small">Send</el-button>
       </el-form-item>
-      
-    </el-form>
-    <br>
-    <br>
-    <el-form label-position="right" v-if="isadmin">
-      <el-form-item label="Question Number">
-        <el-input v-model="commentid" style="width:700px"></el-input>
-      </el-form-item>
-
-      <el-form-item label="Reply：">
-        <el-input type="textarea" v-model="commentmessage" autosize style="width:700px"></el-input>
-      </el-form-item>
-      <el-button @click="huifuClick">Reply</el-button>
     </el-form>
   </el-card>
 </template>
 
 <script>
 import moment from "moment";
+import { mavonEditor } from "mavon-editor";
+import "mavon-editor/dist/css/index.css";
 export default {
-  name: "contestcomment",
+  name: "contesttutorial",
+  components: {
+    mavonEditor
+  },
+  computed: {
+    prop() {
+      let data = {
+        subfield: false, // 单双栏模式
+        defaultOpen: "preview", //edit： 默认展示编辑区域 ， preview： 默认展示预览区域
+        editable: false,
+        toolbarsFlag: false,
+        scrollStyle: true
+      };
+      return data;
+    }
+  },
   data() {
     return {
-      commentid: "",
-      commentmessage: "",
-      isadmin: false,
       tableData: [],
-      pros: [],
+      value: "暂无数据！",
       contestcomment: {
         contestid: this.$route.params.contestID,
         user: localStorage.username,
-        title: "",
+        title: "Tutorial",
         message: "",
-        problem: "",
+        problem: "ALL",
         rating: parseInt(localStorage.rating)
       }
     };
@@ -84,35 +86,7 @@ export default {
       if (row.rating >= 1200) return "color:#909399;font-weight: bold;";
       return "color:#303133;font-weight: bold;";
     },
-    huifuClick() {
-      this.$confirm("确定回复吗？", "回复", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(() => {
-        this.$axios
-          .get("/contestcomment/" + this.commentid + "/")
-          .then(response => {
-            response.data.huifu = this.commentmessage;
-            this.$axios
-              .put("/contestcomment/" + this.commentid + "/", response.data)
-              .then(response2 => {
-                this.$message.success("提交成功！");
-                this.reflash();
-              })
-              .catch(error => {
-                this.$message.error(
-                  "服务器出错！" + JSON.stringify(error.response.data)
-                );
-              });
-          })
-          .catch(error => {
-            this.$message.error(
-              "服务器出错！" + JSON.stringify(error.response.data)
-            );
-          });
-      });
-    },
+
     commentClick() {
       this.$confirm("确定提交吗？", "提交", {
         confirmButtonText: "确定",
@@ -138,6 +112,17 @@ export default {
     },
     reflash() {
       this.$axios
+        .get("/contesttutorial/?contestid=" + this.$route.params.contestID)
+        .then(response => {
+          if (response.data.length > 0) this.value = response.data[0].value;
+        })
+        .catch(error => {
+          this.$message.error(
+            "服务器出错！" + JSON.stringify(error.response.data)
+          );
+        });
+
+      this.$axios
         .get("/contestcomment/?contestid=" + this.$route.params.contestID)
         .then(response => {
           for (let i = 0; i < response.data.length; i++) {
@@ -156,12 +141,7 @@ export default {
     }
   },
   created() {
-    this.isadmin = localStorage.type == 2 || localStorage.type == 3;
-
-    this.pros.push("ALL");
-    for (var i = 65; i < 65 + 26; i++) {
-      this.pros.push(String.fromCharCode(i));
-    }
+    this.reflash();
   }
 };
 </script>

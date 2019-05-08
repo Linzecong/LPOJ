@@ -117,15 +117,12 @@ export default {
       ).then(() => {
         for (var i = 0; i < this.problemnames.length; i++) {
           var li = this.problemnames[i].split("|");
-          this.$axios.post(
-            "/contestproblem/",
-            {
-              contestid: this.contestid,
-              problemid: li[0],
-              problemtitle: li[1],
-              rank: i
-            }
-          );
+          this.$axios.post("/contestproblem/", {
+            contestid: this.contestid,
+            problemid: li[0],
+            problemtitle: li[1],
+            rank: i
+          });
         }
         this.$message({
           message: "添加题目成功！",
@@ -149,16 +146,16 @@ export default {
     },
     addproblemchange(num) {
       this.$axios
-        .get(
-          "/problemdata/" + num + "/"
-        )
+        .get("/problemdata/" + num + "/")
         .then(response2 => {
           this.tmpaddproblemtitle = response2.data.title;
           this.canadd = true;
         })
         .catch(error => {
           this.canadd = false;
-          this.$message.error("服务器错误！" + JSON.stringify(error.response.data));
+          this.$message.error(
+            "服务器错误！" + JSON.stringify(error.response.data)
+          );
         });
     },
     handleClose(tag) {
@@ -195,10 +192,7 @@ export default {
         type: "warning"
       }).then(() => {
         this.$axios
-          .post(
-            "/contestinfo/",
-            this.addcontestform
-          )
+          .post("/contestinfo/", this.addcontestform)
           .then(response => {
             this.contestid = response.data.id;
 
@@ -206,15 +200,16 @@ export default {
               var li = this.contestregister.split(",");
 
               for (var i = 0; i < li.length; i++) {
-                this.$axios.post(
-                  "/contestregister/",
-                  {
-                    contestid: this.contestid,
-                    user: li[i]
-                  }
-                );
+                this.$axios.post("/contestregister/", {
+                  contestid: this.contestid,
+                  user: li[i]
+                });
               }
             }
+            this.$axios.post("/contesttutorial/", {
+              contestid: this.contestid,
+              value: "暂无数据！"
+            });
 
             this.$message({
               message:
@@ -225,7 +220,9 @@ export default {
             });
           })
           .catch(error => {
-            this.$message.error("服务器出错！" + JSON.stringify(error.response.data));
+            this.$message.error(
+              "服务器出错！" + JSON.stringify(error.response.data)
+            );
           });
       });
     }

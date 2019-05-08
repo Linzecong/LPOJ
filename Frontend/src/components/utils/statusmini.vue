@@ -2,7 +2,7 @@
   <el-row>
     <el-dialog :visible.sync="dialogVisible" width="80%" :append-to-body="true">
       <el-alert
-        title="编译结果"
+        title="Program Error Message:"
         :type="compilemsg=='编译成功！'?'success':'warning'"
         :description="compilemsg"
         :closable="false"

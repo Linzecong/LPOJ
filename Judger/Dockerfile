@@ -3,6 +3,7 @@ MAINTAINER linzecong
 ADD . ./Judger
 WORKDIR /Judger
 RUN apt-get update
+RUN apt-get install python3 -y
 RUN apt-get install time -y
 RUN apt-get install cmake -y
 RUN apt-get install openjdk-8-jdk -y

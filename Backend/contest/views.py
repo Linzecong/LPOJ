@@ -8,14 +8,24 @@ from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
 from rest_framework.throttling import ScopedRateThrottle
 from .permission import ManagerOnly, UserRatingOnly, UserRatingOnly2
-from .models import ContestComingInfo, ContestAnnouncement, ContestRank, ContestRatingChange, ContestBoard, ContestComment, ContestInfo, ContestProblem, ContestRegister
-from .serializers import ContestComingInfoSerializer, ContestRankSerializer, ContestRatingChangeSerializer, ContestAnnouncementSerializer, ContestBoardSerializer, ContestCommentSerializer, ContestInfoSerializer, ContestProblemSerializer, ContestRegisterSerializer
+from .models import ContestComingInfo,ContestTutorial, ContestAnnouncement, ContestRank, ContestRatingChange, ContestBoard, ContestComment, ContestInfo, ContestProblem, ContestRegister
+from .serializers import ContestComingInfoSerializer,ContestTutorialSerializer, ContestRankSerializer, ContestRatingChangeSerializer, ContestAnnouncementSerializer, ContestBoardSerializer, ContestCommentSerializer, ContestInfoSerializer, ContestProblemSerializer, ContestRegisterSerializer
 import datetime
 
 
 class ContestAnnouncementView(viewsets.ModelViewSet):
     queryset = ContestAnnouncement.objects.all()
     serializer_class = ContestAnnouncementSerializer
+    pagination_class = LimitOffsetPagination
+    permission_classes = (ManagerOnly,)
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ("contestid",)
+    throttle_scope = "post"
+    throttle_classes = [ScopedRateThrottle, ]
+
+class ContestTutorialView(viewsets.ModelViewSet):
+    queryset = ContestTutorial.objects.all()
+    serializer_class = ContestTutorialSerializer
     pagination_class = LimitOffsetPagination
     permission_classes = (ManagerOnly,)
     filter_backends = (DjangoFilterBackend,)

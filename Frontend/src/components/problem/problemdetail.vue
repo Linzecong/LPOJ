@@ -68,6 +68,7 @@
                 <el-option key="C++" label="C++" value="C++"></el-option>
                 <el-option key="C" label="C" value="C"></el-option>
                 <el-option key="Java" label="Java" value="Java"></el-option>
+                <el-option key="Python3" label="Python3" value="Python3"></el-option>
               </el-select>
             </el-col>
             <el-col :span="3">
@@ -237,7 +238,7 @@ export default {
       .get("/problem/" + this.ID + "/")
       .then(response => {
         auth = response.data.auth;
-        if ((auth == 2 || auth == 3) && localStorage.type == 1) {
+        if ((auth == 2 || auth == 3) && (localStorage.type == 1||localStorage.type =="")) {
           this.title = "非法访问！";
           this.$message.error("服务器错误！" + "(" + "无权限" + ")");
           return;

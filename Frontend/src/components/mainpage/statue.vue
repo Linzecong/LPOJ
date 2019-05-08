@@ -2,7 +2,7 @@
   <el-card shadow="always" id="card">
     <el-dialog :visible.sync="dialogVisible" width="80%">
       <el-alert
-        title="Compile Result"
+        title="Program Error Message:"
         :type="compilemsg=='编译成功！'?'success':'warning'"
         :description="compilemsg"
         :closable="false"

@@ -77,13 +77,29 @@
         </el-row>
       </el-row>
     </el-row>
+
+    <el-row>
+      编辑题解：
+      <mavon-editor
+        style="margin-top:20px"
+        v-model="context"
+        :toolbars="toolbars"
+        @save="savemethod"
+        @imgAdd="$imgAdd"
+      />
+    </el-row>
   </el-row>
 </template>
 
 <script>
 import moment from "moment";
+import { mavonEditor } from "mavon-editor";
+import "mavon-editor/dist/css/index.css";
 export default {
   name: "adminaddcontest",
+  components: {
+    mavonEditor
+  },
   data() {
     return {
       contestregister: "",
@@ -103,11 +119,75 @@ export default {
         lasttime: 0,
         type: "",
         auth: 0
-      }
+      },
+      toolbars: {
+        bold: true, // 粗体
+        italic: true, // 斜体
+        header: true, // 标题
+        underline: true, // 下划线
+        mark: true, // 标记
+        superscript: true, // 上角标
+        quote: true, // 引用
+        ol: true, // 有序列表
+        link: true, // 链接
+        imagelink: true, // 图片链接
+        help: true, // 帮助
+        code: true, // code
+        subfield: true, // 是否需要分栏
+        fullscreen: true, // 全屏编辑
+        readmodel: true, // 沉浸式阅读
+        /* 1.3.5 */
+        undo: true, // 上一步
+        trash: true, // 清空
+        save: true, // 保存（触发events中的save事件）
+        /* 1.4.2 */
+        navigation: true // 导航目录
+      },
+      context: "暂无数据！"
     };
   },
   methods: {
+    $imgAdd(pos, $file) {
+      this.$message.error("暂不支持上传图片！请使用链接添加！");
+    },
+    savemethod(v, r) {
+      this.$axios
+        .get("/contesttutorial/?contestid=" + this.contestid)
+        .then(response2 => {
+          var tid = response2.data[0].id;
+          this.$axios
+            .put("/contesttutorial/" + tid + "/", {
+              contestid: this.contestid,
+              value: v
+            })
+            .then(response => {
+              this.$message.success("保存成功！");
+            })
+            .catch(error => {
+              this.$message.error(
+                "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
+              );
+            });
+        })
+        .catch(error => {
+          this.$message.error(
+            "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
+          );
+        });
+    },
     contestchange(num) {
+      this.$axios
+        .get("/contesttutorial/?contestid=" + num)
+        .then(response22 => {
+          if(response22.data.length>0)
+            this.context=response22.data[0].value
+        })
+        .catch(error => {
+          this.$message.error(
+            "服务器出错！" + JSON.stringify(error.response.data)
+          );
+        });
+
       this.$axios
         .get("/contestinfo/" + num + "/")
         .then(response => {
@@ -334,7 +414,9 @@ export default {
       });
     }
   },
-  created() {}
+  created() {
+
+  }
 };
 </script>
 

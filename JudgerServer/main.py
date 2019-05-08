@@ -133,20 +133,21 @@ def changeauth():
         sleep(2)
         if mutex.acquire():
             cursor.execute(
-                "SELECT * from contest_contestinfo where TO_SECONDS(NOW()) - TO_SECONDS(begintime) <= lasttime")
+                "SELECT * from contest_contestinfo where TO_SECONDS(NOW()) - TO_SECONDS(begintime) <= lasttime and TO_SECONDS(NOW()) - TO_SECONDS(begintime) >= 0")
             data = cursor.fetchall()
             getcontest = set()
             for d in data:
                 getcontest.add(d[0])  # 用于求结束的比赛
-                cursor.execute(
-                    "SELECT * from contest_contestproblem where contestid=%d" % d[0])
-                pros = cursor.fetchall()
-                for pid in pros:
+                if d[0] not in curcontest:
                     cursor.execute(
-                        "UPDATE  problem_problemdata SET auth = 3 WHERE problem = %s" % pid[2])
-                    cursor.execute(
-                        "UPDATE  problem_problem SET auth = 3 WHERE problem = %s" % pid[2])
-                db.commit()
+                        "SELECT * from contest_contestproblem where contestid=%d" % d[0])
+                    pros = cursor.fetchall()
+                    for pid in pros:
+                        cursor.execute(
+                            "UPDATE  problem_problemdata SET auth = 3 WHERE problem = %s" % pid[2])
+                        cursor.execute(
+                            "UPDATE  problem_problem SET auth = 3 WHERE problem = %s" % pid[2])
+                    db.commit()
 
             endcontest = curcontest.difference(getcontest)
             print("curcontest", curcontest)

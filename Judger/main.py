@@ -125,8 +125,81 @@ def reconnect():
 
 reconnect()
 
+def minganci(ci):
 
-def judgeJava(timelimit, memorylimit, inputpath, outputpath, errorpath):
+    if ci.find("open")>=0:
+        return "open"
+    if ci.find("thread")>=0:
+        return "thread"
+    if ci.find("sys")>=0:
+        return "sys"
+    if ci.find("process")>=0:
+        return "process"
+    if ci.find("fork")>=0:
+        return "fork"
+    if ci.find("file")>=0:
+        return "file"
+    if ci.find("resource")>=0:
+        return "resource"
+    if ci.find("read")>=0:
+        return "read"
+    if ci.find("ctypes")>=0:
+        return "ctypes"
+    if ci.find(" os")>=0:
+        return " os"
+    return "0"
+
+def judgePython(timelimit, memorylimit, inputpath, outputpath, errorpath,id):
+    com1 = "/usr/bin/time -f '"+"%"+"U' -o %stime.txt " % (judgername)
+    com2 = "timeout %s python3  %s.py 1>%s 2>%s<%s" % (
+        str(timelimit/1000.0), judgername, outputpath, errorpath, inputpath)
+    com = com1 + com2
+    result = os.system(com)
+
+    ret = dict()
+
+    if result == 0:
+        tf = open(judgername+"time.txt", "r")
+        time = tf.read()
+        time = float(str(time).strip())*1000
+        ret["cpu_time"] = int(time)
+        ret["memory"] = 5201314
+        ret["result"] = 0
+        ret["exit_code"] = result
+        ret["signal"] = 0
+        tf.close()
+    elif result == 31744:
+        ret["cpu_time"] = timelimit
+        ret["memory"] = 5201314
+        ret["result"] = 1
+        ret["exit_code"] = result
+        ret["signal"] = 0
+    else:
+        tf = open(errorpath, "r")
+        sttr = tf.read()
+        if sttr.find("MemoryError")>=0:
+            ret["cpu_time"] = 0
+            ret["memory"] = memorylimit*1024*1024
+            ret["result"] = 3
+            ret["exit_code"] = result
+            ret["signal"] = 0
+        else:
+            tf = open(errorpath, "r")
+            msg = tf.read()
+            cursor.execute("UPDATE judgestatus_judgestatus SET message=%s WHERE id = %s", (msg, id))
+            db.commit()
+
+            ret["cpu_time"] = 0
+            ret["memory"] = 0
+            ret["result"] = 4
+            ret["exit_code"] = result
+            ret["signal"] = 0
+            tf.close()
+        
+
+    return ret
+
+def judgeJava(timelimit, memorylimit, inputpath, outputpath, errorpath,id):
 
     com1 = "/usr/bin/time -f '"+"%"+"U' -o %stime.txt " % (judgername)
     com2 = "timeout %s java -cp %s -Djava.security.manager -Djava.security.policy==policy -Djava.awt.headless=true Main 1>%s 2>%s<%s" % (
@@ -145,20 +218,24 @@ def judgeJava(timelimit, memorylimit, inputpath, outputpath, errorpath):
         ret["result"] = 0
         ret["exit_code"] = result
         ret["signal"] = 0
+        tf.close()
     elif result == 31744:
-
         ret["cpu_time"] = timelimit
         ret["memory"] = 5201314
         ret["result"] = 1
         ret["exit_code"] = result
         ret["signal"] = 0
     else:
-        tf = open(judgername, "r")
+        tf = open(errorpath, "r")
+        msg = tf.read()
+        cursor.execute("UPDATE judgestatus_judgestatus SET message=%s WHERE id = %s", (msg, id))
+        db.commit()
         ret["cpu_time"] = 0
         ret["memory"] = 5201314
         ret["result"] = 4
         ret["exit_code"] = result
         ret["signal"] = 0
+        tf.close()
 
     return ret
 
@@ -199,6 +276,18 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
         cursor.execute(
             "UPDATE user_userdata SET submit = submit+1 WHERE username = '%s'" % username)
     db.commit()
+
+    cursor.execute(
+        "SELECT * from problem_problem where problem = '%s' " % problem)
+    datat = cursor.fetchone()
+
+    timelimit = int(datat[11])
+    memorylimit = int(datat[12])
+
+    cursor.execute(
+        "SELECT * from problem_problemdata where problem = '%s' " % problem)
+    datat = cursor.fetchone()
+    score = int(datat[13])
 
     try:
 
@@ -245,6 +334,25 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                     db.rollback()
                     statue = True
                 return
+
+        elif lang == "Python3":
+            
+            wo = minganci(code)
+            if wo!="0":
+                try:
+                    cursor.execute("UPDATE judgestatus_judgestatus SET result = '-4',message=%s WHERE id = %s", ("Your code has sensitive words "+wo, id))
+                    cursor.execute("UPDATE problem_problemdata SET ce = ce+1 WHERE problem = '%s'" % problem)
+                    db.commit()
+                    statue = True
+                except:
+                    db.rollback()
+                    statue = True
+                return
+
+            file = open("%s.py" % judgername, "w")
+            file.write("import resource\nresource.setrlimit(resource.RLIMIT_AS,(%d*1024*1024,%d*10*1024*1024))\n"%(memorylimit,memorylimit)+code)
+            file.close()
+
         elif lang == "Java":
             file = open("Main.java", "w")
             file.write(code)
@@ -297,17 +405,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
             statue = True
         return
 
-    cursor.execute(
-        "SELECT * from problem_problem where problem = '%s' " % problem)
-    datat = cursor.fetchone()
-
-    timelimit = int(datat[11])
-    memorylimit = int(datat[12])
-
-    cursor.execute(
-        "SELECT * from problem_problemdata where problem = '%s' " % problem)
-    datat = cursor.fetchone()
-    score = int(datat[13])
+    
 
     # 尝试下载数据
 
@@ -372,8 +470,11 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
             return
 
         if lang == "Java":
-            ret = judgeJava(timelimit*2, memorylimit, "./ProblemData/%s/%s.in" % (
-                            problem, filename), judgername+"temp.out", judgername+"error.out")
+            ret = judgeJava(timelimit*3, memorylimit, "./ProblemData/%s/%s.in" % (
+                            problem, filename), judgername+"temp.out", judgername+"error.out",id)
+        elif lang == "Python3":
+            ret = judgePython(timelimit*2, memorylimit, "./ProblemData/%s/%s.in" % (
+                            problem, filename), judgername+"temp.out", judgername+"error.out",id)
         else:
             try:
                 ret = _judger.run(max_cpu_time=timelimit,

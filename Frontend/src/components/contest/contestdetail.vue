@@ -24,7 +24,7 @@
       </span>
       <contestsubmit ref="Submissions"></contestsubmit>
     </el-tab-pane>
-    <el-tab-pane label="Rankings" >
+    <el-tab-pane label="Rankings">
       <span slot="label">
         <b>
           <i class="el-icon-star-on"></i> Rankings
@@ -35,12 +35,11 @@
 
     <el-tab-pane label="Announcements" :disabled="!haveauth">
       <span slot="label">
-        
-          <b><el-badge :value="anvalue" :hidden="anvalue==0" style="margin-top:5px"></el-badge> 
-            <i class="el-icon-bell" v-if="anvalue==0"></i>
-            Announcements
-          </b>
-        
+        <b>
+          <el-badge :value="anvalue" :hidden="anvalue==0" style="margin-top:5px"></el-badge>
+          <i class="el-icon-bell" v-if="anvalue==0"></i>
+          Announcements
+        </b>
       </span>
       <contestannounce ref="Announcements"></contestannounce>
     </el-tab-pane>
@@ -53,6 +52,14 @@
       </span>
       <contestcomment ref="Comments"></contestcomment>
     </el-tab-pane>
+    <el-tab-pane label="Tutorial" :disabled="!haveauth">
+      <span slot="label">
+        <b>
+          <i class="el-icon-notebook-1"></i> Tutorial
+        </b>
+      </span>
+      <contesttutorial ref="Tutorial"></contesttutorial>
+    </el-tab-pane>
   </el-tabs>
 </template>
 
@@ -63,6 +70,7 @@ import contestannounce from "@/components/contest/contestannounce";
 import contestsubmit from "@/components/contest/contestsubmit";
 import contestrank from "@/components/contest/contestrank";
 import contestcomment from "@/components/contest/contestcomment";
+import contesttutorial from "@/components/contest/contesttutorial";
 export default {
   name: "contestdetail",
   components: {
@@ -71,7 +79,8 @@ export default {
     contestannounce,
     contestsubmit,
     contestrank,
-    contestcomment
+    contestcomment,
+    contesttutorial
   },
   data() {
     return {
@@ -82,7 +91,6 @@ export default {
     };
   },
   created() {
-    
     this.contestid = this.$route.params.contestID;
 
     this.$axios
@@ -128,14 +136,16 @@ export default {
         });
       })
       .catch(error => {
-        this.$message.error("服务器错误！" + JSON.stringify(error.response.data));
+        this.$message.error(
+          "服务器错误！" + JSON.stringify(error.response.data)
+        );
         return;
       });
   },
-  mounted(){
+  mounted() {
     this.$store.state.antimer = setInterval(this.getan, 120000);
-    
-this.getan();
+
+    this.getan();
   },
   destroyed() {
     clearInterval(this.$store.state.antimer);
@@ -183,6 +193,9 @@ this.getan();
 
       if (tab.label == "Comments") {
         this.$refs.Comments.reflash(this.$route.params.contestID);
+      }
+      if (tab.label == "Tutorial") {
+        this.$refs.Tutorial.reflash(this.$route.params.contestID);
       }
     }
   }

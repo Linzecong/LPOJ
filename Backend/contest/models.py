@@ -83,10 +83,19 @@ class ContestComment(models.Model):
     title = models.CharField(max_length=50, default="提问")
     problem = models.CharField(default='ALL', max_length=500)  # 对哪个题目提问
     message = models.CharField(max_length=500)
-    # 0代表是提问，其他数字代表回复了哪个提问
-    huifu = models.CharField(default="暂无回复", max_length=500)
+    huifu = models.CharField(default="No respones", max_length=500)
     time = models.DateTimeField(auto_now=True)
     rating = models.IntegerField(default=1500)
+
+    objects = models.Manager()
+
+    def __str__(self):
+        return self.contestid
+
+class ContestTutorial(models.Model):
+
+    contestid = models.IntegerField()
+    value = models.TextField(default="暂无数据！")
 
     objects = models.Manager()
 
