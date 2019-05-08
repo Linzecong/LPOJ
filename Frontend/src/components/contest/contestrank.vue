@@ -248,7 +248,7 @@ export default {
                   (ACTime - this.$store.state.contestbegintime) / 1000
                 );
 
-                Score += ProblemScore- ((cha/60.0 * 0.5)/100.0*ProblemScore)
+                Score += ProblemScore- ((cha/60.0 * (0.7/(ii+1)))/100.0*ProblemScore)
 
                 FaShi += cha;
                 FaShi += -FaShiNum * 20 * 60;

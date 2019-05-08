@@ -497,7 +497,8 @@ export default {
                       username: localStorage.username,
                       user: localStorage.name,
                       contestid: parseInt(this.currentcontest),
-                      statue: str
+                      statue: str,
+                      rating:localStorage.rating
                     })
                     .then(response8 => {
                       this.$axios

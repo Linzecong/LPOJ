@@ -14,7 +14,7 @@ from .permission import UserSafePostOnly, UserPUTOnly, AuthPUTOnly
 
 
 class UserDataView(viewsets.ModelViewSet):
-    queryset = UserData.objects.all().order_by('-rating')
+    queryset = UserData.objects.extra(select = { '_has' : 'if(rating=1500,0, rating)'}).order_by('-_has')
     serializer_class = UserDataSerializer
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('username',)

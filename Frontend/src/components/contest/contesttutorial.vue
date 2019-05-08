@@ -123,7 +123,7 @@ export default {
         });
 
       this.$axios
-        .get("/contestcomment/?contestid=" + this.$route.params.contestID)
+        .get("/contestcomment/?problem=ALL&contestid=" + this.$route.params.contestID)
         .then(response => {
           for (let i = 0; i < response.data.length; i++) {
             response.data[i].time = moment(response.data[i].time).format(

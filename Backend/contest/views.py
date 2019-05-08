@@ -60,7 +60,7 @@ class ContestCommentView(viewsets.ModelViewSet):
     pagination_class = LimitOffsetPagination
     permission_classes = (UserRatingOnly2,)
     filter_backends = (DjangoFilterBackend,)
-    filter_fields = ("contestid",)
+    filter_fields = ("contestid","problem",)
     throttle_scope = "post"
     throttle_classes = [ScopedRateThrottle, ]
 

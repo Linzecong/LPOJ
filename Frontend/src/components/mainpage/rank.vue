@@ -19,7 +19,6 @@
         <el-table
       :data="tableData"
       @cell-click="userclick"
-      :default-sort="{prop: 'rating', order: 'descending'}"
       size="small"
       :row-style="ratingcolor"
     >
