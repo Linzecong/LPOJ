@@ -2,10 +2,17 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.pagination import LimitOffsetPagination
-from .serializers import BoardSerializer, DailyBoardSerializer, TeamBoardSerializer, DailyContestBoardSerializer
+from .serializers import BoardSerializer,SettingBoardSerializer, DailyBoardSerializer, TeamBoardSerializer, DailyContestBoardSerializer
 from .permission import ManagerOnly
-from .models import Board, DailyBoard, TeamBoard, DailyContestBoard
+from .models import Board, DailyBoard, TeamBoard, DailyContestBoard,SettingBoard
 import datetime
+
+class SettingBoardView(viewsets.ModelViewSet):
+    queryset = SettingBoard.objects.all()
+    serializer_class = SettingBoardSerializer
+    permission_classes = (ManagerOnly,)
+    throttle_scope = "post"
+    throttle_classes = [ScopedRateThrottle, ]
 
 
 class BoardView(viewsets.ModelViewSet):

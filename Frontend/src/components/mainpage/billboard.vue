@@ -2,7 +2,7 @@
   <el-card v-loading="loading">
     <center>
       <h3>
-        ACM Training Team Ranking of Guangdong University of Foreign Studies
+        ACM Training Team Ranking of {{school}}
       </h3>
     </center>
 
@@ -33,6 +33,7 @@ export default {
   name: "billboard",
   data() {
     return {
+      school:"",
       dialogVisible: false,
       ojcount: 3,
       boardinfo: [],
@@ -47,6 +48,17 @@ export default {
   },
   created() {
     this.setdata();
+    this.$axios
+      .get("/settingboard/")
+      .then(res => {
+        if (res.data.length > 0) this.school = res.data[0].schoolname;
+        else this.school = "University";
+      })
+      .catch(error => {
+        this.$message.error(
+          "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
+        );
+      });
   },
   methods: {
     sortByProperty(p1, p2) {

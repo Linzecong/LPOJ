@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
 from rest_framework import serializers
-from .models import Board, DailyBoard, TeamBoard, DailyContestBoard
+from .models import Board, DailyBoard, TeamBoard, DailyContestBoard,SettingBoard
+
+
+class SettingBoardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SettingBoard
+        fields = '__all__'
 
 
 class BoardSerializer(serializers.ModelSerializer):

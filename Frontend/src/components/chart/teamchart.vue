@@ -73,6 +73,18 @@ export default {
   },
   mounted() {
     this.$axios
+      .get("/settingboard/")
+      .then(res => {
+        if (res.data.length > 0) this.label.school = res.data[0].schoolname;
+        else this.label.school = "University";
+      })
+      .catch(error => {
+        this.$message.error(
+          "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
+        );
+      });
+      
+    this.$axios
       .get("/teamboard/")
       .then(response => {
         this.series.push({

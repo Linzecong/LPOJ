@@ -11,6 +11,7 @@
     <el-tab-pane label="Rejudge" :disabled="!isadmin" :lazy="true"><adminrejudge></adminrejudge></el-tab-pane>
     <el-tab-pane label="添加与修改训练" :disabled="!isadmin" :lazy="true"><admintrainning></admintrainning></el-tab-pane>
     <el-tab-pane label="爬虫信息管理" :disabled="!isadmin" :lazy="true"><adminboard></adminboard></el-tab-pane>
+    <el-tab-pane label="网站设置" :disabled="!isadmin" :lazy="true"><adminboard></adminboard></el-tab-pane>
   </el-tabs>
 </template>
 
@@ -23,6 +24,7 @@ import adminmanageuser from "@/components/admin/adminmanageuser";
 import adminrejudge from "@/components/admin/adminrejudge";
 import admintrainning from "@/components/admin/admintrainning";
 import adminboard from "@/components/admin/adminboard";
+import adminsetting from "@/components/admin/adminsetting";
 export default {
   name: "admin",
   components: {
@@ -33,7 +35,8 @@ export default {
     adminmanageuser,
     adminrejudge,
     admintrainning,
-    adminboard
+    adminboard,
+    adminsetting
   },
   data() {
     return {

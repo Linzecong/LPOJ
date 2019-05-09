@@ -8,6 +8,7 @@ routers.register('board', views.BoardView)
 routers.register('dailyboard', views.DailyBoardView)
 routers.register('teamboard', views.TeamBoardView)
 routers.register('dailycontestboard', views.DailyContestBoardView)
+routers.register('settingboard', views.SettingBoardView)
 
 urlpatterns = [
     url('', include(routers.urls)),
