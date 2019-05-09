@@ -1,5 +1,14 @@
 from django.db import models
 
+class SettingBoard(models.Model):
+    
+
+    schoolname = models.CharField(default="University",max_length=100)
+
+    objects = models.Manager()
+
+    def __str__(self):
+        return self.teammember
 
 class Board(models.Model):
 
@@ -59,12 +68,3 @@ class DailyContestBoard(models.Model):
     def __str__(self):
         return self.teammember
 
-class SettingBoard(models.Model):
-
-
-    schoolname = models.CharField(default="University",max_length=100)
-
-    objects = models.Manager()
-
-    def __str__(self):
-        return self.teammember

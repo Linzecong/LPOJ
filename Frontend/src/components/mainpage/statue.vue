@@ -2,7 +2,7 @@
   <el-card shadow="always" id="card">
     <el-dialog :visible.sync="dialogVisible" width="80%">
       <el-alert
-        title="Program Error Message:"
+        title="Program Message:"
         :type="compilemsg=='编译成功！'?'success':'warning'"
         :description="compilemsg"
         :closable="false"
@@ -352,16 +352,23 @@ export default {
               response.data.results[i]["result"] = "Judging";
             }
 
-            if (response.data.results[i]["result"] == "-3")
+            if (response.data.results[i]["result"] == "-3"){
               response.data.results[i]["result"] =
                 "Wrong Answer on test " + testcase;
+              if(testcase=="?")
+                response.data.results[i]["result"] ="Wrong Answer"
+            }
+              
 
             if (response.data.results[i]["result"] == "-4")
               response.data.results[i]["result"] = "Compile Error";
 
-            if (response.data.results[i]["result"] == "-5")
+            if (response.data.results[i]["result"] == "-5"){
               response.data.results[i]["result"] =
                 "Presentation Error on test " + testcase;
+                if(testcase=="?")
+                response.data.results[i]["result"] ="Presentation Error"
+            }
 
             if (response.data.results[i]["result"] == "-6") {
               response.data.results[i]["result"] = "Waiting";
@@ -370,21 +377,36 @@ export default {
             if (response.data.results[i]["result"] == "0")
               response.data.results[i]["result"] = "Accepted";
 
-            if (response.data.results[i]["result"] == "1")
+            if (response.data.results[i]["result"] == "1"){
               response.data.results[i]["result"] =
                 "Time Limit Exceeded on test " + testcase;
+                if(testcase=="?")
+                response.data.results[i]["result"] ="Time Limit Exceeded"
+            }
 
-            if (response.data.results[i]["result"] == "2")
+            if (response.data.results[i]["result"] == "2"){
               response.data.results[i]["result"] =
                 "Time Limit Exceeded on test " + testcase;
+                if(testcase=="?")
+                response.data.results[i]["result"] ="Time Limit Exceeded"
+            }
+              
 
-            if (response.data.results[i]["result"] == "3")
+            if (response.data.results[i]["result"] == "3"){
               response.data.results[i]["result"] =
                 "Memory Limit Exceeded on test " + testcase;
+                if(testcase=="?")
+                response.data.results[i]["result"] ="Memory Limit Exceeded"
+            }
+              
 
-            if (response.data.results[i]["result"] == "4")
+            if (response.data.results[i]["result"] == "4"){
               response.data.results[i]["result"] =
                 "Runtime Error on test " + testcase;
+              if(testcase=="?")
+                response.data.results[i]["result"] ="Runtime Error"
+            }
+              
 
             if (response.data.results[i]["result"] == "5")
               response.data.results[i]["result"] = "System Error";

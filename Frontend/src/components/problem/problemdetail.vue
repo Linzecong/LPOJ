@@ -3,7 +3,7 @@
     <el-col :span="18">
       <el-row>
         <el-card shadow="always">
-          <el-row :gutter="18" id="title">{{'LPOJ - '+this.ID+' '}}{{title}}</el-row>
+          <el-row :gutter="18" id="title">{{this.oj+' - '+this.proid+' '}}{{title}}</el-row>
           <br>
           <el-row :gutter="18" id="des">Description</el-row>
           <el-row :gutter="18" id="detail">
@@ -203,6 +203,7 @@ export default {
       author: "",
       addtime: "",
       oj: "",
+      proid:"",
       source: "",
       time: "",
       memory: "",
@@ -243,6 +244,7 @@ export default {
           this.$message.error("服务器错误！" + "(" + "无权限" + ")");
           return;
         }
+        this.proid = this.ID
         this.des = response.data.des;
         this.input = response.data.input;
         this.output = response.data.output;
@@ -258,6 +260,11 @@ export default {
         this.time = response.data.time + "MS";
         this.memory = response.data.memory + "MB";
         this.hint = response.data.hint;
+
+        if(this.oj!="LPOJ"){
+          this.proid = this.source
+        }
+
         this.$axios
           .get("/problemdata/" + this.ID + "/")
           .then(response => {
@@ -374,7 +381,7 @@ export default {
           this.$axios
             .post("/judgestatusput/", {
               user: localStorage.username,
-              oj: "LPOJ",
+              oj: this.oj,
               problem: this.ID,
               result: -1,
               time: 0,
@@ -386,8 +393,8 @@ export default {
               contest: 0,
               code: this.code,
               testcase: 0,
-              message: "0",
-              problemtitle: "LPOJ - " + this.ID + " " + this.title,
+              message: this.proid+"",
+              problemtitle: this.oj+" - " + this.proid + " " + this.title,
               rating: parseInt(localStorage.rating)
             })
             .then(response => {
@@ -430,6 +437,8 @@ export default {
           response.data["result"] = "Wrong Answer on test " + testcase;
           this.judgetype = "danger";
           clearInterval(this.$store.state.submittimer);
+          if(testcase=="?")
+                response.data["result"] ="Wrong Answer"
         }
 
         if (response.data["result"] == "-4") {
@@ -442,6 +451,8 @@ export default {
           response.data["result"] = "Presentation Error on test " + testcase;
           this.judgetype = "warning";
           clearInterval(this.$store.state.submittimer);
+          if(testcase=="?")
+                response.data["result"] ="Presentation Error"
         }
 
         if (response.data["result"] == "-6") {
@@ -460,24 +471,32 @@ export default {
           response.data["result"] = "Time Limit Exceeded on test " + testcase;
           this.judgetype = "warning";
           clearInterval(this.$store.state.submittimer);
+          if(testcase=="?")
+                response.data["result"] ="Time Limit Exceeded"
         }
 
         if (response.data["result"] == "2") {
           response.data["result"] = "Time Limit Exceeded on test " + testcase;
           this.judgetype = "warning";
           clearInterval(this.$store.state.submittimer);
+          if(testcase=="?")
+                response.data["result"] ="Time Limit Exceeded"
         }
 
         if (response.data["result"] == "3") {
           response.data["result"] = "Memory Limit Exceeded on test " + testcase;
           this.judgetype = "warning";
           clearInterval(this.$store.state.submittimer);
+          if(testcase=="?")
+                response.data["result"] ="Memory Limit Exceeded"
         }
 
         if (response.data["result"] == "4") {
           response.data["result"] = "Runtime Error on test " + testcase;
           this.judgetype = "warning";
           clearInterval(this.$store.state.submittimer);
+          if(testcase=="?")
+                response.data["result"] ="Runtime Error"
         }
 
         if (response.data["result"] == "5") {

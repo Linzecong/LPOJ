@@ -23,7 +23,7 @@ export default {
     click() {
       if (this.name == "无") {
         this.$axios
-          .post("/settingboard/1/", {
+          .post("/settingboard/", {
             schoolname: this.name
           })
           .then(res => {

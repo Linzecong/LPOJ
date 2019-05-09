@@ -14,7 +14,7 @@ class Problem(models.Model):
     output = models.TextField()
     sinput = models.TextField()
     soutput = models.TextField()
-    source = models.TextField()
+    source = models.TextField() # 也可以用来存该OJ的Pro ID
     time = models.IntegerField()
     memory = models.IntegerField()
     hint = models.TextField(null=True)

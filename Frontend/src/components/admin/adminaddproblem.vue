@@ -3,6 +3,10 @@
     <el-form-item label="题目编号：">
       <el-input v-model="addproblemform.problem"></el-input>
     </el-form-item>
+    <el-form-item label="特殊选项：添加其他OJ题目用！不知道的话请忽略">
+      <el-input v-model="addproblemform.oj" placeholder="OJ"></el-input>
+      <el-input v-model="addproblemform.source" placeholder="Pro ID"></el-input>
+    </el-form-item>
     <el-form-item label="作者：">
       <el-input v-model="addproblemform.author"></el-input>
     </el-form-item>
