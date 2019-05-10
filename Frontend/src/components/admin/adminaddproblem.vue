@@ -107,7 +107,8 @@ export default {
         auth: 2,
         tag: "简单题|模拟|贪心",
         level: 3,
-        score: 100
+        score: 100,
+        oj:""
       },
       addproblemdataform: {
         problem: this.problemcount + 1,
@@ -115,7 +116,8 @@ export default {
         tag: "简单题|模拟|贪心",
         level: 3,
         score: 100,
-        auth: 2
+        auth: 2,
+        oj:""
       }
     };
   },
@@ -166,6 +168,7 @@ export default {
         this.addproblemdataform.tag = this.addproblemform.tag;
         this.addproblemdataform.score = this.addproblemform.score;
         this.addproblemdataform.auth = this.addproblemform.auth;
+        this.addproblemdataform.oj = this.addproblemform.oj;
 
         var tag = this.addproblemdataform.tag.split("|");
         for (var i = 0; i < tag.length; i++) {

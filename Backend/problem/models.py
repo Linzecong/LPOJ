@@ -8,7 +8,7 @@ class Problem(models.Model):
     author = models.CharField(max_length=50, default="admin")
     addtime = models.DateTimeField(auto_now=True)
     oj = models.CharField(max_length=50, default="LPOJ")
-    title = models.CharField(max_length=50)
+    title = models.CharField(max_length=500)
     des = models.TextField()
     input = models.TextField()
     output = models.TextField()
@@ -28,7 +28,7 @@ class Problem(models.Model):
 
 class ProblemData(models.Model):
     problem = models.CharField(max_length=50, primary_key=True)
-    title = models.CharField(max_length=50)
+    title = models.CharField(max_length=500)
     level = models.IntegerField(default=5)
     submission = models.IntegerField(default=0)
     ac = models.IntegerField(default=0)
@@ -42,6 +42,7 @@ class ProblemData(models.Model):
     tag = models.TextField(null=True)
     score = models.IntegerField(default=1000)
     auth = models.IntegerField(default=1)  # 1公开 2私密 3 比赛中的题
+    oj = models.CharField(max_length=50, default="LPOJ")
 
     objects = models.Manager()
 

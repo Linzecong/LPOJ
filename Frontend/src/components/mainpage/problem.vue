@@ -2,7 +2,7 @@
   <el-row :gutter="15">
     <el-col :span="18">
       <el-card shadow="always">
-        <center>
+        
           <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
@@ -12,7 +12,17 @@
             layout="total, sizes, prev, pager, next, jumper"
             :total="totalproblem"
           ></el-pagination>
-        </center>
+
+          <el-switch
+          style="float: right;"
+          v-model="islpoj"
+          active-text="LPOJ"
+          inactive-text="All"
+          @change="statuechange"
+        ></el-switch>
+       
+
+        
 
         <el-table
           :data="tableData"
@@ -70,11 +80,7 @@
       </el-row>
       <el-row>
         <el-card shadow="always">
-          <el-input
-            placeholder="Search..."
-            v-model="searchtext"
-            @keyup.native.enter="searchtitle"
-          >
+          <el-input placeholder="Search..." v-model="searchtext" @keyup.native.enter="searchtitle">
             <el-button slot="append" icon="el-icon-search" @click="searchtitle"></el-button>
           </el-input>
         </el-card>
@@ -105,7 +111,37 @@ export default {
   components: {
     prostatistice
   },
+  data() {
+    return {
+      currentpage: 1,
+      pagesize: 15,
+      totalproblem: 10,
+      tableData: [],
+      tagnames: [],
+      ac: 100,
+      mle: 100,
+      tle: 100,
+      rte: 100,
+      pe: 100,
+      ce: 100,
+      wa: 100,
+      se: 100,
+      title: "Statistics",
+      currenttag: "",
+      islpoj:true,
+      searchtext: "",
+      searchoj: "LPOJ"
+    };
+  },
   methods: {
+    statuechange(val){
+      if (val == true) {
+        this.searchoj="LPOJ"
+      } else {
+        this.searchoj=""
+      }
+      this.searchtitle()
+    },
     searchtitle() {
       this.currentpage = 1;
       this.$axios
@@ -115,7 +151,8 @@ export default {
             "&offset=" +
             (this.currentpage - 1) * this.pagesize +
             "&auth=1&search=" +
-            this.searchtext
+            this.searchtext +
+            "&oj="+this.searchoj
         )
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {
@@ -172,7 +209,8 @@ export default {
             "&offset=" +
             (this.currentpage - 1) * this.pagesize +
             "&auth=1&search=" +
-            this.searchtext
+            this.searchtext +
+            "&oj="+this.searchoj
         )
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {
@@ -213,7 +251,8 @@ export default {
             "&offset=" +
             (this.currentpage - 1) * this.pagesize +
             "&auth=1&search=" +
-            this.searchtext
+            this.searchtext +
+            "&oj="+this.searchoj
         )
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {
@@ -253,7 +292,8 @@ export default {
             "&offset=" +
             (this.currentpage - 1) * this.pagesize +
             "&auth=1&search=" +
-            this.searchtext
+            this.searchtext +
+            "&oj="+this.searchoj
         )
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {
@@ -329,30 +369,9 @@ export default {
       });
     }
   },
-  data() {
-    return {
-      currentpage: 1,
-      pagesize: 15,
-      totalproblem: 10,
-      tableData: [],
-      tagnames: [],
-      ac: 100,
-      mle: 100,
-      tle: 100,
-      rte: 100,
-      pe: 100,
-      ce: 100,
-      wa: 100,
-      se: 100,
-      title: "Statistics",
-      currenttag: "",
-
-      searchtext: ""
-    };
-  },
   mounted() {
     this.$axios
-      .get("/problemdata/?limit=15&offset=0" + "&auth=1")
+      .get("/problemdata/?limit=15&offset=0&auth=1&oj=LPOJ")
       .then(response => {
         for (var i = 0; i < response.data.results.length; i++) {
           if (response.data.results[i]["level"] == "1")

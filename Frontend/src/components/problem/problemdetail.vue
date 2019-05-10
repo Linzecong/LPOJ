@@ -3,7 +3,7 @@
     <el-col :span="18">
       <el-row>
         <el-card shadow="always">
-          <el-row :gutter="18" id="title">{{this.oj+' - '+this.proid+' '}}{{title}}</el-row>
+          <el-row :gutter="18" id="title">{{(this.oj=="LPOJ"?"LPOJ":"")+' - '+(this.oj=="LPOJ"?this.proid:"")+' '}}{{title}}</el-row>
           <br>
           <el-row :gutter="18" id="des">Description</el-row>
           <el-row :gutter="18" id="detail">

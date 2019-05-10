@@ -32,7 +32,7 @@ class ProblemDataView(viewsets.ModelViewSet):
     pagination_class = LimitOffsetPagination
     permission_classes = (ManagerOnly,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter)
-    filter_fields = ('auth',)
+    filter_fields = ('auth','oj',)
     search_fields = ('tag', 'title')
     throttle_scope = "post"
     throttle_classes = [ScopedRateThrottle, ]
