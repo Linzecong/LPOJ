@@ -3,7 +3,8 @@
     <el-row>
       <el-form label-position="right">
         <el-form-item label="学校名称">
-          <el-input v-model="name" placeholder="GDUFS" style="width:200px"></el-input>
+          <el-input v-model="name" placeholder="School Name" style="width:200px"></el-input>
+          <el-input v-model="ojname" placeholder="OJ Name" style="width:200px"></el-input>
           <el-button type="primary" @click="click">提交</el-button>
         </el-form-item>
       </el-form>
@@ -16,7 +17,8 @@ export default {
   name: "adminsetting",
   data() {
     return {
-      name: ""
+      name: "",
+      ojname:""
     };
   },
   methods: {
@@ -24,7 +26,8 @@ export default {
       if (this.name == "无") {
         this.$axios
           .post("/settingboard/", {
-            schoolname: this.name
+            schoolname: this.name,
+            ojname:this.ojname
           })
           .then(res => {
             this.$message.success("提交成功！");
@@ -37,7 +40,8 @@ export default {
       } else {
         this.$axios
           .put("/settingboard/1/", {
-            schoolname: this.name
+            schoolname: this.name,
+            ojname:this.ojname
           })
           .then(res => {
             this.$message.success("提交成功！");
@@ -54,7 +58,9 @@ export default {
     this.$axios
       .get("/settingboard/")
       .then(res => {
-        if (res.data.length > 0) this.name = res.data[0].schoolname;
+        if (res.data.length > 0) {this.name = res.data[0].schoolname;
+        this.ojname= res.data[0].ojname;
+        }
         else this.name = "无";
       })
       .catch(error => {

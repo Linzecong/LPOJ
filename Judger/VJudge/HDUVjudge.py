@@ -1,6 +1,5 @@
 import requests
 from time import sleep
-import http.cookiejar as cookielib
 
 
 def HDUVJudge(problemid, language, usercode):

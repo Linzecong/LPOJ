@@ -70,7 +70,6 @@ if (localStorage.username != "") {
   localStorage.setItem("acpro", "");
 }
 
-
 new Vue({
   el: '#app',
   router,

@@ -7,7 +7,7 @@
       v-bind:router="true"
       id="nav"
     >
-      <el-menu-item index="/" id="title">LPOJ</el-menu-item>
+      <el-menu-item index="/" id="title">{{school}}</el-menu-item>
       <el-menu-item index="/main">
         <i class="el-icon-star-off"></i>Home
       </el-menu-item>
@@ -80,7 +80,7 @@ export default {
   data() {
     return {
       activeIndex: "1",
-
+      school:"LPOJ",
       loginshow: localStorage.username,
       username: localStorage.username,
       name: localStorage.name,
@@ -89,22 +89,17 @@ export default {
   },
   created() {
     this.isadmin = localStorage.type == 2 || localStorage.type == 3;
-
-    // if (localStorage.username != "") {
-    //   this.$axios
-    //     .get("/userdata/?username=" + localStorage.username)
-    //     .then(response => {
-    //       localStorage.setItem("rating", response.data[0].rating);
-    //       var acpro = response.data[0].acpro.split("|")
-    //       acpro.shift()
-    //       this.$store.state.acpro=acpro
-    //     });
-    // } else {
-    //   localStorage.setItem("username", "");
-    //   localStorage.setItem("name", "");
-    //   localStorage.setItem("rating", "");
-    //   localStorage.setItem("type", "");
-    // }
+    this.$axios
+      .get("/settingboard/")
+      .then(res => {
+        if (res.data.length > 0) this.school = res.data[0].ojname;
+        else this.school = "LPOJ";
+      })
+      .catch(error => {
+        this.$message.error(
+          "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
+        );
+      });
   },
   methods: {
     loginopen() {

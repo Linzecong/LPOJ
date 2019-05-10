@@ -7,7 +7,7 @@
           <br>
           <el-row :gutter="18" id="des">Description</el-row>
           <el-row :gutter="18" id="detail">
-            <div style="margin-right:50px;word-break:break-all;white-space:pre-line;" v-html="des"></div>
+            <div style="margin-right:50px;word-break:break-all;white-space:pre-line;" v-html="des" :key="des"></div>
           </el-row>
           <el-row :gutter="18" id="des">Input</el-row>
           <el-row :gutter="18" id="detail">
@@ -228,6 +228,14 @@ export default {
       submitid: -1
     };
   },
+  watch: {
+    des: function() {
+      console.log('data changed');
+      this.$nextTick().then(()=>{
+        this.reRender();
+      });
+    }
+  },
   created() {
     this.ID = this.$route.query.problemID;
     if (!this.ID) {
@@ -336,6 +344,18 @@ export default {
       });
   },
   methods: {
+    reRender() {
+      if(window.MathJax) {
+        console.log('rendering mathjax');
+        MathJax.Hub.Config({
+            tex2jax: {
+                inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+            }
+        });
+        window.MathJax.Hub.Queue(["Typeset", window.MathJax.Hub], () => console.log('done'));
+      }
+    },
     onCopy(e) {
       this.$message.success("复制成功！");
     },

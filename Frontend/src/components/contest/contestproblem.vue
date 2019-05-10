@@ -36,6 +36,7 @@
               <div
                 style="margin-right:50px;word-break:break-all;white-space:pre-line;"
                 v-html="des"
+                :key="des"
               ></div>
             </el-row>
             <el-row :gutter="18" id="des">Input</el-row>
@@ -206,7 +207,27 @@ export default {
       return String.fromCharCode(val + A.charCodeAt());
     }
   },
+  watch: {
+    des: function() {
+      console.log('data changed');
+      this.$nextTick().then(()=>{
+        this.reRender();
+      });
+    }
+  },
   methods: {
+    reRender() {
+      if(window.MathJax) {
+        console.log('rendering mathjax');
+        MathJax.Hub.Config({
+            tex2jax: {
+                inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+            }
+        });
+        window.MathJax.Hub.Queue(["Typeset", window.MathJax.Hub], () => console.log('done'));
+      }
+    },
     toCharM(val) {
       var A = "A";
       val = parseInt(val);
