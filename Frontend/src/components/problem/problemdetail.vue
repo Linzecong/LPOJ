@@ -413,7 +413,7 @@ export default {
               contest: 0,
               code: this.code,
               testcase: 0,
-              message: this.proid+"",
+              message: this.oj=="LPOJ"?"0":(this.proid+""),
               problemtitle: this.oj+" - " + this.proid + " " + this.title,
               rating: parseInt(localStorage.rating)
             })

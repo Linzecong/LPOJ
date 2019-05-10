@@ -1,7 +1,7 @@
 <template>
   <el-card>
     <div slot="header">
-      <b>Welcome to LPOJ</b>
+      <b>Welcome to {{school}}</b>
     </div>
     <b>Version：2.0</b>
     <br>
@@ -13,8 +13,23 @@
 export default {
   name: "welcomemessage",
   data() {
-    return {};
-  }
+    return {
+      school:"LPOJ",
+    };
+  },
+  created() {
+    this.$axios
+      .get("/settingboard/")
+      .then(res => {
+        if (res.data.length > 0) this.school = res.data[0].ojname;
+        else this.school = "LPOJ";
+      })
+      .catch(error => {
+        this.$message.error(
+          "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
+        );
+      });
+  },
 };
 </script>
 

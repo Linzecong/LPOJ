@@ -74,10 +74,10 @@
               </el-row>
             </el-row>
 
-            <el-row :gutter="18" id="des">Source</el-row>
+            <!-- <el-row :gutter="18" id="des">Source</el-row>
             <el-row :gutter="18" id="detail">
               <div style="margin-right:50px;">{{source}}</div>
-            </el-row>
+            </el-row> -->
             <el-row :gutter="18" id="des">Hint</el-row>
             <el-row :gutter="18" id="detail">
               <div
@@ -257,6 +257,7 @@ export default {
       this.$axios
         .get("/problem/" + this.currentproblem + "/")
         .then(response => {
+          this.oj = response.data.oj
           this.des = response.data.des;
           this.input = response.data.input;
           this.output = response.data.output;
@@ -341,6 +342,7 @@ export default {
               this.$axios
                 .get("/problem/" + this.currentproblem + "/")
                 .then(response => {
+                  this.oj = response.data.oj
                   this.des = response.data.des;
                   this.input = response.data.input;
                   this.output = response.data.output;
@@ -396,7 +398,7 @@ export default {
             this.$axios
               .post("/judgestatusput/", {
                 user: localStorage.username,
-                oj: "LPOJ",
+                oj: this.oj,
                 problem: this.currentproblem,
                 result: -1,
                 time: 0,
@@ -409,7 +411,7 @@ export default {
                 contestproblem: -1,
                 code: this.code,
                 testcase: 0,
-                message: "0",
+                message: this.oj=="LPOJ"?"0":(this.proid+""),
                 problemtitle: "比赛 " + this.currentcontest + this.currentrankE,
                 rating: parseInt(localStorage.rating)
               })
@@ -448,7 +450,7 @@ export default {
                   this.$axios
                     .post("/judgestatusput/", {
                       user: localStorage.username,
-                      oj: "LPOJ",
+                      oj: this.oj,
                       problem: this.currentproblem,
                       result: -1,
                       time: 0,
@@ -461,7 +463,7 @@ export default {
                       contestproblem: this.currentrank,
                       code: this.code,
                       testcase: 0,
-                      message: "0",
+                      message: this.oj=="LPOJ"?"0":(this.proid+""),
                       problemtitle:
                         "比赛 " + this.currentcontest + this.currentrankE,
                       rating: parseInt(localStorage.rating)
@@ -525,7 +527,7 @@ export default {
                       this.$axios
                         .post("/judgestatusput/", {
                           user: localStorage.username,
-                          oj: "LPOJ",
+                          oj: this.oj,
                           problem: this.currentproblem,
                           result: -1,
                           time: 0,
@@ -538,7 +540,7 @@ export default {
                           contestproblem: this.currentrank,
                           code: this.code,
                           testcase: 0,
-                          message: "0",
+                          message: this.oj=="LPOJ"?"0":(this.proid+""),
                           problemtitle:
                             "比赛" + this.currentcontest + this.currentrankE,
                           rating: parseInt(localStorage.rating)
@@ -628,6 +630,8 @@ export default {
         if (response.data["result"] == "-3") {
           response.data["result"] = "Wrong Answer on test " + testcase;
           this.judgetype = "danger";
+          if(testcase=="?")
+                response.data["result"] ="Wrong Answer"
           clearInterval(this.$store.state.submittimer);
         }
 
@@ -640,6 +644,8 @@ export default {
         if (response.data["result"] == "-5") {
           response.data["result"] = "Presentation Error on test " + testcase;
           this.judgetype = "warning";
+          if(testcase=="?")
+                response.data["result"] ="Presentation Error"
           clearInterval(this.$store.state.submittimer);
         }
 
@@ -658,24 +664,32 @@ export default {
         if (response.data["result"] == "1") {
           response.data["result"] = "Time Limit Exceeded on test " + testcase;
           this.judgetype = "warning";
+          if(testcase=="?")
+                response.data["result"] ="Time Limit Exceeded"
           clearInterval(this.$store.state.submittimer);
         }
 
         if (response.data["result"] == "2") {
           response.data["result"] = "Time Limit Exceeded on test " + testcase;
           this.judgetype = "warning";
+          if(testcase=="?")
+                response.data["result"] ="Time Limit Exceeded"
           clearInterval(this.$store.state.submittimer);
         }
 
         if (response.data["result"] == "3") {
           response.data["result"] = "Memory Limit Exceeded on test " + testcase;
           this.judgetype = "warning";
+          if(testcase=="?")
+                response.data["result"] ="Memory Limit Exceeded"
           clearInterval(this.$store.state.submittimer);
         }
 
         if (response.data["result"] == "4") {
           response.data["result"] = "Runtime Error on test " + testcase;
           this.judgetype = "warning";
+          if(testcase=="?")
+                response.data["result"] ="Runtime Error"
           clearInterval(this.$store.state.submittimer);
         }
 

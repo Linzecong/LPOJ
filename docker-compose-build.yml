@@ -6,7 +6,7 @@ services:
     environment:
             MYSQL_ROOT_PASSWORD: "lpojdatabase" # 选择性修改
     ports:
-     - "3306:3306"
+     - "4406:3306"
     restart: always
     volumes:
         - "./Database/data:/var/lib/mysql"
@@ -30,9 +30,9 @@ services:
       - db:lpojdatabase 
     environment:
             DB_PASSWORD: "lpojdatabase" # 选择性修改
-            DB_HOST: "lpojdatabase" # 选择性修改
+            DB_HOST: "172.17.0.1" # 选择性修改
             DB_USER: 'root' # 选择性修改
-            DB_PORT: 3306 # 选择性修改
+            DB_PORT: 4406 # 选择性修改
     ports:
      - "8000:8000"
     restart: always
@@ -51,7 +51,7 @@ services:
     links: 
       - backend:lpojbackend
     ports:
-     - "80:80"
+     - "8080:80"
     restart: always
 
   judgerserver:
@@ -67,9 +67,9 @@ services:
       - db:lpojdatabase
     environment:
             DB_PASSWORD: "lpojdatabase" # 选择性修改
-            DB_HOST: "lpojdatabase" # 选择性修改
+            DB_HOST: "172.17.0.1" # 选择性修改
             DB_USER: 'root' # 选择性修改
-            DB_PORT: 3306 # 选择性修改
+            DB_PORT: 4406 # 选择性修改
     ports:
      - "9906:9906"
     restart: always
@@ -87,9 +87,9 @@ services:
       - db:lpojdatabase
     environment:
             DB_PASSWORD: "lpojdatabase" # 选择性修改
-            DB_HOST: "lpojdatabase" # 选择性修改
+            DB_HOST: "172.17.0.1"" # 选择性修改
             DB_USER: 'root' # 选择性修改
-            DB_PORT: 3306 # 选择性修改
+            DB_PORT: 4406 # 选择性修改
     restart: always
     
   judger:
@@ -106,9 +106,9 @@ services:
       - db:lpojdatabase
     environment:
       DB_PASSWORD: "lpojdatabase" # 选择性修改
-      DB_HOST: "lpojdatabase" # 选择性修改
+      DB_HOST: "172.17.0.1"" # 选择性修改
       DB_USER: 'root' # 选择性修改
-      DB_PORT: 3306
+      DB_PORT: 4406
       SERVER_IP: "lpojjudgerserver"
       SFTP_IP: "172.17.0.1"
       SFTP_PORT: 22
