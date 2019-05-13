@@ -29,7 +29,15 @@
           ></el-date-picker>
         </el-form-item>
         <el-form-item label="比赛类型（ACM/OI/其他）：">
-          <el-input v-model="addcontestform.type"></el-input>
+        <el-select
+          v-model="addcontestform.type"
+          placeholder="Choose type..."
+        >
+          <el-option key="0" label="ACM" value="ACM"></el-option>
+          <el-option key="1" label="Rated" value="Rated"></el-option>
+          <el-option key="2" label="Homework" value="Homework"></el-option>
+          <el-option key="3" label="Personal" value="Personal"></el-option>
+        </el-select>
         </el-form-item>
         <el-form-item label="比赛权限（1 public 2 private 0 protect(可注册)）：">
           <el-input v-model.number="addcontestform.auth"></el-input>
@@ -169,7 +177,6 @@ export default {
       this.addcontestform.lasttime = parseInt(
         (range[1].getTime() - range[0].getTime()) / 1000
       );
-      console.log(this.addcontestform.begintime);
     },
 
     onAddContestSubmit() {

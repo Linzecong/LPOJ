@@ -108,7 +108,7 @@ export default {
         this.statusdata.user
       );
     },
-    ratingcolor({row, rowIndex}){
+    ratingcolor({ row, rowIndex }) {
       if (row.rating >= 3000) return "color:red;font-weight: bold;";
       if (row.rating >= 2600) return "color:#BB5E00;font-weight: bold;";
       if (row.rating >= 2200) return "color:#E6A23C;font-weight: bold;";
@@ -133,22 +133,64 @@ export default {
 
       return "background-color:white";
     },
-    setproblemcount(id) {
+    setproblemcount(cid) {
       if (this.$store.state.contesttype == "Rated") this.SolveLabel = "Score";
 
       this.contesttitle = this.$store.state.contesttitle;
-      this.$axios.get("/contestproblem/?contestid=" + id).then(response3 => {
+      this.$axios.get("/contestproblem/?contestid=" + cid).then(response3 => {
         this.$store.state.contestproblemcount = response3.data.length;
         this.problemcount = this.$store.state.contestproblemcount;
         this.probleminfo = [];
-        for (var i = 0; i < response3.data.length; i++) {
+        for (let i = 0; i < response3.data.length; i++) {
           this.probleminfo.push({
             prop: this.toChar(i),
             label: this.toChar(i)
           });
           this.problemids.push(response3.data[i].problemid);
         }
-        this.$axios.get("/contestboard/?contestid=" + id).then(response => {
+
+        if (
+          this.$store.state.contesttype == "Personal" &&
+          this.$store.state.contestboardid != cid
+        ) {
+          this.$axios
+            .get("/contestboard/?contestid=" + this.$store.state.contestfrom)
+            .then(response1 => {
+              this.$store.state.contestboardres = response1;
+              this.$store.state.contestboardid = this.$store.state.contestfrom;
+            });
+        }
+
+        var response = { data: [] };
+        //筛选
+        if (this.$store.state.contesttype == "Personal") {
+          this.$axios
+            .get("/contestinfo/" + this.$store.state.contestfrom + "/")
+            .then(res => {
+              var beginmis = new Date(Date.parse(res.data.begintime)).getTime();
+              var newres = { data: [] };
+              for (
+                let i = 0;
+                i < this.$store.state.contestboardres.data.length;
+                i++
+              ) {
+                let bt = this.$store.state.contestboardres.data[i].submittime;
+                if (bt - beginmis <= this.$store.state.contestleft * 1000) {
+                  let t = this.$store.state.contestboardres.data[i];
+                  t.user = "[Clone] " + t.user;
+                  t.submittime = t.submittime +  (this.$store.state.contestbegintime-beginmis)
+                  newres.data.push(t);
+                }
+              }
+              response = newres;
+            });
+        }
+
+        this.$axios.get("/contestboard/?contestid=" + cid).then(res1 => {
+          for (let i = 0; i < res1.data.length; i++) {
+            response.data.push(res1.data[i]);
+          }
+
           var data = [];
 
           //初始化每道题目的AC/Sub数
@@ -159,25 +201,23 @@ export default {
 
           //获取所有提交，提取出参加比赛的有哪些人
           var nameset = new Set();
-          var namevis = {"!!!":1}
-          for (let index = 0; index < response.data.length; index++){
+          var namevis = { "!!!": 1 };
+          for (let index = 0; index < response.data.length; index++) {
             nameset.add(
               response.data[index].username + "|" + response.data[index].user
             );
-            namevis[response.data[index].username]=0
+            namevis[response.data[index].username] = 0;
           }
-            
 
           //遍历每一个人，计算每一个人的信息
           for (var na of nameset) {
             //初始化参赛者信息
-            
+
             var username = na.split("|")[0];
             var nickname = na.split("|")[1];
             //去重
-            if(namevis[username]==1)
-              continue
-            namevis[username]=1
+            if (namevis[username] == 1) continue;
+            namevis[username] = 1;
             var PaticipantData = {
               user: username,
               nickname: nickname,
@@ -203,7 +243,7 @@ export default {
             //找出每一道题AC的时间
             for (let index = 0; index < response.data.length; index++) {
               if (response.data[index].username == username) {
-                PaticipantData["rating"]=response.data[index].rating
+                PaticipantData["rating"] = response.data[index].rating;
                 if (parseInt(response.data[index]["type"]) == 1) {
                   let time =
                     ProblemDataList[response.data[index].problemrank][0];
@@ -230,10 +270,10 @@ export default {
 
             //计算每一道题的信息
             for (var ii = 0; ii < this.probleminfo.length; ii++) {
-              var ProblemScore = 0
-              if(ii==0) ProblemScore = 200
-              else if(ii==1) ProblemScore = 500
-              else ProblemScore = (ii - 1) * 1000
+              var ProblemScore = 0;
+              if (ii == 0) ProblemScore = 200;
+              else if (ii == 1) ProblemScore = 500;
+              else ProblemScore = (ii - 1) * 1000;
 
               //如果AC了
               if (ProblemDataList[ii][0] != 5552304570991) {
@@ -248,7 +288,9 @@ export default {
                   (ACTime - this.$store.state.contestbegintime) / 1000
                 );
 
-                Score += ProblemScore- ((cha/60.0 * (0.7/(ii+1)))/100.0*ProblemScore)
+                Score +=
+                  ProblemScore -
+                  (((cha / 60.0) * (0.7 / (ii + 1))) / 100.0) * ProblemScore;
 
                 FaShi += cha;
                 FaShi += -FaShiNum * 20 * 60;
@@ -264,7 +306,7 @@ export default {
                   PaticipantData[this.toChar(ii)] =
                     "(" + FaShiNum + ")\n" + actime;
                   prosub[ii] = prosub[ii] - FaShiNum;
-                  Score += 20 * FaShiNum
+                  Score += 20 * FaShiNum;
                 } else PaticipantData[this.toChar(ii)] = actime;
               } else {
                 //表格中需要显示的信息
@@ -276,7 +318,9 @@ export default {
               }
             }
             PaticipantData["score"] =
-              this.$store.state.contesttype == "Rated" ? parseInt(Score<0?0:Score) : parseInt(ACNum);
+              this.$store.state.contesttype == "Rated"
+                ? parseInt(Score < 0 ? 0 : Score)
+                : parseInt(ACNum);
 
             var TimeTotal =
               parseInt(FaShi / 60 / 60) +
@@ -286,7 +330,6 @@ export default {
               parseInt((FaShi % 60) % 60);
             PaticipantData["time"] = TimeTotal; //排行榜上显示的
             PaticipantData["sorttime"] = FaShi; //用于分数相同时排序的
-            
 
             data.push(PaticipantData);
           }
@@ -303,10 +346,10 @@ export default {
 
           //查找FB
           for (var id = 0; id < this.problemcount; id++) {
-            var ProblemScore = 0
-            if(id==0) ProblemScore = 200
-            else if(id==1) ProblemScore = 500
-            else ProblemScore = (id - 1) * 1000
+            var ProblemScore = 0;
+            if (id == 0) ProblemScore = 200;
+            else if (id == 1) ProblemScore = 500;
+            else ProblemScore = (id - 1) * 1000;
 
             var pro = this.toChar(id);
             var index = -1;
@@ -342,10 +385,9 @@ export default {
             if (index != -1) {
               data[index][pro] = data[index][pro] + "\n❤";
               if (this.$store.state.contesttype == "Rated")
-                data[index]["score"] += parseInt(ProblemScore/10)
+                data[index]["score"] += parseInt(ProblemScore / 10);
             }
           }
-
           data.sort(this.sortByProperty("score", "sorttime"));
           this.tableData = data;
         });

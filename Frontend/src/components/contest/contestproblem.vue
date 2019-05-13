@@ -73,11 +73,6 @@
                 </el-col>
               </el-row>
             </el-row>
-
-            <!-- <el-row :gutter="18" id="des">Source</el-row>
-            <el-row :gutter="18" id="detail">
-              <div style="margin-right:50px;">{{source}}</div>
-            </el-row> -->
             <el-row :gutter="18" id="des">Hint</el-row>
             <el-row :gutter="18" id="detail">
               <div
@@ -209,23 +204,25 @@ export default {
   },
   watch: {
     des: function() {
-      console.log('data changed');
-      this.$nextTick().then(()=>{
+      console.log("data changed");
+      this.$nextTick().then(() => {
         this.reRender();
       });
     }
   },
   methods: {
     reRender() {
-      if(window.MathJax) {
-        console.log('rendering mathjax');
+      if (window.MathJax) {
+        console.log("rendering mathjax");
         MathJax.Hub.Config({
             tex2jax: {
-                inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-                displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+            inlineMath: [["$", "$"], ["\\(", "\\)"]],
+            displayMath: [["$$", "$$"], ["\\[", "\\]"]]
             }
         });
-        window.MathJax.Hub.Queue(["Typeset", window.MathJax.Hub], () => console.log('done'));
+        window.MathJax.Hub.Queue(["Typeset", window.MathJax.Hub], () =>
+          console.log("done")
+        );
       }
     },
     toCharM(val) {
@@ -257,7 +254,7 @@ export default {
       this.$axios
         .get("/problem/" + this.currentproblem + "/")
         .then(response => {
-          this.oj = response.data.oj
+          this.oj = response.data.oj;
           this.des = response.data.des;
           this.input = response.data.input;
           this.output = response.data.output;
@@ -270,31 +267,26 @@ export default {
           this.hint = response.data.hint;
           this.loading = false;
         });
-      this.$axios
+      if(localStorage.username!=""){
+        this.$axios
         .get(
-          "/contestrank/?contestid=" +
+          "/contestboard/?contestid=" +
             this.currentcontest +
             "&username=" +
-            localStorage.username
+            localStorage.username +
+            "&type=1"
         )
         .then(response => {
-          if (response.data.length != 0) {
-            var li = response.data[0]["statue"].split("|");
-
-            for (var ii = 0; ii < li.length; ii++) {
-              if (li[ii].indexOf("$") >= 0) {
-                this.$refs["A" + ii][0].style["color"] = "#67C23A";
-              } else {
-                li[ii] = parseInt(li[ii]);
-
-                if (li[ii] < 0) {
-                  this.$refs["A" + ii][0].style["color"] = "#F56C6C";
-                } else this.$refs["A" + ii][0].style["color"] = "black";
-              }
-            }
-            this.$refs["A" + tab.index][0].style["color"] = "#409EFF";
+          for (var ii = 0; ii < this.$store.state.contestproblemcount; ii++)
+            this.$refs["A" + ii][0].style["color"] = "black";
+          for (var i = 0; i < response.data.length; i++) {
+            this.$refs["A" + response.data[i].problemrank][0].style["color"] =
+              "#67C23A";    
           }
+          this.$refs["A" + tab.index][0].style["color"] = "#409EFF";    
         });
+      }
+      
     },
     getproblem(id) {
       this.loading = true;
@@ -342,7 +334,7 @@ export default {
               this.$axios
                 .get("/problem/" + this.currentproblem + "/")
                 .then(response => {
-                  this.oj = response.data.oj
+                  this.oj = response.data.oj;
                   this.des = response.data.des;
                   this.input = response.data.input;
                   this.output = response.data.output;
@@ -411,7 +403,7 @@ export default {
                 contestproblem: -1,
                 code: this.code,
                 testcase: 0,
-                message: this.oj=="LPOJ"?"0":(this.proid+""),
+                message: this.oj == "LPOJ" ? "0" : this.proid + "",
                 problemtitle: "比赛 " + this.currentcontest + this.currentrankE,
                 rating: parseInt(localStorage.rating)
               })
@@ -438,40 +430,7 @@ export default {
                 );
               });
           } else {
-            this.$axios
-              .get(
-                "/contestrank/?contestid=" +
-                  parseInt(this.currentcontest) +
-                  "&username=" +
-                  localStorage.username
-              )
-              .then(response5 => {
-                if (response5.data.length > 0) {
-                  this.$axios
-                    .post("/judgestatusput/", {
-                      user: localStorage.username,
-                      oj: this.oj,
-                      problem: this.currentproblem,
-                      result: -1,
-                      time: 0,
-                      memory: 0,
-                      length: this.code.length,
-                      language: this.language,
-                      submittime: curtime,
-                      judger: "waiting for judger",
-                      contest: this.currentcontest,
-                      contestproblem: this.currentrank,
-                      code: this.code,
-                      testcase: 0,
-                      message: this.oj=="LPOJ"?"0":(this.proid+""),
-                      problemtitle:
-                        "比赛 " + this.currentcontest + this.currentrankE,
-                      rating: parseInt(localStorage.rating)
-                    })
-                    .then(response => {
-                      var date1 = new Date(
-                        Date.parse(response.data.submittime)
-                      );
+            var date1 = new Date(Date.parse(curtime));
 
                       this.$axios
                         .post("/contestboard/", {
@@ -485,45 +444,6 @@ export default {
                           rating: parseInt(localStorage.rating)
                         })
                         .then(response2 => {
-                          this.$message({
-                            message: "提交成功！",
-                            type: "success"
-                          });
-                          clearInterval(this.$store.state.submittimer);
-                          this.submitid = response.data.id;
-                          this.submitbuttontext = "Pending";
-                          this.judgetype = "info";
-                          this.loadingshow = true;
-                          //创建一个全局定时器，定时刷新状态
-                          this.$store.state.submittimer = setInterval(
-                            this.timer,
-                            1000
-                          );
-                        });
-                    })
-                    .catch(error => {
-                      this.$message.error(
-                        "服务器错误！" +
-                          "(" +
-                          JSON.stringify(error.response.data) +
-                          ")"
-                      );
-                    });
-                } else {
-                  var str = "";
-                  for (var i = 0; i < this.problemids.length - 1; i++)
-                    str = str + "0|";
-                  str = str + "0";
-
-                  this.$axios
-                    .post("/contestrank/", {
-                      username: localStorage.username,
-                      user: localStorage.name,
-                      contestid: parseInt(this.currentcontest),
-                      statue: str,
-                      rating:localStorage.rating
-                    })
-                    .then(response8 => {
                       this.$axios
                         .post("/judgestatusput/", {
                           user: localStorage.username,
@@ -540,28 +460,12 @@ export default {
                           contestproblem: this.currentrank,
                           code: this.code,
                           testcase: 0,
-                          message: this.oj=="LPOJ"?"0":(this.proid+""),
+                    message: this.oj == "LPOJ" ? "0" : this.proid + "",
                           problemtitle:
                             "比赛 " + this.currentcontest + this.currentrankE,
                           rating: parseInt(localStorage.rating)
                         })
                         .then(response => {
-                          var date1 = new Date(
-                            Date.parse(response.data.submittime)
-                          );
-
-                          this.$axios
-                            .post("/contestboard/", {
-                              username: localStorage.username,
-                              user: localStorage.name,
-                              type: -1,
-                              submitid: response.data.id,
-                              contestid: parseInt(this.currentcontest),
-                              problemrank: this.currentrank,
-                              submittime: date1.getTime(),
-                              rating: parseInt(localStorage.rating)
-                            })
-                            .then(response2 => {
                               this.$message({
                                 message: "提交成功！",
                                 type: "success"
@@ -586,25 +490,6 @@ export default {
                               ")"
                           );
                         });
-                    })
-                    .catch(error => {
-                      this.$message.error(
-                        "服务器错误！" +
-                          "(" +
-                          JSON.stringify(error.response.data) +
-                          ")"
-                      );
-                    });
-                }
-              })
-              .catch(error => {
-                this.$message.error(
-                  "服务器错误！" +
-                    "(" +
-                    JSON.stringify(error.response.data) +
-                    ")"
-                );
-              });
           }
         });
       });
@@ -630,8 +515,7 @@ export default {
         if (response.data["result"] == "-3") {
           response.data["result"] = "Wrong Answer on test " + testcase;
           this.judgetype = "danger";
-          if(testcase=="?")
-                response.data["result"] ="Wrong Answer"
+          if (testcase == "?") response.data["result"] = "Wrong Answer";
           clearInterval(this.$store.state.submittimer);
         }
 
@@ -644,8 +528,7 @@ export default {
         if (response.data["result"] == "-5") {
           response.data["result"] = "Presentation Error on test " + testcase;
           this.judgetype = "warning";
-          if(testcase=="?")
-                response.data["result"] ="Presentation Error"
+          if (testcase == "?") response.data["result"] = "Presentation Error";
           clearInterval(this.$store.state.submittimer);
         }
 
@@ -664,32 +547,29 @@ export default {
         if (response.data["result"] == "1") {
           response.data["result"] = "Time Limit Exceeded on test " + testcase;
           this.judgetype = "warning";
-          if(testcase=="?")
-                response.data["result"] ="Time Limit Exceeded"
+          if (testcase == "?") response.data["result"] = "Time Limit Exceeded";
           clearInterval(this.$store.state.submittimer);
         }
 
         if (response.data["result"] == "2") {
           response.data["result"] = "Time Limit Exceeded on test " + testcase;
           this.judgetype = "warning";
-          if(testcase=="?")
-                response.data["result"] ="Time Limit Exceeded"
+          if (testcase == "?") response.data["result"] = "Time Limit Exceeded";
           clearInterval(this.$store.state.submittimer);
         }
 
         if (response.data["result"] == "3") {
           response.data["result"] = "Memory Limit Exceeded on test " + testcase;
           this.judgetype = "warning";
-          if(testcase=="?")
-                response.data["result"] ="Memory Limit Exceeded"
+          if (testcase == "?")
+            response.data["result"] = "Memory Limit Exceeded";
           clearInterval(this.$store.state.submittimer);
         }
 
         if (response.data["result"] == "4") {
           response.data["result"] = "Runtime Error on test " + testcase;
           this.judgetype = "warning";
-          if(testcase=="?")
-                response.data["result"] ="Runtime Error"
+          if (testcase == "?") response.data["result"] = "Runtime Error";
           clearInterval(this.$store.state.submittimer);
         }
 

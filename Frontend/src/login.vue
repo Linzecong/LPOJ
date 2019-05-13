@@ -29,22 +29,25 @@
 export default {
   name: "welcomemessage",
   data() {
-    return { 
-        dialogLoginVisible: false,
-    form: {
+    return {
+      dialogLoginVisible: false,
+      form: {
         username: "",
-        password: "",
+        password: ""
       }
-       };
+    };
   },
   methods: {
     open() {
       this.dialogLoginVisible = true;
     },
     loginClick() {
-      this.form.password = this.$md5(this.form.password);
+      var pas = this.$md5(this.form.password);
       this.$axios
-        .post("/login/", this.form)
+        .post("/login/", {
+          username: this.form.username,
+          password: pas
+        })
         .then(response => {
           if (response.data == "passworderror") {
             this.$message.error("密码错误");

@@ -15,6 +15,7 @@
           style="float:right;width:200px;"
           @change="searchcontest"
         >
+          <el-option key="-1" label="All" value=""></el-option>
           <el-option key="0" label="ACM" value="ACM"></el-option>
           <el-option key="1" label="Rated" value="Rated"></el-option>
           <el-option key="2" label="Homework" value="Homework"></el-option>

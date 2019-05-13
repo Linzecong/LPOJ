@@ -14,6 +14,7 @@ class ContestInfo(models.Model):
     lasttime = models.IntegerField(default=18000)
     type = models.CharField(max_length=50, default="ACM")
     auth = models.IntegerField(default=2)  # 1 public 2 private 0 protect(需注册)
+    clonefrom = models.IntegerField(default=-1)
 
     objects = models.Manager()
 
@@ -56,20 +57,6 @@ class ContestBoard(models.Model):
     submitid = models.IntegerField()  # 用于rejudge
     rating = models.IntegerField(default=1500)
 
-    objects = models.Manager()
-
-    def __str__(self):
-        return self.contestid
-
-
-class ContestRank(models.Model):
-
-    contestid = models.IntegerField()
-    username = models.CharField(max_length=50)
-    user = models.CharField(max_length=50)
-    # 用 | 分割，如  0|-1|100|0|-5 代表 B题错了一次，C题在100毫秒AC，
-    statue = models.CharField(max_length=5000)
-    rating = models.IntegerField(default=1500)
     objects = models.Manager()
 
     def __str__(self):
