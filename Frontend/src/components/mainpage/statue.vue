@@ -312,7 +312,6 @@ export default {
         this.showall = true;
       else this.showall = false;
       this.getstatusdata();
-      this.loading = false;
     },
 
     getstatusdata() {

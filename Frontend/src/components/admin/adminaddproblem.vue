@@ -108,7 +108,7 @@ export default {
         tag: "简单题|模拟|贪心",
         level: 3,
         score: 100,
-        oj:""
+        oj:"LPOJ"
       },
       addproblemdataform: {
         problem: this.problemcount + 1,

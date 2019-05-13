@@ -542,7 +542,7 @@ export default {
                           testcase: 0,
                           message: this.oj=="LPOJ"?"0":(this.proid+""),
                           problemtitle:
-                            "比赛" + this.currentcontest + this.currentrankE,
+                            "比赛 " + this.currentcontest + this.currentrankE,
                           rating: parseInt(localStorage.rating)
                         })
                         .then(response => {

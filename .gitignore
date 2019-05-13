@@ -22,3 +22,6 @@ migrations
 CrawlingServer/contest.json
 Database/data
 
+CrawlingServer/NowCoderSpider.py
+CrawlingServer/CFSpider.py
+CrawlingServer/HDUSpider.py

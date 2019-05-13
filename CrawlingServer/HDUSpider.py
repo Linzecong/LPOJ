@@ -118,6 +118,7 @@ def getpro(problemid,ppid):
     print('HDU - '+str(problemid)+' '+titstr)
     return 0
 
-totid = 0
-for i in range(6000):
-    totid += getpro(str(i+1930),str(i+954-totid))
+# totid = 0
+# for i in range(6000):
+#     totid += getpro(str(i+1930),str(i+954-totid))
+getpro(str(1083),str(189))

@@ -51,11 +51,9 @@ def getSubmition():
     db.close()
 
 
-fir = True
 
-
-def deal_client(newSocket: socket, addr, first):
-    global mutex, queue, fir
+def deal_client(newSocket: socket, addr):
+    global mutex, queue
     statue = False
     cursor = db.cursor()
     falsetime = 0
@@ -66,18 +64,16 @@ def deal_client(newSocket: socket, addr, first):
                 if statue == True and queue.empty() is not True:
                     id = queue.get()
                     statue = False
-                    # 只允许一个测评机测JAVA，否则时间会判断失败
-
                     cursor.execute(
                         "SELECT language from judgestatus_judgestatus where id = '%d'" % (id))
                     data = cursor.fetchall()
                     print(data[0][0])
-                    if data[0][0] == "Java" and first == True:
-                        newSocket.send(("judge|%d" % id).encode("utf-8"))
-                    elif data[0][0] != "Java":
-                        newSocket.send(("judge|%d" % id).encode("utf-8"))
-                    else:
-                        queue.put(id)
+                    # if data[0][0] == "Java" and first == True:
+                    newSocket.send(("judge|%d" % id).encode("utf-8"))
+                    # elif data[0][0] != "Java":
+                    #     newSocket.send(("judge|%d" % id).encode("utf-8"))
+                    # else:
+                    #     queue.put(id)
                 else:
                     newSocket.send("getstatue".encode("utf-8"))
                     data = newSocket.recv(1024)
@@ -93,22 +89,18 @@ def deal_client(newSocket: socket, addr, first):
                             print(addr, "timeout!")
                             newSocket.close()
                             mutex.release()
-                            if first == True:
-                                fir = True
                             return
                     print(addr, statue)
 
             except socket.error:
                 newSocket.close()
                 mutex.release()
-                if first == True:
-                    fir = True
+                
                 return
             except:
                 print("error!")
                 mutex.release()
-                if first == True:
-                    fir = True
+                
                 return
             mutex.release()
 
@@ -174,7 +166,6 @@ t1.start()
 while True:
     newSocket, addr = server.accept()
     print("client [%s] is connected!" % str(addr))
-    client = threading.Thread(target=deal_client, args=(newSocket, addr, fir))
-    fir = False
+    client = threading.Thread(target=deal_client, args=(newSocket, addr))
     client.setDaemon(True)
     client.start()
