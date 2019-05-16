@@ -365,7 +365,8 @@ export default {
               this.timestyle = "end";
               this.$store.state.contestisend = true;
             }
-
+            
+            this.$store.state.contestleft = this.left;
             var t = Math.abs(this.left);
             this.leftpercentage = parseInt(
               (Math.abs(this.left) / response.data.lasttime) * 100

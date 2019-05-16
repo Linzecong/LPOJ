@@ -432,18 +432,7 @@ export default {
           } else {
             var date1 = new Date(Date.parse(curtime));
 
-                      this.$axios
-                        .post("/contestboard/", {
-                          username: localStorage.username,
-                          user: localStorage.name,
-                          type: -1,
-                          submitid: response.data.id,
-                          contestid: parseInt(this.currentcontest),
-                          problemrank: this.currentrank,
-                          submittime: date1.getTime(),
-                          rating: parseInt(localStorage.rating)
-                        })
-                        .then(response2 => {
+                      
                       this.$axios
                         .post("/judgestatusput/", {
                           user: localStorage.username,
@@ -470,6 +459,18 @@ export default {
                                 message: "提交成功！",
                                 type: "success"
                               });
+                              this.$axios
+                        .post("/contestboard/", {
+                          username: localStorage.username,
+                          user: localStorage.name,
+                          type: -1,
+                          submitid: response.data.id,
+                          contestid: parseInt(this.currentcontest),
+                          problemrank: this.currentrank,
+                          submittime: date1.getTime(),
+                          rating: parseInt(localStorage.rating)
+                        })
+                        .then(response2 => {
                               clearInterval(this.$store.state.submittimer);
                               this.submitid = response.data.id;
                               this.submitbuttontext = "Pending";
