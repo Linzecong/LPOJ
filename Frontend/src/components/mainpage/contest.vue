@@ -115,7 +115,7 @@ export default {
             this.pagesize +
             "&offset=" +
             (this.currentpage - 1) * this.pagesize +
-            "&title=" +
+            "&search=" +
             this.searchform.title +
             "&type=" +
             this.searchform.type
@@ -167,7 +167,7 @@ export default {
             this.pagesize +
             "&offset=" +
             (this.currentpage - 1) * this.pagesize +
-            "&title=" +
+            "&search=" +
             this.searchform.title +
             "&type=" +
             this.searchform.type
@@ -219,7 +219,7 @@ export default {
             this.pagesize +
             "&offset=" +
             (this.currentpage - 1) * this.pagesize +
-            "&title=" +
+            "&search=" +
             this.searchform.title +
             "&type=" +
             this.searchform.type

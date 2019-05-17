@@ -62,6 +62,7 @@ class ContestInfoView(viewsets.ModelViewSet):
     permission_classes = (ManagerOnly,)
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ("begintime", "level", "type","title",)
+    search_fields = ('title')
     throttle_scope = "post"
     throttle_classes = [ScopedRateThrottle, ]
 
