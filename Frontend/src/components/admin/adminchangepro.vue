@@ -1,59 +1,110 @@
 <template>
   <el-form ref="problemform" :model="problemform" label-position="right" v-loading="loading">
+    <el-dialog title="选择题目" :visible.sync="dialogTableVisible">
+      <el-pagination
+        @current-change="handleCurrentChange"
+        :current-page="currentpage"
+        :page-size="50"
+        :total="totalproblem"
+        layout="total,prev, pager, next, jumper"
+      ></el-pagination>
+      <el-table :data="gridData" @cell-click="problemclick">
+        <el-table-column property="problem" label="ID" width="70"></el-table-column>
+        <el-table-column property="title" label="Title"></el-table-column>
+      </el-table>
+    </el-dialog>
+
     <el-form-item label="题目编号：">
-      <el-input v-model="problemform.problem" @change="problemchange" placeholder="请输入题目编号"></el-input>
-      <el-button type="danger" @click="onDelProblem">删除题目</el-button>
+      <el-input style="width:200px;" v-model="problemform.problem" placeholder="请输入题目编号" @change="problemchange"></el-input>
+      <el-button style="margin-left:20px;" type="success" @click="dialogTableVisible = true">选择题目</el-button>
+      <el-button style="float:right" type="danger" @click="onDelProblem">删除题目</el-button>
     </el-form-item>
 
+    <el-form-item label="特殊选项：添加其他OJ题目用！不知道的话请忽略">
+      <el-input v-model="problemform.oj" placeholder="OJ" style="width:400px;"></el-input>
+      <el-input
+        v-model="problemform.source"
+        placeholder="Pro ID"
+        style="width:400px;margin-left:40px;"
+      ></el-input>
+    </el-form-item>
     <el-form-item label="作者：">
-      <el-input v-model="problemform.author"></el-input>
+      <el-input v-model="problemform.author" style="width:400px;"></el-input>
     </el-form-item>
     <el-form-item label="标题：">
-      <el-input v-model="problemform.title"></el-input>
+      <el-input v-model="problemform.title" style="width:400px;"></el-input>
     </el-form-item>
     <el-form-item label="介绍：">
-      <el-input type="textarea" v-model="problemform.des" autosize></el-input>
+      <el-input type="textarea" v-model="problemform.des" autosize style="width:800px;"></el-input>
     </el-form-item>
     <el-form-item label="输入：">
-      <el-input type="textarea" v-model="problemform.input" autosize></el-input>
+      <el-input type="textarea" v-model="problemform.input" autosize style="width:800px;"></el-input>
     </el-form-item>
     <el-form-item label="输出：">
-      <el-input type="textarea" v-model="problemform.output" autosize></el-input>
+      <el-input type="textarea" v-model="problemform.output" autosize style="width:800px;"></el-input>
     </el-form-item>
     <el-form-item label="样例输入（用 |#) 分割）：">
-      <el-input type="textarea" v-model="problemform.sinput" autosize></el-input>
+      <el-input type="textarea" v-model="problemform.sinput" autosize style="width:800px;"></el-input>
     </el-form-item>
     <el-form-item label="样例输出（用 |#) 分割）：">
-      <el-input type="textarea" v-model="problemform.soutput" autosize></el-input>
-    </el-form-item>
-    <el-form-item label="来源：">
-      <el-input v-model="problemform.source"></el-input>
-    </el-form-item>
-    <el-form-item label="时间（ms）：">
-      <el-input v-model.number="problemform.time"></el-input>
-    </el-form-item>
-    <el-form-item label="内存（MB）：">
-      <el-input v-model.number="problemform.memory"></el-input>
+      <el-input type="textarea" v-model="problemform.soutput" autosize style="width:800px;"></el-input>
     </el-form-item>
     <el-form-item label="提示：">
-      <el-input type="textarea" v-model="problemform.hint" autosize></el-input>
+      <el-input type="textarea" v-model="problemform.hint" autosize style="width:800px;"></el-input>
     </el-form-item>
-    <el-form-item label="权限（1为公开，2为私密（比赛题目或禁用题目））：">
-      <el-input v-model.number="problemform.auth"></el-input>
+    <el-form-item label="来源：">
+      <el-input v-model="problemform.source" style="width:400px;"></el-input>
+    </el-form-item>
+    <el-form-item label="时间（ms）：">
+      <el-input-number
+        style="width:200px;"
+        v-model="problemform.time"
+        :step="1000"
+        :min="100"
+        :max="60000"
+      ></el-input-number>
+    </el-form-item>
+    <el-form-item label="内存（MB）：">
+      <el-input-number
+        style="width:200px;"
+        v-model="problemform.memory"
+        :step="64"
+        :min="4"
+        :max="1024"
+      ></el-input-number>
+    </el-form-item>
+    <el-form-item label="权限：">
+      <el-select v-model="problemform.auth" placeholder="请选择" style="width:200px;">
+        <el-option key="1" label="公开" :value="1"></el-option>
+        <el-option key="2" label="私密" :value="2"></el-option>
+        <el-option key="3" label="比赛中" :value="3"></el-option>
+      </el-select>
     </el-form-item>
 
-    <el-form-item label="难度（1~5）：">
-      <el-input v-model.number="problemform.level"></el-input>
+    <el-form-item label="难度：">
+      <el-select v-model="problemform.level" placeholder="请选择" style="width:200px;">
+        <el-option key="1" label="简单" :value="1"></el-option>
+        <el-option key="2" label="普通" :value="2"></el-option>
+        <el-option key="3" label="中等" :value="3"></el-option>
+        <el-option key="4" label="困难" :value="4"></el-option>
+        <el-option key="5" label="极其困难" :value="5"></el-option>
+      </el-select>
     </el-form-item>
     <el-form-item label="标签（用|分割）：">
-      <el-input v-model="problemform.tag"></el-input>
+      <el-input v-model="problemform.tag" style="width:400px;"></el-input>
     </el-form-item>
-    <el-form-item label="分数（建议100~1000）：">
-      <el-input v-model.number="problemform.score"></el-input>
+    <el-form-item label="分数（建议100~10000）：">
+      <el-input-number
+        style="width:200px;"
+        v-model="problemform.score"
+        :step="100"
+        :min="100"
+        :max="10000"
+      ></el-input-number>
     </el-form-item>
 
     <el-upload
-      class="upload-demo"
+      style="width:400px;"
       ref="upload"
       :action="uploadaddress"
       :on-exceed="handleExceed"
@@ -75,7 +126,7 @@
     </el-upload>
 
     <el-form-item>
-      <el-button type="primary" @click="onAddProblemSubmit">修改题目</el-button>
+      <el-button type="success" @click="onAddProblemSubmit" style="float:right;">修改题目</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -85,10 +136,13 @@ export default {
   name: "adminchangepro",
   data() {
     return {
-      problemcount: 0,
+      currentpage: 1,
+      gridData: [],
+      totalproblem: 0,
       uploadaddress: "/uploadfile/",
       fileList: [],
       loading: false,
+      dialogTableVisible: false,
       problemform: {
         problem: "",
         author: localStorage.name,
@@ -105,10 +159,11 @@ export default {
         auth: 2,
         tag: "简单题|模拟|贪心",
         level: 3,
-        score: 100
+        score: 100,
+        oj: "LPOJ"
       },
       problemdataform: {
-        problem: this.problemcount + 1,
+        problem: "",
         title: "题目标题",
         tag: "简单题|模拟|贪心",
         level: 3,
@@ -117,9 +172,24 @@ export default {
     };
   },
   methods: {
+    handleCurrentChange(val) {
+      this.currentpage = val;
+      this.$axios
+        .get("/problemdata/?limit=50&offset=" + (this.currentpage - 1) * 50)
+        .then(response => {
+          this.totalproblem = response.data.count;
+          this.gridData = response.data.results;
+        });
+    },
+    problemclick: function(row, column, cell, event) {
+      this.problemform.problem = row.problem;
+      this.problemchange(row.problem)
+      this.dialogTableVisible = false;
+    },
     myupload(f) {
       let param = new FormData(); //创建form对象
-      param.append("file", f.file); //通过append向form对象添加数据
+      var newfile = new File([f.file], this.problemform.problem + ".zip");
+      param.append("file", newfile); //通过append向form对象添加数据
       let config = {
         headers: { "Content-Type": "multipart/form-data" }
       }; //添加请求头
@@ -135,7 +205,7 @@ export default {
         });
     },
     onDelProblem() {
-      this.$message.error("请把权限设置为2（私密）即可！");
+      this.$message.error("请把权限设置为（私密）即可！");
     },
     problemchange(num) {
       this.$axios
@@ -173,10 +243,8 @@ export default {
       var name = file.name;
       var li = name.split(".");
       this.fileList = fileList;
-      if (li[0] != this.problemform.problem) {
-        this.$message.error(
-          "数据文件名名不正确！应为" + this.problemform.problem + ".zip"
-        );
+      if (li[1] != "zip") {
+        this.$message.error("数据文件名名不正确！后缀应为zip");
         this.fileList = [];
       }
     },
@@ -258,7 +326,14 @@ export default {
       });
     }
   },
-  created() {}
+  created() {
+    this.$axios
+      .get("/problemdata/?limit=50&offset=" + (this.currentpage - 1) * 50)
+      .then(response => {
+        this.totalproblem = response.data.count;
+        this.gridData = response.data.results;
+      });
+  }
 };
 </script>
 

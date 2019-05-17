@@ -1,61 +1,75 @@
 <template>
   <el-form ref="addproblemform" :model="addproblemform" label-position="right" v-loading="loading">
     <el-form-item label="题目编号：">
-      <el-input v-model="addproblemform.problem"></el-input>
+      <el-input v-model="addproblemform.problem" style="width:400px;" readonly></el-input>
     </el-form-item>
     <el-form-item label="特殊选项：添加其他OJ题目用！不知道的话请忽略">
-      <el-input v-model="addproblemform.oj" placeholder="OJ"></el-input>
-      <el-input v-model="addproblemform.source" placeholder="Pro ID"></el-input>
+      <el-input v-model="addproblemform.oj" placeholder="OJ" style="width:400px;"></el-input>
+      <el-input
+        v-model="addproblemform.source"
+        placeholder="Pro ID"
+        style="width:400px;margin-left:40px;"
+      ></el-input>
     </el-form-item>
     <el-form-item label="作者：">
-      <el-input v-model="addproblemform.author"></el-input>
+      <el-input v-model="addproblemform.author" style="width:400px;"></el-input>
     </el-form-item>
     <el-form-item label="标题：">
-      <el-input v-model="addproblemform.title"></el-input>
+      <el-input v-model="addproblemform.title" style="width:400px;"></el-input>
     </el-form-item>
     <el-form-item label="介绍：">
-      <el-input type="textarea" v-model="addproblemform.des" autosize></el-input>
+      <el-input type="textarea" v-model="addproblemform.des" autosize style="width:800px;"></el-input>
     </el-form-item>
     <el-form-item label="输入：">
-      <el-input type="textarea" v-model="addproblemform.input" autosize></el-input>
+      <el-input type="textarea" v-model="addproblemform.input" autosize style="width:800px;"></el-input>
     </el-form-item>
     <el-form-item label="输出：">
-      <el-input type="textarea" v-model="addproblemform.output" autosize></el-input>
+      <el-input type="textarea" v-model="addproblemform.output" autosize style="width:800px;"></el-input>
     </el-form-item>
     <el-form-item label="样例输入（用 |#) 分割）：">
-      <el-input type="textarea" v-model="addproblemform.sinput" autosize></el-input>
+      <el-input type="textarea" v-model="addproblemform.sinput" autosize style="width:800px;"></el-input>
     </el-form-item>
     <el-form-item label="样例输出（用 |#) 分割）：">
-      <el-input type="textarea" v-model="addproblemform.soutput" autosize></el-input>
-    </el-form-item>
-    <el-form-item label="来源：">
-      <el-input v-model="addproblemform.source"></el-input>
-    </el-form-item>
-    <el-form-item label="时间（ms）：">
-      <el-input v-model.number="addproblemform.time"></el-input>
-    </el-form-item>
-    <el-form-item label="内存（MB）：">
-      <el-input v-model.number="addproblemform.memory"></el-input>
+      <el-input type="textarea" v-model="addproblemform.soutput" autosize style="width:800px;"></el-input>
     </el-form-item>
     <el-form-item label="提示：">
-      <el-input type="textarea" v-model="addproblemform.hint" autosize></el-input>
+      <el-input type="textarea" v-model="addproblemform.hint" autosize style="width:800px;"></el-input>
     </el-form-item>
-    <el-form-item label="权限（1为公开，2为私密（比赛题目））：">
-      <el-input v-model.number="addproblemform.auth"></el-input>
+    <el-form-item label="来源：">
+      <el-input v-model="addproblemform.source" style="width:400px;"></el-input>
+    </el-form-item>
+    <el-form-item label="时间（ms）：">
+      <el-input-number style="width:200px;" v-model="addproblemform.time" :step="1000" :min="100" :max="60000"></el-input-number>      
+    </el-form-item>
+    <el-form-item label="内存（MB）：">
+      <el-input-number style="width:200px;" v-model="addproblemform.memory" :step="64" :min="4" :max="1024"></el-input-number>
+    </el-form-item>
+    <el-form-item label="权限：">
+      <el-select v-model="addproblemform.auth" placeholder="请选择" style="width:200px;">
+        <el-option key="1" label="公开" :value="1"></el-option>
+        <el-option key="2" label="私密" :value="2"></el-option>
+        <el-option key="3" label="比赛中" :value="3"></el-option>
+      </el-select>
     </el-form-item>
 
-    <el-form-item label="难度（1~5）：">
-      <el-input v-model.number="addproblemform.level"></el-input>
+    <el-form-item label="难度：">
+      <el-select v-model="addproblemform.level" placeholder="请选择" style="width:200px;">
+        <el-option key="1" label="简单" :value="1"></el-option>
+        <el-option key="2" label="普通" :value="2"></el-option>
+        <el-option key="3" label="中等" :value="3"></el-option>
+        <el-option key="4" label="困难" :value="4"></el-option>
+        <el-option key="5" label="极其困难" :value="5"></el-option>
+      </el-select>
     </el-form-item>
     <el-form-item label="标签（用|分割）：">
-      <el-input v-model="addproblemform.tag"></el-input>
+      <el-input v-model="addproblemform.tag" style="width:400px;"></el-input>
     </el-form-item>
-    <el-form-item label="分数（建议100~1000）：">
-      <el-input v-model.number="addproblemform.score"></el-input>
+    <el-form-item label="分数（建议100~10000）：">
+        <el-input-number style="width:200px;" v-model="addproblemform.score" :step="100" :min="100" :max="10000"></el-input-number>
     </el-form-item>
 
     <el-upload
-      class="upload-demo"
+      style="width:400px;"
       ref="upload"
       :action="uploadaddress"
       :on-exceed="handleExceed"
@@ -70,15 +84,10 @@
       :http-request="myupload"
     >
       <el-button slot="trigger" size="small" type="primary">选取数据文件</el-button>
-      <div
-        slot="tip"
-        class="el-upload__tip"
-      >只能上传zip文件，重命名为 题目编号.zip 如 1.zip，压缩包中输入输出名字要一样，且后缀为.in和.out</div>
+      <div slot="tip" class="el-upload__tip">只能上传zip文件,压缩包内的不要有文件夹，输入输出文件后缀为.in和.out</div>
     </el-upload>
 
-    <el-form-item>
-      <el-button type="primary" @click="onAddProblemSubmit">添加题目</el-button>
-    </el-form-item>
+    <el-button type="success" @click="onAddProblemSubmit" style="float:right;">添加题目</el-button>
   </el-form>
 </template>
 
@@ -108,7 +117,7 @@ export default {
         tag: "简单题|模拟|贪心",
         level: 3,
         score: 100,
-        oj:"LPOJ"
+        oj: "LPOJ"
       },
       addproblemdataform: {
         problem: this.problemcount + 1,
@@ -117,7 +126,7 @@ export default {
         level: 3,
         score: 100,
         auth: 2,
-        oj:""
+        oj: ""
       }
     };
   },
@@ -125,7 +134,10 @@ export default {
     myupload(f) {
       this.$message.success("提交中！请等待自动刷新！");
       let param = new FormData(); //创建form对象
-      param.append("file", f.file); //通过append向form对象添加数据
+
+      var newfile = new File([f.file], this.addproblemform.problem + ".zip");
+
+      param.append("file", newfile); //通过append向form对象添加数据
       let config = {
         headers: { "Content-Type": "multipart/form-data" }
       }; //添加请求头
@@ -150,10 +162,8 @@ export default {
       var name = file.name;
       var li = name.split(".");
       this.fileList = fileList;
-      if (li[0] != this.addproblemform.problem) {
-        this.$message.error(
-          "数据文件名名不正确！应为" + this.addproblemform.problem + ".zip"
-        );
+      if (li[1] != "zip") {
+        this.$message.error("数据文件名名不正确！后缀应为zip");
         this.fileList = [];
       }
     },
@@ -211,12 +221,9 @@ export default {
       console.log(this.fileList);
       var name = this.fileList[0].name;
       var li = name.split(".");
-      if (li[0] != this.addproblemform.problem) {
-        this.$message.error(
-          "数据文件名名不正确！应为" + this.addproblemform.problem + ".zip"
-        );
+      if (li[1] != "zip") {
+        this.$message.error("数据文件名名不正确！后缀应为zip");
         this.fileList = [];
-        return;
       }
       this.$confirm("确定添加吗？", "添加题目", {
         confirmButtonText: "确定",

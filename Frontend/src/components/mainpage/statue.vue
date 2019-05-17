@@ -66,6 +66,7 @@
             <el-option key="C++" label="C++" value="C%2B%2B"></el-option>
             <el-option key="C" label="C" value="C"></el-option>
             <el-option key="Java" label="Java" value="Java"></el-option>
+            <el-option key="Python3" label="Python3" value="Python3"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="Result：">

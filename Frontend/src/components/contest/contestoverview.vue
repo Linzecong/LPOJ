@@ -23,7 +23,15 @@
           ></el-date-picker>
         </el-form-item>
         <el-form-item label="比赛权限（1 public 2 private 0 protect(可注册)）：">
-          <el-input v-model.number="addcontestform.auth" style="width:500px;"></el-input>
+          <el-select
+            style="width:200px;"
+            v-model="addcontestform.auth"
+            placeholder="Choose type..."
+          >
+            <el-option key="0" label="Public" :value="1"></el-option>
+            <el-option key="1" label="Private" :value="2"></el-option>
+            <el-option key="2" label="Protect(可注册)" :value="0"></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
 
