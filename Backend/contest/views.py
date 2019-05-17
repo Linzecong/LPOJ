@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
 from rest_framework.throttling import ScopedRateThrottle
+from rest_framework import viewsets, mixins, filters
 from .permission import ManagerOnly, UserRatingOnly, UserRatingOnly2
 from .models import ContestComingInfo,ContestTutorial, ContestAnnouncement, ContestRatingChange, ContestBoard, ContestComment, ContestInfo, ContestProblem, ContestRegister
 from .serializers import ContestComingInfoSerializer,ContestTutorialSerializer, ContestRatingChangeSerializer, ContestAnnouncementSerializer, ContestBoardSerializer, ContestCommentSerializer, ContestInfoSerializer, ContestProblemSerializer, ContestRegisterSerializer
@@ -60,9 +61,9 @@ class ContestInfoView(viewsets.ModelViewSet):
     serializer_class = ContestInfoSerializer
     pagination_class = LimitOffsetPagination
     permission_classes = (ManagerOnly,)
-    filter_backends = (DjangoFilterBackend,)
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter)
     filter_fields = ("begintime", "level", "type","title",)
-    search_fields = ('title')
+    search_fields = ('title',)
     throttle_scope = "post"
     throttle_classes = [ScopedRateThrottle, ]
 

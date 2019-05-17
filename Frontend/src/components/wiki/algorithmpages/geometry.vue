@@ -97,7 +97,27 @@ export default {
         );
       });
   },
+  watch: {
+    geometryvalue: function() {
+      console.log('data changed');
+      this.$nextTick().then(()=>{
+        this.reRender();
+      });
+    }
+  },
   methods: {
+    reRender() {
+      if(window.MathJax) {
+        console.log('rendering mathjax');
+        MathJax.Hub.Config({
+            tex2jax: {
+                inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+            }
+        });
+        window.MathJax.Hub.Queue(["Typeset", window.MathJax.Hub], () => console.log('done'));
+      }
+    },
     handleSelect(key, keyPath) {
       this.getdata("std", key);
     },

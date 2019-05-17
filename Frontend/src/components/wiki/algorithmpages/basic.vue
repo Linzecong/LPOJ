@@ -101,14 +101,6 @@ export default {
       menulist: []
     };
   },
-  watch: {
-    basicvalue: function() {
-      console.log('data changed');
-      this.$nextTick().then(()=>{
-        this.reRender();
-      });
-    }
-  },
   created() {
     this.getdata("std", "basic_index");
 
@@ -122,6 +114,14 @@ export default {
           "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
         );
       });
+  },
+  watch: {
+    basicvalue: function() {
+      console.log('data changed');
+      this.$nextTick().then(()=>{
+        this.reRender();
+      });
+    }
   },
   methods: {
     reRender() {
