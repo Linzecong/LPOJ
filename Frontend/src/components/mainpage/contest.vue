@@ -8,7 +8,8 @@
           style="float:left;width:200px;"
           @change="searchcontest"
           @keyup.native.enter="searchcontest"
-        ></el-input>
+        ><el-button slot="append" icon="el-icon-search" @click="searchcontest"></el-button>
+        </el-input>
         <el-select
           v-model="searchform.type"
           placeholder="Choose type..."

@@ -8,6 +8,10 @@
         :total="totalproblem"
         layout="total,prev, pager, next, jumper"
       ></el-pagination>
+      <el-input placeholder="输入Title来筛选..." v-model="searchpro" @keyup.native.enter="searchtitle" style="float:right;width:200px;">
+            <el-button slot="append" icon="el-icon-search" @click="searchtitle"></el-button>
+          </el-input>
+
       <el-table :data="gridData" @cell-click="problemclick">
         <el-table-column property="problem" label="ID" width="70"></el-table-column>
         <el-table-column property="title" label="Title"></el-table-column>
@@ -90,7 +94,7 @@
       <el-row>
         <el-row :gutter="20">
           <el-col :span="4">
-            <el-input @change="addproblemchange" v-model="tmpaddproblemid" placeholder="题目编号"></el-input>
+            <el-input @change="addproblemchange" v-model="tmpaddproblemid" placeholder="题目编号"><el-button slot="append" icon="el-icon-search" @click="addproblemchange"></el-button></el-input>
           </el-col>
           <el-col :span="4">
             <el-input v-model="tmpaddproblemtitle" placeholder="比赛中的题目标题"></el-input>
@@ -124,6 +128,7 @@ export default {
       tmpaddproblemid: "",
       tmpaddproblemtitle: "",
       canadd: false,
+      searchpro:"",
       addcontestform: {
         creator: localStorage.name,
         title: "新比赛",
@@ -139,10 +144,21 @@ export default {
     };
   },
   methods: {
+    searchtitle(){
+      this.currentpage = 1
+      this.$axios
+        .get("/problemdata/?limit=50&offset=" + (this.currentpage - 1) * 50 + "&search=" +
+            this.searchpro)
+        .then(response => {
+          this.totalproblem = response.data.count;
+          this.gridData = response.data.results;
+        });
+    },
     handleCurrentChange(val) {
       this.currentpage = val;
       this.$axios
-        .get("/problemdata/?limit=50&offset=" + (this.currentpage - 1) * 50)
+        .get("/problemdata/?limit=50&offset=" + (this.currentpage - 1) * 50 + "&search=" +
+            this.searchpro)
         .then(response => {
           this.totalproblem = response.data.count;
           this.gridData = response.data.results;
@@ -280,7 +296,8 @@ export default {
   },
   created() {
     this.$axios
-      .get("/problemdata/?limit=50&offset=" + (this.currentpage - 1) * 50)
+      .get("/problemdata/?limit=50&offset=" + (this.currentpage - 1) * 50+ "&search=" +
+            this.searchpro)
       .then(response => {
         this.totalproblem = response.data.count;
         this.gridData = response.data.results;

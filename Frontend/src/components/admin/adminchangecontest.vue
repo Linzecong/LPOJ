@@ -8,6 +8,9 @@
         :total="totalproblem"
         layout="total,prev, pager, next, jumper"
       ></el-pagination>
+      <el-input placeholder="输入Title来筛选..." v-model="searchpro" @keyup.native.enter="searchprotitle" style="float:right;width:200px;">
+            <el-button slot="append" icon="el-icon-search" @click="searchprotitle"></el-button>
+          </el-input>
       <el-table :data="gridData" @cell-click="problemclick">
         <el-table-column property="problem" label="ID" width="70"></el-table-column>
         <el-table-column property="title" label="Title"></el-table-column>
@@ -21,9 +24,17 @@
         :total="totalcontest"
         layout="total,prev, pager, next, jumper"
       ></el-pagination>
+      <el-input
+          v-model="searchtitle"
+          placeholder="输入Title来筛选..."
+          style="float:right;width:200px;"
+          @change="searchcontest"
+          @keyup.native.enter="searchcontest"
+        ><el-button slot="append" icon="el-icon-search" @click="searchcontest"></el-button></el-input>
       <el-table :data="gridData2" @cell-click="contestclick" :default-sort="{prop: 'id', order: 'descending'}">
         <el-table-column property="id" label="ID" width="70"></el-table-column>
         <el-table-column property="title" label="Title"></el-table-column>
+        <el-table-column prop="type" label="Type"></el-table-column>
       </el-table>
     </el-dialog>
     <el-row>
@@ -118,7 +129,7 @@
       <el-row>
         <el-row :gutter="20">
           <el-col :span="4">
-            <el-input @change="addproblemchange" v-model="tmpaddproblemid" placeholder="题目编号"></el-input>
+            <el-input @change="addproblemchange" v-model="tmpaddproblemid" placeholder="题目编号"><el-button slot="append" icon="el-icon-search" @click="addproblemchange"></el-button></el-input>
           </el-col>
           <el-col :span="4">
             <el-input v-model="tmpaddproblemtitle" placeholder="比赛中的题目标题"></el-input>
@@ -173,6 +184,10 @@ export default {
       tmpaddproblemid: "",
       tmpaddproblemtitle: "",
       canadd: false,
+
+      searchtitle:"",
+      searchpro:"",
+
       changecontestform: {
         creator: localStorage.name,
         title: "",
@@ -212,6 +227,25 @@ export default {
     };
   },
   methods: {
+    searchprotitle(){
+      this.currentpage = 1
+      this.$axios
+        .get("/problemdata/?limit=50&offset=" + (this.currentpage - 1) * 50 + "&search=" +
+            this.searchpro)
+        .then(response => {
+          this.totalproblem = response.data.count;
+          this.gridData = response.data.results;
+        });
+    },
+    searchcontest(){
+      this.currentpage2 = 1;
+      this.$axios
+        .get("/contestinfo/?limit=50&offset=" + (this.currentpage2 - 1) * 50+ "&search=" + this.searchtitle)
+        .then(response => {
+          this.gridData2 = response.data.results;
+          this.totalcontest = response.data.count;
+        });
+    },
     contestclick: function(row, column, cell, event) {
       this.contestid = row.id;
       this.contestchange(row.id);
@@ -220,7 +254,8 @@ export default {
     handleCurrentChange(val) {
       this.currentpage = val;
       this.$axios
-        .get("/problemdata/?limit=50&offset=" + (this.currentpage - 1) * 50)
+        .get("/problemdata/?limit=50&offset=" + (this.currentpage - 1) * 50+ "&search=" +
+            this.searchpro)
         .then(response => {
           this.totalproblem = response.data.count;
           this.gridData = response.data.results;
@@ -230,7 +265,7 @@ export default {
       this.currentpage2 = val;
 
       this.$axios
-        .get("/contestinfo/?limit=50&offset=" + (this.currentpage2 - 1) * 50)
+        .get("/contestinfo/?limit=50&offset=" + (this.currentpage2 - 1) * 50+ "&search=" + this.searchtitle)
         .then(response => {
           this.gridData2 = response.data.results;
           this.totalcontest = response.data.count;
@@ -511,12 +546,13 @@ export default {
   },
   created() {
     this.$axios
-      .get("/problemdata/?limit=50&offset=" + (this.currentpage - 1) * 50)
+      .get("/problemdata/?limit=50&offset=" + (this.currentpage - 1) * 50+ "&search=" +
+            this.searchpro)
       .then(response => {
         this.totalproblem = response.data.count;
         this.gridData = response.data.results;
         this.$axios
-          .get("/contestinfo/?limit=50&offset=" + (this.currentpage2 - 1) * 50)
+          .get("/contestinfo/?limit=50&offset=" + (this.currentpage2 - 1) * 50+ "&search=" + this.searchtitle)
           .then(response2 => {
             this.gridData2 = response2.data.results;
             this.totalcontest = response2.data.count;

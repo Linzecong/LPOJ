@@ -182,6 +182,7 @@ export default {
       level: "Easy",
       code: "",
       language: "C++",
+      proid:"0",
 
       submitbuttontext: "提交后请勿重复刷新/支持将文件拖入代码框",
       judgetype: "primary",
@@ -262,6 +263,9 @@ export default {
           this.soutput = response.data.soutput.split("|#)");
           this.author = response.data.author;
           this.source = response.data.source;
+          if(this.oj!="LPOJ"){
+            this.proid = this.source
+          }
           this.time = response.data.time + "MS";
           this.memory = response.data.memory + "MB";
           this.hint = response.data.hint;
@@ -342,6 +346,9 @@ export default {
                   this.soutput = response.data.soutput.split("|#)");
                   this.author = response.data.author;
                   this.source = response.data.source;
+                  if(this.oj!="LPOJ"){
+                    this.proid = this.source
+                  }
                   this.time = response.data.time + "MS";
                   this.memory = response.data.memory + "MB";
                   this.hint = response.data.hint;

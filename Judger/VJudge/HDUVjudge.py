@@ -34,6 +34,7 @@ def HDUVJudge(problemid, language, usercode):
     }
     responseRes = mafengwoSession.post(
         loginUrl, data=loginData, headers=header, allow_redirects=True)
+    print(problemid,responseRes.status_code)
 
     postUrl = "http://acm.hdu.edu.cn/submit.php?action=submit"
     postData = {
@@ -43,7 +44,7 @@ def HDUVJudge(problemid, language, usercode):
     }
     responseRes = mafengwoSession.post(postUrl, data=postData, headers=header)
     resstr = f"text = {responseRes.text}"
-    
+    print(responseRes.status_code)
 
     while True:
         sleep(1)
@@ -87,10 +88,3 @@ def HDUVJudge(problemid, language, usercode):
                 
 
             return [restr, timestr, memstr, "Remote run ID:HDU  "+subid]
-
-
-# if __name__ == "__main__":
-#     HDUVJudge(
-#         "5000", '0', "#include<iostream>\nusing namespace std;\nint main(){\nint a,b;\n\ncin>>a>>b;\ncout<<a+b;\nreturn 0;\n}")
-
-# # include<iostream>\nusing namespace std;\nint main(){\nint a,b;\n\ncin>>a>>b;\ncout<<a+b;\nreturn 0;\n}
