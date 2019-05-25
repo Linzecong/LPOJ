@@ -65,7 +65,7 @@ docker-compose up -d
 ```
 cd Frontend
 npm install
-npm run-script build
+npm run build
 ```
 编译完毕后，网站文件保存在dist目录中，接下来部署到服务器中
 + 推荐使用Nginx

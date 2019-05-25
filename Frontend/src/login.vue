@@ -58,16 +58,16 @@ export default {
             type: "success"
           });
 
-          localStorage.setItem("username", this.form.username);
-          localStorage.setItem("name", response.data.name);
-          localStorage.setItem("type", response.data.type);
+          sessionStorage.setItem("username", this.form.username);
+          sessionStorage.setItem("name", response.data.name);
+          sessionStorage.setItem("type", response.data.type);
 
           this.dialogLoginVisible = false;
 
           this.$axios
-            .get("/userdata/?username=" + localStorage.username)
+            .get("/userdata/?username=" + sessionStorage.username)
             .then(response => {
-              localStorage.setItem("rating", response.data[0].rating);
+              sessionStorage.setItem("rating", response.data[0].rating);
               this.$router.go(0);
             });
         })

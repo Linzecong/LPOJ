@@ -70,15 +70,15 @@ export default {
       return "color:#303133;font-weight: bold;";
     },
     addcomment() {
-      if (localStorage.username == "") {
+      if (sessionStorage.username == "") {
         this.$message.error("请先登录！");
         return;
       }
       this.$axios
         .post("/ojmessage/", {
-          username: localStorage.username,
+          username: sessionStorage.username,
           msg: this.msg,
-          rating: parseInt(localStorage.rating)
+          rating: parseInt(sessionStorage.rating)
         })
         .then(response => {
           this.$message.success("提交成功！");

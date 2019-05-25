@@ -65,11 +65,11 @@ export default {
       value: "暂无数据！",
       contestcomment: {
         contestid: this.$route.params.contestID,
-        user: localStorage.username,
+        user: sessionStorage.username,
         title: "Tutorial",
         message: "",
         problem: "ALL",
-        rating: parseInt(localStorage.rating)
+        rating: parseInt(sessionStorage.rating)
       }
     };
   },

@@ -120,6 +120,7 @@ t.start()
 def changeauth():
     global db, mutex
     curcontest = set()
+    curpro = set()
     cursor = db.cursor()
     while True:
         sleep(2)
@@ -130,16 +131,17 @@ def changeauth():
             getcontest = set()
             for d in data:
                 getcontest.add(d[0])  # 用于求结束的比赛
-                if d[0] not in curcontest:
-                    cursor.execute(
-                        "SELECT * from contest_contestproblem where contestid=%d" % d[0])
-                    pros = cursor.fetchall()
-                    for pid in pros:
+                cursor.execute(
+                    "SELECT * from contest_contestproblem where contestid=%d" % d[0])
+                pros = cursor.fetchall()
+                for pid in pros:
+                    if pid[2] not in curpro:
+                        curpro.add(pid[2])
                         cursor.execute(
                             "UPDATE  problem_problemdata SET auth = 3 WHERE problem = %s" % pid[2])
                         cursor.execute(
                             "UPDATE  problem_problem SET auth = 3 WHERE problem = %s" % pid[2])
-                    db.commit()
+                db.commit()
 
             endcontest = curcontest.difference(getcontest)
             print("curcontest", curcontest)
@@ -149,6 +151,7 @@ def changeauth():
                 pros = cursor.fetchall()
                 for pid in pros:
                     print(pid[2])
+                    curpro.remove(pid[2])
                     cursor.execute(
                         "UPDATE  problem_problemdata SET auth = 1 WHERE problem = %s" % pid[2])
                     cursor.execute(

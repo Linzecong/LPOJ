@@ -10,7 +10,7 @@
 ```
 cd Frontend
 npm install
-npm run-script build
+npm run build
 ```
 
 等待npm编译前端，编译成功后可以在前端中的dist文件夹找到编译成功后的静态文件。接下来我们只要把那些文件，扔到Web服务器中即可。Web服务器随意，我这里使用的是Nginx，也推荐使用Nginx。首先让我们先安装Nginx

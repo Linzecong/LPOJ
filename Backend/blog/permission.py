@@ -7,7 +7,7 @@ class UserRatingOnly(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
         data = request.data
-        username = data.get('user')
+        username = data.get('username')
         userid = request.session.get('user_id', None)
         r1 = data.get('rating')
         r2 = request.session.get('rating', None)
@@ -22,9 +22,9 @@ class UserRatingOnly(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
         data = request.data
-        username = blog.user
+        username = blog.username
         userid = request.session.get('user_id', None)
-        r1 = data.get('rating')
+        r1 = blog.rating
         r2 = request.session.get('rating', None)
         if r1 != r2:
             return False

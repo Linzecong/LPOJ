@@ -130,7 +130,7 @@ export default {
       canadd: false,
       searchpro:"",
       addcontestform: {
-        creator: localStorage.name,
+        creator: sessionStorage.name,
         title: "新比赛",
         level: 3,
         des: "无",

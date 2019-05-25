@@ -251,7 +251,7 @@ export default {
       this.title = this.problemtitles[tab.index];
       this.currentrank = tab.index;
       this.currentrankE = this.toCharM(tab.index);
-      this.$refs["Statusmini" + tab.index][0].setstatus(this.currentproblem);
+      this.$refs["Statusmini" + tab.index][0].setstatus(this.currentproblem,sessionStorage.username,this.$route.params.contestID);
       this.$axios
         .get("/problem/" + this.currentproblem + "/")
         .then(response => {
@@ -271,13 +271,13 @@ export default {
           this.hint = response.data.hint;
           this.loading = false;
         });
-      if(localStorage.username!=""){
+      if(sessionStorage.username!=""){
         this.$axios
         .get(
           "/contestboard/?contestid=" +
             this.currentcontest +
             "&username=" +
-            localStorage.username +
+            sessionStorage.username +
             "&type=1"
         )
         .then(response => {
@@ -352,7 +352,7 @@ export default {
                   this.time = response.data.time + "MS";
                   this.memory = response.data.memory + "MB";
                   this.hint = response.data.hint;
-                  this.$refs["Statusmini0"][0].setstatus(this.currentproblem);
+                  this.$refs["Statusmini0"][0].setstatus(this.currentproblem,sessionStorage.username,this.$route.params.contestID);
                   this.loading = false;
                 });
             });
@@ -368,7 +368,7 @@ export default {
       //   this.$message.error("比赛已结束");
       //   return;
       // }
-      if (!localStorage.username) {
+      if (!sessionStorage.username) {
         this.$message.error("请先登录！");
         return;
       }
@@ -396,7 +396,7 @@ export default {
           if (this.$store.state.contestisend == true) {
             this.$axios
               .post("/judgestatusput/", {
-                user: localStorage.username,
+                user: sessionStorage.username,
                 oj: this.oj,
                 problem: this.currentproblem,
                 result: -1,
@@ -412,7 +412,7 @@ export default {
                 testcase: 0,
                 message: this.oj == "LPOJ" ? "0" : this.proid + "",
                 problemtitle: "比赛 " + this.currentcontest + this.currentrankE,
-                rating: parseInt(localStorage.rating)
+                rating: parseInt(sessionStorage.rating)
               })
               .then(response => {
                 this.$message({
@@ -442,7 +442,7 @@ export default {
                       
                       this.$axios
                         .post("/judgestatusput/", {
-                          user: localStorage.username,
+                          user: sessionStorage.username,
                           oj: this.oj,
                           problem: this.currentproblem,
                           result: -1,
@@ -459,7 +459,7 @@ export default {
                     message: this.oj == "LPOJ" ? "0" : this.proid + "",
                           problemtitle:
                             "比赛 " + this.currentcontest + this.currentrankE,
-                          rating: parseInt(localStorage.rating)
+                          rating: parseInt(sessionStorage.rating)
                         })
                         .then(response => {
                               this.$message({
@@ -468,14 +468,14 @@ export default {
                               });
                               this.$axios
                         .post("/contestboard/", {
-                          username: localStorage.username,
-                          user: localStorage.name,
+                          username: sessionStorage.username,
+                          user: sessionStorage.name,
                           type: -1,
                           submitid: response.data.id,
                           contestid: parseInt(this.currentcontest),
                           problemrank: this.currentrank,
                           submittime: date1.getTime(),
-                          rating: parseInt(localStorage.rating)
+                          rating: parseInt(sessionStorage.rating)
                         })
                         .then(response2 => {
                               clearInterval(this.$store.state.submittimer);

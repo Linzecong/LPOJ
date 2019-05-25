@@ -158,7 +158,7 @@
       <el-row :gutter="15">
         <el-card>
           <h3>提交记录</h3>
-          <statusmini></statusmini>
+          <statusmini ref="Statusmini"></statusmini>
         </el-card>
       </el-row>
     </el-col>
@@ -247,7 +247,7 @@ export default {
       .get("/problem/" + this.ID + "/")
       .then(response => {
         auth = response.data.auth;
-        if ((auth == 2 || auth == 3) && (localStorage.type == 1||localStorage.type =="")) {
+        if ((auth == 2 || auth == 3) && (sessionStorage.type == 1||sessionStorage.type =="")) {
           this.title = "非法访问！";
           this.$message.error("服务器错误！" + "(" + "无权限" + ")");
           return;
@@ -333,6 +333,8 @@ export default {
             this.level = response.data.level;
             this.tagnames = response.data.tag;
             this.$refs.prosta.setdata(this.$data)
+            console.log(this.$refs["Statusmini"])
+            this.$refs["Statusmini"].setstatus(this.ID,sessionStorage.username,"");
           })
           .catch(error => {
             this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
@@ -375,7 +377,7 @@ export default {
         this.$message.error("非法操作！");
         return;
       }
-      if (!localStorage.username) {
+      if (!sessionStorage.username) {
         this.$message.error("请先登录！");
         return;
       }
@@ -400,7 +402,7 @@ export default {
           var curtime = response2.data;
           this.$axios
             .post("/judgestatusput/", {
-              user: localStorage.username,
+              user: sessionStorage.username,
               oj: this.oj,
               problem: this.ID,
               result: -1,
@@ -415,7 +417,7 @@ export default {
               testcase: 0,
               message: this.oj=="LPOJ"?"0":(this.proid+""),
               problemtitle: this.oj+" - " + this.proid + " " + this.title,
-              rating: parseInt(localStorage.rating)
+              rating: parseInt(sessionStorage.rating)
             })
             .then(response => {
               this.$message({

@@ -22,17 +22,6 @@
             :default-time="['12:00:00', '17:00:00']"
           ></el-date-picker>
         </el-form-item>
-        <el-form-item label="比赛权限（1 public 2 private 0 protect(可注册)）：">
-          <el-select
-            style="width:200px;"
-            v-model="addcontestform.auth"
-            placeholder="Choose type..."
-          >
-            <el-option key="0" label="Public" :value="1"></el-option>
-            <el-option key="1" label="Private" :value="2"></el-option>
-            <el-option key="2" label="Protect(可注册)" :value="0"></el-option>
-          </el-select>
-        </el-form-item>
       </el-form>
 
       <div slot="footer" class="dialog-footer">
@@ -154,7 +143,7 @@ export default {
       note: "",
       lefttime: 0.0,
       leftpercentage: 0,
-      barstatus: "",
+      barstatus: "exception",
       timestyle: "wait",
       left: -100,
       lasttime: 0,
@@ -174,7 +163,7 @@ export default {
 
       clonedialogVisible: false,
       addcontestform: {
-        creator: localStorage.name,
+        creator: sessionStorage.name,
         title: "新比赛",
         level: 3,
         des: "无",
@@ -183,7 +172,7 @@ export default {
         begintime: new Date(),
         lasttime: 0,
         type: "Personal",
-        auth: 0,
+        auth: 1,
         clonefrom:this.$route.params.contestID,
       }
     };
@@ -274,7 +263,7 @@ export default {
         return;
       }
 
-      var username = localStorage.username;
+      var username = sessionStorage.username;
       if (!username) {
         this.$message.error("请先登录！");
         return;
@@ -291,8 +280,8 @@ export default {
           this.$axios
             .post("/contestregister/", {
               contestid: parseInt(this.id),
-              user: localStorage.username,
-              rating: parseInt(localStorage.rating)
+              user: sessionStorage.username,
+              rating: parseInt(sessionStorage.rating)
             })
             .then(res => {
               this.$message({

@@ -67,8 +67,8 @@ export default {
         );
         this.codeData = response.data;
         this.show =
-          this.codeData.username == localStorage.username ||
-          localStorage.type == 3;
+          this.codeData.username == sessionStorage.username ||
+          sessionStorage.type == 3;
       })
       .catch(error => {
         this.$message.error(
@@ -86,8 +86,8 @@ export default {
     },
     del() {
       if (
-        this.codeData.username == localStorage.username ||
-        localStorage.type == 3
+        this.codeData.username == sessionStorage.username ||
+        sessionStorage.type == 3
       ) {
         this.$confirm("确定删除吗？", "删除！", {
           confirmButtonText: "确定",

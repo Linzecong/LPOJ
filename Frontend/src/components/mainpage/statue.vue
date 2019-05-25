@@ -309,7 +309,7 @@ export default {
       if (!this.contest) this.contest = "";
       if (!this.username) this.username = "";
 
-      if (this.username == localStorage.username && localStorage.username)
+      if (this.username == sessionStorage.username && sessionStorage.username)
         this.showall = true;
       else this.showall = false;
       this.getstatusdata();
@@ -427,16 +427,17 @@ export default {
     },
     statuechange(val) {
       if (val == true) {
-        if (!localStorage.username) {
+        if (!sessionStorage.username) {
           this.showall = false;
           this.$message.error("请先登录！");
-        } else this.setusername(localStorage.username);
+        } else this.setusername(sessionStorage.username);
       } else {
         this.setusername("");
       }
     },
     creattimer() {
       clearInterval(this.$store.state.timer);
+      this.timer()
       this.$store.state.timer = setInterval(this.timer, 10000);
     }
   },

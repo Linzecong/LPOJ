@@ -16,7 +16,7 @@
       </span>
       <contestproblem ref="Problems"></contestproblem>
     </el-tab-pane>
-    <el-tab-pane label="Submissions" :lazy="true">
+    <el-tab-pane label="Submissions">
       <span slot="label">
         <b>
           <i class="el-icon-edit-outline"></i> Submissions
@@ -117,7 +117,7 @@ export default {
             this.$refs.Overview.haveauth = 1;
             return;
           }
-          var username = localStorage.username;
+          var username = sessionStorage.username;
           if (username) {
             this.$axios
               .get(
@@ -143,9 +143,9 @@ export default {
       });
   },
   mounted() {
+    this.$store.state.contestisend = true;
     this.$store.state.antimer = setInterval(this.getan, 120000);
-
-    this.getan();
+    this.getan()
   },
   destroyed() {
     clearInterval(this.$store.state.antimer);
@@ -164,12 +164,13 @@ export default {
             }
             if (flag == false) {
               this.anlist.push(response.data[i]["announcement"]);
-              this.$notify.warning({
-                dangerouslyUseHTMLString: true,
-                title: "提示",
-                message: response.data[i]["announcement"],
-                duration: 0
-              });
+              if (this.$store.state.contestisend != true)
+                this.$notify.warning({
+                  dangerouslyUseHTMLString: true,
+                  title: "提示",
+                  message: response.data[i]["announcement"],
+                  duration: 0
+                });
             }
           }
         });
@@ -180,8 +181,11 @@ export default {
       // if (tab.label == "Problems")
       //   this.$refs.Problems.getproblem(this.$route.params.contestID);
 
-      if (tab.label == "Submissions") this.$refs.Submissions.creattimer();
-      else clearInterval(this.$store.state.timer);
+      if (tab.label == "Submissions") {
+        this.$refs.Submissions.$children[0].creattimer();
+      } else {
+        clearInterval(this.$store.state.timer);
+      }
 
       if (tab.label == "Rankings") {
         this.$refs.Rankings.setproblemcount(this.$route.params.contestID);

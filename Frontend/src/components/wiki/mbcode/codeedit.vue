@@ -62,8 +62,8 @@ export default {
     };
   },
   created() {
-    if (localStorage.type == 3) this.username = "std";
-    else this.username = localStorage.username;
+    if (sessionStorage.type == 3) this.username = "std";
+    else this.username = sessionStorage.username;
     if (!this.username) {
       this.$message.error("请先登录");
       this.username = "匿名用户";

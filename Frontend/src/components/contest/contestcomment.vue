@@ -63,11 +63,11 @@ export default {
       pros: [],
       contestcomment: {
         contestid: this.$route.params.contestID,
-        user: localStorage.username,
+        user: sessionStorage.username,
         title: "",
         message: "",
         problem: "",
-        rating: parseInt(localStorage.rating)
+        rating: parseInt(sessionStorage.rating)
       }
     };
   },
@@ -156,7 +156,7 @@ export default {
     }
   },
   created() {
-    this.isadmin = localStorage.type == 2 || localStorage.type == 3;
+    this.isadmin = sessionStorage.type == 2 || sessionStorage.type == 3;
 
     this.pros.push("ALL");
     for (var i = 65; i < 65 + 26; i++) {

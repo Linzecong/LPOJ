@@ -29,45 +29,45 @@ const store = new Vuex.Store({
   },
 })
 
-if (localStorage.acpro != "")
-  store.state.acpro = localStorage.acpro
+if (sessionStorage.acpro != "")
+  store.state.acpro = sessionStorage.acpro
 
 var curTime = new Date()
 var secs = curTime.getTime()
-var lastsecs = localStorage.storagetime
+var lastsecs = sessionStorage.storagetime
 if (secs - lastsecs > 14 * 24 * 60 * 60 * 1000 && lastsecs != undefined)
-  localStorage.setItem("username", "");
-localStorage.setItem("storagetime", secs);
+  sessionStorage.setItem("username", "");
+sessionStorage.setItem("storagetime", secs);
 
 
-if (localStorage.username != "") {
+if (sessionStorage.username != "") {
   axios
-    .get("/userdata/?username=" + localStorage.username)
+    .get("/userdata/?username=" + sessionStorage.username)
     .then(response => {
-      localStorage.setItem("rating", response.data[0].rating);
+      sessionStorage.setItem("rating", response.data[0].rating);
       var acpro = response.data[0].acpro.split("|")
       acpro.shift()
       store.state.acpro = acpro
-      localStorage.setItem("acpro", acpro);
+      sessionStorage.setItem("acpro", acpro);
     });
   axios
     .get("/updaterating/")
     .then(response => {
       if (response.data == "ok") {
-        localStorage.setItem("username", "");
-        localStorage.setItem("name", "");
-        localStorage.setItem("rating", "");
-        localStorage.setItem("type", "");
-        localStorage.setItem("acpro", "");
+        sessionStorage.setItem("username", "");
+        sessionStorage.setItem("name", "");
+        sessionStorage.setItem("rating", "");
+        sessionStorage.setItem("type", "");
+        sessionStorage.setItem("acpro", "");
         router.go(0)
       }
     });
 } else {
-  localStorage.setItem("username", "");
-  localStorage.setItem("name", "");
-  localStorage.setItem("rating", "");
-  localStorage.setItem("type", "");
-  localStorage.setItem("acpro", "");
+  sessionStorage.setItem("username", "");
+  sessionStorage.setItem("name", "");
+  sessionStorage.setItem("rating", "");
+  sessionStorage.setItem("type", "");
+  sessionStorage.setItem("acpro", "");
 }
 
 new Vue({

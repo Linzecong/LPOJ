@@ -70,7 +70,7 @@
       </el-table-column>
       <el-table-column prop="submittime" align="right">
         <template slot="header" slot-scope="scrop">
-          <el-button size="mini" @click="setstatus(false)" type="primary">刷新</el-button>
+          <el-button size="mini" @click="reflash" type="primary">刷新</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -207,32 +207,24 @@ export default {
       if (type == "System Error") return false;
       return false;
     },
-    setstatus(problem, username) {
+
+    setstatus(problem, username, contest) {
       this.tableData=[]
-      //console.log(problem)
-      if(problem==-1){
-        return //用于清零
-      }
-      if (this.$route.params.contestID) {
-        var contest = this.$route.params.contestID;
-        if (problem != false) this.problem = problem;
-      } else {
-        this.problem = this.$route.query.problemID;
-        var contest = "";
-      }
+      this.problem = problem
+      this.username = username
+      this.contest = contest
+      this.reflash()
+    },
 
-      if (!username) var user = localStorage.username;
-      else var user = username;
-      if (user == "") user = "|)#";
-
+    reflash(){
       this.$axios
         .get(
           "/judgestatus/?user=" +
-            user +
+            this.username +
             "&problem=" +
             this.problem +
             "&contest=" +
-            contest
+            this.contest
         )
         .then(response => {
           for (var i = 0; i < response.data.length; i++) {
@@ -284,6 +276,7 @@ export default {
           this.tableData = response.data;
         });
     }
+
   },
   data() {
     return {
@@ -297,14 +290,16 @@ export default {
         lineWrapping:true,
       },
       tableData: [],
+
+      problem: -1,
       username: "",
-      showall: false,
+      contest:"",
+
       dialogVisible: false,
       code: "",
       compilemsg: "",
       dialogdata: [],
-
-      problem: -1
+      
     };
   },
   created() {

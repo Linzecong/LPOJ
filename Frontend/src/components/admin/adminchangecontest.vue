@@ -189,7 +189,7 @@ export default {
       searchpro:"",
 
       changecontestform: {
-        creator: localStorage.name,
+        creator: sessionStorage.name,
         title: "",
         level: 1,
         des: "",

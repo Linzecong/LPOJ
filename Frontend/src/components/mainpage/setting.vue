@@ -184,7 +184,7 @@ export default {
                   message: "更新成功！",
                   type: "success"
                 });
-                localStorage.setItem("name", this.form.name);
+                sessionStorage.setItem("name", this.form.name);
                 this.$router.push({
                   name: "user",
                   query: { username: this.form.username }

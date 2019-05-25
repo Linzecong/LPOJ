@@ -148,7 +148,7 @@ export default {
       dialogTableVisible: false,
       problemform: {
         problem: "",
-        author: localStorage.name,
+        author: sessionStorage.name,
         title: "题目标题",
         des: "题目说明",
         input: "输入说明",

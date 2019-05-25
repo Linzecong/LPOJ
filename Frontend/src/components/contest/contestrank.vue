@@ -95,20 +95,26 @@ export default {
       this.statusdata.problemid = this.problemids[
         column.property.charCodeAt() - A.charCodeAt()
       ];
+      if(row.nickname.indexOf("[Clone]")>-1)
+        this.statusdata.contest = this.$store.state.contestfrom;
+      else
+        this.statusdata.contest = this.$route.params.contestID;
 
       this.statusshow = true;
     },
     statusclosed() {
-      this.$refs.Status.setstatus(-1, -1);
+      this.$refs.Status.setstatus("0", "|#)","-1");
     },
     setstatus() {
-      //console.log(this.statusdata.user,this.statusdata.problemid)
       this.$refs.Status.setstatus(
         this.statusdata.problemid,
-        this.statusdata.user
+        this.statusdata.user,
+        this.statusdata.contest
       );
     },
     ratingcolor({ row, rowIndex }) {
+      if(row.nickname.indexOf("[Clone]")>-1)
+        return "color:#AAAAAA";
       if (row.rating >= 3000) return "color:red;font-weight: bold;";
       if (row.rating >= 2600) return "color:#BB5E00;font-weight: bold;";
       if (row.rating >= 2200) return "color:#E6A23C;font-weight: bold;";
@@ -221,7 +227,7 @@ export default {
           nameset.add(
             response.data[index].username + "|" + response.data[index].user
           );
-          namevis[response.data[index].username] = 0;
+          namevis[response.data[index].username + "|" + response.data[index].user] = 0;
         }
 
         //遍历每一个人，计算每一个人的信息
@@ -231,8 +237,9 @@ export default {
           var username = na.split("|")[0];
           var nickname = na.split("|")[1];
           //去重
-          if (namevis[username] == 1) continue;
-          namevis[username] = 1;
+          if (namevis[na] == 1) continue;
+          namevis[na] = 1;
+
           var PaticipantData = {
             user: username,
             nickname: nickname,
@@ -257,7 +264,7 @@ export default {
 
           //找出每一道题AC的时间
           for (let index = 0; index < response.data.length; index++) {
-            if (response.data[index].username == username) {
+            if (response.data[index].username == username&&response.data[index].user == nickname) {
               PaticipantData["rating"] = response.data[index].rating;
               if (parseInt(response.data[index]["type"]) == 1) {
                 let time = ProblemDataList[response.data[index].problemrank][0];
@@ -271,7 +278,7 @@ export default {
 
           //找出每一道题AC前的提交次数，作为罚时
           for (let index = 0; index < response.data.length; index++) {
-            if (response.data[index].username == username) {
+            if (response.data[index].username == username&&response.data[index].user == nickname) {
               if (parseInt(response.data[index]["type"]) == 0) {
                 if (
                   parseInt(response.data[index]["submittime"]) <

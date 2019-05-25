@@ -81,14 +81,14 @@ export default {
     return {
       activeIndex: "1",
       school:"LPOJ",
-      loginshow: localStorage.username,
-      username: localStorage.username,
-      name: localStorage.name,
+      loginshow: sessionStorage.username,
+      username: sessionStorage.username,
+      name: sessionStorage.name,
       isadmin: false
     };
   },
   created() {
-    this.isadmin = localStorage.type == 2 || localStorage.type == 3;
+    this.isadmin = sessionStorage.type == 2 || sessionStorage.type == 3;
     this.$axios
       .get("/settingboard/")
       .then(res => {
@@ -119,10 +119,10 @@ export default {
               message: "登出成功！",
               type: "success"
             });
-            localStorage.setItem("username", "");
-            localStorage.setItem("name", "");
-            localStorage.setItem("rating", "");
-            localStorage.setItem("type", "");
+            sessionStorage.setItem("username", "");
+            sessionStorage.setItem("name", "");
+            sessionStorage.setItem("rating", "");
+            sessionStorage.setItem("type", "");
             this.loginshow = 0;
             this.username = "";
             this.$router.go(0);
@@ -136,19 +136,19 @@ export default {
       if (command == "home") {
         this.$router.push({
           name: "user",
-          query: { username: localStorage.username }
+          query: { username: sessionStorage.username }
         });
       }
       if (command == "setting") {
         this.$router.push({
           name: "setting",
-          params: { username: localStorage.username }
+          params: { username: sessionStorage.username }
         });
       }
       if (command == "submittion") {
         this.$router.push({
           name: "statue",
-          query: { username: localStorage.username }
+          query: { username: sessionStorage.username }
         });
       }
       if (command == "admin") {

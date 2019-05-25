@@ -31,7 +31,7 @@ export default {
     };
   },
   created() {
-    this.isadmin = localStorage.type == 2 || localStorage.type == 3;
+    this.isadmin = sessionStorage.type == 2 || sessionStorage.type == 3;
   },
   methods: {
     anClick() {
