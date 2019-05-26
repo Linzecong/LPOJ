@@ -40,7 +40,7 @@ if (secs - lastsecs > 14 * 24 * 60 * 60 * 1000 && lastsecs != undefined)
 sessionStorage.setItem("storagetime", secs);
 
 
-if (sessionStorage.username != "") {
+if (sessionStorage.username != ""&&sessionStorage.username!=undefined) {
   axios
     .get("/userdata/?username=" + sessionStorage.username)
     .then(response => {

@@ -8,5 +8,5 @@ RUN apt-get install time -y
 RUN apt-get install cmake -y
 RUN apt-get install openjdk-8-jdk -y
 RUN apt-get install libseccomp-dev -y && mkdir build && cd build && cmake /Judger && make && make install && cd .. && cd JudgerCore && python setup.py install
-RUN pip install mysqlclient && pip install paramiko && pip install requests
+RUN pip install -r requirements.txt
 CMD ["python", "main.py"]

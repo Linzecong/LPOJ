@@ -68,12 +68,7 @@ def deal_client(newSocket: socket, addr):
                         "SELECT language from judgestatus_judgestatus where id = '%d'" % (id))
                     data = cursor.fetchall()
                     print(data[0][0])
-                    # if data[0][0] == "Java" and first == True:
                     newSocket.send(("judge|%d" % id).encode("utf-8"))
-                    # elif data[0][0] != "Java":
-                    #     newSocket.send(("judge|%d" % id).encode("utf-8"))
-                    # else:
-                    #     queue.put(id)
                 else:
                     newSocket.send("getstatue".encode("utf-8"))
                     data = newSocket.recv(1024)
@@ -126,7 +121,7 @@ def changeauth():
         sleep(2)
         if mutex.acquire():
             cursor.execute(
-                "SELECT * from contest_contestinfo where TO_SECONDS(NOW()) - TO_SECONDS(begintime) <= lasttime and TO_SECONDS(NOW()) - TO_SECONDS(begintime) >= 0")
+                "SELECT * from contest_contestinfo where type <> 'Personal' and TO_SECONDS(NOW()) - TO_SECONDS(begintime) <= lasttime")
             data = cursor.fetchall()
             getcontest = set()
             for d in data:

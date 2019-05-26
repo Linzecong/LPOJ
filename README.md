@@ -45,17 +45,27 @@ sftp yourusername@localhost # 验证是否安装成功！
 git clone https://github.com/Linzecong/LPOJ.git && cd LPOJ
 # 如有需要，修改docker-compose.yml中的数据库密码（DB_PASSWORD，MYSQL_ROOT_PASSWORD）
 # 必须修改docker-compose.yml中的BACKEND_PATH,SFTP_USER,SFTP_PASSWORD为你的LPOJ/Backend文件夹的绝对路径和服务器的用户名密码
-docker-compose up -d
+sudo docker-compose up -d
 ```
 根据网速和配置情况，大约10到20分钟就可以自动搭建完成，全程无需人工干预。
 
 等命令执行完成，然后运行 **docker ps -a** 当看到所有的容器的状态均为 Up 就代表 OJ 已经启动成功。
 
-> 安装成功后，先通过IP:80访问OJ，注册一个用户
+> 安装成功后，先通过IP:8080访问OJ，注册一个用户
 > 
 > 然后进入 IP:8000/admin 以用户名admin 密码admin 登录后台（请及时修改后台密码）
 > 
 > 修改User表中，你注册的超级用户的type为3，使得你注册的用户变为超级管理员
+
+3. 更新OJ
+
+如要更新OJ只需在LPOJ目录下执行如下步骤
+```
+sudo docker stop $(sudo docker ps -aq)
+git pull
+sudo docker-compose pull
+sudo docker-compose up -d
+```
 
 **容易运行时产生的数据会保存在对应的文件夹中，如数据库文件，题目数据等**
 

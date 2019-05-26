@@ -1,0 +1,5 @@
+Django==2.2.1
+djangorestframework==3.9.3
+django-filter==2.1.0
+django-cors-headers==2.5.3
+mysqlclient==1.4.2.post1
