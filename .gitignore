@@ -7,7 +7,6 @@ Judger/*.c
 Judger/*out
 Judger/*.log
 Judger/*.out
-Judger/*.txt
 *.in
 *.out
 *.log
