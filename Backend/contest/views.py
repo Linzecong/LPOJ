@@ -57,7 +57,7 @@ class ContestCommentView(viewsets.ModelViewSet):
 
 
 class ContestInfoView(viewsets.ModelViewSet):
-    queryset = ContestInfo.objects.all()
+    queryset = ContestInfo.objects.all().order_by('-id')
     serializer_class = ContestInfoSerializer
     pagination_class = LimitOffsetPagination
     permission_classes = (ManagerOnly,)
@@ -100,7 +100,8 @@ class ContestRegisterView(viewsets.ModelViewSet):
 
 
 class ContestRatingChangeView(viewsets.ModelViewSet):
-    queryset = ContestRatingChange.objects.all()
+    queryset = ContestRatingChange.objects.extra(
+        select={'t': 'contesttime+0'}).extra(order_by=["t"])
     serializer_class = ContestRatingChangeSerializer
     pagination_class = LimitOffsetPagination
     permission_classes = (ManagerOnly,)

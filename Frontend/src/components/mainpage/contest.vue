@@ -27,7 +27,7 @@
       <el-table
         :data="tableData"
         @cell-click="contestclick"
-        :default-sort="{prop: 'begintime', order: 'descending'}"
+        :default-sort="{prop: 'id', order: 'descending'}"
         size="small"
       >
         <el-table-column prop="id" label="ID" :width="100"></el-table-column>
@@ -79,7 +79,7 @@ export default {
   data() {
     return {
       currentpage: 1,
-      pagesize: 10,
+      pagesize: 30,
       totalcontest: 10,
       tableData: [],
       loading: true,
@@ -267,7 +267,7 @@ export default {
   },
   created() {
     this.$axios
-      .get("/contestinfo/?limit=15&offset=0")
+      .get("/contestinfo/?limit=30&offset=0")
       .then(response => {
         for (var i = 0; i < response.data.results.length; i++) {
           if (response.data.results[i]["level"] == "1")

@@ -1,14 +1,42 @@
 <template>
   <el-card shadow="always" id="card">
-    <h1 :style="color">{{username}}</h1>
-    <h2>Name: {{ name }}</h2>
-    <h2>Des: {{ des }}</h2>
-    <h2>AC: {{ ac }}</h2>
-    <h2>Submittion: {{ submittion }}</h2>
-    <h2>Score: {{ score }}</h2>
-    <h2>Rating: {{ rating }}</h2>
-    <br>
-    <h2 style="margin:7px;">AC Problems:</h2>
+    <center>
+      <h1 :style="color">{{username}}</h1>
+      <h4 :style="color">{{ des }}</h4>
+      <h4 :style="color">Rating: {{ rating }}</h4>
+    </center>
+
+    <ratingchart></ratingchart>
+
+    <center>
+      <h1 :style="color">{{ name }}</h1>
+    </center>
+
+    <el-row>
+      <el-col :span="8">
+        <center>
+          <h2 :style="color">Submittion</h2>
+          <h3 :style="color">{{ submittion }}</h3>
+        </center>
+      </el-col>
+      <el-col :span="8">
+        <center>
+          <h2 :style="color">AC</h2>
+          <h3 :style="color">{{ ac }}</h3>
+        </center>
+      </el-col>
+      <el-col :span="8">
+        <center>
+          <h2 :style="color">Score</h2>
+          <h3 :style="color">{{ score }}</h3>
+        </center>
+      </el-col>
+    </el-row>
+
+    <center>
+      <h2 :style="color">AC Problems</h2>
+      <br>
+    </center>
     <el-button
       id="tag"
       v-for="(name,index) in acpro"
@@ -22,8 +50,12 @@
 </template>
 
 <script>
+import ratingchart from "@/components/chart/ratingchart";
 export default {
   name: "user",
+  components: {
+    ratingchart
+  },
   data() {
     return {
       username: "",
@@ -72,8 +104,8 @@ export default {
         this.score = response.data[0].score;
         this.rating = response.data[0].rating;
 
-        this.acpro = response.data[0].acpro.split("|")
-        this.acpro.shift()
+        this.acpro = response.data[0].acpro.split("|");
+        this.acpro.shift();
 
         var style = "";
         if (this.rating >= 3000) style = "color:red;font-weight: bold;";
@@ -96,7 +128,6 @@ export default {
         else style = "color:#303133;font-weight: bold;";
         this.color = style;
       });
-
     }
   }
 };
