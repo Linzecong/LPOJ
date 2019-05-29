@@ -1,5 +1,3 @@
-import xlrd
-
 import MySQLdb
 import json
 

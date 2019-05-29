@@ -217,6 +217,8 @@ export default {
     },
 
     reflash(){
+      if(this.username==""||this.username==undefined)
+        this.username="|#))"
       this.$axios
         .get(
           "/judgestatus/?user=" +
