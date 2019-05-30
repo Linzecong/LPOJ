@@ -109,7 +109,7 @@
 
 <script>
 export default {
-  name: "welcomemessage",
+  name: "register",
   data() {
     return {
       dialogRegisterVisible: false,

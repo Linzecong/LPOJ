@@ -3,7 +3,6 @@
     <el-menu
       :default-active="activeIndex"
       mode="horizontal"
-      @select="handleSelect"
       v-bind:router="true"
       id="nav"
     >
@@ -87,7 +86,7 @@ export default {
       isadmin: false
     };
   },
-  created() {
+  mounted() {
     this.isadmin = sessionStorage.type == 2 || sessionStorage.type == 3;
     this.$axios
       .get("/settingboard/")
@@ -109,7 +108,6 @@ export default {
       this.$refs.registerdialog.open();
     },
 
-    handleSelect(key, keyPath) {},
     handleCommand(command) {
       if (command == "logout") {
         this.$axios

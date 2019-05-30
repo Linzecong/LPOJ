@@ -27,7 +27,7 @@
 
 <script>
 export default {
-  name: "welcomemessage",
+  name: "login",
   data() {
     return {
       dialogLoginVisible: false,

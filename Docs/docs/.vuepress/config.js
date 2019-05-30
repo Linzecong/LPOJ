@@ -44,7 +44,11 @@ module.exports = {
                 collapsable: true,
                 children: [
                     '/dev/',
-                    '/dev/backend/',
+                    '/dev/frontend',
+                    '/dev/backend',
+                    '/dev/judgerserver',
+                    '/dev/judger',
+                    '/dev/utils',
                 ]
             },
             {

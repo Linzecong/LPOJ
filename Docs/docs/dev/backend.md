@@ -513,7 +513,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 | permission | 读权限 | 写权限 |
 | :--  | :--: | :--: |
-| ManagerOnly | 有 | 仅管理员 |
+| ManagerOnly | 有 | 仅管理员或clone的比赛已结束 |
 | UserRatingOnly | 有 | 仅用户（username）或为管理员，或为PUT |
 | UserRatingOnly2 | 有 | 仅用户（user）或为管理员，或为PUT |
 
@@ -617,7 +617,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 | :--  | :--: | :--: |
 | ManagerOnly | 有 | 仅管理员 |
 | UserRatingOnly | 无 | 仅用户或为管理员，并且不能修改Rating |
-| NoContestOnly | 仅用户或无比赛 | 有 |
+| NoContestOnly | 仅用户或比赛结束 | 有 |
 
 **serializers.py**
 
@@ -649,9 +649,274 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 ### Problem
 
+此模块主要用来实现题目相关的API
+
+**models.py**
+
+| model | 功能 |
+| :--  | :-- |
+| Problem | 题目的详细信息 | 
+| ProblemData | 题目的简要信息 | 
+| ProblemTag | 题目的标签 | 
+
+**Problem**
+| 属性 | 功能 | 类型 | 说明 |
+| :--  | :-- | :-- | :-- |
+| problem | 题目编号 | CharField | primary_key |
+| author | 题目作者 | CharField |  |
+| addtime | 题目添加时间 | DateTimeField | auto_now |
+| oj | 题目的OJ | CharField | Vjudge用，一般是LPOJ |
+| title | 题目的标题 | CharField |  |
+| des | 题目的介绍 | TextField | 支持网页格式 |
+| input | 输入介绍 | TextField | 支持网页格式 |
+| output | 输出介绍 | TextField | 支持网页格式 |
+| sinput | 样例输入 | TextField | 多个样例间用\|#)隔开 |
+| soutput | 样例输出 | TextField | 多个样例间用\|#)隔开 |
+| source | 题目来源 | TextField | 如果是Vjudge，填的是OJ对应的题号 |
+| time | 题目限时 | IntegerField |  |
+| memory | 题目内存限制 | IntegerField |  |
+| hint | 提示 | TextField | 支持网页格式 |
+| auth | 题目权限 | IntegerField | 1公开 2私密 3 比赛中的题 |
+
+**ProblemData**
+
+| 属性 | 功能 | 类型 | 说明 |
+| :--  | :-- | :-- | :-- |
+| problem | 题目编号 | CharField | primary_key |
+| title | 题目标题 | CharField |  |
+| level | 题目难度 | IntegerField | 1~5 |
+| submission | 题目提交数 | IntegerField |  |
+| ac | 该类型的数量 | IntegerField |  |
+| mle | 该类型的数量 | IntegerField |  |
+| tle | 该类型的数量 | IntegerField |  |
+| rte | 该类型的数量 | IntegerField |  |
+| pe | 该类型的数量 | IntegerField |  |
+| ce | 该类型的数量 | IntegerField |  |
+| wa | 该类型的数量 | IntegerField |  |
+| se | 该类型的数量 | IntegerField |  |
+| tag | 题目标签 | TextField | 中间用竖线隔开 |
+| score | 题目分数 | IntegerField |  |
+| auth | 题目权限 | IntegerField | 1公开 2私密 3 比赛中的题 |
+| oj | 题目所在OJ | CharField |  |
+
+**ProblemTag**
+| 属性 | 功能 | 类型 | 说明 |
+| :--  | :-- | :-- | :-- |
+| tagname | 标签名字 | CharField | unique |
+| count | 该标签的数量 | IntegerField | 暂时弃用 |
+
+**permission.py**
+
+| permission | 读权限 | 写权限 |
+| :--  | :--: | :--: |
+| ManagerOnly | 有 | 仅管理员 |
+| AuthOnly | 仅比赛中或公开 | 仅管理员 |
+
+**serializers.py**
+
+| serializers | 序列化字段 |
+| :--  | :--: | :--: |
+| ProblemSerializer | ALL |
+| ProblemDataSerializer | ALL | 
+| ProblemTagSerializer | ALL | 
+
+**views.py**
+
+| 视图 | 查询集合  | 可过滤字段 | 权限 | 可分页 | 可搜索 |
+| :--  | :--: |:--: |  :--: | :--: | :--: |
+| ProblemView | 仅单个查询  | ('auth',) |  AuthOnly | 否 | 否 |
+| ProblemDataView | ID倒序  | ('auth','oj',) |  ManagerOnly | 是 | ('tag', 'title') |
+| ProblemTagView | ALL  | 无 |  ManagerOnly | 否 | 否 |
+| UploadFileAPIView | 用于上传测试数据  | 无 |  仅管理员 | 否 | 否 |
+
+**urls.py**
+
+| 视图 | 访问路由  | 
+| :--  | :-- |
+| ProblemView | http://localhost:8000/problem/  | 
+| ProblemDataView | http://localhost:8000/problemdata/ |  
+| ProblemTagView | http://localhost:8000/problemtag/  | 
+| UploadFileAPIView | http://localhost:8000/uploadfile/ |  
+
 ### User
 
+此模块主要用来实现用户相关的API
+
+**models.py**
+
+| model | 功能 |
+| :--  | :-- |
+| User | 用户的详细信息 | 
+| UserData | 用户的简要信息 | 
+
+**User**
+| 属性 | 功能 | 类型 | 说明 |
+| :--  | :-- | :-- | :-- |
+| username | 用户名 | CharField | primary_key |
+| password | 密码 | CharField | MD5加密后的 |
+| name | 昵称 | CharField |  |
+| regtime | 注册时间 | DateTimeField | auto_now |
+| logintime | 上次登录时间 | DateTimeField | auto_now（暂时弃用） |
+| school | 学校 | CharField |  |
+| course | 专业 | CharField |  |
+| classes | 班级 | CharField |  |
+| number | 学号 | CharField |  |
+| realname | 真实姓名 | CharField |  |
+| qq | QQ | CharField |  |
+| email | 邮箱 | CharField |  |
+| type | 权限 | IntegerField | 1 普通 2 管理员 3 超级管理员 |
+
+**UserData**
+
+| 属性 | 功能 | 类型 | 说明 |
+| :--  | :-- | :-- | :-- |
+| username | 用户名 | CharField | primary_key |
+| ac | 用户AC数 | IntegerField |  |
+| submit | 用户提交数 | IntegerField |  |
+| score | 用户总得分 | IntegerField |  |
+| des | 用户介绍 | CharField |  |
+| rating | 用户的Rating | IntegerField |  |
+| acpro | 用户AC的题目 | TextField | 中间用竖线隔开 |
+
+**permission.py**
+
+| permission | 读权限 | 写权限 |
+| :--  | :--: | :--: |
+| UserSafePostOnly | 有 | 仅不修改敏感信息或管理员 |
+| UserPUTOnly | 无 | 仅用户 |
+| AuthPUTOnly | 无 | 仅管理员 |
+
+**serializers.py**
+
+| serializers | 序列化字段 |
+| :--  | :--: | :--: |
+| UserSerializer | ALL |
+| UserNoPassSerializer | 不包括密码 | 
+| UserNoTypeSerializer | 不包括权限 | 
+| UserDataSerializer | ALL | 
+
+**views.py**
+
+| 视图 | 查询集合  | 可过滤字段 | 权限 | 可分页 | 可搜索 |
+| :--  | :--: |:--: |  :--: | :--: | :--: |
+| UserDataView | rating倒序 | ('username',) |  UserSafePostOnly | 否 | 否 |
+| UserView | ID倒序  | ('username',) |  UserSafePostOnly | 是 | 否 |
+| UserChangeView | ALL  | 无 |  UserPUTOnly | 否 | 否 |
+| UserChangeAllView | ALL  | 无 |  AuthPUTOnly | 否 | 否 |
+| UserLoginAPIView | 用于登陆  | 无 |  AllowAny | 否 | 否 |
+| UserUpdateRatingAPIView | 用于更新本地Rating  | 无 |  AllowAny | 否 | 否 |
+| UserLogoutAPIView | 用于登出  | 无 |  AllowAny | 否 | 否 |
+| UserRegisterAPIView | 用于注册  | 无 |  AllowAny | 否 | 否 |
+
+**urls.py**
+
+| 视图 | 访问路由  | 
+| :--  | :-- |
+| UserDataView | http://localhost:8000/problem/  | 
+| UserView | http://localhost:8000/problemdata/ |  
+| UserChangeView | http://localhost:8000/problemtag/  | 
+| UserChangeAllView | http://localhost:8000/uploadfile/ | 
+| UserRegisterAPIView | http://localhost:8000/problemtag/  | 
+| UserLoginAPIView | http://localhost:8000/uploadfile/ | 
+| UserLogoutAPIView | http://localhost:8000/problemtag/  | 
+| UserUpdateRatingAPIView | http://localhost:8000/uploadfile/ | 
+
 ### Wiki
+
+此模块主要用来实现Wiki相关的API
+
+**models.py**
+
+| model | 功能 |
+| :--  | :-- |
+| Wiki | 算法详情 | 
+| MBCode | 模板介绍 | 
+| MBCodeDetail | 模板详细代码 | 
+| TrainningContest | 试炼谷的内容 | 
+
+**Wiki**
+| 属性 | 功能 | 类型 | 说明 |
+| :--  | :-- | :-- | :-- |
+| username | 用户名 | CharField | 发布人姓名 |
+| type | 发布的算法 | CharField | 发布了哪一篇算法 |
+| value | 具体内容 | TextField |  |
+| time | 发表时间 | DateTimeField | auto_now |
+| group | 所属分组 | CharField | 新添加的算法的分类，仅std=1时有效 |
+| std | 是否是标准算法 | IntegerField | 0代表是，1代表新添加的算法 |
+| title | 新添加的算法标题 | CharField | 仅std=1时有效 |
+
+**MBCode**
+
+| 属性 | 功能 | 类型 | 说明 |
+| :--  | :-- | :-- | :-- |
+| username | 用户名 | CharField | primary_key |
+| des | 模板介绍 | CharField |  |
+| time | 添加时间 | DateTimeField | auto_now |
+
+**MBCodeDetail**
+
+| 属性 | 功能 | 类型 | 说明 |
+| :--  | :-- | :-- | :-- |
+| username | 用户名 | CharField | 发布人姓名 |
+| title | 模板标题 | CharField |  |
+| des | 模板介绍 | DateTimeField |  |
+| group | 模板所属分组 | CharField |  |
+| code | 模板代码 | CharField |  |
+| time | 添加时间 | DateTimeField | auto_now |
+
+**TrainningContest**
+
+| 属性 | 功能 | 类型 | 说明 |
+| :--  | :-- | :-- | :-- |
+| title | 试炼名称 | CharField |  |
+| des | 试炼介绍 | CharField |  |
+| tips | 试炼提示 | DateTimeField | 对应Wiki中的type，用竖线隔开 |
+| group | 试炼分组 | CharField | 第几章 |
+| num | 试炼关卡 | CharField | 第几关 |
+| problem | 试炼题目 | DateTimeField | 中间用竖线隔开 |
+
+**permission.py**
+
+| permission | 读权限 | 写权限 |
+| :--  | :--: | :--: |
+| WikiUserOnly | 有 | 仅用户或管理员 |
+| UserOnly | 有 | 仅用户或管理员 |
+| ManagerOnly | 有 | 仅管理员 |
+
+**serializers.py**
+
+| serializers | 序列化字段 |
+| :--  | :--: | :--: |
+| WikiSerializer | ALL |
+| WikiCountSerializer | 不包括内容 | 
+| MBCodeSerializer | ALL | 
+| MBCodeDetailSerializer | ALL | 
+| MBCodeDetailNoCodeSerializer | 不包括代码 | 
+| TrainningContestSerializer | ALL |
+
+**views.py**
+
+| 视图 | 查询集合  | 可过滤字段 | 权限 | 可分页 | 可搜索 |
+| :--  | :--: |:--: |  :--: | :--: | :--: |
+| WikiView | ALL | ('username', 'type', 'group', 'std',) |  WikiUserOnly | 否 | 否 |
+| WikiCountView | ALL  | ('username', 'type') |  UserOnly | 否 | 否 |
+| MBCodeView | ALL  | ('username',) |  UserOnly | 否 | 否 |
+| MBCodeDetailView | ALL  | ('username', 'group', 'des', 'title') |  UserOnly | 否 | 否 |
+| MBCodeDetailNoCodeView | ALL  | ('username', 'group', 'des', 'title') |  UserOnly | 否 | 否 |
+| TrainningContestView | ALL  | ('group', 'title',) |  ManagerOnly | 否 | 否 |
+
+
+**urls.py**
+
+| 视图 | 访问路由  | 
+| :--  | :-- |
+| WikiView | http://localhost:8000/wiki/  | 
+| WikiCountView | http://localhost:8000/wikicount/ |  
+| MBCodeView | http://localhost:8000/mbcode/  | 
+| MBCodeDetailView | http://localhost:8000/mbcodedetail/ | 
+| MBCodeDetailNoCodeView | http://localhost:8000/mbcodedetailnocode/  | 
+| TrainningContestView | http://localhost:8000/trainning/ | 
+
 
 ## 修改后端
 

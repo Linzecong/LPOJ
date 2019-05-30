@@ -13,7 +13,9 @@ class ManagerOnly(permissions.BasePermission):
             return True
 
         if request.method=="POST":
-            clone = request.data.get('clonefrom')
+            clone = request.data.get('clonefrom',-1)
+            if clone == -1 :
+                return True
             info = ContestInfo.objects.get(id=clone)
             if (datetime.datetime.now()-info.begintime).total_seconds()>info.lasttime:
                 return True

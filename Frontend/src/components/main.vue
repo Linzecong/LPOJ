@@ -38,14 +38,12 @@
 </template>
 
 <script>
-import moment from "moment";
 import rankchart from "@/components/chart/rankchart";
 import teamchart from "@/components/chart/teamchart";
 import ojmessage from "@/components/utils/ojmessage";
 import welcomemessage from "@/components/utils/welcomemessage";
 import topuser from "@/components/utils/topuser";
 import soulrow from "@/components/utils/soulrow";
-// import blogmini from "@/components/utils/blogmini";
 import ratingrule from "@/components/utils/ratingrule";
 import contestmini from "@/components/utils/contestmini";
 export default {
@@ -56,7 +54,6 @@ export default {
     welcomemessage,
     topuser,
     soulrow,
-    // blogmini,
     ratingrule,
     contestmini
   },
@@ -70,7 +67,7 @@ export default {
       }
     };
   },
-  created() {},
+  mounted() {},
   methods: {}
 };
 </script>
