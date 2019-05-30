@@ -34,9 +34,15 @@
       <el-col :span="4">
         <el-button
           plain
-          :disabled="!contestisend"
+          v-if="contestisend"
           style="float:left;"
           @click="clonedialogVisible =true"
+        >Clone</el-button>
+        <el-button
+          plain
+          v-if="!contestisend"
+          :disabled="true"
+          style="float:left;"
         >Clone</el-button>
       </el-col>
 

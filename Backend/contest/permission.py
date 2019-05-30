@@ -1,17 +1,24 @@
 # coding=utf-8
 from rest_framework import permissions
-
+from .models import ContestInfo
+import datetime
 
 class ManagerOnly(permissions.BasePermission):
     def has_permission(self, request, view):
-        if request.method in permissions.SAFE_METHODS or request.method=="POST":
-            return True
-
         type = request.session.get('type', 1)
         if type == 2 or type == 3:
             return True
-        else:
-            return False
+
+        if request.method in permissions.SAFE_METHODS:
+            return True
+
+        if request.method=="POST":
+            clone = request.data.get('clonefrom')
+            info = ContestInfo.objects.get(id=clone)
+            if (datetime.datetime.now()-info.begintime).total_seconds()>info.lasttime:
+                return True
+                  
+        return False
 
 
 class UserRatingOnly(permissions.BasePermission):

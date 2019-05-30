@@ -23,17 +23,6 @@ class JudgeStatusView(viewsets.ModelViewSet):
     throttle_classes = [ScopedRateThrottle, ]
 
 
-class JudgeStatusDistinctView(viewsets.ModelViewSet):
-    queryset = JudgeStatus.objects.all().order_by('-submittime')
-    serializer_class = JudgeStatusSerializer
-    pagination_class = LimitOffsetPagination
-    filter_backends = (DjangoFilterBackend,)
-    filter_fields = ('user', 'result', "contest", "problem", "language")
-    permission_classes = (ManagerOnly,)
-    throttle_scope = "post"
-    throttle_classes = [ScopedRateThrottle, ]
-
-
 class JudgeStatusPutView(viewsets.GenericViewSet, mixins.CreateModelMixin):
     queryset = JudgeStatus.objects.all()
     serializer_class = JudgeStatusCodeSerializer

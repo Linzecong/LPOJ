@@ -137,6 +137,7 @@ export default {
       .then(response => {
         this.totalpro = response.data.length;
         var acpro = this.$store.state.acpro;
+        if(acpro==undefined) acpro=""
         for (let i = 0; i < this.totalpro; i++) {
           var proli = response.data[i].problem.split("|");
           if (proli[0] == "") proli = [];

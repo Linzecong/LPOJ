@@ -9,3 +9,10 @@
 + 判题机
 + 爬虫系统的使用
 + 前端开发
+
+首先我们要做一下准备工作！下载源码和切换工作目录
+
+```
+git clone https://github.com/Linzecong/LPOJ.git
+cd LPOJ
+```

@@ -77,7 +77,7 @@ for name in nameset:
         elif ii == 1:
             ProblemScore = 500
         else:
-            ProblemScore = (ii-1)*1000
+            ProblemScore = (ii-1)*500
 
         if ProblemDataList[ii][0] != 5552304570991:
 
@@ -104,7 +104,7 @@ for i in range(0, 26):
     elif i == 1:
         ProblemScore = 500
     else:
-        ProblemScore = (i-1)*1000
+        ProblemScore = (i-1)*500
 
     if FB[i] != "!!!":
         for ii, d in enumerate(userdata):

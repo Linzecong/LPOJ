@@ -9,7 +9,7 @@ module.exports = {
         lineNumbers: true // 代码块显示行号
     },
     themeConfig: {
-        sidebarDepth: 2,
+        sidebarDepth: 5,
         nav: [
             { text: 'Demo', link: 'http://www.lpoj.cn/' },
             { text: 'GitHub首页', link: 'https://github.com/Linzecong/LPOJ/' },
@@ -44,6 +44,7 @@ module.exports = {
                 collapsable: true,
                 children: [
                     '/dev/',
+                    '/dev/backend/',
                 ]
             },
             {
@@ -55,7 +56,8 @@ module.exports = {
             },
         ]
 
-
+        
     },
+    
 
 }

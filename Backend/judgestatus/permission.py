@@ -1,6 +1,7 @@
 # coding=utf-8
 from rest_framework import permissions
-
+from contest.models import ContestInfo
+import datetime
 
 class ManagerOnly(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -48,8 +49,10 @@ class NoContestOnly(permissions.BasePermission):
         if userid == blog.user:
             return True
 
-        contestid = blog.contest
-        if contestid == 0 or request.session.get('type', 1) != 1:
+        if blog.contest == 0 or request.session.get('type', 1) != 1:
             return True
-        else:
-            return False
+
+        info = ContestInfo.objects.get(id=blog.contest)
+        if (datetime.datetime.now()-info.begintime).total_seconds()>info.lasttime:
+            return True
+        return False

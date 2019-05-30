@@ -137,6 +137,7 @@
 <script>
 import { codemirror } from "vue-codemirror";
 import statusmini from "@/components/utils/statusmini";
+import moment from "moment";
 require("codemirror/lib/codemirror.css");
 require("codemirror/theme/base16-light.css");
 require("codemirror/mode/clike/clike");
@@ -437,9 +438,8 @@ export default {
                 );
               });
           } else {
-            var date1 = new Date(Date.parse(curtime));
-
-                      
+            var date1 = moment(curtime).toDate()
+            //var date1 = new Date(Date.parse(curtime)+ ' UTC +8'); 
                       this.$axios
                         .post("/judgestatusput/", {
                           user: sessionStorage.username,
@@ -488,7 +488,14 @@ export default {
                                 this.timer,
                                 1000
                               );
-                            });
+                            }).catch(error => {
+                          this.$message.error(
+                            "服务器错误！" +
+                              "(" +
+                              JSON.stringify(error.response.data) +
+                              ")"
+                          );
+                        });
                         })
                         .catch(error => {
                           this.$message.error(

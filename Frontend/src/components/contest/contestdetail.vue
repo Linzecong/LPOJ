@@ -143,7 +143,6 @@ export default {
       });
   },
   mounted() {
-    this.$store.state.contestisend = true;
     this.$store.state.antimer = setInterval(this.getan, 120000);
     this.getan()
   },
@@ -164,12 +163,12 @@ export default {
             }
             if (flag == false) {
               this.anlist.push(response.data[i]["announcement"]);
-              if (this.$store.state.contestisend != true)
+              // if (this.$store.state.contestisend != true)
                 this.$notify.warning({
                   dangerouslyUseHTMLString: true,
                   title: "提示",
                   message: response.data[i]["announcement"],
-                  duration: 0
+                  duration: 10000
                 });
             }
           }
