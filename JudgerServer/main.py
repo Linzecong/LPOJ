@@ -116,12 +116,13 @@ def changeauth():
     global db, mutex
     curcontest = set()
     curpro = set()
+    curinpro = set()
     cursor = db.cursor()
     while True:
         sleep(2)
         if mutex.acquire():
             cursor.execute(
-                "SELECT * from contest_contestinfo where type <> 'Personal' and TO_SECONDS(NOW()) - TO_SECONDS(begintime) <= lasttime and TO_SECONDS(NOW()) - TO_SECONDS(begintime) >=-1")
+                "SELECT * from contest_contestinfo where type <> 'Personal' and TO_SECONDS(NOW()) - TO_SECONDS(begintime) <= lasttime")
             data = cursor.fetchall()
             getcontest = set()
             for d in data:
@@ -132,6 +133,22 @@ def changeauth():
                 for pid in pros:
                     if pid[2] not in curpro:
                         curpro.add(pid[2])
+                        cursor.execute(
+                            "UPDATE  problem_problemdata SET auth = 2 WHERE problem = %s" % pid[2])
+                        cursor.execute(
+                            "UPDATE  problem_problem SET auth = 2 WHERE problem = %s" % pid[2])
+                db.commit()
+
+            cursor.execute(
+                "SELECT * from contest_contestinfo where type <> 'Personal' and TO_SECONDS(NOW()) - TO_SECONDS(begintime) <= lasttime and TO_SECONDS(NOW()) - TO_SECONDS(begintime) >=-1")
+            data = cursor.fetchall()
+            for d in data:
+                cursor.execute(
+                    "SELECT * from contest_contestproblem where contestid=%d" % d[0])
+                pros = cursor.fetchall()
+                for pid in pros:
+                    if pid[2] not in curinpro:
+                        curinpro.add(pid[2])
                         cursor.execute(
                             "UPDATE  problem_problemdata SET auth = 3 WHERE problem = %s" % pid[2])
                         cursor.execute(
@@ -147,6 +164,7 @@ def changeauth():
                 for pid in pros:
                     print(pid[2])
                     curpro.remove(pid[2])
+                    curinpro.remove(pid[2])
                     cursor.execute(
                         "UPDATE  problem_problemdata SET auth = 1 WHERE problem = %s" % pid[2])
                     cursor.execute(

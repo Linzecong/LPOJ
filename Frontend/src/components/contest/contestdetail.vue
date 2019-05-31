@@ -117,6 +117,12 @@ export default {
             this.$refs.Overview.haveauth = 1;
             return;
           }
+
+          if(sessionStorage.type==2||sessionStorage.type==3){
+            this.haveauth = 1;
+            return;
+          }
+
           var username = sessionStorage.username;
           if (username) {
             this.$axios

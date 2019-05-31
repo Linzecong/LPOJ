@@ -27,6 +27,7 @@
     <el-form-item label="题目编号：">
       <el-input style="width:200px;" v-model="problemform.problem" placeholder="请输入题目编号" @change="problemchange"><el-button slot="append" icon="el-icon-search" @click="problemchange"></el-button></el-input>
       <el-button style="margin-left:20px;" type="success" @click="dialogTableVisible = true">选择题目</el-button>
+      <el-button style="margin-left:20px;" type="primary" @click="showpro">查看题目</el-button>
       <el-button style="float:right" type="danger" @click="onDelProblem">删除题目</el-button>
     </el-form-item>
 
@@ -183,6 +184,9 @@ export default {
     };
   },
   methods: {
+    showpro(){
+      window.open("/problemdetail?problemID="+this.problemform.problem)
+    },
     searchtitle(){
       this.currentpage = 1
       this.$axios

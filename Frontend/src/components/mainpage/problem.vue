@@ -19,6 +19,7 @@
           :total="totalproblem"
         ></el-pagination>
 
+
         <el-table
           :data="tableData"
           :row-class-name="tableRowClassName"
@@ -27,7 +28,7 @@
           size="small"
         >
           <el-table-column prop="problem" label="ID" :width="70"></el-table-column>
-          <el-table-column prop="title" label="Title" :width="200"></el-table-column>
+          <el-table-column prop="title" label="Title" :width="250"></el-table-column>
           <el-table-column prop="level" label="Level" :width="170">
             <template slot-scope="scope1">
               <el-tag
@@ -39,8 +40,8 @@
               >{{ scope1.row.level }}</el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="rate" label="A/S"></el-table-column>
-          <el-table-column prop="tag" label="Tag" :width="350">
+          <el-table-column prop="rate" label="A/S" :width="70"></el-table-column>
+          <el-table-column prop="tag" label="Tag">
             <template slot-scope="scope">
               <el-tag
                 id="protag"
@@ -52,7 +53,7 @@
               >{{ name }}</el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="score" label="Score"></el-table-column>
+          <el-table-column prop="score" label="Score" :width="70"></el-table-column>
         </el-table>
         <center>
           <el-pagination
@@ -123,19 +124,19 @@ export default {
       se: 100,
       title: "Statistics",
       currenttag: "",
-      islpoj: true,
+      islpoj:true,
       searchtext: "",
       searchoj: "LPOJ"
     };
   },
   methods: {
-    statuechange(val) {
+    statuechange(val){
       if (val == true) {
-        this.searchoj = "LPOJ";
+        this.searchoj="LPOJ"
       } else {
-        this.searchoj = "";
+        this.searchoj=""
       }
-      this.searchtitle();
+      this.searchtitle()
     },
     searchtitle() {
       this.currentpage = 1;
@@ -147,8 +148,7 @@ export default {
             (this.currentpage - 1) * this.pagesize +
             "&auth=1&search=" +
             this.searchtext +
-            "&oj=" +
-            this.searchoj
+            "&oj="+this.searchoj
         )
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {
@@ -206,8 +206,7 @@ export default {
             (this.currentpage - 1) * this.pagesize +
             "&auth=1&search=" +
             this.searchtext +
-            "&oj=" +
-            this.searchoj
+            "&oj="+this.searchoj
         )
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {
@@ -249,8 +248,7 @@ export default {
             (this.currentpage - 1) * this.pagesize +
             "&auth=1&search=" +
             this.searchtext +
-            "&oj=" +
-            this.searchoj
+            "&oj="+this.searchoj
         )
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {
@@ -291,8 +289,7 @@ export default {
             (this.currentpage - 1) * this.pagesize +
             "&auth=1&search=" +
             this.searchtext +
-            "&oj=" +
-            this.searchoj
+            "&oj="+this.searchoj
         )
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {
