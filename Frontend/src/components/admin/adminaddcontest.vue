@@ -1,20 +1,31 @@
 <template>
   <el-row>
-    <el-dialog title="选择题目" :visible.sync="dialogTableVisible">
+    <el-dialog title="选择题目" :visible.sync="dialogTableVisible" width="75%">
+      <el-input
+        placeholder="输入Title来筛选..."
+        v-model="searchpro"
+        @keyup.native.enter="searchtitle"
+        style="float:right;width:200px;"
+      >
+        <el-button slot="append" icon="el-icon-search" @click="searchtitle"></el-button>
+      </el-input>
       <el-pagination
         @current-change="handleCurrentChange"
         :current-page="currentpage"
-        :page-size="50"
+        :page-size="20"
         :total="totalproblem"
         layout="total,prev, pager, next, jumper"
       ></el-pagination>
-      <el-input placeholder="输入Title来筛选..." v-model="searchpro" @keyup.native.enter="searchtitle" style="float:right;width:200px;">
-            <el-button slot="append" icon="el-icon-search" @click="searchtitle"></el-button>
-          </el-input>
 
       <el-table :data="gridData" @cell-click="problemclick">
         <el-table-column property="problem" label="ID" width="70"></el-table-column>
-        <el-table-column property="title" label="Title"></el-table-column>
+        <el-table-column property="title" label="标题" width="350"></el-table-column>
+        <el-table-column property="tag" label="标签" ></el-table-column>
+        <el-table-column property="score" label="分数" width="80"></el-table-column>
+        <el-table-column property="oj" label="OJ" width="70"></el-table-column>
+        <el-table-column property="level" label="难度" width="70"></el-table-column>
+        <el-table-column property="ac" label="AC数" width="70"></el-table-column>
+        <el-table-column property="submission" label="提交数" width="70"></el-table-column>
       </el-table>
     </el-dialog>
     <el-row>
@@ -23,9 +34,9 @@
           <el-input v-model="addcontestform.creator" style="width:200px;"></el-input>
         </el-form-item>
         <el-form-item label="比赛名称：">
-          <el-input v-model="addcontestform.title" style="width:200px;"></el-input>
+          <el-input v-model="addcontestform.title" style="width:400px;"></el-input>
         </el-form-item>
-        <el-form-item label="比赛难度（1~5）：">
+        <el-form-item label="比赛难度：">
           <el-select v-model="addcontestform.level" placeholder="请选择" style="width:200px;">
             <el-option key="1" label="简单" :value="1"></el-option>
             <el-option key="2" label="普通" :value="2"></el-option>
@@ -59,7 +70,7 @@
             <el-option key="3" label="Personal" value="Personal"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="比赛权限（1 public 2 private 0 protect(可注册)）：">
+        <el-form-item label="比赛权限：">
           <el-select
             style="width:200px;"
             v-model="addcontestform.auth"
@@ -94,19 +105,21 @@
       <el-row>
         <el-row :gutter="20">
           <el-col :span="4">
-            <el-input @change="addproblemchange" v-model="tmpaddproblemid" placeholder="题目编号"><el-button slot="append" icon="el-icon-search" @click="addproblemchange"></el-button></el-input>
+            <el-input @change="addproblemchange" v-model="tmpaddproblemid" placeholder="题目编号">
+              <el-button slot="append" icon="el-icon-search" @click="addproblemchange"></el-button>
+            </el-input>
           </el-col>
           <el-col :span="4">
             <el-input v-model="tmpaddproblemtitle" placeholder="比赛中的题目标题"></el-input>
           </el-col>
           <el-col :span="2">
-            <el-button type="primary" @click="addproblemclick" plain :disabled="!canadd">添加题目</el-button>
+            <el-button type="success" @click="dialogTableVisible = true">选择题目</el-button>
           </el-col>
           <el-col :span="4">
-            <el-button type="success" @click="uploadproblemclick" :disabled="contestid==-1">提交题目</el-button>
+            <el-button type="primary" @click="addproblemclick" plain :disabled="!canadd">添加题目</el-button>
           </el-col>
         </el-row>
-        <el-button type="success" @click="dialogTableVisible = true">选择题目</el-button>
+        <el-button type="success" @click="uploadproblemclick" :disabled="contestid==-1">提交题目</el-button>
       </el-row>
     </el-row>
   </el-row>
@@ -128,7 +141,7 @@ export default {
       tmpaddproblemid: "",
       tmpaddproblemtitle: "",
       canadd: false,
-      searchpro:"",
+      searchpro: "",
       addcontestform: {
         creator: sessionStorage.name,
         title: "新比赛",
@@ -144,11 +157,15 @@ export default {
     };
   },
   methods: {
-    searchtitle(){
-      this.currentpage = 1
+    searchtitle() {
+      this.currentpage = 1;
       this.$axios
-        .get("/problemdata/?limit=50&offset=" + (this.currentpage - 1) * 50 + "&search=" +
-            this.searchpro)
+        .get(
+          "/problemdata/?limit=20&offset=" +
+            (this.currentpage - 1) * 20 +
+            "&search=" +
+            this.searchpro
+        )
         .then(response => {
           this.totalproblem = response.data.count;
           this.gridData = response.data.results;
@@ -157,8 +174,12 @@ export default {
     handleCurrentChange(val) {
       this.currentpage = val;
       this.$axios
-        .get("/problemdata/?limit=50&offset=" + (this.currentpage - 1) * 50 + "&search=" +
-            this.searchpro)
+        .get(
+          "/problemdata/?limit=20&offset=" +
+            (this.currentpage - 1) * 20 +
+            "&search=" +
+            this.searchpro
+        )
         .then(response => {
           this.totalproblem = response.data.count;
           this.gridData = response.data.results;
@@ -296,8 +317,12 @@ export default {
   },
   created() {
     this.$axios
-      .get("/problemdata/?limit=50&offset=" + (this.currentpage - 1) * 50+ "&search=" +
-            this.searchpro)
+      .get(
+        "/problemdata/?limit=20&offset=" +
+          (this.currentpage - 1) * 20 +
+          "&search=" +
+          this.searchpro
+      )
       .then(response => {
         this.totalproblem = response.data.count;
         this.gridData = response.data.results;

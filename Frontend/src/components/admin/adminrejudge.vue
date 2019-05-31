@@ -4,7 +4,7 @@
       <el-form label-position="right">
         <el-form-item label="比赛题目重测：">
           <el-input v-model="contestid" placeholder="请输入比赛编号" style="width:200px"></el-input>
-          <el-input v-model="contestproblem" placeholder="请输入比赛题目编号，A=0,B=1" style="width:200px"></el-input>
+          <el-input v-model="contestproblem" placeholder="请输入比赛题目编号的数字，A=0,B=1" style="width:400px"></el-input>
           <el-button type="primary" @click="contestrejudge">提交</el-button>
         </el-form-item>
         <el-form-item label="题目重测：">

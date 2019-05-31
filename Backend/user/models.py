@@ -36,3 +36,14 @@ class UserData(models.Model):
 
     def __str__(self):
         return self.username
+
+class UserLoginData(models.Model):
+    username = models.CharField(max_length=50, null=False)
+    ip = models.CharField(max_length=50, null=False)
+    logintime = models.DateTimeField(auto_now=True)
+    msg = models.TextField(null=True)
+
+    objects = models.Manager()
+
+    def __str__(self):
+        return self.username

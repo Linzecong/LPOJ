@@ -61,7 +61,7 @@
       <p>
         Powered by
         <a href="https://github.com/Linzecong/LPOJ"  target="_blank" style="text-decoration: none;color:#409EFF;">Linzecong</a>
-        <span>&nbsp; Version: 2.1&nbsp; Docs:&nbsp;<a href="http://docs.lpoj.cn" target="_blank" style="text-decoration: none;color:#409EFF;">LPOJ Docs</a></span>
+        <span>&nbsp; Version: 2.2&nbsp; Docs:&nbsp;<a href="http://docs.lpoj.cn" target="_blank" style="text-decoration: none;color:#409EFF;">LPOJ Docs</a></span>
       </p>
     </div>
   </div>

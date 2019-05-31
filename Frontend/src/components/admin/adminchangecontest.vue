@@ -1,40 +1,61 @@
 <template>
   <el-row>
-    <el-dialog title="选择题目" :visible.sync="dialogTableVisible">
+    <el-dialog title="选择题目" :visible.sync="dialogTableVisible" width="75%">
+      <el-input
+        placeholder="输入Title来筛选..."
+        v-model="searchpro"
+        @keyup.native.enter="searchprotitle"
+        style="float:right;width:200px;"
+      >
+        <el-button slot="append" icon="el-icon-search" @click="searchprotitle"></el-button>
+      </el-input>
       <el-pagination
         @current-change="handleCurrentChange"
         :current-page="currentpage"
-        :page-size="50"
+        :page-size="20"
         :total="totalproblem"
         layout="total,prev, pager, next, jumper"
       ></el-pagination>
-      <el-input placeholder="输入Title来筛选..." v-model="searchpro" @keyup.native.enter="searchprotitle" style="float:right;width:200px;">
-            <el-button slot="append" icon="el-icon-search" @click="searchprotitle"></el-button>
-          </el-input>
+
       <el-table :data="gridData" @cell-click="problemclick">
         <el-table-column property="problem" label="ID" width="70"></el-table-column>
-        <el-table-column property="title" label="Title"></el-table-column>
+        <el-table-column property="title" label="标题" width="350"></el-table-column>
+        <el-table-column property="tag" label="标签"></el-table-column>
+        <el-table-column property="score" label="分数" width="80"></el-table-column>
+        <el-table-column property="oj" label="OJ" width="70"></el-table-column>
+        <el-table-column property="level" label="难度" width="70"></el-table-column>
+        <el-table-column property="ac" label="AC数" width="70"></el-table-column>
+        <el-table-column property="submission" label="提交数" width="70"></el-table-column>
       </el-table>
     </el-dialog>
-    <el-dialog title="选择比赛" :visible.sync="dialogTableVisible2">
+    <el-dialog title="选择比赛" :visible.sync="dialogTableVisible2" width="75%">
+      <el-input
+        v-model="searchtitle"
+        placeholder="输入Title来筛选..."
+        style="float:right;width:200px;"
+        @change="searchcontest"
+        @keyup.native.enter="searchcontest"
+      >
+        <el-button slot="append" icon="el-icon-search" @click="searchcontest"></el-button>
+      </el-input>
       <el-pagination
         @current-change="handleCurrentContestChange"
         :current-page="currentpage2"
-        :page-size="50"
+        :page-size="20"
         :total="totalcontest"
         layout="total,prev, pager, next, jumper"
       ></el-pagination>
-      <el-input
-          v-model="searchtitle"
-          placeholder="输入Title来筛选..."
-          style="float:right;width:200px;"
-          @change="searchcontest"
-          @keyup.native.enter="searchcontest"
-        ><el-button slot="append" icon="el-icon-search" @click="searchcontest"></el-button></el-input>
-      <el-table :data="gridData2" @cell-click="contestclick" :default-sort="{prop: 'id', order: 'descending'}">
+
+      <el-table
+        :data="gridData2"
+        @cell-click="contestclick"
+        :default-sort="{prop: 'id', order: 'descending'}"
+      >
         <el-table-column property="id" label="ID" width="70"></el-table-column>
-        <el-table-column property="title" label="Title"></el-table-column>
-        <el-table-column prop="type" label="Type"></el-table-column>
+        <el-table-column property="title" label="比赛标题" ></el-table-column>
+        <el-table-column prop="type" label="比赛类型" width="100"></el-table-column>
+        <el-table-column prop="begintime" label="开始时间" width="200"></el-table-column>
+        <el-table-column prop="lasttime" label="持续时间" width="90"></el-table-column>
       </el-table>
     </el-dialog>
     <el-row>
@@ -58,9 +79,9 @@
           <el-input v-model="changecontestform.creator" style="width:200px;"></el-input>
         </el-form-item>
         <el-form-item label="比赛名称：">
-          <el-input v-model="changecontestform.title" style="width:200px;"></el-input>
+          <el-input v-model="changecontestform.title" style="width:400px;"></el-input>
         </el-form-item>
-        <el-form-item label="比赛难度（1~5）：">
+        <el-form-item label="比赛难度：">
           <el-select v-model="changecontestform.level" placeholder="请选择" style="width:200px;">
             <el-option key="1" label="简单" :value="1"></el-option>
             <el-option key="2" label="普通" :value="2"></el-option>
@@ -94,7 +115,7 @@
             <el-option key="3" label="Personal" value="Personal"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="比赛权限（1 public 2 private 0 protect(可注册)）：">
+        <el-form-item label="比赛权限：">
           <el-select
             style="width:200px;"
             v-model="changecontestform.auth"
@@ -129,20 +150,21 @@
       <el-row>
         <el-row :gutter="20">
           <el-col :span="4">
-            <el-input @change="addproblemchange" v-model="tmpaddproblemid" placeholder="题目编号"><el-button slot="append" icon="el-icon-search" @click="addproblemchange"></el-button></el-input>
+            <el-input @change="addproblemchange" v-model="tmpaddproblemid" placeholder="题目编号">
+              <el-button slot="append" icon="el-icon-search" @click="addproblemchange"></el-button>
+            </el-input>
           </el-col>
           <el-col :span="4">
             <el-input v-model="tmpaddproblemtitle" placeholder="比赛中的题目标题"></el-input>
           </el-col>
           <el-col :span="2">
-            <el-button type="primary" @click="addproblemclick" plain :disabled="!canadd">添加题目</el-button>
+            <el-button type="success" @click="dialogTableVisible = true">选择题目</el-button>
           </el-col>
           <el-col :span="4">
-            <el-button type="success" @click="uploadproblemclick" :disabled="contestid==-1">更新题目</el-button>
+            <el-button type="primary" @click="addproblemclick" plain :disabled="!canadd">添加题目</el-button>
           </el-col>
         </el-row>
-
-        <el-button type="success" @click="dialogTableVisible = true">选择题目</el-button>
+        <el-button type="success" @click="uploadproblemclick" :disabled="contestid==-1">更新题目</el-button>
       </el-row>
     </el-row>
 
@@ -185,8 +207,8 @@ export default {
       tmpaddproblemtitle: "",
       canadd: false,
 
-      searchtitle:"",
-      searchpro:"",
+      searchtitle: "",
+      searchpro: "",
 
       changecontestform: {
         creator: sessionStorage.name,
@@ -227,21 +249,42 @@ export default {
     };
   },
   methods: {
-    searchprotitle(){
-      this.currentpage = 1
+    searchprotitle() {
+      this.currentpage = 1;
       this.$axios
-        .get("/problemdata/?limit=50&offset=" + (this.currentpage - 1) * 50 + "&search=" +
-            this.searchpro)
+        .get(
+          "/problemdata/?limit=20&offset=" +
+            (this.currentpage - 1) * 20 +
+            "&search=" +
+            this.searchpro
+        )
         .then(response => {
           this.totalproblem = response.data.count;
           this.gridData = response.data.results;
         });
     },
-    searchcontest(){
+    searchcontest() {
       this.currentpage2 = 1;
       this.$axios
-        .get("/contestinfo/?limit=50&offset=" + (this.currentpage2 - 1) * 50+ "&search=" + this.searchtitle)
+        .get(
+          "/contestinfo/?limit=20&offset=" +
+            (this.currentpage2 - 1) * 20 +
+            "&search=" +
+            this.searchtitle
+        )
         .then(response => {
+          for (let i = 0; i < response.data.results.length; i++) {
+            response.data.results[i].begintime = moment(
+              response.data.results[i].begintime
+            ).format("YYYY-MM-DD HH:mm:ss");
+            response.data.results[i]["lasttime"] =
+              parseInt(response.data.results[i]["lasttime"] / 60 / 60) +
+              ":" +
+              parseInt((response.data.results[i]["lasttime"] / 60) % 60) +
+              ":" +
+              parseInt((response.data.results[i]["lasttime"] % 60) % 60);
+          }
+          
           this.gridData2 = response.data.results;
           this.totalcontest = response.data.count;
         });
@@ -254,8 +297,12 @@ export default {
     handleCurrentChange(val) {
       this.currentpage = val;
       this.$axios
-        .get("/problemdata/?limit=50&offset=" + (this.currentpage - 1) * 50+ "&search=" +
-            this.searchpro)
+        .get(
+          "/problemdata/?limit=20&offset=" +
+            (this.currentpage - 1) * 20 +
+            "&search=" +
+            this.searchpro
+        )
         .then(response => {
           this.totalproblem = response.data.count;
           this.gridData = response.data.results;
@@ -265,8 +312,24 @@ export default {
       this.currentpage2 = val;
 
       this.$axios
-        .get("/contestinfo/?limit=50&offset=" + (this.currentpage2 - 1) * 50+ "&search=" + this.searchtitle)
+        .get(
+          "/contestinfo/?limit=20&offset=" +
+            (this.currentpage2 - 1) * 20 +
+            "&search=" +
+            this.searchtitle
+        )
         .then(response => {
+          for (let i = 0; i < response.data.results.length; i++) {
+            response.data.results[i].begintime = moment(
+              response.data.results[i].begintime
+            ).format("YYYY-MM-DD HH:mm:ss");
+            response.data.results[i]["lasttime"] =
+              parseInt(response.data.results[i]["lasttime"] / 60 / 60) +
+              ":" +
+              parseInt((response.data.results[i]["lasttime"] / 60) % 60) +
+              ":" +
+              parseInt((response.data.results[i]["lasttime"] % 60) % 60);
+          }
           this.gridData2 = response.data.results;
           this.totalcontest = response.data.count;
         });
@@ -546,14 +609,34 @@ export default {
   },
   created() {
     this.$axios
-      .get("/problemdata/?limit=50&offset=" + (this.currentpage - 1) * 50+ "&search=" +
-            this.searchpro)
+      .get(
+        "/problemdata/?limit=20&offset=" +
+          (this.currentpage - 1) * 20 +
+          "&search=" +
+          this.searchpro
+      )
       .then(response => {
         this.totalproblem = response.data.count;
         this.gridData = response.data.results;
         this.$axios
-          .get("/contestinfo/?limit=50&offset=" + (this.currentpage2 - 1) * 50+ "&search=" + this.searchtitle)
+          .get(
+            "/contestinfo/?limit=20&offset=" +
+              (this.currentpage2 - 1) * 20 +
+              "&search=" +
+              this.searchtitle
+          )
           .then(response2 => {
+            for (let i = 0; i < response2.data.results.length; i++) {
+              response2.data.results[i].begintime = moment(
+                response2.data.results[i].begintime
+              ).format("YYYY-MM-DD HH:mm:ss");
+              response2.data.results[i]["lasttime"] =
+              parseInt(response2.data.results[i]["lasttime"] / 60 / 60) +
+              ":" +
+              parseInt((response2.data.results[i]["lasttime"] / 60) % 60) +
+              ":" +
+              parseInt((response2.data.results[i]["lasttime"] % 60) % 60);
+            }
             this.gridData2 = response2.data.results;
             this.totalcontest = response2.data.count;
           });

@@ -121,7 +121,7 @@ def changeauth():
         sleep(2)
         if mutex.acquire():
             cursor.execute(
-                "SELECT * from contest_contestinfo where type <> 'Personal' and TO_SECONDS(NOW()) - TO_SECONDS(begintime) <= lasttime")
+                "SELECT * from contest_contestinfo where type <> 'Personal' and TO_SECONDS(NOW()) - TO_SECONDS(begintime) <= lasttime and TO_SECONDS(NOW()) - TO_SECONDS(begintime) >=-1")
             data = cursor.fetchall()
             getcontest = set()
             for d in data:

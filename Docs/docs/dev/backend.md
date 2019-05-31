@@ -748,6 +748,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 | :--  | :-- |
 | User | 用户的详细信息 | 
 | UserData | 用户的简要信息 | 
+| UserLoginData | 用户的登录信息 | 
 
 **User**
 | 属性 | 功能 | 类型 | 说明 |
@@ -756,7 +757,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 | password | 密码 | CharField | MD5加密后的 |
 | name | 昵称 | CharField |  |
 | regtime | 注册时间 | DateTimeField | auto_now |
-| logintime | 上次登录时间 | DateTimeField | auto_now（暂时弃用） |
+| logintime | 上次登录时间 | DateTimeField | auto_now（暂时弃用，见userlogindata表） |
 | school | 学校 | CharField |  |
 | course | 专业 | CharField |  |
 | classes | 班级 | CharField |  |
@@ -778,10 +779,21 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 | rating | 用户的Rating | IntegerField |  |
 | acpro | 用户AC的题目 | TextField | 中间用竖线隔开 |
 
+**UserLoginData**
+
+| 属性 | 功能 | 类型 | 说明 |
+| :--  | :-- | :-- | :-- |
+| username | 用户名 | CharField |  |
+| ip | 用户登录的IP | CharField |  |
+| logintime | 登录的时间 | DateTimeField |  |
+| msg | 其他额外信息，如浏览器版本等 | TextField |  |
+
+
 **permission.py**
 
 | permission | 读权限 | 写权限 |
 | :--  | :--: | :--: |
+| ManagerOnly | 有 | 仅POST或为管理员 |
 | UserSafePostOnly | 有 | 仅不修改敏感信息或管理员 |
 | UserPUTOnly | 无 | 仅用户 |
 | AuthPUTOnly | 无 | 仅管理员 |
@@ -794,6 +806,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 | UserNoPassSerializer | 不包括密码 | 
 | UserNoTypeSerializer | 不包括权限 | 
 | UserDataSerializer | ALL | 
+| UserLoginDataSerializer | ALL | 
 
 **views.py**
 
@@ -807,6 +820,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 | UserUpdateRatingAPIView | 用于更新本地Rating  | 无 |  AllowAny | 否 | 否 |
 | UserLogoutAPIView | 用于登出  | 无 |  AllowAny | 否 | 否 |
 | UserRegisterAPIView | 用于注册  | 无 |  AllowAny | 否 | 否 |
+| UserLoginDataView | ID倒序  | ('username','ip',) |  ManagerOnly | 是 | 是 |
 
 **urls.py**
 
@@ -820,6 +834,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 | UserLoginAPIView | http://localhost:8000/uploadfile/ | 
 | UserLogoutAPIView | http://localhost:8000/problemtag/  | 
 | UserUpdateRatingAPIView | http://localhost:8000/uploadfile/ | 
+| UserLoginDataView | http://localhost:8000/userlogindata/ | 
 
 ### Wiki
 

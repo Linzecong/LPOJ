@@ -313,7 +313,7 @@ export default {
 
           var left = parseInt((d1.getTime() - d2.getTime()) / 1000);
 
-          if (left < 0) {
+          if (left < 0&&sessionStorage.type==1) {
             this.$message.error("比赛未开始！");
             this.begin = false;
             return;

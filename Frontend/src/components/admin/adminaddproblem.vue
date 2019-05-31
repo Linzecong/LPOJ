@@ -26,10 +26,10 @@
     <el-form-item label="输出：">
       <el-input type="textarea" v-model="addproblemform.output" autosize style="width:800px;"></el-input>
     </el-form-item>
-    <el-form-item label="样例输入（用 |#) 分割）：">
+    <el-form-item label="样例输入（多个样例间用 |#) 分割）：">
       <el-input type="textarea" v-model="addproblemform.sinput" autosize style="width:800px;"></el-input>
     </el-form-item>
-    <el-form-item label="样例输出（用 |#) 分割）：">
+    <el-form-item label="样例输出（多个样例间用 |#) 分割）：">
       <el-input type="textarea" v-model="addproblemform.soutput" autosize style="width:800px;"></el-input>
     </el-form-item>
     <el-form-item label="提示：">
@@ -104,17 +104,17 @@ export default {
         problem: this.problemcount + 1,
         author: sessionStorage.name,
         title: "题目标题",
-        des: "题目说明",
-        input: "输入说明",
-        output: "输出说明",
+        des: "题目说明\n支持HTML格式和Katex公式\n\n",
+        input: "输入说明\n支持HTML格式和Katex公式\n\n",
+        output: "输出说明\n支持HTML格式和Katex公式\n\n",
         sinput: "1 1|#)2 2",
         soutput: "2|#)4",
         source: "LPOJ",
         time: 1000,
         memory: 64,
-        hint: "提示",
+        hint: "提示\n支持HTML格式和Katex公式\n\n",
         auth: 2,
-        tag: "简单题|模拟|贪心",
+        tag: "简单题|模拟",
         level: 3,
         score: 100,
         oj: "LPOJ"

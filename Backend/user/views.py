@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets
+from rest_framework import viewsets,filters
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.throttling import ScopedRateThrottle
-from .models import User, UserData
-from .serializers import UserSerializer, UserDataSerializer, UserNoPassSerializer, UserNoTypeSerializer
-from .permission import UserSafePostOnly, UserPUTOnly, AuthPUTOnly
+from .models import User, UserData,UserLoginData
+from .serializers import UserSerializer, UserDataSerializer, UserNoPassSerializer, UserNoTypeSerializer, UserLoginDataSerializer
+from .permission import UserSafePostOnly, UserPUTOnly, AuthPUTOnly,ManagerOnly
 
 
 
@@ -27,8 +27,9 @@ class UserDataView(viewsets.ModelViewSet):
 class UserView(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserNoPassSerializer
-    filter_backends = (DjangoFilterBackend,)
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter)
     filter_fields = ('username',)
+    search_fields = ('username', 'name','realname','course','classes','school','number','qq')
     permission_classes = (UserSafePostOnly,)
     pagination_class = LimitOffsetPagination
     throttle_scope = "post"
@@ -50,6 +51,16 @@ class UserChangeAllView(viewsets.ModelViewSet):
     throttle_scope = "post"
     throttle_classes = [ScopedRateThrottle, ]
 
+class UserLoginDataView(viewsets.ModelViewSet):
+    queryset = UserLoginData.objects.all().order_by('-id')
+    serializer_class = UserLoginDataSerializer
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter)
+    filter_fields = ('username','ip',)
+    search_fields = ('username', 'ip')
+    permission_classes = (ManagerOnly,)
+    pagination_class = LimitOffsetPagination
+    throttle_scope = "post"
+    throttle_classes = [ScopedRateThrottle, ]
 
 class UserLoginAPIView(APIView):
     queryset = User.objects.all()

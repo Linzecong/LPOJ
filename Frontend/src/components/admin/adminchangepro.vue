@@ -1,19 +1,26 @@
 <template>
   <el-form ref="problemform" :model="problemform" label-position="right" v-loading="loading">
-    <el-dialog title="选择题目" :visible.sync="dialogTableVisible">
-      <el-pagination
-        @current-change="handleCurrentChange"
-        :current-page="currentpage"
-        :page-size="50"
-        :total="totalproblem"
-        layout="total,prev, pager, next, jumper"
-      ></el-pagination>
+    <el-dialog title="选择题目" :visible.sync="dialogTableVisible" width="75%">
       <el-input placeholder="输入Title来筛选..." v-model="searchpro" @keyup.native.enter="searchtitle" style="float:right;width:200px;">
             <el-button slot="append" icon="el-icon-search" @click="searchtitle"></el-button>
           </el-input>
+      <el-pagination
+        @current-change="handleCurrentChange"
+        :current-page="currentpage"
+        :page-size="20"
+        :total="totalproblem"
+        layout="total,prev, pager, next, jumper"
+      ></el-pagination>
+      
       <el-table :data="gridData" @cell-click="problemclick">
         <el-table-column property="problem" label="ID" width="70"></el-table-column>
-        <el-table-column property="title" label="Title"></el-table-column>
+        <el-table-column property="title" label="标题" width="350"></el-table-column>
+        <el-table-column property="tag" label="标签" ></el-table-column>
+        <el-table-column property="score" label="分数" width="80"></el-table-column>
+        <el-table-column property="oj" label="OJ" width="70"></el-table-column>
+        <el-table-column property="level" label="难度" width="70"></el-table-column>
+        <el-table-column property="ac" label="AC数" width="70"></el-table-column>
+        <el-table-column property="submission" label="提交数" width="70"></el-table-column>
       </el-table>
     </el-dialog>
 
@@ -179,7 +186,7 @@ export default {
     searchtitle(){
       this.currentpage = 1
       this.$axios
-        .get("/problemdata/?limit=50&offset=" + (this.currentpage - 1) * 50 + "&search=" +
+        .get("/problemdata/?limit=20&offset=" + (this.currentpage - 1) * 20 + "&search=" +
             this.searchpro)
         .then(response => {
           this.totalproblem = response.data.count;
@@ -189,7 +196,7 @@ export default {
     handleCurrentChange(val) {
       this.currentpage = val;
       this.$axios
-        .get("/problemdata/?limit=50&offset=" + (this.currentpage - 1) * 50+ "&search=" +
+        .get("/problemdata/?limit=20&offset=" + (this.currentpage - 1) * 20+ "&search=" +
             this.searchpro)
         .then(response => {
           this.totalproblem = response.data.count;
@@ -343,7 +350,7 @@ export default {
   },
   created() {
     this.$axios
-      .get("/problemdata/?limit=50&offset=" + (this.currentpage - 1) * 50+ "&search=" +
+      .get("/problemdata/?limit=20&offset=" + (this.currentpage - 1) * 20+ "&search=" +
             this.searchpro)
       .then(response => {
         this.totalproblem = response.data.count;

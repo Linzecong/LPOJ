@@ -3,7 +3,7 @@
     <div slot="header">
       <b>Welcome to {{school}}</b>
     </div>
-    <b>Version：2.1</b>
+    <b>Version：2.2</b>
     <br>
     <h3>Safer and More Robust!</h3>
     <h3><a href="https://github.com/Linzecong/LPOJ" target="_blank" style="text-decoration: none;color:#409EFF;">Github (Star Me!)</a></h3>

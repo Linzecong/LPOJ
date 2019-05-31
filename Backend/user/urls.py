@@ -8,6 +8,7 @@ routers.register('userdata', views.UserDataView)
 routers.register('user', views.UserView)
 routers.register('change', views.UserChangeView)
 routers.register('changeall', views.UserChangeAllView)
+routers.register('userlogindata', views.UserLoginDataView)
 
 urlpatterns = [
     url('', include(routers.urls)),

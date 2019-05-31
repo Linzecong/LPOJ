@@ -2,27 +2,22 @@
   <el-row :gutter="15">
     <el-col :span="18">
       <el-card shadow="always">
-        
-          <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="currentpage"
-            :page-sizes="[15, 20, 30, 50]"
-            :page-size="pagesize"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="totalproblem"
-          ></el-pagination>
-
-          <el-switch
+        <el-switch
           style="float: right;"
           v-model="islpoj"
           active-text="LPOJ"
           inactive-text="All"
           @change="statuechange"
         ></el-switch>
-       
-
-        
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="currentpage"
+          :page-sizes="[15, 20, 30, 50]"
+          :page-size="pagesize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="totalproblem"
+        ></el-pagination>
 
         <el-table
           :data="tableData"
@@ -128,19 +123,19 @@ export default {
       se: 100,
       title: "Statistics",
       currenttag: "",
-      islpoj:true,
+      islpoj: true,
       searchtext: "",
       searchoj: "LPOJ"
     };
   },
   methods: {
-    statuechange(val){
+    statuechange(val) {
       if (val == true) {
-        this.searchoj="LPOJ"
+        this.searchoj = "LPOJ";
       } else {
-        this.searchoj=""
+        this.searchoj = "";
       }
-      this.searchtitle()
+      this.searchtitle();
     },
     searchtitle() {
       this.currentpage = 1;
@@ -152,7 +147,8 @@ export default {
             (this.currentpage - 1) * this.pagesize +
             "&auth=1&search=" +
             this.searchtext +
-            "&oj="+this.searchoj
+            "&oj=" +
+            this.searchoj
         )
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {
@@ -210,7 +206,8 @@ export default {
             (this.currentpage - 1) * this.pagesize +
             "&auth=1&search=" +
             this.searchtext +
-            "&oj="+this.searchoj
+            "&oj=" +
+            this.searchoj
         )
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {
@@ -252,7 +249,8 @@ export default {
             (this.currentpage - 1) * this.pagesize +
             "&auth=1&search=" +
             this.searchtext +
-            "&oj="+this.searchoj
+            "&oj=" +
+            this.searchoj
         )
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {
@@ -293,7 +291,8 @@ export default {
             (this.currentpage - 1) * this.pagesize +
             "&auth=1&search=" +
             this.searchtext +
-            "&oj="+this.searchoj
+            "&oj=" +
+            this.searchoj
         )
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {

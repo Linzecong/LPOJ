@@ -163,12 +163,11 @@ export default {
             }
             if (flag == false) {
               this.anlist.push(response.data[i]["announcement"]);
-              // if (this.$store.state.contestisend != true)
                 this.$notify.warning({
                   dangerouslyUseHTMLString: true,
                   title: "提示",
                   message: response.data[i]["announcement"],
-                  duration: 10000
+                  duration: 7000
                 });
             }
           }

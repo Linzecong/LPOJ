@@ -65,10 +65,23 @@ export default {
           this.dialogLoginVisible = false;
 
           this.$axios
-            .get("/userdata/?username=" + sessionStorage.username)
+            .post("/userlogindata/", {
+              username: this.form.username,
+              ip: this.$store.state.loginip,
+              msg: this.$store.state.logininfo
+            })
             .then(response => {
-              sessionStorage.setItem("rating", response.data[0].rating);
               this.$router.go(0);
+            })
+            .catch(error => {
+              this.$message.error(
+                "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
+              );
+              sessionStorage.setItem("username", "");
+              sessionStorage.setItem("name", "");
+              sessionStorage.setItem("rating", "");
+              sessionStorage.setItem("type", "");
+              sessionStorage.setItem("acpro", "");
             });
         })
         .catch(error => {
