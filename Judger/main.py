@@ -491,9 +491,22 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
 
         tempset = set()  # 用于判读数据是否都有in,out
         newfiles = set()
+        casedes = dict()
         for s in files:
             s = s.replace(".in", "")
             s = s.replace(".out", "")
+            if s == "casedes.txt":
+                file3 = open("./ProblemData/%s/casedes.txt"%problem,"r");
+                while file3.readable() is True:
+                    des = str(file3.readline()).strip()
+                    # print(des)
+                    if des.find("|")!=-1:
+                        casedes[des.split("|")[0]]=des.split("|")[1]
+                    if des == "":
+                        break
+
+                file3.close()
+                continue
             if s in tempset:
                 newfiles.add(s)
             else:
@@ -516,7 +529,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 waittime = 0
                 while True:
                     memo = getmem()
-                    print(memo, memorylimit)
+                    # print(memo, memorylimit)
                     if memo >= memorylimit/2:
                         break
                     waittime = waittime + 1
@@ -622,7 +635,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                         'Memory Limit Exceeded',
                         ret["cpu_time"],
                         ret["memory"]/1024/1024,
-                        filename,
+                        filename+" ("+casedes.get(filename,"No description available")+")",
                         casedata,
                         outputdata,
                         useroutputdata
@@ -652,7 +665,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                         resultstr,
                         ret["cpu_time"],
                         ret["memory"]/1024/1024,
-                        filename,
+                        filename+" ("+casedes.get(filename,"No description available")+")",
                         casedata,
                         outputdata,
                         useroutputdata
@@ -721,7 +734,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                         resultstr,
                         ret["cpu_time"],
                         ret["memory"]/1024/1024,
-                        filename,
+                        filename+" ("+casedes.get(filename,"No description available")+")",
                         casedata,
                         outputdata,
                         useroutputdata
@@ -738,7 +751,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                         'Accepted',
                         ret["cpu_time"],
                         ret["memory"]/1024/1024,
-                        filename,
+                        filename+" ("+casedes.get(filename,"No description available")+")",
                         casedata,
                         outputdata,
                         useroutputdata

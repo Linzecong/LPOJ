@@ -28,7 +28,7 @@ class UserData(models.Model):
     ac = models.IntegerField(null=False, default=0)
     submit = models.IntegerField(null=False, default=0)
     score = models.IntegerField(default=0)
-    des = models.CharField(max_length=500, null=True)
+    des = models.CharField(max_length=50, null=True)
     rating = models.IntegerField(default=1500)
     acpro = models.TextField(null=True, default="")
 

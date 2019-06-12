@@ -82,7 +82,7 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="默认参赛人员（如果是公开比赛，请忽略，私有比赛请务必填写，因为私有比赛不可注册，中间用英文逗号隔开）：">
+        <el-form-item label="默认参赛人员（如果是公开比赛，请忽略，私有比赛请务必填写，因为私有比赛不可注册，中间用英文逗号或换行隔开）：">
           <el-input type="textarea" v-model="contestregister" autosize></el-input>
         </el-form-item>
 
@@ -91,7 +91,7 @@
         </el-form-item>
       </el-form>
     </el-row>
-
+    (添加比赛后再确认保存题目)
     <el-row style="margin-top:50px;">
       <el-row>
         <el-tag
@@ -102,6 +102,7 @@
           @close="handleClose(tag)"
         >{{tag}}</el-tag>
       </el-row>
+      
       <el-row>
         <el-row :gutter="20">
           <el-col :span="4">
@@ -119,7 +120,7 @@
             <el-button type="primary" @click="addproblemclick" plain :disabled="!canadd">添加题目</el-button>
           </el-col>
         </el-row>
-        <el-button type="success" @click="uploadproblemclick" :disabled="contestid==-1">提交题目</el-button>
+        <el-button type="success" @click="uploadproblemclick" :disabled="contestid==-1">确认保存题目</el-button>
       </el-row>
     </el-row>
   </el-row>
@@ -285,7 +286,7 @@ export default {
             this.contestid = response.data.id;
 
             if (response.data.auth != 1) {
-              var li = this.contestregister.split(",");
+              var li = this.contestregister.split(/[,\n]/);
 
               for (var i = 0; i < li.length; i++) {
                 this.$axios.post("/contestregister/", {

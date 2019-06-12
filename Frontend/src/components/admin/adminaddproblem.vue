@@ -4,11 +4,11 @@
       <el-input v-model="addproblemform.problem" style="width:400px;" readonly></el-input>
     </el-form-item>
     <el-form-item label="特殊选项：添加其他OJ题目用！不知道的话请忽略">
-      <el-input v-model="addproblemform.oj" placeholder="OJ" style="width:400px;"></el-input>
+      <el-input v-model="addproblemform.oj" placeholder="OJ" style="width:100px;"></el-input>
       <el-input
         v-model="addproblemform.source"
         placeholder="Pro ID"
-        style="width:400px;margin-left:40px;"
+        style="width:100px;margin-left:40px;"
       ></el-input>
     </el-form-item>
     <el-form-item label="作者：">
@@ -84,7 +84,7 @@
       :http-request="myupload"
     >
       <el-button slot="trigger" size="small" type="primary">选取数据文件</el-button>
-      <div slot="tip" class="el-upload__tip">只能上传zip文件,压缩包内的不要有文件夹，输入输出文件后缀为.in和.out</div>
+      <div slot="tip" class="el-upload__tip">只能上传zip文件,压缩包内的不要有文件夹，输入输出文件后缀为.in和.out.添加一个casedes.txt文件可以对每一个样例进行说明，每行一个说明，中间不要有多余的空行，对应的case用|隔开，如：   case1|这是case1的说明</div>
     </el-upload>
 
     <el-button type="success" @click="onAddProblemSubmit" style="float:right;">添加题目</el-button>

@@ -34,10 +34,10 @@ class CaseStatus(models.Model):
     statusid = models.IntegerField()
     username = models.CharField(max_length=50)
     problem = models.CharField(max_length=50)
-    result = models.CharField(max_length=50, default="System Error")
+    result = models.CharField(max_length=500, default="System Error")
     time = models.IntegerField(default=0)
     memory = models.IntegerField(default=0)
-    testcase = models.CharField(max_length=50, default="unknow")
+    testcase = models.CharField(max_length=500, default="unknow")
     casedata = models.CharField(max_length=500)  # 非比赛才能查看，Judger中控制
     outputdata = models.CharField(
         max_length=500, default="")  # 非比赛才能查看，Judger中控制

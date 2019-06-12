@@ -50,7 +50,6 @@ nano setting.json
     WRONG_ANSWER = -3
     PENDING = -1
     JUDGINNG = -2
-    SUCCESS = 0 (this only means the process exited normally)
     CPU_TIME_LIMIT_EXCEEDED = 1
     REAL_TIME_LIMIT_EXCEEDED = 2
     MEMORY_LIMIT_EXCEEDED = 3

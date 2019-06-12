@@ -28,7 +28,8 @@
         <el-table-column property="submission" label="提交数" width="70"></el-table-column>
       </el-table>
     </el-dialog>
-    <el-dialog title="选择比赛" :visible.sync="dialogTableVisible2" width="75%">
+
+    
       <el-input
         v-model="searchtitle"
         placeholder="输入Title来筛选..."
@@ -48,7 +49,6 @@
 
       <el-table
         :data="gridData2"
-        @cell-click="contestclick"
         :default-sort="{prop: 'id', order: 'descending'}"
       >
         <el-table-column property="id" label="ID" width="70"></el-table-column>
@@ -56,8 +56,21 @@
         <el-table-column prop="type" label="比赛类型" width="100"></el-table-column>
         <el-table-column prop="begintime" label="开始时间" width="200"></el-table-column>
         <el-table-column prop="lasttime" label="持续时间" width="90"></el-table-column>
+        <el-table-column
+      fixed="right"
+      label="操作"
+      width="240">
+      <template slot-scope="scope">
+        <el-button @click="handleEdit(scope.row)" type="primary" size="small">编辑</el-button>
+        <el-button @click="contestclick(scope.row)" type="primary" size="small">查看</el-button>
+        <el-button @click="handleDel(scope.row)" type="danger" size="small">删除</el-button>
+      </template>
+    </el-table-column>
+
       </el-table>
-    </el-dialog>
+
+      <el-dialog title="修改比赛" :visible.sync="dialogTableVisible2" width="85%">
+    
     <el-row>
       <el-form :model="changecontestform" label-position="right">
         <el-form-item label="比赛编号：">
@@ -66,13 +79,8 @@
             v-model="contestid"
             @change="contestchange"
             placeholder="请输入比赛编号"
+            readonly
           ></el-input>
-          <el-button
-            style="margin-left:20px;"
-            type="success"
-            @click="dialogTableVisible2 = true"
-          >选择比赛</el-button>
-          <el-button type="danger" style="float:right;" @click="onDelContest">删除比赛</el-button>
         </el-form-item>
 
         <el-form-item label="作者：">
@@ -127,7 +135,7 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="默认参赛人员（如果是公开比赛，请忽略，私有比赛请务必填写，因为私有比赛不可注册，中间用英文逗号隔开）：">
+        <el-form-item label="默认参赛人员（如果是公开比赛，请忽略，私有比赛请务必填写，因为私有比赛不可注册，中间用英文逗号或换行隔开）：">
           <el-input type="textarea" v-model="contestregister" autosize></el-input>
         </el-form-item>
 
@@ -149,15 +157,15 @@
       </el-row>
       <el-row>
         <el-row :gutter="20">
-          <el-col :span="4">
+          <el-col :span="5">
             <el-input @change="addproblemchange" v-model="tmpaddproblemid" placeholder="题目编号">
               <el-button slot="append" icon="el-icon-search" @click="addproblemchange"></el-button>
             </el-input>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-input v-model="tmpaddproblemtitle" placeholder="比赛中的题目标题"></el-input>
           </el-col>
-          <el-col :span="2">
+          <el-col :span="3">
             <el-button type="success" @click="dialogTableVisible = true">选择题目</el-button>
           </el-col>
           <el-col :span="4">
@@ -178,6 +186,8 @@
         @imgAdd="$imgAdd"
       />
     </el-row>
+
+    </el-dialog>
   </el-row>
 </template>
 
@@ -249,6 +259,9 @@ export default {
     };
   },
   methods: {
+    contestclick(row) {
+      window.open("/contest/" + row.id+"/");
+    },
     searchprotitle() {
       this.currentpage = 1;
       this.$axios
@@ -289,10 +302,10 @@ export default {
           this.totalcontest = response.data.count;
         });
     },
-    contestclick: function(row, column, cell, event) {
+    handleEdit(row) {
       this.contestid = row.id;
       this.contestchange(row.id);
-      this.dialogTableVisible2 = false;
+      this.dialogTableVisible2 = true;
     },
     handleCurrentChange(val) {
       this.currentpage = val;
@@ -437,8 +450,8 @@ export default {
           this.changecontestform = {};
         });
     },
-    onDelContest() {
-      this.$confirm("删除比赛id：" + this.contestid, "确定删除比赛吗？", {
+    handleDel(row) {
+      this.$confirm("删除比赛id：" + row.id, "确定删除比赛吗？", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
@@ -449,7 +462,7 @@ export default {
           type: "warning"
         }).then(() => {
           this.$axios
-            .delete("/contestinfo/" + this.contestid + "/")
+            .delete("/contestinfo/" + row.id + "/")
             .then(res => {
               this.$message({
                 message: "删除成功！",
@@ -583,7 +596,7 @@ export default {
                     );
                   }
 
-                  var li = this.contestregister.split(",");
+                  var li = this.contestregister.split(/[,\n]/);
 
                   for (var i = 0; i < li.length; i++) {
                     this.$axios.post("/contestregister/", {

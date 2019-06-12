@@ -5,9 +5,9 @@
     </el-tab-pane>
 
     <el-tab-pane label="添加比赛" :lazy="true"><adminaddcontest></adminaddcontest></el-tab-pane>
-    <el-tab-pane label="题目修改" :lazy="true"><adminchangepro></adminchangepro></el-tab-pane>
-    <el-tab-pane label="比赛设置" :lazy="true"><adminchangecontest></adminchangecontest></el-tab-pane>
-    <el-tab-pane label="管理用户" :disabled="!isadmin" :lazy="true"><adminmanageuser></adminmanageuser></el-tab-pane>
+    <el-tab-pane label="题目列表" :lazy="true"><adminchangepro></adminchangepro></el-tab-pane>
+    <el-tab-pane label="比赛列表" :lazy="true"><adminchangecontest></adminchangecontest></el-tab-pane>
+    <el-tab-pane label="用户列表" :disabled="!isadmin" :lazy="true"><adminmanageuser></adminmanageuser></el-tab-pane>
     <el-tab-pane label="Rejudge" :disabled="!isadmin" :lazy="true"><adminrejudge></adminrejudge></el-tab-pane>
     <el-tab-pane label="添加与修改训练" :disabled="!isadmin" :lazy="true"><admintrainning></admintrainning></el-tab-pane>
     <el-tab-pane label="爬虫信息管理" :disabled="!isadmin" :lazy="true"><adminboard></adminboard></el-tab-pane>

@@ -57,8 +57,8 @@ REST_FRAMEWORK = {
         'rest_framework.throttling.AnonRateThrottle',
     ),
     'DEFAULT_THROTTLE_RATES': {
-        'anon': '300/m',
-        'judge': '300/m',
+        'anon': '1000/m',
+        'judge': '1000/m',
         'post': '2000/m',
     }
 
