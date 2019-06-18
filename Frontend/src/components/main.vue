@@ -21,9 +21,6 @@
           <el-tab-pane :label="label.rank" >
             <rankchart></rankchart>
           </el-tab-pane>
-          <el-tab-pane :label="label.team" :lazy="true">
-            <teamchart></teamchart>
-          </el-tab-pane>
           <el-tab-pane :label="label.rule" :lazy="true">
             <ratingrule></ratingrule>
           </el-tab-pane>
@@ -39,7 +36,6 @@
 
 <script>
 import rankchart from "@/components/chart/rankchart";
-import teamchart from "@/components/chart/teamchart";
 import ojmessage from "@/components/utils/ojmessage";
 import welcomemessage from "@/components/utils/welcomemessage";
 import topuser from "@/components/utils/topuser";
@@ -49,7 +45,6 @@ import contestmini from "@/components/utils/contestmini";
 export default {
   components: {
     rankchart,
-    teamchart,
     ojmessage,
     welcomemessage,
     topuser,

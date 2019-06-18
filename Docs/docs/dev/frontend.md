@@ -310,7 +310,6 @@ import mycon from '@/components/mycon'
 | name | 作用  | 
 | :--  | :-- |
 | [rankchart](/dev/frontend.html#rankchart-vue) | 个人排名图表  | 
-| [teamchart](/dev/frontend.html#teamchart-vue) | 队伍排名图表  | 
 | [ojmessage](/dev/frontend.html#ojmessage-vue) | 留言板  | 
 | [welcomemessage](/dev/frontend.html#welcomemessage-vue) | 左上角的控件  | 
 | [topuser](/dev/frontend.html#topuser-vue) | 排行榜前十用户  | 
@@ -330,78 +329,1285 @@ import mycon from '@/components/mycon'
 
 | name | 作用  | 
 | :--  | :-- |
+| adminaddproblem     |   管理员添加题目页面  |
+| adminaddcontest     |   管理员添加比赛页面  |
+| adminchangepro     |   管理员题目管理页面  |
+| adminchangecontest     |   管理员比赛管理页面  |
+| adminmanageuser     |   管理员用户管理页面  |
+| adminrejudge     |   管理员重测页面  |
+| admintrainning     |   管理员添加训练页面  |
+| adminboard     |   管理员爬虫页面管理  |
+| adminsetting     |   OJ设置页面  |
 
 **data**
 
 | name | 作用  | 
 | :--  | :-- |
+|      |     |
 
 **methods**
 
 | name | 作用  | 补充说明 |
 | :--  | :-- | :-- |
+|      |     |      |
 
 **mounted**
 
 > 
 
 ### [billboard.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/mainpage/billboard.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
 ### [blog.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/mainpage/blog.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
 ### [contest.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/mainpage/contest.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
 ### [problem.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/mainpage/problem.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
 ### [rank.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/mainpage/rank.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
 ### [setting.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/mainpage/setting.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
 ### [statue.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/mainpage/statue.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
 ### [user.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/mainpage/user.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
 ### [wiki.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/mainpage/wiki.vue)
-### rankchart.vue
-### ratingchart.vue
-### teamchart.vue
-### problemdetail.vue
-### algorithmselect.vue
-### blogmini.vue
-### contestmini.vue
-### ojmessage.vue
-### prostatistice.vue
-### ratingrule.vue
-### soulrow.vue
-### statusmini.vue
-### topuser.vue
-### welcomemessage.vue
-### wikidetail.vue
-### contestannounce.vue
-### contestcomment.vue
-### contestdetail.vue
-### contestoverview.vue
-### contestproblem.vue
-### contestrank.vue
-### contestsubmit.vue
-### contesttutorial.vue
-### adminaddcontest.vue
-### adminaddproblem.vue
-### adminboard.vue
-### adminchangecontest.vue
-### adminchangepro.vue
-### adminmanageuser.vue
-### adminrejudge.vue
-### adminsetting.vue
-### admintrainning.vue
-### algorithm.vue
-### code.vue
-### trainning.vue
-### basic.vue
-### dp.vue
-### ds.vue
-### editalgorithm.vue
-### geometry.vue
-### graph.vue
-### intro.vue
-### math.vue
-### search.vue
-### string.vue
-### codeedit.vue
-### viewcode.vue
-### viewcodedetail.vue
-### trainningdetail.vue
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [rankchart.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/chart/billboard.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [ratingchart.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/chart/ratingchart.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [problemdetail.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/problem/problemdetail.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [algorithmselect.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/utils/algorithmselect.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [blogmini.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/utils/blogmini.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [contestmini.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/utils/contestmini.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [ojmessage.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/utils/ojmessage.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [prostatistice.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/utils/prostatistice.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [ratingrule.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/utils/ratingrule.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [soulrow.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/utils/soulrow.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [statusmini.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/utils/statusmini.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [topuser.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/utils/topuser.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [welcomemessage.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/utils/welcomemessage.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [wikidetail.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/utils/wikidetail.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [contestannounce.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/contest/contestannounce.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [contestcomment.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/contest/contestcomment.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [contestdetail.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/contest/contestdetail.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [contestoverview.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/contest/contestoverview.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [contestproblem.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/contest/contestproblem.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [contestrank.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/contest/contestrank.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [contestsubmit.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/contest/contestsubmit.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [contesttutorial.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/contest/contesttutorial.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [adminaddcontest.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/admin/adminaddcontest.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [adminaddproblem.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/admin/adminaddproblem.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [adminboard.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/admin/adminboard.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [adminchangecontest.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/admin/adminchangecontest.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [adminchangepro.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/admin/adminchangepro.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [adminmanageuser.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/admin/adminmanageuser.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [adminrejudge.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/admin/adminrejudge.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [adminsetting.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/admin/adminsetting.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [admintrainning.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/admin/admintrainning.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [algorithm.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/wiki/algorithm.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [code.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/wiki/code.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [trainning.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/wiki/trainning.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [basic.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/wiki/algorithmpages/basic.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [dp.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/wiki/algorithmpages/dp.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [ds.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/wiki/algorithmpages/ds.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [editalgorithm.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/wiki/algorithmpages/editalgorithm.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [geometry.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/wiki/algorithmpages/geometry.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [graph.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/wiki/algorithmpages/graph.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [intro.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/wiki/algorithmpages/intro.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [math.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/wiki/algorithmpages/math.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [search.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/wiki/algorithmpages/search.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [string.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/wiki/algorithmpages/string.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [codeedit.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/wiki/mbcode/codeedit.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [viewcode.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/wiki/mbcode/viewcode.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [viewcodedetail.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/wiki/mbcode/viewcodedetail.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
+### [trainningdetail.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/wiki/trainning/trainningdetail.vue)
+**component**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  | 
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+> 
 
 

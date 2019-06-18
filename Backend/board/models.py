@@ -5,6 +5,7 @@ class SettingBoard(models.Model):
 
     schoolname = models.CharField(default="University",max_length=100)
     ojname = models.CharField(default="LPOJ",max_length=100)
+    openwiki = models.BooleanField(default=True)
 
     objects = models.Manager()
 

@@ -11,7 +11,7 @@ import os
 
 mutex = threading.Lock()  # queue mutex
 
-queue = Queue()
+queue = Queue() # 全局判题列表
 myjsonfile = open("./setting.json", 'r')
 judgerjson = json.loads(myjsonfile.read())
 
@@ -28,7 +28,7 @@ except Exception as e:
     print(e)
     exit(1)
  
-
+# 获取未判题列表，放入到全局队列中
 def getSubmition():
     global queue, mutex, db
 
@@ -51,19 +51,19 @@ def getSubmition():
     db.close()
 
 
-
+# 处理每个判题机的逻辑
 def deal_client(newSocket: socket, addr):
     global mutex, queue
     statue = False
     cursor = db.cursor()
     falsetime = 0
     while True:
-        sleep(1)
-        if mutex.acquire():
+        sleep(1) # 每隔一秒取一次
+        if mutex.acquire(): # 获取队列锁
             try:
                 if statue == True and queue.empty() is not True:
-                    id = queue.get()
-                    statue = False
+                    id = queue.get() # 如果可以判题，那就发送判题命令
+                    statue = False 
                     cursor.execute(
                         "SELECT language from judgestatus_judgestatus where id = '%d'" % (id))
                     data = cursor.fetchall()
@@ -73,13 +73,13 @@ def deal_client(newSocket: socket, addr):
                     newSocket.send("getstatue".encode("utf-8"))
                     data = newSocket.recv(1024)
                     recv_data = data.decode('utf-8')
-                    if recv_data == "ok":
+                    if recv_data == "ok": 
                         falsetime = 0
                         statue = True
                     else:
                         falsetime = falsetime + 1
                         statue = False
-                        if falsetime >= 120:
+                        if falsetime >= 120: # 计算一下未准备好的时间，如果超过120s，发送销毁重启命令
                             newSocket.send("timeout".encode("utf-8"))
                             print(addr, "timeout!")
                             newSocket.close()
@@ -106,12 +106,12 @@ server.bind(("", judgerjson["server_port"]))
 server.listen(20)
 print("server is running!")
 
-t = threading.Thread(target=getSubmition, args=())
+t = threading.Thread(target=getSubmition, args=()) # 用一个线程去跑
 t.setDaemon(True)
 t.start()
 
 
-# 记得添加contest开始时，自动设置题目为auth=3，比赛结束自动设置auth=1
+# 比赛题目设置为auth=2,contest开始时，自动设置题目为auth=3，比赛结束自动设置auth=1
 def changeauth():
     global db, mutex
     curcontest = set()
@@ -179,6 +179,7 @@ t1.setDaemon(True)
 t1.start()
 
 
+# 循环监听
 while True:
     newSocket, addr = server.accept()
     print("client [%s] is connected!" % str(addr))

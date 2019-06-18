@@ -306,7 +306,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 | SettingBoard | 保存OJ的设置 | 
 | Board | 用户爬虫需要的一些信息 | 
 | DailyBoard | 用户每天的AC题目数统计 | 
-| TeamBoard | 队伍Rating信息 | 
+| TeamBoard | 队伍Rating信息（该功能暂时弃用） | 
 | DailyContestBoard | 队伍排位赛的一些信息，用于备份，作用不大 | 
 
 **SettingBoard**
