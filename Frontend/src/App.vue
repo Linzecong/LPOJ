@@ -1,11 +1,6 @@
 <template>
   <div id="app" style="top:0px;left:0px;">
-    <el-menu
-      :default-active="activeIndex"
-      mode="horizontal"
-      v-bind:router="true"
-      id="nav"
-    >
+    <el-menu :default-active="activeIndex" mode="horizontal" v-bind:router="true" id="nav">
       <el-menu-item index="/" id="title">{{school}}</el-menu-item>
       <el-menu-item index="/main">
         <i class="el-icon-star-off"></i>Home
@@ -50,7 +45,19 @@
     <register ref="registerdialog"></register>
 
     <login ref="logindialog"></login>
-
+    <el-backtop :bottom="50">
+      <div
+        style="{
+        height: 100%;
+        width: 100%;
+        background-color: #f2f5f6;
+        box-shadow: 0 0 6px rgba(0,0,0, .12);
+        text-align: center;
+        line-height: 40px;
+        color: #1989fa;
+      }"
+      >UP</div>
+    </el-backtop>
     <transition name="el-fade-in-linear" mode="out-in">
       <router-view id="route"></router-view>
     </transition>
@@ -60,8 +67,30 @@
       </p>
       <p>
         Powered by
-        <a href="https://github.com/Linzecong/LPOJ"  target="_blank" style="text-decoration: none;color:#409EFF;">Linzecong</a>
-        <span>&nbsp; Version: 2.2&nbsp; Docs:&nbsp;<a href="http://docs.lpoj.cn" target="_blank" style="text-decoration: none;color:#409EFF;">LPOJ Docs</a></span>
+        <a
+          href="https://github.com/Linzecong/LPOJ"
+          target="_blank"
+          style="text-decoration: none;color:#409EFF;"
+        >Linzecong</a>
+        <span>
+          &nbsp; Version: 2.2&nbsp;&nbsp; Docs:&nbsp;&nbsp;
+          <a
+            href="http://docs.lpoj.cn"
+            target="_blank"
+            style="text-decoration: none;color:#409EFF;"
+          >LPOJ Docs</a>&nbsp;&nbsp;欢迎加入LPOJ讨论群: 875136693&nbsp;&nbsp;
+          <a
+            target="_blank"
+            href="//shang.qq.com/wpa/qunwpa?idkey=dcc9d5c63a744d5c09eda5dd7f4b208451e66b42ba633ea23ec6fa4d49135825"
+          >
+            <img
+              border="0"
+              src="//pub.idqqimg.com/wpa/images/group.png"
+              alt="LPOJ讨论群"
+              title="LPOJ讨论群"
+            >
+          </a>
+        </span>
       </p>
     </div>
   </div>
@@ -79,7 +108,7 @@ export default {
   data() {
     return {
       activeIndex: "1",
-      school:"LPOJ",
+      school: "LPOJ",
       loginshow: sessionStorage.username,
       username: sessionStorage.username,
       name: sessionStorage.name,
@@ -196,9 +225,9 @@ export default {
   margin-bottom: 20px;
 }
 .footer {
-    margin-top: 20px;
-    margin-bottom: 10px;
-    text-align: center;
-    font-size: small;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  text-align: center;
+  font-size: small;
 }
 </style>

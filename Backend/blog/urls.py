@@ -6,6 +6,7 @@ from rest_framework import routers
 routers = routers.DefaultRouter()
 routers.register('ojmessage', views.OJMessageView)
 routers.register('blog', views.BlogView)
+routers.register('banner', views.BannerView)
 
 urlpatterns = [
     url('', include(routers.urls)),

@@ -21,11 +21,17 @@
       </el-card>
     </el-col>
     <el-col :span="10">
-      <el-card style="height:150px;">
-        <b style="font-size:14.5px">Sequential Construction of Persistent Line Segment Tree by DFS on Fail Tree of AC Automata</b>
+      <el-card style="height:150px;" :body-style="{ padding: '0px' }">
+        <!-- <b style="font-size:14.5px">Sequential Construction of Persistent Line Segment Tree by DFS on Fail Tree of AC Automata</b>
         <br>
         <br>
-        <b style="font-size:14.5px;">SG Functions on DAG Built by Next Pointer of Suffix Automata</b>
+        <b style="font-size:14.5px;">SG Functions on DAG Built by Next Pointer of Suffix Automata</b>-->
+
+        <el-carousel height="150px" direction="vertical" arrow="never">
+          <el-carousel-item v-for="item in tables" :key="item">
+              <div style="margin:20px;" v-html="item.msg"></div>
+          </el-carousel-item>
+        </el-carousel>
       </el-card>
     </el-col>
   </el-row>
@@ -35,7 +41,9 @@
 export default {
   name: "soulrow",
   data() {
-    return {};
+    return {
+      tables: []
+    };
   },
   methods: {
     trainningClick() {
@@ -49,9 +57,22 @@ export default {
         params: { wikiid: "intro_index" }
       });
     }
+  },
+  created() {
+    this.$axios.get("/banner/").then(response => {
+      this.tables = response.data;
+    });
   }
 };
 </script>
 
 <style  scoped>
+
+.el-carousel__item:nth-child(2n) {
+  background-color: #ffffff;
+}
+
+.el-carousel__item:nth-child(2n + 1) {
+  background-color: #ffffff;
+}
 </style>
