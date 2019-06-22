@@ -242,9 +242,16 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 | model | 功能 |
 | :--  | :-- |
+| Banner | 首页新闻 | 
 | OJMessage | 留言板信息 | 
 | Blog | 爬虫得到的博客条目 | 
 
+**Banner**
+
+| 属性 | 功能 | 类型 | 说明 |
+| :--  | :-- | :-- | :-- |
+| msg | 新闻内容 | CharField |  |
+| time | 新闻时间 | DateField | auto_now |
 
 **OJMessage**
 
@@ -276,6 +283,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 | serializers | 序列化字段 |
 | :--  | :--: | :--: |
+| BannerSerializer | ALL |
 | OJMessageSerializer | ALL |
 | BlogSerializer | ALL | 
 
@@ -284,6 +292,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 | 视图 | 查询集合  | 可过滤字段 | 权限 | 可分页 | 可搜索 |
 | :--  | :--: |:--: |  :--: | :--: | :--: |
+| BannerView | ID倒序  | ('time') |  ManagerOnly | 是 | 否 |
 | OJMessageView | ID倒序  | ('username', 'time') |  UserRatingOnly | 是 | 否 |
 | BlogView | ID倒序  | ('username', 'time') |  ManagerOnly | 是 | 否 |
 
@@ -291,6 +300,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 | 视图 | 访问路由  | 
 | :--  | :-- |
+| BannerView | http://localhost:8000/banner/  | 
 | OJMessageView | http://localhost:8000/ojmessage/  | 
 | BlogView | http://localhost:8000/blog/ |  
 

@@ -3,14 +3,13 @@
 [![Django Rest Framework](https://img.shields.io/badge/django_rest_framework-3.9.1-success.svg?style=flat-round)](http://www.django-rest-framework.org/)
 [![vue](https://img.shields.io/badge/vue-2.5.2-success.svg?style=flat-round)](https://github.com/vuejs/vue)
 [![travis-ci](https://travis-ci.org/Linzecong/LPOJ.svg?branch=master)](https://travis-ci.org/Linzecong/LPOJ)
+[![Join-QQ-Group](https://img.shields.io/badge/Join_QQ_Group-875136693-blue.svg?style=flat-round)](https://shang.qq.com/wpa/qunwpa?idkey=dcc9d5c63a744d5c09eda5dd7f4b208451e66b42ba633ea23ec6fa4d49135825)
 
 > 一个基于Vue.js和Django的轻量级在线评测系统
 >
 > 目前应用于广东外语外贸大学
 ## Demo地址：[www.lpoj.cn](http://www.lpoj.cn)
 ## 说明文档：[docs.lpoj.cn](http://docs.lpoj.cn)
-
-[![Join-QQ-Group](https://img.shields.io/badge/Join_QQ_Group-875136693-success.svg?style=flat-round)](https://shang.qq.com/wpa/qunwpa?idkey=dcc9d5c63a744d5c09eda5dd7f4b208451e66b42ba633ea23ec6fa4d49135825)
 
 ## 简述
 + 轻量级，易于部署和自定义定制
@@ -74,14 +73,30 @@ sudo docker-compose up -d
 
 ### 一般部署
 
-[后端](https://github.com/Linzecong/LPOJ/tree/master/Backend)
-[前端](https://github.com/Linzecong/LPOJ/tree/master/Frontend)
-[判题服务器](https://github.com/Linzecong/LPOJ/tree/master/JudgerServer)
-[判题机](https://github.com/Linzecong/LPOJ/tree/master/Judger)
-[爬虫机器人](https://github.com/Linzecong/LPOJ/tree/master/CrawlingServer)
++ [后端](https://github.com/Linzecong/LPOJ/tree/master/Backend)
++ [前端](https://github.com/Linzecong/LPOJ/tree/master/Frontend)
++ [判题服务器](https://github.com/Linzecong/LPOJ/tree/master/JudgerServer)
++ [判题机](https://github.com/Linzecong/LPOJ/tree/master/Judger)
++ [爬虫机器人](https://github.com/Linzecong/LPOJ/tree/master/CrawlingServer)
 
 ## 如无意外，部署成功！
 具体使用，请参阅使用[文档](http://docs.lpoj.cn)
+
+## 部分截图
+
+![image1](http://www.lpoj.cn/githubimage/image1.png)
+
+![image2](http://www.lpoj.cn/githubimage/image2.png)
+
+![image3](http://www.lpoj.cn/githubimage/image3.png)
+
+![image4](http://www.lpoj.cn/githubimage/image4.png)
+
+![image5](http://www.lpoj.cn/githubimage/image5.png)
+
+![image6](http://www.lpoj.cn/githubimage/image6.png)
+
+或者你可以直接访问我们  [www.lpoj.cn](http://www.lpoj.cn)
 
 ## 浏览器支持
 

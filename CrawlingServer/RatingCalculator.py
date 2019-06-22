@@ -175,10 +175,10 @@ for i, data in enumerate(userdata):
 
     if str(round(lastscore+20*(K+P+S-E))) == "1500":
         lastscore = lastscore +1
-    # cursor.execute("UPDATE  user_userdata  SET rating = %s where username = %s", (
-    #  str(round(lastscore+20*(K+P+S-E))), data["user"]))
-    # cursor.execute("INSERT INTO contest_contestratingchange(contestid,contestname,contesttime,user,lastrating,ratingchange,currentrating) VALUES('%s','%s','%s','%s','%s','%s','%s') " % (
-    #  str(contestid), str(contestname), str(ContestBeginTime), data["user"],str(lastscore),str(round(20*(K+P+S-E))),str(round(lastscore+20*(K+P+S-E)))))
+    cursor.execute("UPDATE  user_userdata  SET rating = %s where username = %s", (
+     str(round(lastscore+20*(K+P+S-E))), data["user"]))
+    cursor.execute("INSERT INTO contest_contestratingchange(contestid,contestname,contesttime,user,lastrating,ratingchange,currentrating) VALUES('%s','%s','%s','%s','%s','%s','%s') " % (
+     str(contestid), str(contestname), str(ContestBeginTime), data["user"],str(lastscore),str(round(20*(K+P+S-E))),str(round(lastscore+20*(K+P+S-E)))))
 
 
 db.commit()

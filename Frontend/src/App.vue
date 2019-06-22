@@ -73,7 +73,7 @@
           style="text-decoration: none;color:#409EFF;"
         >Linzecong</a>
         <span>
-          &nbsp; Version: 2.2&nbsp;&nbsp; Docs:&nbsp;&nbsp;
+          &nbsp; Version: 3.0&nbsp;&nbsp; Docs:&nbsp;&nbsp;
           <a
             href="http://docs.lpoj.cn"
             target="_blank"

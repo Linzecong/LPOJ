@@ -3,9 +3,9 @@
     <div slot="header">
       <b>Welcome to {{school}}</b>
     </div>
-    <b>Version：2.2</b>
+    <b>Version：3.0</b>
     <br>
-    <h3>Safer and More Robust!</h3>
+    <h3>Stable Release</h3>
     <h3><a href="https://github.com/Linzecong/LPOJ" target="_blank" style="text-decoration: none;color:#409EFF;">Github (Star Me!)</a></h3>
     <h3><a href="http://docs.lpoj.cn" target="_blank" style="text-decoration: none;color:#67C23A;">Documentation</a></h3>
   </el-card>
