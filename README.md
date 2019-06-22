@@ -10,7 +10,7 @@
 ## Demo地址：[www.lpoj.cn](http://www.lpoj.cn)
 ## 说明文档：[docs.lpoj.cn](http://docs.lpoj.cn)
 
-[![欢迎加入LPOJ讨论群](https://img.shields.io/badge/875136693-success.svg?style=flat-round)](https://shang.qq.com/wpa/qunwpa?idkey=dcc9d5c63a744d5c09eda5dd7f4b208451e66b42ba633ea23ec6fa4d49135825)
+[![Join-QQ-Group](https://img.shields.io/badge/875136693-success.svg?style=flat-round)](https://shang.qq.com/wpa/qunwpa?idkey=dcc9d5c63a744d5c09eda5dd7f4b208451e66b42ba633ea23ec6fa4d49135825)
 
 ## 简述
 + 轻量级，易于部署和自定义定制
