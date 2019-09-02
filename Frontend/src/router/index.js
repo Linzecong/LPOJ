@@ -21,6 +21,7 @@ import viewcodedetail from '@/components/wiki/mbcode/viewcodedetail'
 import codeedit from '@/components/wiki/mbcode/codeedit'
 import wikidetail from '@/components/utils/wikidetail'
 import trainningdetail from '@/components/wiki/trainning/trainningdetail'
+import newalgorithm from '@/components/wiki/newalgorithm'
 
 Vue.use(Router)
 
@@ -136,6 +137,11 @@ export default new Router({
       path: '/trainningdetail/:trainningid',
       name: 'trainningdetail',
       component: trainningdetail,
+    },
+    {
+      path: '/wiki/newalgorithm',
+      name: 'newalgorithm',
+      component: newalgorithm,
     }
   ]
 })

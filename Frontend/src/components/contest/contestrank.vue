@@ -294,7 +294,7 @@ export default {
             var ProblemScore = 0;
             if (ii == 0) ProblemScore = 200;
             else if (ii == 1) ProblemScore = 500;
-            else ProblemScore = (ii - 1) * 1000;
+            else ProblemScore = ii * 500;
 
             //如果AC了
             if (ProblemDataList[ii][0] != 5552304570991) {
@@ -370,7 +370,7 @@ export default {
           var ProblemScore = 0;
           if (id == 0) ProblemScore = 200;
           else if (id == 1) ProblemScore = 500;
-          else ProblemScore = (id - 1) * 1000;
+          else ProblemScore = id * 500;
 
           var pro = this.toChar(id);
           var index = -1;

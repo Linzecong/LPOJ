@@ -10,137 +10,47 @@
     >
       <algorithmselect></algorithmselect>
     </el-select>
-    <mavon-editor
-      style="margin-top:15px;"
-      :boxShadow="false"
-      :value="value"
-      :subfield="prop.subfield"
-      :defaultOpen="prop.defaultOpen"
-      :toolbarsFlag="prop.toolbarsFlag"
-      :editable="prop.editable"
-      :scrollStyle="prop.scrollStyle"
-      :autofocus="false"
-      v-loading="loading"
-    ></mavon-editor>
-    <el-row style="margin-left:15px">
-      <br>
-      <p>Select other version</p>
-      <el-table :data="tableData" @cell-click="userclick" style="float:left;width:100%;">
-        <el-table-column type="index"></el-table-column>
-        <el-table-column prop="username" label="User" :width="200"></el-table-column>
-        <el-table-column prop="time" label="Last Edit Time"></el-table-column>
-      </el-table>
-    </el-row>
+
+    <el-card style="margin-top:20px;">
+      <iframe :src="algurl" frameborder="0" scrolling="0" width="100%" height="880px"></iframe>
+    </el-card>
+
   </el-row>
 </template>
 
 <script>
 import moment from "moment";
-import { mavonEditor } from "mavon-editor";
-import "mavon-editor/dist/css/index.css";
+
 import algorithmselect from "@/components/utils/algorithmselect";
 export default {
   name: "wikidetail",
   components: {
-    mavonEditor,
     algorithmselect
-  },
-  computed: {
-    prop() {
-      let data = {
-        subfield: false, // 单双栏模式
-        defaultOpen: "preview", //edit： 默认展示编辑区域 ， preview： 默认展示预览区域
-        editable: false,
-        toolbarsFlag: false,
-        scrollStyle: true
-      };
-      return data;
-    }
   },
   data() {
     return {
-      value: "",
-      searchtext: "",
       editpage: "",
-      tableData: [],
-      loading:false,
-      username:"",
-      curtype:"",
+      algurl:"https://oi-wiki.org/"
+      
     };
   },
-  created() {
-    this.getdata("std", this.$route.params.wikiid);
+  created(){
+    var cururl = this.$route.params.wikiid
+    this.algurl = "https://oi-wiki.org/" + cururl.replace("_","/") +"/"
+    //console.log(this.algurl)
   },
-  watch: {
-    value: function() {
-      console.log('data changed');
-      this.$nextTick().then(()=>{
-        this.reRender();
-      });
-    }
-  },
-  methods: {
-    reRender() {
-      if(window.MathJax) {
-        console.log('rendering mathjax');
-        MathJax.Hub.Config({
-            tex2jax: {
-                inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-                displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-            }
-        });
-        window.MathJax.Hub.Queue(["Typeset", window.MathJax.Hub], () => console.log('done'));
-      }
-    },
-    getdata(username, type) {
-      if(type=="")
-        return
-      if(this.username==username&&this.curtype==type)
-        return
-      this.username=username
-      this.curtype=type
-      this.loading = true;
-      this.$axios
-        .get("/wikicount/?type=" + type)
-        .then(response2 => {
-          console.log(response2)
-          for (let i = 0; i < response2.data.length; i++)
-            response2.data[i].time = moment(response2.data[i].time).format(
-              "YYYY-MM-DD HH:mm:ss"
-            );
-          this.tableData = response2.data;
-        })
-        .catch(error => {
-          this.$message.error(
-            "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
-          );
-        });
 
-      this.$axios
-        .get("/wiki/?username=" + username + "&type=" + type)
-        .then(response => {
-          this.value =
-            response.data.length > 0
-              ? response.data[0].value
-              : "# 暂无标准数据，请切换版本你想要的版本！";
-          this.loading = false;
-        })
-        .catch(error => {
-          this.$message.error(
-            "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
-          );
-        });
-    },
+  methods: {
+  
     searchtitle() {
       this.$router.push({
         name: "wikidetail",
         params: { wikiid: this.editpage }
       });
-      this.getdata("std", this.$route.params.wikiid);
+      var cururl = this.$route.params.wikiid
+      this.algurl = "https://oi-wiki.org/" + cururl.replace("_","/") +"/"
+      //console.log(this.algurl)
     },
-    userclick(row, column, cell, event) {
-      this.getdata(row.username, this.$route.params.wikiid);
-    }
   }
 };
 </script>

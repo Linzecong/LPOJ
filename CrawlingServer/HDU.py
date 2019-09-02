@@ -3,7 +3,7 @@ import json
 def get_HDU_data(name):
     try:
         api_url = "http://acm.hdu.edu.cn/userstatus.php?user="+name
-        response = urllib.request.urlopen(api_url)
+        response = urllib.request.urlopen(api_url,timeout=2000)
         response_data=response.read()
         response_data = str(response_data)
         

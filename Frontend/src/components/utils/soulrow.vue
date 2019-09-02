@@ -54,7 +54,7 @@ export default {
     searchtitle() {
       this.$router.push({
         name: "wikidetail",
-        params: { wikiid: "intro_index" }
+        params: { wikiid: "/" }
       });
     }
   },

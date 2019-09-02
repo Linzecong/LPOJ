@@ -16,6 +16,7 @@
           <div style=" margin-bottom: 18px;">在这里你可以查看别人编写的攻略</div>
           <div style=" margin-bottom: 18px;">
             <el-button @click="glClick" type="primary">查看攻略</el-button>
+            <el-button @click="jiubanClick" type="text">进入旧版</el-button>
           </div>
         </el-card>
       </el-col>
@@ -57,6 +58,11 @@ export default {
   },
   methods: {
     glClick(){
+      this.$router.push({
+          name: "newalgorithm"
+      });
+    },
+    jiubanClick(){
       this.$router.push({
           name: "algorithm"
       });

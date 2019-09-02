@@ -170,8 +170,13 @@ function getBrowserInfo(){
   }
 }
 
-getYourIP()
-store.state.logininfo = getBrowserInfo().toString()
+try {
+  getYourIP()
+  store.state.logininfo = getBrowserInfo().toString()
+} catch (error) {
+  console.log(error)
+}
+
 
 
 new Vue({

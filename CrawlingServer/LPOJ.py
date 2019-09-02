@@ -7,7 +7,7 @@ def get_LPOJ_data(name):
   
     api_url = "http://119.29.15.43:8000/userdata/?username="+urllib.parse.quote(name)
     try:
-        response = urllib.request.urlopen(api_url)
+        response = urllib.request.urlopen(api_url,timeout=2000)
         response_data=response.read()
 
         response_data = json.loads(response_data)

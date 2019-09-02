@@ -3,7 +3,7 @@ import json
 def get_CF_data(name):
     api_url = "http://codeforces.com/api/user.status?handle="+name
     try:
-        response = urllib.request.urlopen(api_url)
+        response = urllib.request.urlopen(api_url,timeout=2000)
         response_data=response.read()
 
         response_data = json.loads(response_data)
