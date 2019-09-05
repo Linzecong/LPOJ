@@ -39,7 +39,7 @@ class UserData(models.Model):
 
 class UserLoginData(models.Model):
     username = models.CharField(max_length=50, null=False)
-    ip = models.CharField(max_length=50, null=False,default="unknow")
+    ip = models.CharField(max_length=50, null=True,default="unknow")
     logintime = models.DateTimeField(auto_now=True)
     msg = models.TextField(null=True)
 
