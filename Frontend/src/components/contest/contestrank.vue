@@ -292,9 +292,11 @@ export default {
           //计算每一道题的信息
           for (var ii = 0; ii < this.probleminfo.length; ii++) {
             var ProblemScore = 0;
-            if (ii == 0) ProblemScore = 200;
-            else if (ii == 1) ProblemScore = 500;
-            else ProblemScore = ii * 500;
+            if (ii == 0) ProblemScore = 1000;
+            else if (ii == 1) ProblemScore = 1500;
+            else if (ii == 2) ProblemScore = 1600;
+            else ProblemScore = 2000;
+
 
             //如果AC了
             if (ProblemDataList[ii][0] != 5552304570991) {
@@ -368,9 +370,10 @@ export default {
         //查找FB
         for (var id = 0; id < this.problemcount; id++) {
           var ProblemScore = 0;
-          if (id == 0) ProblemScore = 200;
-          else if (id == 1) ProblemScore = 500;
-          else ProblemScore = id * 500;
+          if (id == 0) ProblemScore = 1000;
+          else if (id == 1) ProblemScore = 1500;
+          else if (id == 2) ProblemScore = 1600;
+          else ProblemScore = 2000;
 
           var pro = this.toChar(id);
           var index = -1;
