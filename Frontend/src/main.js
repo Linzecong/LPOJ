@@ -9,6 +9,7 @@ import Vuex from 'vuex'
 import md5 from 'js-md5';
 import axios from 'axios';
 import VueClipboard from 'vue-clipboard2'
+import 'babel-polyfill' //兼容IE6
 
 Vue.use(VueClipboard)
 Vue.use(Vuex)
@@ -23,6 +24,9 @@ axios.defaults.withCredentials = true;
 axios.defaults.baseURL = process.env.API_ROOT
 Vue.prototype.$axios = axios;
 
+//兼容IE6
+if (Number.parseInt === undefined) Number.parseInt = window.parseInt;
+if (Number.parseFloat === undefined) Number.parseFloat = window.parseFloat;
 
 const store = new Vuex.Store({
   state: {
@@ -117,6 +121,8 @@ function getYourIP(){
   }
 }
 
+
+
 function getBrowserInfo(){
   var agent = navigator.userAgent.toLowerCase() ;
   console.log(agent);
@@ -172,6 +178,7 @@ function getBrowserInfo(){
 
 try {
   getYourIP()
+  console.log(store.state.loginip)
   store.state.logininfo = getBrowserInfo().toString()
 } catch (error) {
   console.log(error)

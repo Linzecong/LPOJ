@@ -3,7 +3,7 @@
     <center v-show="!begin">
       <h1>The Contest is Coming</h1>
     </center>
-    <el-tab-pane v-for="(name,index) in problemtitles" :key="index">
+    <el-tab-pane v-for="(name,index) in problemtitles" :key="index" v-show="begin">
       <span slot="label" style="float:left;" :ref="'A'+index">
         <i class="el-icon-date"></i>
         Problem {{index | toChar}}:
@@ -313,7 +313,7 @@ export default {
 
           var left = parseInt((d1.getTime() - d2.getTime()) / 1000);
 
-          if (left < 0&&sessionStorage.type==1) {
+          if (left < 0&&(sessionStorage.type==1||sessionStorage.type=="")) {
             this.$message.error("比赛未开始！");
             this.begin = false;
             return;

@@ -148,7 +148,7 @@ export default {
       des: "",
       note: "",
       lefttime: 0.0,
-      leftpercentage: 0,
+      leftpercentage: 100,
       barstatus: "exception",
       timestyle: "wait",
       left: -100,
@@ -375,6 +375,9 @@ export default {
               (Math.abs(this.left) / response.data.lasttime) * 100
             );
 
+            if(this.leftpercentage>100)
+              this.leftpercentage=100
+
             this.lefttime =
               parseInt(t / 60 / 60) +
               ":" +
@@ -467,6 +470,9 @@ export default {
       this.leftpercentage = parseInt(
         (Math.abs(this.left) / this.lasttime) * 100
       );
+
+      if(this.leftpercentage>100)
+        this.leftpercentage=100
 
       this.lefttime =
         parseInt(t / 60 / 60) +

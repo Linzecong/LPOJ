@@ -173,7 +173,7 @@ export default {
                   dangerouslyUseHTMLString: true,
                   title: "提示",
                   message: response.data[i]["announcement"],
-                  duration: 7000
+                  duration: 70000000
                 });
             }
           }

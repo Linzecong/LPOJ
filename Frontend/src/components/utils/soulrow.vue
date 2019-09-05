@@ -28,7 +28,7 @@
         <b style="font-size:14.5px;">SG Functions on DAG Built by Next Pointer of Suffix Automata</b>-->
 
         <el-carousel height="150px" direction="vertical" arrow="never">
-          <el-carousel-item v-for="item in tables" :key="item">
+          <el-carousel-item v-for="item in tables" :key="item.msg">
               <div style="margin:20px;" v-html="item.msg"></div>
           </el-carousel-item>
         </el-carousel>
