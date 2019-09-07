@@ -149,7 +149,17 @@ def minganci(ci):
         return "ctypes"
     if ci.find(" os") >= 0:
         return " os"
+    if ci.find("__import__") >= 0:
+        return "__import__"
+    if ci.find("getattr") >= 0:
+        return "getattr"
+    if ci.find("eval") >= 0:
+        return "eval"
+    if ci.find("exec") >= 0:
+        return "exec"
+
     return "0"
+
 
 
 def judgePython(timelimit, memorylimit, inputpath, outputpath, errorpath, id):
@@ -418,7 +428,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                     return
 
                 file = open("%s.py" % judgername, "w")
-                file.write("import resource\nresource.setrlimit(resource.RLIMIT_AS,(%d*1024*1024,%d*10*1024*1024))\n" %
+                file.write("import resource\nresource.setrlimit(resource.RLIMIT_AS,(%d*1024*1024,%d*10*1024*1024))\nimport sys\nblacklist = ['os','sys']\nfor mod in blacklist:\n    i = __import__(mod)\n    sys.modules[mod] = None\n" %
                            (memorylimit, memorylimit)+code)
                 file.close()
 
