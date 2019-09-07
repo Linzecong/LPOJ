@@ -13,8 +13,9 @@
 
     <el-card style="margin-top:20px;">
       <iframe :src="algurl" frameborder="0" scrolling="0" width="100%" height="880px"></iframe>
+      <el-divider>Thanks for the mirror provided by Netease</el-divider>
     </el-card>
-
+    
   </el-row>
 </template>
 
@@ -30,13 +31,13 @@ export default {
   data() {
     return {
       editpage: "",
-      algurl:"https://oi-wiki.org/"
+      algurl:"https://oi-wiki.io.netease.com/"
       
     };
   },
   created(){
     var cururl = this.$route.params.wikiid
-    this.algurl = "https://oi-wiki.org/" + cururl.replace("_","/") +"/"
+    this.algurl = "https://oi-wiki.io.netease.com/" + cururl.replace("_","/") +"/"
     //console.log(this.algurl)
   },
 
@@ -48,7 +49,7 @@ export default {
         params: { wikiid: this.editpage }
       });
       var cururl = this.$route.params.wikiid
-      this.algurl = "https://oi-wiki.org/" + cururl.replace("_","/") +"/"
+      this.algurl = "https://oi-wiki.io.netease.com/" + cururl.replace("_","/") +"/"
       //console.log(this.algurl)
     },
   }
