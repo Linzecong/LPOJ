@@ -171,6 +171,8 @@ def minganci(ci):
         return "raise"
     if ci.find("compile") >= 0:
         return "compile"
+    if ci.find("frame") >= 0:
+        return "frame"
     return "0"
 
 
@@ -440,7 +442,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                     return
 
                 file = open("%s.py" % judgername, "w")
-                file.write("import resource\nresource.setrlimit(resource.RLIMIT_AS,(%d*1024*1024,%d*10*1024*1024))\nimport sys\nblacklist = ['os','sys','gc']\nfor mod in blacklist:\n    i = __import__(mod)\n    sys.modules[mod] = None\n" %
+                file.write("import resource\nresource.setrlimit(resource.RLIMIT_AS,(%d*1024*1024,%d*10*1024*1024))\nimport sys\nblacklist = ['importlib','traceback','os','sys']\nfor mod in blacklist:\n    i = __import__(mod)\n    sys.modules[mod] = None\ndel sys\ndel __builtins__.__dict__['eval']\ndel __builtins__.__dict__['exec']\ndel __builtins__.__dict__['locals']\ndel __builtins__.__dict__['open']\n" %
                            (memorylimit, memorylimit)+code)
                 file.close()
 
