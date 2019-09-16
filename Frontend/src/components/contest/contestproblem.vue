@@ -1,16 +1,16 @@
 <template>
   <el-tabs type="card" tab-position="left" @tab-click="problemtabClick">
-    <center v-show="!begin">
+    <center v-if="!begin">
       <h1>The Contest is Coming</h1>
     </center>
-    <el-tab-pane v-for="(name,index) in problemtitles" :key="index" v-show="begin">
+   
+    <el-tab-pane v-for="(name,index) in problemtitles" :key="name" v-if="begin">
       <span slot="label" style="float:left;" :ref="'A'+index">
         <i class="el-icon-date"></i>
         Problem {{index | toChar}}:
         {{name}}
       </span>
-
-      <el-col :span="24" v-show="begin" v-loading="loading">
+      <el-col :span="24" v-loading="loading">
         <el-row>
           <el-card shadow="always">
             <el-row :gutter="18" id="title">
@@ -120,17 +120,12 @@
               <el-col :span="7">
                 <statusmini :ref="'Statusmini'+index"></statusmini>
               </el-col>
-              <!-- <el-input
-                type="textarea"
-                :autosize="{ minRows: 10, maxRows: 70}"
-                placeholder="Please type your code here."
-                v-model="code"
-              ></el-input>-->
             </el-row>
           </el-card>
         </el-row>
       </el-col>
     </el-tab-pane>
+
   </el-tabs>
 </template>
 

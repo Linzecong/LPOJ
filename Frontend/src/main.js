@@ -24,10 +24,6 @@ axios.defaults.withCredentials = true;
 axios.defaults.baseURL = process.env.API_ROOT
 Vue.prototype.$axios = axios;
 
-//兼容IE6
-if (Number.parseInt === undefined) Number.parseInt = window.parseInt;
-if (Number.parseFloat === undefined) Number.parseFloat = window.parseFloat;
-
 const store = new Vuex.Store({
   state: {
   },
@@ -171,14 +167,16 @@ function getBrowserInfo(){
       arr.push(agent.match(regStr_chrome)[0].split('/')[1]);
       return arr;
   }else{
-      arr.push('请更换主流浏览器，例如chrome,firefox,opera,safari,IE,Edge!')
+      arr.push('请更换主流浏览器，例如chrome,firefox,opera,safari')
+
+      
+      
       return arr;
   }
 }
 
 try {
   getYourIP()
-  console.log(store.state.loginip)
   store.state.logininfo = getBrowserInfo().toString()
 } catch (error) {
   console.log(error)
@@ -194,6 +192,9 @@ new Vue({
   template: '<App/>',
   render: h => h(App),
   created() {
+    if(this.$store.state.loginip.indexOf("请使用主流浏览器")>=0){
+      this.$message.success("推荐使用主流浏览器，例如Chrome,Firefox,Opera,Safari等，如果是360浏览器，请关闭极速模式！")
+    }
   }
 })
 

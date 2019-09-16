@@ -8,6 +8,7 @@ routers.register('judgestatus', views.JudgeStatusView)
 routers.register('judgestatusput', views.JudgeStatusPutView)
 routers.register('judgestatuscode', views.JudgeStatusCodeView)
 routers.register('casestatus', views.CaseStatusView)
+routers.register('acrank', views.ACRankView)
 
 urlpatterns = [
     url('', include(routers.urls)),

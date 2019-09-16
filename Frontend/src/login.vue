@@ -64,6 +64,9 @@ export default {
 
           this.dialogLoginVisible = false;
 
+          
+            
+
           this.$axios
             .post("/userlogindata/", {
               username: this.form.username,

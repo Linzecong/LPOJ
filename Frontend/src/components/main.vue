@@ -5,6 +5,9 @@
         <welcomemessage></welcomemessage>
       </el-row>
       <el-row :gutter="10">
+        <acrank></acrank>
+      </el-row>
+      <el-row :gutter="10">
         <topuser></topuser>
       </el-row>
       <el-row :gutter="10">
@@ -52,6 +55,7 @@ import topuser from "@/components/utils/topuser";
 import soulrow from "@/components/utils/soulrow";
 import ratingrule from "@/components/utils/ratingrule";
 import contestmini from "@/components/utils/contestmini";
+import acrank from "@/components/utils/acrank";
 export default {
   components: {
     rankchart,
@@ -60,7 +64,8 @@ export default {
     topuser,
     soulrow,
     ratingrule,
-    contestmini
+    contestmini,
+    acrank
   },
   name: "main",
   data() {
