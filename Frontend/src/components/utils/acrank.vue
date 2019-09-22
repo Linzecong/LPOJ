@@ -67,14 +67,21 @@ export default {
         }
 
         for(var i=0;i<response.data.length;i++){
-            if(response.data[i]["problem"] in mydata[response.data[i].user]){
-              continue
+            var flag=0;
+            for(var j = 0;j<mydata[response.data[i].user].length;j++){
+              if(mydata[response.data[i].user][j]==response.data[i]["problem"]){
+                flag = 1;
+                break;
+              }
             }
-            else{
+           if(flag==0)
+           {
               mydata[response.data[i].user].push(response.data[i]["problem"])
               userac[response.data[i].user] = userac[response.data[i].user] + 1
-            }
+          }
         }
+        console.log(mydata)
+
 
         var sorted = []
         for (var key in userac) {
