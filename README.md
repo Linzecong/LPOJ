@@ -8,19 +8,21 @@
 > 一个基于Vue.js和Django的轻量级在线评测系统
 >
 > 目前应用于广东外语外贸大学
-## Demo地址：[www.lpoj.cn](http://www.lpoj.cn)
-## 说明文档：[docs.lpoj.cn](http://docs.lpoj.cn)
+## Demo地址：[www.lpoj.cn](https://www.lpoj.cn)
+## 说明文档：[docs.lpoj.cn](https://docs.lpoj.cn)
 
 ## 简述
 + 轻量级，易于部署和自定义定制
 + 前后端分离，提高服务器性能
 + 支持多机器多进程判题，判题更高效
 + 支持 C/C++/Java和Python3语言
++ 支持 Special Judge
 + 丰富的API，开放的源代码
 + 实时爬取用户的博客和其他OJ的做题数
 + 丰富的算法知识和体系化的套题训练
 + 一键保存和导出代码模板
 + 包含类CF的积分体系和比赛机制
++ 现代化的界面
 
 ## 模块列表
 + [前端 Vue.js](https://github.com/Linzecong/LPOJ/tree/master/Frontend)
@@ -80,23 +82,23 @@ sudo docker-compose up -d
 + [爬虫机器人](https://github.com/Linzecong/LPOJ/tree/master/CrawlingServer)
 
 ## 如无意外，部署成功！
-具体使用，请参阅使用[文档](http://docs.lpoj.cn)
+具体使用，请参阅使用[文档](https://docs.lpoj.cn)
 
 ## 部分截图
 
-![image1](http://www.lpoj.cn/githubimage/image1.png)
+![image1](https://www.lpoj.cn/githubimage/image1.png)
 
-![image2](http://www.lpoj.cn/githubimage/image2.png)
+![image2](https://www.lpoj.cn/githubimage/image2.png)
 
-![image3](http://www.lpoj.cn/githubimage/image3.png)
+![image3](https://www.lpoj.cn/githubimage/image3.png)
 
-![image4](http://www.lpoj.cn/githubimage/image4.png)
+![image4](https://www.lpoj.cn/githubimage/image4.png)
 
-![image5](http://www.lpoj.cn/githubimage/image5.png)
+![image5](https://www.lpoj.cn/githubimage/image5.png)
 
-![image6](http://www.lpoj.cn/githubimage/image6.png)
+![image6](https://www.lpoj.cn/githubimage/image6.png)
 
-或者你可以直接访问我们  [www.lpoj.cn](http://www.lpoj.cn)
+或者你可以直接访问我们  [www.lpoj.cn](https://www.lpoj.cn)
 
 ## 浏览器支持
 

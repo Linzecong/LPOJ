@@ -35,6 +35,9 @@
     <el-form-item label="提示：">
       <el-input type="textarea" v-model="addproblemform.hint" autosize style="width:800px;"></el-input>
     </el-form-item>
+    <el-form-item label="是否Special Judge（规则详见 https://docs.lpoj.cn/doc/#special-judge）">
+      <el-switch v-model="addproblemform.isspj" active-text="是" inactive-text="否"></el-switch>
+    </el-form-item>
     <el-form-item label="来源：">
       <el-input v-model="addproblemform.source" style="width:400px;"></el-input>
     </el-form-item>
@@ -100,6 +103,7 @@ export default {
       uploadaddress: "/uploadfile/",
       fileList: [],
       loading: false,
+      
       addproblemform: {
         problem: this.problemcount + 1,
         author: sessionStorage.name,
@@ -117,7 +121,8 @@ export default {
         tag: "简单题|模拟",
         level: 3,
         score: 100,
-        oj: "LPOJ"
+        oj: "LPOJ",
+        isspj:false,
       },
       addproblemdataform: {
         problem: this.problemcount + 1,
@@ -171,6 +176,10 @@ export default {
       this.$message.error("数据上传失败！" + response);
     },
     handleSuccess(response, file, fileList) {
+      if(this.addproblemform.isspj == true) {
+        this.addproblemform.hint = this.addproblemform.hint +"\n <b>【本题为Special Judge，即答案可能有多种情况】</b>"
+      }
+
       this.$axios.post("/problem/", this.addproblemform).then(response => {
         this.addproblemdataform.problem = this.addproblemform.problem;
         this.addproblemdataform.title = this.addproblemform.title;

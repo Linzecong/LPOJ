@@ -56,6 +56,15 @@ sftp_t.connect(username=judgerjson["sftp_username"],
 sftp = paramiko.SFTPClient.from_transport(sftp_t)  # sftp传输协议
 
 
+def specialjudge(problem,testin,testout,userout):
+
+    result = os.system("timeout 10 g++ ./ProblemData/%s/spj.cpp -o spj.out -O2 -std=c++14" % str(problem))
+    if result:
+        return 5
+    res = os.system("timeout 20 ./spj.out %s %s %s" % (testin, testout, userout))
+    print(res)
+    return res
+
 def remote_scp(host_ip, remote_path, local_path, username, password, problem):
     global sftp, sftp_t
     try:
@@ -213,6 +222,7 @@ def judgePython(timelimit, memorylimit, inputpath, outputpath, errorpath, id):
         else:
             tf = open(errorpath, "r")
             msg = tf.read()
+            msg = "Python language does not support viewing runtime error message"
             cursor.execute(
                 "UPDATE judgestatus_judgestatus SET message=%s WHERE id = %s", (msg, id))
             db.commit()
@@ -645,6 +655,8 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                     if tmpstr != "":
                         useroutputdata = useroutputdata + '\n......'
                     useroutputfile.close()
+                    if lang == "Python3":
+                        useroutputdata = "Python language does not support viewing output"
                 except:
                     ret["result"] = 5
 
@@ -663,7 +675,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                         'Memory Limit Exceeded',
                         ret["cpu_time"],
                         ret["memory"]/1024/1024,
-                        filename+" ("+casedes.get(filename,"No description available")+")",
+                        filename+" ("+casedes.get(filename,filename)+")",
                         casedata,
                         outputdata,
                         useroutputdata
@@ -693,7 +705,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                         resultstr,
                         ret["cpu_time"],
                         ret["memory"]/1024/1024,
-                        filename+" ("+casedes.get(filename,"No description available")+")",
+                        filename+" ("+casedes.get(filename,filename)+")",
                         casedata,
                         outputdata,
                         useroutputdata
@@ -703,44 +715,51 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 if contest is not 0:
                     break
             else:
-                file1 = open(judgername+"temp.out", "r")
-                file2 = open("./ProblemData/%s/%s.out" %
-                             (problem, filename), "r")
-
+                isspj = ""
                 result = 0  # 0 ac -3 wrong -5 presentation
+                # specialjudge，如果spj.cpp存在，则判定为特判问题
+                if os.path.isfile("./ProblemData/%s/spj.cpp" %problem):
+                    isspj = " (This test case is Special Judge) "
+                    r = specialjudge(problem,"./ProblemData/%s/%s.in" %(problem, filename), "./ProblemData/%s/%s.out" % (problem, filename), judgername+"temp.out")
+                    if r == 256: result = -3
+                    elif r == 0: result = 0
+                    else: result = 5
 
-                stdout = ""
-                answer = ""
+                else:
+                    file1 = open(judgername+"temp.out", "r")
+                    file2 = open("./ProblemData/%s/%s.out" %
+                                (problem, filename), "r")
+                    stdout = ""
+                    answer = ""
+                    while True:
+                        try:
+                            std = file1.readline()
+                            ans = file2.readline()
 
-                while True:
-                    try:
-                        std = file1.readline()
-                        ans = file2.readline()
+                            if std == "" and ans == "":
+                                break
 
-                        if std == "" and ans == "":
+                            std = std.rstrip()
+                            ans = ans.rstrip()
+
+                            stdout = stdout + std
+                            answer = answer + ans
+
+                            if std != ans:
+                                result = -3
+                        except:
+                            result = -3
+                            stdout = "1"
+                            answer = "0"
                             break
 
-                        std = std.rstrip()
-                        ans = ans.rstrip()
+                    if stdout == answer and result == -3:
+                        result = -5
 
-                        stdout = stdout + std
-                        answer = answer + ans
-
-                        if std != ans:
-                            result = -3
-                    except:
-                        result = -3
-                        stdout = "1"
-                        answer = "0"
-                        break
-
-                if stdout == answer and result == -3:
-                    result = -5
-
-                file1.close()
-                file2.close()
-                del stdout
-                del answer
+                    file1.close()
+                    file2.close()
+                    del stdout
+                    del answer
 
                 if result != 0:
                     if myresult == 100:
@@ -754,6 +773,8 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                         resultstr = 'Presentation Error'
                     if result == -3:
                         resultstr = 'Wrong Answer'
+                    if result == 5:
+                        resultstr = 'System Error'
 
                     cursor.execute("INSERT into judgestatus_casestatus (statusid,username,problem,result,time,memory,testcase,casedata,outputdata,useroutput) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ", (
                         id,
@@ -762,7 +783,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                         resultstr,
                         ret["cpu_time"],
                         ret["memory"]/1024/1024,
-                        filename+" ("+casedes.get(filename,"No description available")+")",
+                        filename+isspj+" ("+casedes.get(filename,filename)+")",
                         casedata,
                         outputdata,
                         useroutputdata
@@ -779,7 +800,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                         'Accepted',
                         ret["cpu_time"],
                         ret["memory"]/1024/1024,
-                        filename+" ("+casedes.get(filename,"No description available")+")",
+                        filename+isspj+" ("+casedes.get(filename,filename)+")",
                         casedata,
                         outputdata,
                         useroutputdata

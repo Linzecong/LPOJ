@@ -20,6 +20,7 @@ migrations
 # GDUFSTeamExport.py
 CrawlingServer/contest.json
 Database/data
+数据
 
 CrawlingServer/NowCoderSpider.py
 CrawlingServer/CFSpider.py

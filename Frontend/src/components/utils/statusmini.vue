@@ -19,37 +19,51 @@
       </el-alert>
       <codemirror v-model="code" :options="cmOptions"></codemirror>
 
-      <el-alert
-        :key="index"
-        v-for="(data,index) in dialogdata"
-        :title="index+1 +': '+data.caseresult + ' on test ' + data.casetitle"
-        :type="data.caseresult=='Accepted'?'success':(data.caseresult=='Wrong Answer'?'error':'warning')"
-        :closable="false"
-        v-show="data.casedata!=''"
-      >
-        <br>
-        <h5
-          style="white-space:pre;margin-left:15px;"
-          v-if="data.casedata!=''"
-        >{{'Time: '+ data.casetime + 'MS'+' Memory: '+data.casememory+'MB'}}</h5>
-        <h5 style="white-space:pre;margin-left:15px;" v-if="data.casedata!=''">Test Input:</h5>
-        <div
-          style="white-space:pre;margin-left:15px;word-wrap:break-word;word-break: normal;"
-          v-if="data.casedata!=''"
-        >{{data.casedata+'\n'}}</div>
+      <el-collapse>
+        <el-collapse-item :key="index" v-for="(data,index) in dialogdata" v-if="data.casedata!=''">
+          <template slot="title">
+            <el-alert
+              :show-icon="true"
+              :type="data.caseresult=='Accepted'?'success':(data.caseresult=='Wrong Answer'?'error':'warning')"
+              :closable="false"
+              v-show="data.casedata!=''"
+            >
+              <template slot="title">
+                <b>{{' '+data.caseresult + ' on test ' + data.casetitle}}</b>
+              </template>
+            </el-alert>
+          </template>
+          <el-alert
+            :title="''"
+            :type="data.caseresult=='Accepted'?'success':(data.caseresult=='Wrong Answer'?'error':'warning')"
+            :closable="false"
+            v-show="data.casedata!=''"
+          >
+            <h5
+              style="white-space:pre;margin-left:15px;"
+              v-if="data.casedata!=''"
+            >{{'Time: '+ data.casetime + 'MS'+' Memory: '+data.casememory+'MB'}}</h5>
+            <h5 style="white-space:pre;margin-left:15px;" v-if="data.casedata!=''">Test Input:</h5>
+            <div
 
-        <h5 style="white-space:pre;margin-left:15px;" v-if="data.casedata!=''">Your Output:</h5>
-        <div
-          style="white-space:pre;margin-left:15px;word-wrap:break-word;word-break: normal;"
-          v-if="data.casedata!=''"
-        >{{data.caseuseroutput+'\n'}}</div>
+              style="white-space:pre;margin-left:15px;word-wrap:break-word;word-break: normal;"
+              v-if="data.casedata!=''"
+            >{{data.casedata+'\n'}}</div>
 
-        <h5 style="white-space:pre;margin-left:15px;" v-if="data.casedata!=''">Expected Output:</h5>
-        <div
-          style="white-space:pre;margin-left:15px;word-wrap:break-word;word-break: normal;"
-          v-if="data.casedata!=''"
-        >{{data.caseoutputdata+'\n'}}</div>
-      </el-alert>
+            <h5 style="white-space:pre;margin-left:15px;" v-if="data.casedata!=''">Your Output:</h5>
+            <div
+              style="white-space:pre;margin-left:15px;word-wrap:break-word;word-break: normal;"
+              v-if="data.casedata!=''"
+            >{{data.caseuseroutput+'\n'}}</div>
+
+            <h5 style="white-space:pre;margin-left:15px;" v-if="data.casedata!=''">Expected Output:</h5>
+            <div
+              style="white-space:pre;margin-left:15px;word-wrap:break-word;word-break: normal;"
+              v-if="data.casedata!=''"
+            >{{data.caseoutputdata+'\n'}}</div>
+          </el-alert>
+        </el-collapse-item>
+      </el-collapse>
     </el-dialog>
     <el-table
       :default-sort="{prop: 'id', order: 'descending'}"
