@@ -75,7 +75,7 @@
         <span>
           &nbsp; Version: 3.0&nbsp;&nbsp; Docs:&nbsp;&nbsp;
           <a
-            href="http://docs.lpoj.cn"
+            href="https://docs.lpoj.cn"
             target="_blank"
             style="text-decoration: none;color:#409EFF;"
           >LPOJ Docs</a>&nbsp;&nbsp;欢迎加入LPOJ讨论群: 875136693&nbsp;&nbsp;

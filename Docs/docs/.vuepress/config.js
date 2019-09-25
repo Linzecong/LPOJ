@@ -11,7 +11,7 @@ module.exports = {
     themeConfig: {
         sidebarDepth: 5,
         nav: [
-            { text: 'Demo', link: 'http://www.lpoj.cn/' },
+            { text: 'Demo', link: 'https://www.lpoj.cn/' },
             { text: 'GitHub首页', link: 'https://github.com/Linzecong/LPOJ/' },
             { text: '作者首页', link: 'https://github.com/Linzecong/' },
         ],

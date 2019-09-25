@@ -7,7 +7,7 @@
             <h2>{{ item.username }}</h2>
             <h2>{{ item.des }}</h2>
             <h3>Rating: {{ item.rating }}</h3>
-            <img :src="'http://www.lpoj.cn/'+(8-index)+'.png'" class="image">
+            <img :src="'https://www.lpoj.cn/'+(8-index)+'.png'" class="image">
           </center>
         </el-carousel-item>
       </el-carousel>
