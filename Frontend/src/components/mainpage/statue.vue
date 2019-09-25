@@ -19,38 +19,51 @@
       </el-alert>
 
       <codemirror id="mycode" v-model="code" :options="cmOptions"></codemirror>
+      <el-collapse>
+        <el-collapse-item :key="index" v-for="(data,index) in dialogdata" v-if="data.casedata!=''">
+          <template slot="title">
+            <el-alert
+              :show-icon="true"
+              :type="data.caseresult=='Accepted'?'success':(data.caseresult=='Wrong Answer'?'error':'warning')"
+              :closable="false"
+              v-show="data.casedata!=''"
+            >
+              <template slot="title">
+                <b>{{' '+data.caseresult + ' on test ' + data.casetitle}}</b>
+              </template>
+            </el-alert>
+          </template>
+          <el-alert
+            :title="''"
+            :type="data.caseresult=='Accepted'?'success':(data.caseresult=='Wrong Answer'?'error':'warning')"
+            :closable="false"
+            v-show="data.casedata!=''"
+          >
+            <h5
+              style="white-space:pre;margin-left:15px;"
+              v-if="data.casedata!=''"
+            >{{'Time: '+ data.casetime + 'MS'+' Memory: '+data.casememory+'MB'}}</h5>
+            <h5 style="white-space:pre;margin-left:15px;" v-if="data.casedata!=''">Test Input:</h5>
+            <div
 
-      <el-alert
-        :key="index"
-        v-for="(data,index) in dialogdata"
-        :title="index+1 +': '+data.caseresult + ' on test ' + data.casetitle"
-        :type="data.caseresult=='Accepted'?'success':(data.caseresult=='Wrong Answer'?'error':'warning')"
-        :closable="false"
-        v-show="data.casedata!=''"
-      >
-        <br>
-        <h5
-          style="white-space:pre;margin-left:15px;"
-          v-if="data.casedata!=''"
-        >{{'Time: '+ data.casetime + 'MS'+' Memory: '+data.casememory+'MB'}}</h5>
-        <h5 style="white-space:pre;margin-left:15px;" v-if="data.casedata!=''">Test Input:</h5>
-        <div
-          style="white-space:pre;margin-left:15px;word-wrap:break-word;word-break: normal;"
-          v-if="data.casedata!=''"
-        >{{data.casedata+'\n'}}</div>
+              style="white-space:pre;margin-left:15px;word-wrap:break-word;word-break: normal;"
+              v-if="data.casedata!=''"
+            >{{data.casedata+'\n'}}</div>
 
-        <h5 style="white-space:pre;margin-left:15px;" v-if="data.casedata!=''">Your Output:</h5>
-        <div
-          style="white-space:pre;margin-left:15px;word-wrap:break-word;word-break: normal;"
-          v-if="data.casedata!=''"
-        >{{data.caseuseroutput+'\n'}}</div>
+            <h5 style="white-space:pre;margin-left:15px;" v-if="data.casedata!=''">Your Output:</h5>
+            <div
+              style="white-space:pre;margin-left:15px;word-wrap:break-word;word-break: normal;"
+              v-if="data.casedata!=''"
+            >{{data.caseuseroutput+'\n'}}</div>
 
-        <h5 style="white-space:pre;margin-left:15px;" v-if="data.casedata!=''">Expected Output:</h5>
-        <div
-          style="white-space:pre;margin-left:15px;word-wrap:break-word;word-break: normal;"
-          v-if="data.casedata!=''"
-        >{{data.caseoutputdata+'\n'}}</div>
-      </el-alert>
+            <h5 style="white-space:pre;margin-left:15px;" v-if="data.casedata!=''">Expected Output:</h5>
+            <div
+              style="white-space:pre;margin-left:15px;word-wrap:break-word;word-break: normal;"
+              v-if="data.casedata!=''"
+            >{{data.caseoutputdata+'\n'}}</div>
+          </el-alert>
+        </el-collapse-item>
+      </el-collapse>
     </el-dialog>
 
     <el-dialog :visible.sync="searchdialogVisible">
@@ -133,14 +146,14 @@
     >
       <el-table-column prop="id" label="ID" :width="70"></el-table-column>
       <el-table-column prop="user" label="User" :width="140"></el-table-column>
-      <el-table-column prop="problemtitle" label="Problem" :width="190" >
+      <el-table-column prop="problemtitle" label="Problem" :width="320">
         <template slot-scope="scope">
           <font color="#409EFF">
             <b>{{ scope.row.problemtitle }}</b>
           </font>
         </template>
       </el-table-column>
-      <el-table-column prop="result" label="Status" :width="290">
+      <el-table-column prop="result" label="Status" :width="285">
         <template slot-scope="scope">
           <el-tag size="medium" :type="statuetype(scope.row.result)" disable-transitions hit>
             {{ scope.row.result }}
@@ -198,11 +211,9 @@ export default {
       this.$message.error("复制失败：" + e);
     },
     rowClick(row, col, e) {
+      console.log(col);
 
-      console.log(col)
-
-      if(col.label == "Problem"){
-
+      if (col.label == "Problem") {
         this.$router.push({
           name: "problemdetail",
           query: { problemID: row.problem }
@@ -210,8 +221,7 @@ export default {
         return;
       }
 
-      if(col.label == "User"){
-
+      if (col.label == "User") {
         this.$router.push({
           name: "user",
           query: { username: row.user }
@@ -219,7 +229,8 @@ export default {
         return;
       }
 
-      if (row.message + "" == "0") this.compilemsg = "编译成功！";
+      if (row.message + "" == "0" || row.result == "Accepted")
+        this.compilemsg = "编译成功！";
       else this.compilemsg = row.message;
 
       this.dialogdata = [];
@@ -379,22 +390,21 @@ export default {
               response.data.results[i]["result"] = "Judging";
             }
 
-            if (response.data.results[i]["result"] == "-3"){
+            if (response.data.results[i]["result"] == "-3") {
               response.data.results[i]["result"] =
                 "Wrong Answer on test " + testcase;
-              if(testcase=="?")
-                response.data.results[i]["result"] ="Wrong Answer"
+              if (testcase == "?")
+                response.data.results[i]["result"] = "Wrong Answer";
             }
-              
 
             if (response.data.results[i]["result"] == "-4")
               response.data.results[i]["result"] = "Compile Error";
 
-            if (response.data.results[i]["result"] == "-5"){
+            if (response.data.results[i]["result"] == "-5") {
               response.data.results[i]["result"] =
                 "Presentation Error on test " + testcase;
-                if(testcase=="?")
-                response.data.results[i]["result"] ="Presentation Error"
+              if (testcase == "?")
+                response.data.results[i]["result"] = "Presentation Error";
             }
 
             if (response.data.results[i]["result"] == "-6") {
@@ -404,36 +414,33 @@ export default {
             if (response.data.results[i]["result"] == "0")
               response.data.results[i]["result"] = "Accepted";
 
-            if (response.data.results[i]["result"] == "1"){
+            if (response.data.results[i]["result"] == "1") {
               response.data.results[i]["result"] =
                 "Time Limit Exceeded on test " + testcase;
-                if(testcase=="?")
-                response.data.results[i]["result"] ="Time Limit Exceeded"
+              if (testcase == "?")
+                response.data.results[i]["result"] = "Time Limit Exceeded";
             }
 
-            if (response.data.results[i]["result"] == "2"){
+            if (response.data.results[i]["result"] == "2") {
               response.data.results[i]["result"] =
                 "Time Limit Exceeded on test " + testcase;
-                if(testcase=="?")
-                response.data.results[i]["result"] ="Time Limit Exceeded"
+              if (testcase == "?")
+                response.data.results[i]["result"] = "Time Limit Exceeded";
             }
-              
 
-            if (response.data.results[i]["result"] == "3"){
+            if (response.data.results[i]["result"] == "3") {
               response.data.results[i]["result"] =
                 "Memory Limit Exceeded on test " + testcase;
-                if(testcase=="?")
-                response.data.results[i]["result"] ="Memory Limit Exceeded"
+              if (testcase == "?")
+                response.data.results[i]["result"] = "Memory Limit Exceeded";
             }
-              
 
-            if (response.data.results[i]["result"] == "4"){
+            if (response.data.results[i]["result"] == "4") {
               response.data.results[i]["result"] =
                 "Runtime Error on test " + testcase;
-              if(testcase=="?")
-                response.data.results[i]["result"] ="Runtime Error"
+              if (testcase == "?")
+                response.data.results[i]["result"] = "Runtime Error";
             }
-              
 
             if (response.data.results[i]["result"] == "5")
               response.data.results[i]["result"] = "System Error";
@@ -464,7 +471,7 @@ export default {
     },
     creattimer() {
       clearInterval(this.$store.state.timer);
-      this.timer()
+      this.timer();
       this.$store.state.timer = setInterval(this.timer, 10000);
     }
   },
@@ -476,8 +483,8 @@ export default {
         theme: "base16-light",
         lineNumbers: true,
         readOnly: true,
-        viewportMargin:Infinity,
-        lineWrapping:true,
+        viewportMargin: Infinity,
+        lineWrapping: true
       },
       tableData: [],
       currentpage: 1,

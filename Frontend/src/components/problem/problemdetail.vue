@@ -3,7 +3,7 @@
     <el-col :span="18">
       <el-row>
         <el-card shadow="always">
-          <el-row :gutter="18" id="title">{{(this.oj=="LPOJ"?"LPOJ":"")+' - '+(this.oj=="LPOJ"?this.proid:"")+' '}}{{title}}</el-row>
+          <el-row :gutter="18" id="title">{{(this.oj=="LPOJ"?"LPOJ":"")+(this.oj=="LPOJ"?" - ":"")+(this.oj=="LPOJ"?this.proid:"")+' '}}{{title}}</el-row>
           <br>
           <el-row :gutter="18" id="des">Description</el-row>
           <el-row :gutter="18" id="detail">
@@ -416,7 +416,7 @@ export default {
               code: this.code,
               testcase: 0,
               message: this.oj=="LPOJ"?"0":(this.proid+""),
-              problemtitle: this.oj+" - " + this.proid + " " + this.title,
+              problemtitle: (this.oj=="LPOJ"?"LPOJ":"") + (this.oj=="LPOJ"?' - ':"") + (this.oj=="LPOJ"?this.proid:"")+' ' + this.title,
               rating: parseInt(sessionStorage.rating)
             })
             .then(response => {
