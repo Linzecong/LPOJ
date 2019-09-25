@@ -133,7 +133,13 @@
     >
       <el-table-column prop="id" label="ID" :width="70"></el-table-column>
       <el-table-column prop="user" label="User" :width="140"></el-table-column>
-      <el-table-column prop="problemtitle" label="Problem" :width="190"></el-table-column>
+      <el-table-column prop="problemtitle" label="Problem" :width="190" >
+        <template slot-scope="scope">
+          <font color="#409EFF">
+            <b>{{ scope.row.problemtitle }}</b>
+          </font>
+        </template>
+      </el-table-column>
       <el-table-column prop="result" label="Status" :width="290">
         <template slot-scope="scope">
           <el-tag size="medium" :type="statuetype(scope.row.result)" disable-transitions hit>
@@ -192,6 +198,27 @@ export default {
       this.$message.error("复制失败：" + e);
     },
     rowClick(row, col, e) {
+
+      console.log(col)
+
+      if(col.label == "Problem"){
+
+        this.$router.push({
+          name: "problemdetail",
+          query: { problemID: row.problem }
+        });
+        return;
+      }
+
+      if(col.label == "User"){
+
+        this.$router.push({
+          name: "user",
+          query: { username: row.user }
+        });
+        return;
+      }
+
       if (row.message + "" == "0") this.compilemsg = "编译成功！";
       else this.compilemsg = row.message;
 

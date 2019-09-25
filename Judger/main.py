@@ -385,12 +385,14 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 file = open("%s.c" % judgername, "w")
                 file.write(code)
                 file.close()
-                result = os.system("gcc %s.c -o %s.out -O2 -std=c11 2>%sce.txt" %
+                result = os.system("timeout 10 gcc %s.c -o %s.out -O2 -std=c11 2>%sce.txt" %
                                    (judgername, judgername, judgername))
                 if result:
                     try:
                         filece = open("%sce.txt" % judgername, "r")
                         msg = str(filece.read())
+                        if msg == "":
+                            msg = "Compile timeout! Maybe you define too big arrays!"
                         filece.close()
                         cursor.execute(
                             "UPDATE judgestatus_judgestatus SET result = '-4',message=%s WHERE id = %s", (msg, id))
@@ -407,12 +409,14 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 file = open("%s.cpp" % judgername, "w")
                 file.write(code)
                 file.close()
-                result = os.system("g++ %s.cpp -o %s.out -O2 -std=c++11 2>%sce.txt" %
+                result = os.system("timeout 10 g++ %s.cpp -o %s.out -O2 -std=c++14 2>%sce.txt" %
                                    (judgername, judgername, judgername))
                 if result:
                     try:
                         filece = open("%sce.txt" % judgername, "r")
                         msg = str(filece.read())
+                        if msg == "":
+                            msg = "Compile timeout! Maybe you define too big arrays!"
                         filece.close()
                         cursor.execute(
                             "UPDATE judgestatus_judgestatus SET result = '-4',message=%s WHERE id = %s", (msg, id))
