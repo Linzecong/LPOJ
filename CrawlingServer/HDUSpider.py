@@ -1,12 +1,13 @@
 import requests
 from time import sleep
-
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
 login={
         'username':"504603913",
-        'password':"721543705bd6c0469d22c781efe27343"
+        'password':"123123123"
 }
 mafengwoSession = requests.session()
-backendurl = "http://119.29.15.43:8000/login/"
+backendurl = "https://www.lpoj.cn/api/login/"
 responseRes = mafengwoSession.post(backendurl,data=login)
 
 def getpro(problemid,ppid):
@@ -105,12 +106,12 @@ def getpro(problemid,ppid):
 
     
     
-    backendurl = "http://119.29.15.43:8000/problem/"
+    backendurl = "https://www.lpoj.cn/api/problem/"
     responseRes = mafengwoSession.post(backendurl,data=prodata)
     if int(responseRes.status_code/100) != 2:
         print(responseRes.text)
         exit(0)
-    backendurl = "http://119.29.15.43:8000/problemdata/"
+    backendurl = "https://www.lpoj.cn/api/problemdata/"
     responseRes = mafengwoSession.post(backendurl,data=prodatas)
     if int(responseRes.status_code/100) != 2:
         print(responseRes.text)
@@ -119,6 +120,7 @@ def getpro(problemid,ppid):
     return 0
 
 # totid = 0
-# for i in range(6000):
-#     totid += getpro(str(i+1930),str(i+954-totid))
-getpro(str(1083),str(189))
+# for i in range(4):
+#     totid += getpro(str(i+6727),str(i+5763-totid))
+
+# getpro(str(1083),str(189))

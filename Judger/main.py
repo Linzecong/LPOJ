@@ -382,7 +382,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 file = open("%s.c" % judgername, "w")
                 file.write(code)
                 file.close()
-                result = os.system("timeout 10 gcc %s.c -o %s.out -O2 -std=c11 2>%sce.txt" %
+                result = os.system("timeout 10 gcc %s.c -fmax-errors=3 -o %s.out -O2 -std=c11 2>%sce.txt" %
                                    (judgername, judgername, judgername))
                 if result:
                     try:
@@ -406,7 +406,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 file = open("%s.cpp" % judgername, "w")
                 file.write(code)
                 file.close()
-                result = os.system("timeout 10 g++ %s.cpp -o %s.out -O2 -std=c++14 2>%sce.txt" %
+                result = os.system("timeout 10 g++ %s.cpp -fmax-errors=3 -o %s.out -O2 -std=c++14 2>%sce.txt" %
                                    (judgername, judgername, judgername))
                 if result:
                     try:
