@@ -1,74 +1,97 @@
 <template>
-  <el-row :gutter="15">
-    <el-col :span="18">
-      <el-card shadow="always">
-        <el-switch
-          style="float: right;"
-          v-model="islpoj"
-          active-text="LPOJ"
-          inactive-text="All"
-          @change="statuechange"
-        ></el-switch>
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="currentpage"
-          :page-sizes="[15, 20, 30, 50]"
-          :page-size="pagesize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="totalproblem"
-        ></el-pagination>
+  <mu-container>
+    <mu-card>
+      <mu-data-table
+        :hover="false"
+        :data="tableData"
+        :rowClassName="tableRowClassName"
+        :columns="columns"
+      >
+        <template slot="header" slot-scope="scope">
+          <tr>
+            <th>ID</th>
+            <th>
+              <mu-row style="margin-top:16px;">
+                <mu-col :span="8.5">
+                  <mu-text-field
+                    style="width:180px"
+                    v-model="searchtext"
+                    @keyup.native.enter="searchtitle"
+                    placeholder="Search..."
+                    action-icon="search"
+                    :action-click="searchtitle"
+                  ></mu-text-field>
+                </mu-col>
+                <mu-col span="3">
+                  <mu-button color="primary" @click="dialogVisible=true">Filter</mu-button>
+                </mu-col>
+              </mu-row>
+            </th>
+          </tr>
+        </template>
 
+        <template slot="expand" slot-scope="prop">
+          <mu-container>
+            <mu-flex justify-content="center">
+              <mu-button
+                style="margin: 8px;"
+                :color="problemlevel(prop.row.level)"
+              >{{ prop.row.level }}</mu-button>
 
-        <el-table
-          :data="tableData"
-          :row-class-name="tableRowClassName"
-          @cell-mouse-enter="changestatistices"
-          @cell-click="problemclick"
-          size="small"
-        >
-          <el-table-column prop="problem" label="ID" :width="70"></el-table-column>
-          <el-table-column prop="title" label="Title" :width="250"></el-table-column>
-          <el-table-column prop="level" label="Level" :width="170">
-            <template slot-scope="scope1">
-              <el-tag
-                id="leveltag"
-                size="medium"
-                :type="problemlevel(scope1.row.level)"
-                disable-transitions
-                hit
-              >{{ scope1.row.level }}</el-tag>
-            </template>
-          </el-table-column>
-          <el-table-column prop="rate" label="A/S" :width="70"></el-table-column>
-          <el-table-column prop="tag" label="Tag">
-            <template slot-scope="scope">
-              <el-tag
+              <mu-button style="margin: 8px;" color="primary">A/S: {{ prop.row.rate }}</mu-button>
+
+              <mu-button style="margin: 8px;" color="success">Score: {{ prop.row.score }}</mu-button>
+            </mu-flex>
+
+            <br />
+            <mu-flex justify-content="center">
+              <mu-chip
                 id="protag"
-                v-for="(name,index) in scope.row.tag"
+                color="info"
+                v-for="(name,index) in prop.row.tag"
                 :key="index"
-                size="medium"
-                disable-transitions
-                hit
-              >{{ name }}</el-tag>
-            </template>
-          </el-table-column>
-          <el-table-column prop="score" label="Score" :width="70"></el-table-column>
-        </el-table>
-        <center>
-          <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="currentpage"
-            :page-sizes="[15, 20, 30, 50]"
-            :page-size="pagesize"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="totalproblem"
-          ></el-pagination>
-        </center>
-      </el-card>
-    </el-col>
-    <el-col :span="6">
+              >{{ name }}</mu-chip>
+            </mu-flex>
+            <br />
+            <mu-button full-width color="success" @click="problemclick(prop.row.problem)">Do It Now!</mu-button>
+            <br />
+            <br />
+          </mu-container>
+        </template>
+
+        <template slot-scope="scope">
+          <td>{{scope.row.problem}}</td>
+          <td>{{scope.row.title}}</td>
+        </template>
+      </mu-data-table>
+    </mu-card>
+    <br />
+    <mu-flex justify-content="center">
+      <mu-pagination
+        raised
+        :page-count="5"
+        :total="totalproblem"
+        :current.sync="currentpage"
+        @change="handleCurrentChange"
+      ></mu-pagination>
+    </mu-flex>
+
+    <mu-dialog title="Click to filter" scrollable :open.sync="dialogVisible">
+            <mu-button
+              id="tag"
+              v-for="(name,index) in tagnames"
+              :key="index"
+              @click="tagclick(name)"
+              :color="filtercolor[name]"
+            >{{ name }}</mu-button>
+    <mu-button slot="actions" flat color="primary" @click="dialogVisible=false">OK</mu-button>
+
+  </mu-dialog>
+
+
+  </mu-container>
+
+  <!-- <el-col :span="6">
       <el-row :gutter="15">
         <el-col>
           <prostatistice ref="prosta"></prostatistice>
@@ -97,11 +120,11 @@
         </el-col>
       </el-row>
     </el-col>
-  </el-row>
+  </el-row>-->
+
 </template>
 
 <script>
-prostatistice;
 import prostatistice from "@/components/utils/prostatistice";
 export default {
   components: {
@@ -110,7 +133,7 @@ export default {
   data() {
     return {
       currentpage: 1,
-      pagesize: 15,
+      pagesize: 10,
       totalproblem: 10,
       tableData: [],
       tagnames: [],
@@ -124,19 +147,29 @@ export default {
       se: 100,
       title: "Statistics",
       currenttag: "",
-      islpoj:true,
+      islpoj: false,
       searchtext: "",
-      searchoj: "LPOJ"
+      searchoj: "LPOJ",
+      dialogVisible:false,
+
+      columns: [
+        { title: "ID", name: "problem", width: 80 },
+        { title: "Title", name: "title" }
+      ],
+
+      filtercolor:{
+
+      }
     };
   },
   methods: {
-    statuechange(val){
+    statuechange(val) {
       if (val == true) {
-        this.searchoj="LPOJ"
+        this.searchoj = "LPOJ";
       } else {
-        this.searchoj=""
+        this.searchoj = "";
       }
-      this.searchtitle()
+      this.searchtitle();
     },
     searchtitle() {
       this.currentpage = 1;
@@ -148,7 +181,8 @@ export default {
             (this.currentpage - 1) * this.pagesize +
             "&auth=1&search=" +
             this.searchtext +
-            "&oj="+this.searchoj
+            "&oj=" +
+            this.searchoj
         )
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {
@@ -181,7 +215,7 @@ export default {
     },
     tagclick(name) {
       if (this.currenttag.indexOf(name) >= 0) {
-        this.$refs[name][0].type = "default";
+        this.filtercolor[name] = "";
         var li = this.currenttag.split("+");
         for (var i = 0; i < li.length; i++) {
           if (li[i] == name) {
@@ -191,7 +225,7 @@ export default {
         }
         this.currenttag = li.join("+");
       } else {
-        this.$refs[name][0].type = "primary";
+        this.filtercolor[name] = "primary";
         var li = this.currenttag.split("+");
         li.push(name);
         this.currenttag = li.join("+");
@@ -206,7 +240,8 @@ export default {
             (this.currentpage - 1) * this.pagesize +
             "&auth=1&search=" +
             this.searchtext +
-            "&oj="+this.searchoj
+            "&oj=" +
+            this.searchoj
         )
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {
@@ -237,48 +272,7 @@ export default {
           this.totalproblem = response.data.count;
         });
     },
-    handleSizeChange(val) {
-      this.pagesize = val;
-
-      this.$axios
-        .get(
-          "/problemdata/?limit=" +
-            this.pagesize +
-            "&offset=" +
-            (this.currentpage - 1) * this.pagesize +
-            "&auth=1&search=" +
-            this.searchtext +
-            "&oj="+this.searchoj
-        )
-        .then(response => {
-          for (var i = 0; i < response.data.results.length; i++) {
-            if (response.data.results[i]["level"] == "1")
-              response.data.results[i]["level"] = "Easy";
-            if (response.data.results[i]["level"] == "2")
-              response.data.results[i]["level"] = "Medium";
-            if (response.data.results[i]["level"] == "3")
-              response.data.results[i]["level"] = "Hard";
-            if (response.data.results[i]["level"] == "4")
-              response.data.results[i]["level"] = "VeryHard";
-            if (response.data.results[i]["level"] == "5")
-              response.data.results[i]["level"] = "ExtremelyHard";
-
-            response.data.results[i]["rate"] =
-              response.data.results[i]["ac"] +
-              "/" +
-              response.data.results[i]["submission"];
-
-            if (response.data.results[i]["tag"] == null)
-              response.data.results[i]["tag"] = ["无"];
-            else
-              response.data.results[i]["tag"] = response.data.results[i][
-                "tag"
-              ].split("|");
-          }
-          this.tableData = response.data.results;
-          this.totalproblem = response.data.count;
-        });
-    },
+   
     handleCurrentChange(val) {
       this.currentpage = val;
       this.$axios
@@ -289,7 +283,8 @@ export default {
             (this.currentpage - 1) * this.pagesize +
             "&auth=1&search=" +
             this.searchtext +
-            "&oj="+this.searchoj
+            "&oj=" +
+            this.searchoj
         )
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {
@@ -320,7 +315,7 @@ export default {
           this.totalproblem = response.data.count;
         });
     },
-    tableRowClassName({ row, rowIndex }) {
+    tableRowClassName(rowIndex, row) {
       var acpro = this.$store.state.acpro;
       if (acpro)
         if (acpro.indexOf(row.problem + "") != -1) {
@@ -331,43 +326,21 @@ export default {
     problemlevel: function(type) {
       if (type == "Easy") return "info";
       if (type == "Medium") return "success";
-      if (type == "Hard") return "";
+      if (type == "Hard") return "secondary";
       if (type == "VeryHard") return "warning";
-      if (type == "ExtremelyHard") return "danger";
+      if (type == "ExtremelyHard") return "error";
     },
-    changestatistices: function(row, column, cell, event) {
-      if (row.submission == 0) {
-        this.ac = 0;
-        this.mle = 0;
-        this.tle = 0;
-        this.rte = 0;
-        this.pe = 0;
-        this.ce = 0;
-        this.wa = 0;
-        this.se = 0;
-      } else {
-        this.ac = parseFloat(((row.ac * 100) / row.submission).toFixed(2));
-        this.mle = parseFloat(((row.mle * 100) / row.submission).toFixed(2));
-        this.tle = parseFloat(((row.tle * 100) / row.submission).toFixed(2));
-        this.rte = parseFloat(((row.rte * 100) / row.submission).toFixed(2));
-        this.pe = parseFloat(((row.pe * 100) / row.submission).toFixed(2));
-        this.ce = parseFloat(((row.ce * 100) / row.submission).toFixed(2));
-        this.wa = parseFloat(((row.wa * 100) / row.submission).toFixed(2));
-        this.se = parseFloat(((row.se * 100) / row.submission).toFixed(2));
-      }
-      this.title = row.title;
-      this.$refs.prosta.setdata(this.$data);
-    },
-    problemclick: function(row, column, cell, event) {
+    
+    problemclick: function(problem) {
       this.$router.push({
         name: "problemdetail",
-        query: { problemID: row.problem }
+        query: { problemID: problem }
       });
     }
   },
   mounted() {
     this.$axios
-      .get("/problemdata/?limit=15&offset=0&auth=1&oj=LPOJ")
+      .get("/problemdata/?limit=10&offset=0&auth=1&oj=LPOJ")
       .then(response => {
         for (var i = 0; i < response.data.results.length; i++) {
           if (response.data.results[i]["level"] == "1")
@@ -414,19 +387,18 @@ export default {
 #protag {
   text-align: center;
   font-weight: bold;
-  margin-right: 7px;
-  margin-bottom: 7px;
+  margin-right: 3px;
+  margin-bottom: 3px;
 }
 #tag {
+  font-size: 12px;
   text-align: center;
-  font-weight: bold;
-  margin-left: 2px;
-  margin-bottom: 5px;
+  margin: 4px;
 }
 .el-row {
   margin-bottom: 20px;
 }
-.el-table .acrow {
+.acrow {
   background: #c7ffb8;
 }
 </style>

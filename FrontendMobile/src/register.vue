@@ -84,23 +84,23 @@ export default {
         !this.form.number ||
         !this.form.realname
       ) {
-        this.$message.error("字段不能为空！");
+        this.$toast.error("字段不能为空！");
         return;
       }
       if (this.form.password != this.form.comfirm) {
-        this.$message.error("两次密码不一致！");
+        this.$toast.error("两次密码不一致！");
         return;
       }
       if (this.form.username.length < 3) {
-        this.$message.error("用户名太短！");
+        this.$toast.error("用户名太短！");
         return;
       }
       if (this.form.name.length < 2) {
-        this.$message.error("昵称太短！");
+        this.$toast.error("昵称太短！");
         return;
       }
       if (this.form.password.length < 6) {
-        this.$message.error("密码太短！");
+        this.$toast.error("密码太短！");
         return;
       }
       if (
@@ -108,7 +108,7 @@ export default {
         this.form.username.indexOf("'") >= 0 ||
         this.form.username.indexOf("#") >= 0
       ) {
-        this.$message.error("用户名包含非法字符！");
+        this.$toast.error("用户名包含非法字符！");
         return;
       }
       if (
@@ -116,7 +116,7 @@ export default {
         this.form.username.indexOf("(") >= 0 ||
         this.form.username.indexOf(")") >= 0
       ) {
-        this.$message.error("用户名包含非法字符！");
+        this.$toast.error("用户名包含非法字符！");
         return;
       }
 
@@ -129,27 +129,24 @@ export default {
             .post("/register/", this.form)
             .then(response => {
               if (response.data == "usererror") {
-                this.$message.error("用户名已存在！");
+                this.$toast.error("用户名已存在！");
                 return;
               }
-              this.$message({
-                message: "注册成功！",
-                type: "success"
-              });
+              this.$toast.success("注册成功！");
               this.dialogRegisterVisible = false;
               this.form.password = "";
             })
             .catch(error => {
-              this.$message.error(
+              this.$toast.error(
                 "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
               );
             });
         })
         .catch(error => {
           if (JSON.stringify(error.response.data).indexOf("user") >= 0)
-            this.$message.error("用户名已存在！");
+            this.$toast.error("用户名已存在！");
           else
-            this.$message.error(
+            this.$toast.error(
               "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
             );
         });

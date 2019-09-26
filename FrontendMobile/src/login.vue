@@ -37,13 +37,10 @@ export default {
         })
         .then(response => {
           if (response.data == "passworderror") {
-            this.$message.error("密码错误");
+            this.$toast.error("密码错误");
             return;
           }
-          this.$message({
-            message: "登录成功！",
-            type: "success"
-          });
+          this.$toast.success("登录成功！");
 
           sessionStorage.setItem("username", this.form.username);
           sessionStorage.setItem("name", response.data.name);
@@ -61,7 +58,7 @@ export default {
               this.$router.go(0);
             })
             .catch(error => {
-              this.$message.error(
+              this.$toast.error(
                 "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
               );
               sessionStorage.setItem("username", "");
@@ -72,7 +69,7 @@ export default {
             });
         })
         .catch(error => {
-          this.$message.error("用户名不存在（" + error + "）");
+          this.$toast.error("用户名不存在（" + error + "）");
         });
     }
   }

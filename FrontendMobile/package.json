@@ -19,6 +19,7 @@
     "mavon-editor": "^2.7.3",
     "moment": "^2.24.0",
     "muse-ui": "^3.0.2",
+    "muse-ui-toast": "^0.3.0",
     "vue": "^2.5.2",
     "vue-clipboard2": "^0.3.0",
     "vue-codemirror": "^4.0.6",

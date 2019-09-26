@@ -197,10 +197,7 @@ export default {
         this.$axios
           .get("/logout/")
           .then(response => {
-            this.$message({
-              message: "登出成功！",
-              type: "success"
-            });
+            this.$toast.success("登出成功！");
             sessionStorage.setItem("username", "");
             sessionStorage.setItem("name", "");
             sessionStorage.setItem("rating", "");
@@ -210,7 +207,7 @@ export default {
             this.$router.go(0);
           })
           .catch(error => {
-            this.$message.error(
+            this.$toast.error(
               "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
             );
           });

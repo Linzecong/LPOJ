@@ -10,6 +10,9 @@ import md5 from 'js-md5';
 import axios from 'axios';
 import VueClipboard from 'vue-clipboard2'
 import 'babel-polyfill' //兼容IE6
+import MuseUI from 'muse-ui';
+import 'muse-ui/dist/muse-ui.css';
+import Toast from 'muse-ui-toast';
 
 Vue.use(VueClipboard)
 Vue.use(Vuex)
@@ -17,10 +20,7 @@ Vue.config.productionTip = false
 Vue.use(ElementUI);
 Vue.use(MuseUI);
 Vue.prototype.$md5 = md5;
-
-import MuseUI from 'muse-ui';
-import 'muse-ui/dist/muse-ui.css';
-
+Vue.use(Toast);
 
 //开启debug模式
 Vue.config.debug = true;

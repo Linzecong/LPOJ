@@ -1,29 +1,31 @@
 <template>
-  <el-card>
-    <div slot="header">
-      <b>7 Days AC Rank</b>
-    </div>
-    <el-table
-      :data="tableData"
-      border
-      style="width: 100%"
-      @cell-click="userclick"
-      size="mini"
-      :default-sort="{prop: 'acnum', order: 'descending'}"
-      :row-style="rowcolor"
-    >
-      <el-table-column type="index" width="40"></el-table-column>
-      <el-table-column prop="user" label="User"></el-table-column>
-      <el-table-column prop="acnum" label="AC"></el-table-column>
-    </el-table>
-  </el-card>
+  <mu-card>
+
+    <mu-card-title title="7 Days AC Rank"></mu-card-title>
+
+    <mu-card-text>
+      <mu-data-table :columns="columns" :data="tableData" @row-click="userclick" :rowStyle="rowcolor">
+        <template slot-scope="scope">
+          <td>{{scope.row.user}}</td>
+          <td>{{scope.row.acnum}}</td>
+        </template>
+      </mu-data-table>
+    </mu-card-text>
+  </mu-card>
 </template>
 
 <script>
 export default {
   name: "acrank",
   data() {
-    return {tableData:[]};
+    return {
+      tableData:[],
+      columns: [
+          { title: 'User', name: 'user' },
+          { title: 'AC', name: 'acnum' },
+      ],
+
+    };
   },
   methods: {
     sortfun(obj1, obj2) {
@@ -41,7 +43,8 @@ export default {
         query: { username: row.user }
       });
     },
-    rowcolor({ row, rowIndex }) {
+    rowcolor(rowIndex,row) {
+
       if (rowIndex == 0) return "color:red;font-weight: bold;";
       if (rowIndex == 1) return "color:#BB5E00;font-weight: bold;";
       if (rowIndex == 2) return "color:#E6A23C;font-weight: bold;";
@@ -99,7 +102,7 @@ export default {
 
       })
       .catch(error => {
-        this.$message.error(
+        this.$toast.error(
           "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
         );
       });
