@@ -34,8 +34,8 @@
 
 直接调用命令即可，非常简单方便
 ```py
-result = os.system("gcc %s.c -o %s.out -O2 -std=c11 2>%sce.txt" %(judgername, judgername, judgername))
-result = os.system("g++ %s.cpp -o %s.out -O2 -std=c++11 2>%sce.txt" %(judgername, judgername, judgername))
+result = os.system("timeout 10 gcc %s.c -o %s.out -O2 -std=c11 2>%sce.txt" %(judgername, judgername, judgername))
+result = os.system("timeout 10 g++ %s.cpp -o %s.out -O2 -std=c++11 2>%sce.txt" %(judgername, judgername, judgername))
 ```
 
 ### 运行
@@ -92,30 +92,27 @@ result = os.system(com)
 - [x] 限时
 - [x] 测时
 - [x] 限内存
-- [ ] 测内存
+- [x] 测内存
 
 ### 编译
 
-判断代码中有无敏感词，禁止import某些库。然后再在程序最前面添加一段限制内存的语句。
+判断代码中有无敏感词，禁止import某些库。
 
 ```py
-import resource
-resource.setrlimit(resource.RLIMIT_AS,(memorylimit*1024*1024,memorylimit*10*1024*1024))
+import sys
+blacklist = ['importlib','traceback','os','sys']
+for mod in blacklist:\n    i = __import__(mod)
+    sys.modules[mod] = None
+    del sys
+    del __builtins__.__dict__['eval']
+    del __builtins__.__dict__['exec']
+    del __builtins__.__dict__['locals']
+    del __builtins__.__dict__['open']
 ```
 
 ### 运行
 
-通过 **/usr/bin/time** 命令来实现时间的计算
-
-通过timeout命令来实现限时
-
-```py
-com1 = "/usr/bin/time -f '"+"%"+"U' -o %stime.txt " % (judgername)
-com2 = "timeout %s python3  %s.py 1>%s 2>%s<%s" % (
-str(timelimit/1000.0), judgername, outputpath, errorpath, inputpath)
-com = com1 + com2
-result = os.system(com)
-```
+同C++，采用沙盒技术
 
 ## Virtual Judge规范
 

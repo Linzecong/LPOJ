@@ -44,6 +44,7 @@ judgername = socket.gethostbyname(socket.gethostname())
 
 host = judgerjson["server_ip"]
 port = judgerjson["server_port"]
+pythonpath = judgerjson["python_path"]
 
 db = MySQLdb.connect(judgerjson["db_ip"], judgerjson["db_user"], judgerjson["db_pass"],
                      judgerjson["db_database"], int(judgerjson["db_port"]), charset='utf8')
@@ -138,22 +139,12 @@ reconnect()
 
 def minganci(ci):
 
-    if ci.find("open") >= 0:
-        return "open"
     if ci.find("thread") >= 0:
         return "thread"
-    if ci.find("sys") >= 0:
-        return "sys"
     if ci.find("process") >= 0:
         return "process"
-    if ci.find("fork") >= 0:
-        return "fork"
-    if ci.find("file") >= 0:
-        return "file"
     if ci.find("resource") >= 0:
         return "resource"
-    if ci.find("read") >= 0:
-        return "read"
     if ci.find("ctypes") >= 0:
         return "ctypes"
     if ci.find(" os") >= 0:
@@ -166,10 +157,6 @@ def minganci(ci):
         return "eval"
     if ci.find("exec") >= 0:
         return "exec"
-    if ci.find("__builtins__") >= 0:
-        return "__builtins__"
-    if ci.find("__dict__") >= 0:
-        return "__dict__"
     if ci.find("__") >= 0:
         return "__"
     if ci.find("globals") >= 0:
@@ -280,7 +267,7 @@ def judgeJava(timelimit, memorylimit, inputpath, outputpath, errorpath, id):
 
 
 def judge(id, code, lang, problem, contest, username, submittime, contestproblem, oj,ojpro):
-    global statue, cursor
+    global statue, cursor, pythonpath
     contest = int(contest)
     contest = contest + 1
     contest = contest - 1
@@ -456,8 +443,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                     return
 
                 file = open("%s.py" % judgername, "w")
-                file.write("import resource\nresource.setrlimit(resource.RLIMIT_AS,(%d*1024*1024,%d*10*1024*1024))\nimport sys\nblacklist = ['importlib','traceback','os','sys']\nfor mod in blacklist:\n    i = __import__(mod)\n    sys.modules[mod] = None\ndel sys\ndel __builtins__.__dict__['eval']\ndel __builtins__.__dict__['exec']\ndel __builtins__.__dict__['locals']\ndel __builtins__.__dict__['open']\n" %
-                           (memorylimit, memorylimit)+code)
+                file.write("import sys\nblacklist = ['importlib','traceback','os','sys']\nfor mod in blacklist:\n    i = __import__(mod)\n    sys.modules[mod] = None\ndel sys\ndel __builtins__.__dict__['eval']\ndel __builtins__.__dict__['exec']\ndel __builtins__.__dict__['locals']\ndel __builtins__.__dict__['open']\n" +code)
                 file.close()
 
             elif lang == "Java":
@@ -591,8 +577,29 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 ret = judgeJava(timelimit*3, memorylimit, "./ProblemData/%s/%s.in" % (
                                 problem, filename), judgername+"temp.out", judgername+"error.out", id)
             elif lang == "Python3":
-                ret = judgePython(timelimit*2, memorylimit, "./ProblemData/%s/%s.in" % (
-                    problem, filename), judgername+"temp.out", judgername+"error.out", id)
+                # ret = judgePython(timelimit*2, memorylimit, "./ProblemData/%s/%s.in" % (
+                #     problem, filename), judgername+"temp.out", judgername+"error.out", id)
+                ret = _judger.run(max_cpu_time=timelimit,
+                                      max_real_time=timelimit*10,
+                                      max_memory=memorylimit * 1024 * 1024,
+                                      max_process_number=200,
+                                      max_output_size=32 * 1024 * 1024,
+                                      max_stack=32 * 1024 * 1024,
+                                      # five args above can be _judger.UNLIMITED
+                                      exe_path=pythonpath,
+                                      input_path="./ProblemData/%s/%s.in" % (
+                                          problem, filename),
+                                      output_path=judgername+"temp.out",
+                                      error_path=judgername+"error.out",
+                                      args=[judgername+".py"],
+                                      # can be empty list
+                                      env=[],
+                                      log_path=judgername+"judger.log",
+                                      # can be None
+                                      seccomp_rule_name="general",
+                                      uid=0,
+                                      gid=0
+                                      )
             else:
                 try:
                     ret = _judger.run(max_cpu_time=timelimit,
@@ -618,7 +625,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                                       )
                 except:
                     cursor.execute(
-                        "UPDATE judgestatus_judgestatus SET memory =0, time=0, result = '5',testcase='0'  WHERE id = '%s'" % (id))
+                        "UPDATE judgestatus_judgestatus SET message='Judger Fatal Error!' memory =0, time=0, result = '5',testcase='0'  WHERE id = '%s'" % (id))
                     db.commit()
                     statue = True
                     return
@@ -655,8 +662,8 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                     if tmpstr != "":
                         useroutputdata = useroutputdata + '\n......'
                     useroutputfile.close()
-                    if lang == "Python3":
-                        useroutputdata = "Python language does not support viewing output"
+                    # if lang == "Python3":
+                    #     useroutputdata = "Python language does not support viewing output"
                 except:
                     ret["result"] = 5
 

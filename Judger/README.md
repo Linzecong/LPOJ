@@ -21,6 +21,12 @@ docker run -d lpojjudger
 ## 一般部署
 
 首先修改配置文件，setting.json里的东西都要修改为你的ip，其中sftp应配置为你的后端服务器的用户名和密码和ip
+
+如果你需要Python判题，那么请注意修改python_path 
+
+你可以使用 whereis python 命名查看python路径
+
+
 ``` 
 cd Judger
 nano setting.json

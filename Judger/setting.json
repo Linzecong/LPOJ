@@ -10,5 +10,6 @@
     "sftp_port":22,
     "sftp_username":"ubuntu",
     "sftp_password":"ubuntuubuntu",
-    "backend_path":"/home/ubuntu/LPOJ/Backend/"
+    "backend_path":"/home/ubuntu/LPOJ/Backend/",
+    "python_path": "/usr/bin/python"
 }

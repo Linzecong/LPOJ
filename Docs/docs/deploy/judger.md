@@ -16,6 +16,10 @@ nano setting.json
 
 修改backend_path为你的后端文件夹地址（用于下载数据）
 
+如果你需要Python判题，那么请注意修改python_path 
+
+你可以使用 whereis python 命名查看python路径
+
 需要数据库模块支持！如已安装可跳过
 
 ```
