@@ -1,193 +1,77 @@
 <template>
-  <el-card shadow="always" id="card">
-    <el-dialog :visible.sync="dialogVisible" width="80%">
-      <el-alert
-        title="Program Message:"
-        :type="compilemsg=='编译成功！'?'success':'warning'"
-        :description="compilemsg"
-        :closable="false"
-        show-icon
-        :show-close="false"
-      ></el-alert>
-      <el-alert title="Code：" type="info" :closable="false">
-        <el-button
-          size="mini"
-          v-clipboard:copy="code"
-          v-clipboard:success="onCopy"
-          v-clipboard:error="onError"
-        >Copy</el-button>
-      </el-alert>
+  <mu-container>
+    <mu-card>
 
-      <codemirror id="mycode" v-model="code" :options="cmOptions"></codemirror>
-      <el-collapse>
-        <el-collapse-item :key="index" v-for="(data,index) in dialogdata" v-if="data.casedata!=''">
-          <template slot="title">
-            <el-alert
-              :show-icon="true"
-              :type="data.caseresult=='Accepted'?'success':(data.caseresult=='Wrong Answer'?'error':'warning')"
-              :closable="false"
-              v-show="data.casedata!=''"
-            >
-              <template slot="title">
-                <b>{{' '+data.caseresult + ' on test ' + data.casetitle}}</b>
-              </template>
-            </el-alert>
-          </template>
-          <el-alert
-            :title="''"
-            :type="data.caseresult=='Accepted'?'success':(data.caseresult=='Wrong Answer'?'error':'warning')"
-            :closable="false"
-            v-show="data.casedata!=''"
-          >
-            <h5
-              style="white-space:pre;margin-left:15px;"
-              v-if="data.casedata!=''"
-            >{{'Time: '+ data.casetime + 'MS'+' Memory: '+data.casememory+'MB'}}</h5>
-            <h5 style="white-space:pre;margin-left:15px;" v-if="data.casedata!=''">Test Input:</h5>
-            <div
+      <mu-data-table
+        :data="tableData"
+        :hover="false"
+        :rowStyle="ratingcolor"
+        :loading="loading"
+        :columns="columns"
+      >
+        
+        <template slot="expand" slot-scope="prop">
+          <mu-container>
+            <mu-flex justify-content="center">
+              <mu-button
+                full-width
+                style="margin: 8px;"
+                :color="statuetype(prop.row.result)"
+              >{{ prop.row.result }}</mu-button>
+            </mu-flex>
 
-              style="white-space:pre;margin-left:15px;word-wrap:break-word;word-break: normal;"
-              v-if="data.casedata!=''"
-            >{{data.casedata+'\n'}}</div>
+            <br />
 
-            <h5 style="white-space:pre;margin-left:15px;" v-if="data.casedata!=''">Your Output:</h5>
-            <div
-              style="white-space:pre;margin-left:15px;word-wrap:break-word;word-break: normal;"
-              v-if="data.casedata!=''"
-            >{{data.caseuseroutput+'\n'}}</div>
+            <mu-flex justify-content="center">
+              <mu-chip  style="margin: 8px;" color="primary">{{ prop.row.time }}</mu-chip>
 
-            <h5 style="white-space:pre;margin-left:15px;" v-if="data.casedata!=''">Expected Output:</h5>
-            <div
-              style="white-space:pre;margin-left:15px;word-wrap:break-word;word-break: normal;"
-              v-if="data.casedata!=''"
-            >{{data.caseoutputdata+'\n'}}</div>
-          </el-alert>
-        </el-collapse-item>
-      </el-collapse>
-    </el-dialog>
+              <mu-chip  style="margin: 8px;" color="secondary">{{ prop.row.memory }}</mu-chip>
 
-    <el-dialog :visible.sync="searchdialogVisible">
-      <el-form :model="searchform" label-position="right" @keyup.native.enter="searchstatus">
-        <el-form-item label="User:">
-          <el-input v-model="searchform.user" placeholder="User..."></el-input>
-        </el-form-item>
-        <el-form-item label="Problem Number：">
-          <el-input v-model="searchform.problem" placeholder="Problem Number..."></el-input>
-        </el-form-item>
-        <el-form-item label="Language：">
-          <el-select v-model="searchform.language" placeholder="Choose...">
-            <el-option key="C++" label="C++" value="C%2B%2B"></el-option>
-            <el-option key="C" label="C" value="C"></el-option>
-            <el-option key="Java" label="Java" value="Java"></el-option>
-            <el-option key="Python3" label="Python3" value="Python3"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="Result：">
-          <el-select v-model="searchform.result" placeholder="Choose...">
-            <el-option key="0" label="Accepted" value="0"></el-option>
-            <el-option key="1" label="Wrong Answer" value="-3"></el-option>
-            <el-option key="2" label="Waiting" value="-6"></el-option>
-            <el-option key="3" label="Presentation Error" value="-5"></el-option>
-            <el-option key="4" label="Compile Error" value="-4"></el-option>
-            <el-option key="5" label="Pending" value="-1"></el-option>
-            <el-option key="6" label="Judging" value="-2"></el-option>
-            <el-option key="7" label="Time Limit Exceeded 1" value="1"></el-option>
-            <el-option key="8" label="Time Limit Exceeded 2" value="2"></el-option>
-            <el-option key="9" label="Memory Limit Exceeded" value="3"></el-option>
-            <el-option key="10" label="Runtime Error" value="4"></el-option>
-            <el-option key="11" label="System Error" value="5"></el-option>
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="searchdialogVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="searchstatus">OK</el-button>
-      </div>
-    </el-dialog>
+              <mu-chip  style="margin: 8px;" color="warning">{{ prop.row.language }}</mu-chip>
+              <mu-chip  style="margin: 8px;" color="success">{{ prop.row['length'] }}</mu-chip>
+            </mu-flex>
 
-    <el-switch
-      style="float: right;margin:10px;"
-      v-model="showall"
-      active-text="Show Mine"
-      inactive-text="Show All"
-      @change="statuechange"
-    ></el-switch>
-    <el-button
-      type="danger"
-      @click="resetsearch"
-      style="float: right;margin-top:6px;margin-right:10px;"
-      size="mini"
-    >Reset</el-button>
-    <el-button
-      type="primary"
-      @click="searchdialogVisible = true"
-      style="float: right;margin-top:6px;margin-right:15px;"
-      size="mini"
-    >Filter</el-button>
+            <mu-flex justify-content="center">
+              <mu-button  style="margin: 8px;" color="info">{{ prop.row.submittime }}</mu-button>
+            </mu-flex>
 
-    <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="currentpage"
-      :page-sizes="[10, 20, 30, 50]"
-      :page-size="pagesize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="totalstatus"
-    ></el-pagination>
 
-    <el-table
-      :default-sort="{prop: 'id', order: 'descending'}"
-      :data="tableData"
-      style="width: 100%"
-      :row-style="ratingcolor"
-      @row-click="rowClick"
-      size="small"
-      v-loading="loading"
-    >
-      <el-table-column prop="id" label="ID" :width="70"></el-table-column>
-      <el-table-column prop="user" label="User" :width="140"></el-table-column>
-      <el-table-column prop="problemtitle" label="Problem" :width="320">
-        <template slot-scope="scope">
-          <font color="#409EFF">
-            <b style="cursor:pointer;">{{ scope.row.problemtitle }}</b>
-          </font>
+            <br />
+
+            <mu-button full-width color="success" @click="problemclick(prop.row.problem)">Try IT!</mu-button>
+
+            <br />
+            <br>
+          </mu-container>
         </template>
-      </el-table-column>
-      <el-table-column prop="result" label="Status" :width="285">
+
         <template slot-scope="scope">
-          <el-tag size="medium" :type="statuetype(scope.row.result)" disable-transitions hit>
-            {{ scope.row.result }}
-            <i class="el-icon-loading" v-show="statuejudge(scope.row.result)"></i>
-          </el-tag>
+          <td>{{scope.row.id}}</td>
+          <td>{{scope.row.user}}</td>
+          <td>{{scope.row.problemtitle}}</td>
         </template>
-      </el-table-column>
-      <el-table-column prop="time" label="Time"></el-table-column>
-      <el-table-column prop="memory" label="Memory"></el-table-column>
-      <el-table-column prop="length" label="Length"></el-table-column>
-      <el-table-column prop="language" label="Language"></el-table-column>
-      <el-table-column prop="submittime" label="Submit time" :width="180"></el-table-column>
-      <el-table-column prop="judger" label="Judger"></el-table-column>
-    </el-table>
-    <center>
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="currentpage"
-        :page-sizes="[10, 20, 30, 50]"
-        :page-size="pagesize"
-        layout="total, sizes, prev, pager, next, jumper"
+      </mu-data-table>
+
+
+    </mu-card>
+    <br />
+    <mu-flex justify-content="center">
+      <mu-pagination
+        raised
+        :page-count="5"
         :total="totalstatus"
-      ></el-pagination>
-    </center>
-  </el-card>
+        :current.sync="currentpage"
+        @change="handleCurrentChange"
+      ></mu-pagination>
+    </mu-flex>
+
+  </mu-container>
 </template>
 
 
 <style scope>
-.el-tag {
-  text-align: center;
-  font-weight: bold;
-}
+
+
 </style>
 
 <script>
@@ -210,12 +94,18 @@ export default {
     onError(e) {
       this.$message.error("复制失败：" + e);
     },
+    problemclick: function(problem) {
+      this.$router.push({
+        name: "problemdetail",
+        query: { problemID: problem }
+      });
+    },
+
     rowClick(row, col, e) {
       console.log(col);
 
       if (col.label == "Problem") {
-        if(this.contest != "")
-          return
+        if (this.contest != "") return;
         this.$router.push({
           name: "problemdetail",
           query: { problemID: row.problem }
@@ -295,10 +185,19 @@ export default {
       this.currentpage = val;
       this.getstatusdata();
     },
-    ratingcolor({ row, rowIndex }) {
+    ratingcolor(rowIndex, row) {
       var back = "";
       if (row.result == "Accepted")
-        back = "background:#e6ffdf;font-weight: bold;";
+        back = "background:#e8f5e9;font-weight: bold;";
+      if (row.result == "Wrong Answer")
+        back = "background:#ffebee;font-weight: bold;";
+      
+      if (row.result.indexOf("Error")>=0)
+        back = "background:#fff3e0;font-weight: bold;";
+      
+      if (row.result.indexOf("Limit")>=0)
+        back = "background:#fff3e0;font-weight: bold;";
+      
 
       if (row.rating >= 3000) return "color:red;" + back;
       if (row.rating >= 2600) return "color:#BB5E00;" + back;
@@ -315,7 +214,7 @@ export default {
     statuetype: function(type) {
       if (type == "Pending") return "info";
       if (type == "Judging") return "";
-      if (type == "Wrong Answer") return "danger";
+      if (type == "Wrong Answer") return "error";
       if (type == "Compile Error") return "warning";
       if (type == "Presentation Error") return "warning";
       if (type == "Waiting") return "info";
@@ -324,7 +223,7 @@ export default {
       if (type == "Time Limit Exceeded") return "warning";
       if (type == "Memory Limit Exceeded") return "warning";
       if (type == "Runtime Error") return "warning";
-      if (type == "System Error") return "danger";
+      if (type == "System Error") return "error";
 
       return "danger";
     },
@@ -479,6 +378,11 @@ export default {
   },
   data() {
     return {
+      columns: [
+        { title: "ID", name: "id",width: 85 },
+        { title: "User", name: "user",width: 100 },
+        { title: "Problem", name: "problemtitle" }
+      ],
       cmOptions: {
         tabSize: 4,
         mode: "text/x-c++src",
@@ -490,7 +394,7 @@ export default {
       },
       tableData: [],
       currentpage: 1,
-      pagesize: 30,
+      pagesize: 10,
       totalstatus: 10,
       username: "",
       contest: "",

@@ -1,10 +1,11 @@
 <template>
-  <div>
-    <el-card>
+  <mu-container>
+    <mu-card>
       <iframe src="https://oi-wiki.io.netease.com/" frameborder="0" scrolling="0" width="100%" height="880px"></iframe>
-      <el-divider>Thanks for the mirror provided by Netease</el-divider>
-    </el-card>
-  </div>
+      <mu-divider></mu-divider>
+      <center>Thanks for the mirror provided by Netease</center>
+    </mu-card>
+  </mu-container>
 </template>
 
 <script>

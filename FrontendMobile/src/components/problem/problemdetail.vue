@@ -1,168 +1,107 @@
 <template>
-  <el-row :gutter="15">
-    <el-col :span="18">
-      <el-row>
-        <el-card shadow="always">
-          <el-row :gutter="18" id="title">{{(this.oj=="LPOJ"?"LPOJ":"")+(this.oj=="LPOJ"?" - ":"")+(this.oj=="LPOJ"?this.proid:"")+' '}}{{title}}</el-row>
+  <mu-container>
+    <mu-card raised>
+      <mu-card-header
+        :title="(this.oj=='LPOJ'?'LPOJ':'')+(this.oj=='LPOJ'?' - ':'')+(this.oj=='LPOJ'?this.proid:'')"
+        :sub-title="time+'   '+memory"
+      ></mu-card-header>
+
+      <mu-card-title :title="title"></mu-card-title>
+
+      <mu-card-text>
+        <div
+          style="word-break:break-all;white-space:pre-line;"
+          v-html="des"
+          :key="des"
+        ></div>
+      </mu-card-text>
+
+      <mu-card-text>
+        <mu-row id="des">Input</mu-row>
+        <br />
+
+        <div style="word-break:break-all;white-space:pre-line;" v-html="input"></div>
+      </mu-card-text>
+
+      <mu-card-text>
+        <mu-row id="des">Output</mu-row>
+        <br />
+        <div style="word-break:break-all;white-space:pre-line;" v-html="output"></div>
+      </mu-card-text>
+
+      <mu-card-text>
+        <mu-row v-for="(item,index) in sinput.length" :key="index" gutter style="margin-top:10px;">
+          <mu-col span="5" id="text">
+            <font id="des" style="margin-bottom: 0px;">Input {{item}}</font>
+
+            <mu-button
+              icon
+              small
+              color="primary"
+              v-clipboard:copy="sinput[index]"
+              v-clipboard:success="onCopy"
+              v-clipboard:error="onError"
+            >
+              <mu-icon value="assignment"></mu-icon>
+            </mu-button>
+            <br>
+
+            <mu-row id="data" style="margin-bottom: 0px;">{{sinput[index]}}</mu-row>
+          </mu-col>
+
+          <mu-col span="5" id="text" offset="1">
+            <font id="des" style="margin-bottom: 0px;">Output {{item}}</font><br>
+            <mu-row id="data" style="margin-bottom: 0px;">{{soutput[index]}}</mu-row>
+          </mu-col>
+        </mu-row>
+      </mu-card-text>
+
+      <mu-card-text>
+        <mu-row id="des">Source</mu-row>
+        <br />
+        <div>{{source}}</div>
+      </mu-card-text>
+
+      <mu-card-text>
+        <mu-row id="des">Hint</mu-row>
+        <br />
+        <div style="word-break:break-all;white-space:pre-line;" v-html="hint"></div>
+      </mu-card-text>
+    </mu-card>
+
+    <br />
+
+
+      <mu-card raised>
+        <mu-card-text>
+       
+         
+            <mu-select v-model="language" label="Choose a language..." full-width>
+              <mu-option key="C++" label="C++" value="C++"></mu-option>
+              <mu-option key="C" label="C" value="C"></mu-option>
+              <mu-option key="Java" label="Java" value="Java"></mu-option>
+              <mu-option key="Python3" label="Python3" value="Python3"></mu-option>
+            </mu-select>
+        
+   
+        <br>
+
+          <codemirror v-model="code" :options="cmOptions" @changes="judgetype='success';submitbuttontext='submit'"></codemirror>
           <br>
-          <el-row :gutter="18" id="des">Description</el-row>
-          <el-row :gutter="18" id="detail">
-            <div style="margin-right:50px;word-break:break-all;white-space:pre-line;" v-html="des" :key="des"></div>
-          </el-row>
-          <el-row :gutter="18" id="des">Input</el-row>
-          <el-row :gutter="18" id="detail">
-            <div
-              style="margin-right:50px;word-break:break-all;white-space:pre-line;"
-              v-html="input"
-            ></div>
-          </el-row>
-          <el-row :gutter="18" id="des">Output</el-row>
-          <el-row :gutter="18" id="detail">
-            <div
-              style="margin-right:50px;word-break:break-all;white-space:pre-line;"
-              v-html="output"
-            ></div>
-          </el-row>
 
-          <el-row :gutter="18" style="left:10px">
-            <el-row :gutter="18" v-for="(item,index) in sinput.length" :key="index">
-              <el-col :span="11" id="text">
-                <el-row :gutter="18" id="des" style="margin-bottom: 0px;">Sample Input {{item}}<el-button
-                    size="mini"
-                    v-clipboard:copy="sinput[index]"
-                    v-clipboard:success="onCopy"
-                    v-clipboard:error="onError"
-                    style="margin-left:8px;float:top;"
-                  >Copy</el-button>
-                </el-row>
-                <el-row :gutter="18" id="data" style="margin-bottom: 0px;">{{sinput[index]}}</el-row>
-              </el-col>
-              <el-col :span="11" id="text">
-                <el-row :gutter="18" id="des" style="margin-bottom: 0px;">Sample Output {{item}}</el-row>
-                <el-row :gutter="18" id="data" style="margin-bottom: 0px;">{{soutput[index]}}</el-row>
-              </el-col>
-            </el-row>
-          </el-row>
+        <mu-button
+              full-width
+              :color="judgetype"
+              @click="submit"
+              
+            >{{submitbuttontext}}</mu-button>
 
-          <el-row :gutter="18" id="des">Source</el-row>
-          <el-row :gutter="18" id="detail">
-            <div style="margin-right:50px;">{{source}}</div>
-          </el-row>
-          <el-row :gutter="18" id="des">Hint</el-row>
-          <el-row :gutter="18" id="detail">
-            <div
-              style="margin-right:50px;word-break:break-all;white-space:pre-line;"
-              v-html="hint"
-            ></div>
-          </el-row>
-        </el-card>
-      </el-row>
-      <el-row>
-        <el-card shadow="always">
-          <el-row :gutter="15">
-            <el-col :span="3">
-              <div id="des" style="padding: 5px 10px;">Language:</div>
-            </el-col>
-            <el-col :span="3">
-              <el-select v-model="language" placeholder="请选择">
-                <el-option key="C++" label="C++" value="C++"></el-option>
-                <el-option key="C" label="C" value="C"></el-option>
-                <el-option key="Java" label="Java" value="Java"></el-option>
-                <el-option key="Python3" label="Python3" value="Python3"></el-option>
-              </el-select>
-            </el-col>
-            <el-col :span="3">
-              <el-button
-                type="primary"
-                @click="submit"
-                style="font-weight:bold;margin-left:10px;"
-              >Submit</el-button>
-            </el-col>
 
-            <el-col :span="15">
-              <el-button
-                round
-                :type="judgetype"
-                :loading="loadingshow"
-                style="font-weight:bold;margin-left:10px;"
-              >{{submitbuttontext}}</el-button>
-            </el-col>
-          </el-row>
-          <el-row>
-            <codemirror v-model="code" :options="cmOptions"></codemirror>
-          </el-row>
-        </el-card>
-      </el-row>
-    </el-col>
 
-    <el-col :span="6">
-      <el-row :gutter="15">
-        <el-card shadow="always">
-          <el-collapse v-model="activeNames">
-            <el-collapse-item name="1" id="des">
-              <template slot="title">
-                <font color="deepskyblue" size="4">Creator:</font>
-              </template>
-              <div>{{author}}</div>
-            </el-collapse-item>
-            <el-collapse-item name="2" id="des">
-              <template slot="title">
-                <font color="deepskyblue" size="4">Date:</font>
-              </template>
-              <div>{{addtime}}</div>
-            </el-collapse-item>
-            <el-collapse-item name="3" id="des">
-              <template slot="title">
-                <font color="deepskyblue" size="4">OJ:</font>
-              </template>
-              <div>{{oj}}</div>
-            </el-collapse-item>
-            <el-collapse-item name="4" id="des">
-              <template slot="title">
-                <font color="deepskyblue" size="4">Time:</font>
-              </template>
-              <div>{{time}}</div>
-            </el-collapse-item>
-            <el-collapse-item name="5" id="des">
-              <template slot="title">
-                <font color="deepskyblue" size="4">Memory:</font>
-              </template>
-              <div>{{memory}}</div>
-            </el-collapse-item>
-            <el-collapse-item name="7" id="des">
-              <template slot="title">
-                <font color="deepskyblue" size="4">Level:</font>
-              </template>
-              <el-tag size="medium" :type="problemlevel(level)" disable-transitions hit>{{ level }}</el-tag>
-            </el-collapse-item>
-            <el-collapse-item name="6" id="des">
-              <template slot="title">
-                <font color="deepskyblue" size="4">Tags:</font>
-              </template>
-              <el-tag
-                id="tag"
-                v-for="(name,index) in tagnames"
-                :key="index"
-                size="medium"
-                type="info"
-                disable-transitions
-                hit
-              >{{ name }}</el-tag>
-            </el-collapse-item>
-          </el-collapse>
-        </el-card>
-      </el-row>
-      <el-row :gutter="15">
-        <prostatistice ref="prosta"></prostatistice>
-      </el-row>
-      <el-row :gutter="15">
-        <el-card>
-          <h3>提交记录</h3>
-          <statusmini ref="Statusmini"></statusmini>
-        </el-card>
-      </el-row>
-    </el-col>
-  </el-row>
+        </mu-card-text>
+
+      </mu-card>
+  </mu-container>
 </template>
 
 <style scope>
@@ -203,7 +142,7 @@ export default {
       author: "",
       addtime: "",
       oj: "",
-      proid:"",
+      proid: "",
       source: "",
       time: "",
       memory: "",
@@ -222,16 +161,16 @@ export default {
       ce: 100,
       wa: 100,
       se: 100,
-      submitbuttontext: "提交后请勿重复刷新/支持将文件拖入代码框",
-      judgetype: "primary",
+      submitbuttontext: "Submit",
+      judgetype: "success",
       loadingshow: false,
       submitid: -1
     };
   },
   watch: {
     des: function() {
-      console.log('data changed');
-      this.$nextTick().then(()=>{
+      console.log("data changed");
+      this.$nextTick().then(() => {
         this.reRender();
       });
     }
@@ -239,7 +178,7 @@ export default {
   created() {
     this.ID = this.$route.query.problemID;
     if (!this.ID) {
-      this.$message.error("参数错误" + "(" + this.ID + ")");
+      this.$toast.error("参数错误" + "(" + this.ID + ")");
       return;
     }
     var auth = 1;
@@ -247,12 +186,15 @@ export default {
       .get("/problem/" + this.ID + "/")
       .then(response => {
         auth = response.data.auth;
-        if ((auth == 2 || auth == 3) && (sessionStorage.type == 1||sessionStorage.type =="")) {
+        if (
+          (auth == 2 || auth == 3) &&
+          (sessionStorage.type == 1 || sessionStorage.type == "")
+        ) {
           this.title = "非法访问！";
-          this.$message.error("服务器错误！" + "(" + "无权限" + ")");
+          this.$toast.error("服务器错误！" + "(" + "无权限" + ")");
           return;
         }
-        this.proid = this.ID
+        this.proid = this.ID;
         this.des = response.data.des;
         this.input = response.data.input;
         this.output = response.data.output;
@@ -269,8 +211,8 @@ export default {
         this.memory = response.data.memory + "MB";
         this.hint = response.data.hint;
 
-        if(this.oj!="LPOJ"){
-          this.proid = this.source
+        if (this.oj != "LPOJ") {
+          this.proid = this.source;
         }
 
         this.$axios
@@ -332,38 +274,48 @@ export default {
             this.title = response.data.title;
             this.level = response.data.level;
             this.tagnames = response.data.tag;
-            this.$refs.prosta.setdata(this.$data)
-            console.log(this.$refs["Statusmini"])
-            this.$refs["Statusmini"].setstatus(this.ID,sessionStorage.username,"");
+            this.$refs.prosta.setdata(this.$data);
+            console.log(this.$refs["Statusmini"]);
+            this.$refs["Statusmini"].setstatus(
+              this.ID,
+              sessionStorage.username,
+              ""
+            );
           })
           .catch(error => {
-            this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
+            this.$toast.error(
+              "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
+            );
           });
       })
       .catch(error => {
         this.title = "非法访问！";
-        this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
+        this.$toast.error(
+          "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
+        );
       });
   },
   methods: {
     reRender() {
-      if(window.MathJax) {
-        console.log('rendering mathjax');
+      if (window.MathJax) {
+        console.log("rendering mathjax");
         MathJax.Hub.Config({
-            tex2jax: {
-                inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-                displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-            }
+          tex2jax: {
+            inlineMath: [["$", "$"], ["\\(", "\\)"]],
+            displayMath: [["$$", "$$"], ["\\[", "\\]"]]
+          }
         });
-        window.MathJax.Hub.Queue(["Typeset", window.MathJax.Hub], () => console.log('done'));
+        window.MathJax.Hub.Queue(["Typeset", window.MathJax.Hub], () =>
+          console.log("done")
+        );
       }
     },
     onCopy(e) {
-      this.$message.success("复制成功！");
+      this.$toast.success("复制成功！");
     },
     // 复制失败
     onError(e) {
-      this.$message.error("复制失败：" + e);
+      this.$toast.error("复制失败：" + e);
     },
     problemlevel: function(type) {
       if (type == "Easy") return "info";
@@ -374,19 +326,19 @@ export default {
     },
     submit: function() {
       if (this.addtime == "") {
-        this.$message.error("非法操作！");
+        this.$toast.error("非法操作！");
         return;
       }
       if (!sessionStorage.username) {
-        this.$message.error("请先登录！");
+        this.$toast.error("请先登录！");
         return;
       }
       if (!this.code) {
-        this.$message.error("请输入代码！");
+        this.$toast.error("请输入代码！");
         return;
       }
       if (!this.language) {
-        this.$message.error("请选择语言！");
+        this.$toast.error("请选择语言！");
         return;
       }
       this.$confirm("确定提交吗？", "提交", {
@@ -394,10 +346,7 @@ export default {
         cancelButtonText: "取消",
         type: "warning"
       }).then(() => {
-        this.$message({
-          type: "success",
-          message: "提交中..."
-        });
+        this.$toast.success( "提交中...");
         this.$axios.get("/currenttime/").then(response2 => {
           var curtime = response2.data;
           this.$axios
@@ -415,15 +364,17 @@ export default {
               contest: 0,
               code: this.code,
               testcase: 0,
-              message: this.oj=="LPOJ"?"0":(this.proid+""),
-              problemtitle: (this.oj=="LPOJ"?"LPOJ":"") + (this.oj=="LPOJ"?' - ':"") + (this.oj=="LPOJ"?this.proid:"")+' ' + this.title,
+              message: this.oj == "LPOJ" ? "0" : this.proid + "",
+              problemtitle:
+                (this.oj == "LPOJ" ? "LPOJ" : "") +
+                (this.oj == "LPOJ" ? " - " : "") +
+                (this.oj == "LPOJ" ? this.proid : "") +
+                " " +
+                this.title,
               rating: parseInt(sessionStorage.rating)
             })
             .then(response => {
-              this.$message({
-                message: "提交成功！",
-                type: "success"
-              });
+              this.$toast.success("提交成功！");
               clearInterval(this.$store.state.submittimer);
               this.submitid = response.data.id;
               this.submitbuttontext = "Pending";
@@ -433,13 +384,16 @@ export default {
               this.$store.state.submittimer = setInterval(this.timer, 1000);
             })
             .catch(error => {
-              this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
+              this.$toast.error(
+                "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
+              );
             });
         });
       });
     },
     timer: function() {
-      if (this.submitbuttontext == "提交后请勿重复刷新/支持将文件拖入代码框") return;
+      if (this.submitbuttontext == "提交后请勿重复刷新/支持将文件拖入代码框")
+        return;
       this.$axios.get("/judgestatus/" + this.submitid + "/").then(response => {
         this.loadingshow = false;
         var testcase = response.data["testcase"];
@@ -457,10 +411,9 @@ export default {
 
         if (response.data["result"] == "-3") {
           response.data["result"] = "Wrong Answer on test " + testcase;
-          this.judgetype = "danger";
+          this.judgetype = "error";
           clearInterval(this.$store.state.submittimer);
-          if(testcase=="?")
-                response.data["result"] ="Wrong Answer"
+          if (testcase == "?") response.data["result"] = "Wrong Answer";
         }
 
         if (response.data["result"] == "-4") {
@@ -473,8 +426,7 @@ export default {
           response.data["result"] = "Presentation Error on test " + testcase;
           this.judgetype = "warning";
           clearInterval(this.$store.state.submittimer);
-          if(testcase=="?")
-                response.data["result"] ="Presentation Error"
+          if (testcase == "?") response.data["result"] = "Presentation Error";
         }
 
         if (response.data["result"] == "-6") {
@@ -493,37 +445,34 @@ export default {
           response.data["result"] = "Time Limit Exceeded on test " + testcase;
           this.judgetype = "warning";
           clearInterval(this.$store.state.submittimer);
-          if(testcase=="?")
-                response.data["result"] ="Time Limit Exceeded"
+          if (testcase == "?") response.data["result"] = "Time Limit Exceeded";
         }
 
         if (response.data["result"] == "2") {
           response.data["result"] = "Time Limit Exceeded on test " + testcase;
           this.judgetype = "warning";
           clearInterval(this.$store.state.submittimer);
-          if(testcase=="?")
-                response.data["result"] ="Time Limit Exceeded"
+          if (testcase == "?") response.data["result"] = "Time Limit Exceeded";
         }
 
         if (response.data["result"] == "3") {
           response.data["result"] = "Memory Limit Exceeded on test " + testcase;
           this.judgetype = "warning";
           clearInterval(this.$store.state.submittimer);
-          if(testcase=="?")
-                response.data["result"] ="Memory Limit Exceeded"
+          if (testcase == "?")
+            response.data["result"] = "Memory Limit Exceeded";
         }
 
         if (response.data["result"] == "4") {
           response.data["result"] = "Runtime Error on test " + testcase;
           this.judgetype = "warning";
           clearInterval(this.$store.state.submittimer);
-          if(testcase=="?")
-                response.data["result"] ="Runtime Error"
+          if (testcase == "?") response.data["result"] = "Runtime Error";
         }
 
         if (response.data["result"] == "5") {
           response.data["result"] = "System Error";
-          this.judgetype = "danger";
+          this.judgetype = "error";
           clearInterval(this.$store.state.submittimer);
         }
 
@@ -553,18 +502,16 @@ export default {
 #des {
   color: deepskyblue;
   font-weight: bold;
-  left: 20px;
   font-size: 20px;
 }
 #detail {
-  left: 30px;
   font-size: 16px;
 }
 #text {
   font-weight: normal;
   font-size: 15px;
   white-space: pre-wrap;
-  margin-right: 40px;
+  margin-right: 10px;
 }
 #data {
   left: 30px;
@@ -574,7 +521,7 @@ export default {
   border: 1px dashed #e9eaec;
 }
 
-.el-row {
+.mu-row {
   margin-bottom: 20px;
 }
 </style>

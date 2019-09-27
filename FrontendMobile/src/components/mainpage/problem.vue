@@ -11,10 +11,10 @@
           <tr>
             <th>ID</th>
             <th>
-              <mu-row style="margin-top:16px;">
-                <mu-col :span="8.5">
+              <mu-row style="margin-top:16px;" gutter>
+                <mu-col span="9">
                   <mu-text-field
-                    style="width:180px"
+                    style="width:150px"
                     v-model="searchtext"
                     @keyup.native.enter="searchtitle"
                     placeholder="Search..."
@@ -22,8 +22,10 @@
                     :action-click="searchtitle"
                   ></mu-text-field>
                 </mu-col>
-                <mu-col span="3">
-                  <mu-button color="primary" @click="dialogVisible=true">Filter</mu-button>
+                <mu-col span="3" offset=".">
+                  <mu-button fab small color="primary" @click="dialogVisible=true">
+                    <mu-icon value="build"></mu-icon>
+                  </mu-button>
                 </mu-col>
               </mu-row>
             </th>
@@ -33,14 +35,15 @@
         <template slot="expand" slot-scope="prop">
           <mu-container>
             <mu-flex justify-content="center">
+              <mu-button style="margin: 8px;" color="primary">{{ prop.row.rate }}</mu-button>
+
+              <mu-button style="margin: 8px;" color="success">{{ prop.row.score }}</mu-button>
+            </mu-flex>
+            <mu-flex justify-content="center">
               <mu-button
                 style="margin: 8px;"
                 :color="problemlevel(prop.row.level)"
               >{{ prop.row.level }}</mu-button>
-
-              <mu-button style="margin: 8px;" color="primary">A/S: {{ prop.row.rate }}</mu-button>
-
-              <mu-button style="margin: 8px;" color="success">Score: {{ prop.row.score }}</mu-button>
             </mu-flex>
 
             <br />
@@ -77,51 +80,16 @@
     </mu-flex>
 
     <mu-dialog title="Click to filter" scrollable :open.sync="dialogVisible">
-            <mu-button
-              id="tag"
-              v-for="(name,index) in tagnames"
-              :key="index"
-              @click="tagclick(name)"
-              :color="filtercolor[name]"
-            >{{ name }}</mu-button>
-    <mu-button slot="actions" flat color="primary" @click="dialogVisible=false">OK</mu-button>
-
-  </mu-dialog>
-
-
+      <mu-button
+        id="tag"
+        v-for="(name,index) in tagnames"
+        :key="index"
+        @click="tagclick(name)"
+        :color="filtercolor[name]"
+      >{{ name }}</mu-button>
+      <mu-button slot="actions" flat color="primary" @click="dialogVisible=false">OK</mu-button>
+    </mu-dialog>
   </mu-container>
-
-  <!-- <el-col :span="6">
-      <el-row :gutter="15">
-        <el-col>
-          <prostatistice ref="prosta"></prostatistice>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-card shadow="always">
-          <el-input placeholder="Search..." v-model="searchtext" @keyup.native.enter="searchtitle">
-            <el-button slot="append" icon="el-icon-search" @click="searchtitle"></el-button>
-          </el-input>
-        </el-card>
-      </el-row>
-      <el-row :gutter="15">
-        <el-col>
-          <el-card shadow="always">
-            <h4>Tags (Click to filter)</h4>
-            <el-button
-              id="tag"
-              v-for="(name,index) in tagnames"
-              :key="index"
-              size="mini"
-              @click="tagclick(name)"
-              :ref="name"
-            >{{ name }}</el-button>
-          </el-card>
-        </el-col>
-      </el-row>
-    </el-col>
-  </el-row>-->
-
 </template>
 
 <script>
@@ -147,19 +115,16 @@ export default {
       se: 100,
       title: "Statistics",
       currenttag: "",
-      islpoj: false,
       searchtext: "",
       searchoj: "LPOJ",
-      dialogVisible:false,
+      dialogVisible: false,
 
       columns: [
         { title: "ID", name: "problem", width: 80 },
         { title: "Title", name: "title" }
       ],
 
-      filtercolor:{
-
-      }
+      filtercolor: {}
     };
   },
   methods: {
@@ -180,9 +145,7 @@ export default {
             "&offset=" +
             (this.currentpage - 1) * this.pagesize +
             "&auth=1&search=" +
-            this.searchtext +
-            "&oj=" +
-            this.searchoj
+            this.searchtext
         )
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {
@@ -239,9 +202,7 @@ export default {
             "&offset=" +
             (this.currentpage - 1) * this.pagesize +
             "&auth=1&search=" +
-            this.searchtext +
-            "&oj=" +
-            this.searchoj
+            this.searchtext
         )
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {
@@ -272,7 +233,7 @@ export default {
           this.totalproblem = response.data.count;
         });
     },
-   
+
     handleCurrentChange(val) {
       this.currentpage = val;
       this.$axios
@@ -282,9 +243,7 @@ export default {
             "&offset=" +
             (this.currentpage - 1) * this.pagesize +
             "&auth=1&search=" +
-            this.searchtext +
-            "&oj=" +
-            this.searchoj
+            this.searchtext
         )
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {
@@ -330,7 +289,7 @@ export default {
       if (type == "VeryHard") return "warning";
       if (type == "ExtremelyHard") return "error";
     },
-    
+
     problemclick: function(problem) {
       this.$router.push({
         name: "problemdetail",
@@ -340,7 +299,7 @@ export default {
   },
   mounted() {
     this.$axios
-      .get("/problemdata/?limit=10&offset=0&auth=1&oj=LPOJ")
+      .get("/problemdata/?limit=10&offset=0&auth=1")
       .then(response => {
         for (var i = 0; i < response.data.results.length; i++) {
           if (response.data.results[i]["level"] == "1")
@@ -387,7 +346,7 @@ export default {
 #protag {
   text-align: center;
   font-weight: bold;
-  margin-right: 3px;
+  margin-right: 5px;
   margin-bottom: 3px;
 }
 #tag {
