@@ -1,22 +1,19 @@
 <template>
-  <el-row>
-    <el-select
-      @keyup.native.enter="searchtitle"
-      v-model="editpage"
-      placeholder="Please enter the algorithm to view..."
-      @change="searchtitle"
-      filterable
-      style="width:100%;"
-    >
-      <algorithmselect></algorithmselect>
-    </el-select>
-
-    <el-card style="margin-top:20px;">
-      <iframe :src="algurl" frameborder="0" scrolling="0" width="100%" height="880px"></iframe>
-      <el-divider>Thanks for the mirror provided by Netease</el-divider>
-    </el-card>
-    
-  </el-row>
+  <mu-container>
+    <mu-card>
+      <mu-container>
+        <mu-select label="Choose Algorithm..." v-model="editpage" @change="searchtitle" full-width>
+          <algorithmselect></algorithmselect>
+        </mu-select>
+      </mu-container>
+    </mu-card>
+    <br />
+    <mu-card>
+    <iframe :src="algurl" frameborder="0" width="100%" height="880px"></iframe>
+    <mu-divider></mu-divider>
+    <center>Thanks for the mirror provided by Netease</center>
+    </mu-card>
+  </mu-container>
 </template>
 
 <script>
@@ -31,27 +28,27 @@ export default {
   data() {
     return {
       editpage: "",
-      algurl:"https://oi-wiki.io.netease.com/"
-      
+      algurl: "https://oi-wiki.io.netease.com/"
     };
   },
-  created(){
-    var cururl = this.$route.params.wikiid
-    this.algurl = "https://oi-wiki.io.netease.com/" + cururl.replace("_","/") +"/"
+  created() {
+    var cururl = this.$route.params.wikiid;
+    this.algurl =
+      "https://oi-wiki.io.netease.com/" + cururl.replace("_", "/") + "/";
     //console.log(this.algurl)
   },
 
   methods: {
-  
     searchtitle() {
       this.$router.push({
         name: "wikidetail",
         params: { wikiid: this.editpage }
       });
-      var cururl = this.$route.params.wikiid
-      this.algurl = "https://oi-wiki.io.netease.com/" + cururl.replace("_","/") +"/"
+      var cururl = this.$route.params.wikiid;
+      this.algurl =
+        "https://oi-wiki.io.netease.com/" + cururl.replace("_", "/") + "/";
       //console.log(this.algurl)
-    },
+    }
   }
 };
 </script>

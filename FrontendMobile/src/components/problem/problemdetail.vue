@@ -9,11 +9,7 @@
       <mu-card-title :title="title"></mu-card-title>
 
       <mu-card-text>
-        <div
-          style="word-break:break-all;white-space:pre-line;"
-          v-html="des"
-          :key="des"
-        ></div>
+        <div style="word-break:break-all;white-space:pre-line;" v-html="des" :key="des"></div>
       </mu-card-text>
 
       <mu-card-text>
@@ -44,13 +40,14 @@
             >
               <mu-icon value="assignment"></mu-icon>
             </mu-button>
-            <br>
+            <br />
 
             <mu-row id="data" style="margin-bottom: 0px;">{{sinput[index]}}</mu-row>
           </mu-col>
 
           <mu-col span="5" id="text" offset="1">
-            <font id="des" style="margin-bottom: 0px;">Output {{item}}</font><br>
+            <font id="des" style="margin-bottom: 0px;">Output {{item}}</font>
+            <br />
             <mu-row id="data" style="margin-bottom: 0px;">{{soutput[index]}}</mu-row>
           </mu-col>
         </mu-row>
@@ -71,36 +68,39 @@
 
     <br />
 
+    <mu-card raised>
+      <mu-card-text>
+        <mu-select v-model="language" label="Choose a language..." full-width>
+          <mu-option key="C++" label="C++" value="C++"></mu-option>
+          <mu-option key="C" label="C" value="C"></mu-option>
+          <mu-option key="Java" label="Java" value="Java"></mu-option>
+          <mu-option key="Python3" label="Python3" value="Python3"></mu-option>
+        </mu-select>
 
-      <mu-card raised>
-        <mu-card-text>
-       
-         
-            <mu-select v-model="language" label="Choose a language..." full-width>
-              <mu-option key="C++" label="C++" value="C++"></mu-option>
-              <mu-option key="C" label="C" value="C"></mu-option>
-              <mu-option key="Java" label="Java" value="Java"></mu-option>
-              <mu-option key="Python3" label="Python3" value="Python3"></mu-option>
-            </mu-select>
-        
-   
-        <br>
+        <br />
 
-          <codemirror v-model="code" :options="cmOptions" @changes="judgetype='success';submitbuttontext='submit'"></codemirror>
-          <br>
+        <codemirror
+          style="font-size:12px;"
+          v-model="code"
+          :options="cmOptions"
+          @changes="judgetype='success';submitbuttontext='submit'"
+        ></codemirror>
+        <br />
 
-        <mu-button
-              full-width
-              :color="judgetype"
-              @click="submit"
-              
-            >{{submitbuttontext}}</mu-button>
+        <mu-button full-width :color="judgetype" @click="confirmdialog = true">{{submitbuttontext}}</mu-button>
 
-
-
-        </mu-card-text>
-
-      </mu-card>
+        <mu-dialog
+          title="Submit?"
+          :esc-press-close="false"
+          :overlay-close="false"
+          :open.sync="confirmdialog"
+        >
+          Want to submit your code ?
+          <mu-button slot="actions" flat color="primary" @click="confirmdialog = false">No</mu-button>
+          <mu-button slot="actions" flat color="primary" @click="submit">Yes</mu-button>
+        </mu-dialog>
+      </mu-card-text>
+    </mu-card>
   </mu-container>
 </template>
 
@@ -112,18 +112,13 @@
 <script>
 import moment from "moment";
 import { codemirror } from "vue-codemirror";
-import statusmini from "@/components/utils/statusmini";
-import prostatistice from "@/components/utils/prostatistice";
 require("codemirror/lib/codemirror.css");
 require("codemirror/theme/base16-light.css");
 require("codemirror/mode/clike/clike");
-
 export default {
   name: "problemdetail",
   components: {
-    codemirror,
-    statusmini,
-    prostatistice
+    codemirror
   },
   data() {
     return {
@@ -164,7 +159,8 @@ export default {
       submitbuttontext: "Submit",
       judgetype: "success",
       loadingshow: false,
-      submitid: -1
+      submitid: -1,
+      confirmdialog: false
     };
   },
   watch: {
@@ -325,6 +321,7 @@ export default {
       if (type == "ExtremelyHard") return "danger";
     },
     submit: function() {
+      this.confirmdialog = false
       if (this.addtime == "") {
         this.$toast.error("非法操作！");
         return;
@@ -341,54 +338,49 @@ export default {
         this.$toast.error("请选择语言！");
         return;
       }
-      this.$confirm("确定提交吗？", "提交", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(() => {
-        this.$toast.success( "提交中...");
-        this.$axios.get("/currenttime/").then(response2 => {
-          var curtime = response2.data;
-          this.$axios
-            .post("/judgestatusput/", {
-              user: sessionStorage.username,
-              oj: this.oj,
-              problem: this.ID,
-              result: -1,
-              time: 0,
-              memory: 0,
-              length: this.code.length,
-              language: this.language,
-              submittime: curtime,
-              judger: "waiting for judger",
-              contest: 0,
-              code: this.code,
-              testcase: 0,
-              message: this.oj == "LPOJ" ? "0" : this.proid + "",
-              problemtitle:
-                (this.oj == "LPOJ" ? "LPOJ" : "") +
-                (this.oj == "LPOJ" ? " - " : "") +
-                (this.oj == "LPOJ" ? this.proid : "") +
-                " " +
-                this.title,
-              rating: parseInt(sessionStorage.rating)
-            })
-            .then(response => {
-              this.$toast.success("提交成功！");
-              clearInterval(this.$store.state.submittimer);
-              this.submitid = response.data.id;
-              this.submitbuttontext = "Pending";
-              this.judgetype = "info";
-              this.loadingshow = true;
-              //创建一个全局定时器，定时刷新状态
-              this.$store.state.submittimer = setInterval(this.timer, 1000);
-            })
-            .catch(error => {
-              this.$toast.error(
-                "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
-              );
-            });
-        });
+
+      this.$toast.success("提交中...");
+      this.$axios.get("/currenttime/").then(response2 => {
+        var curtime = response2.data;
+        this.$axios
+          .post("/judgestatusput/", {
+            user: sessionStorage.username,
+            oj: this.oj,
+            problem: this.ID,
+            result: -1,
+            time: 0,
+            memory: 0,
+            length: this.code.length,
+            language: this.language,
+            submittime: curtime,
+            judger: "waiting for judger",
+            contest: 0,
+            code: this.code,
+            testcase: 0,
+            message: this.oj == "LPOJ" ? "0" : this.proid + "",
+            problemtitle:
+              (this.oj == "LPOJ" ? "LPOJ" : "") +
+              (this.oj == "LPOJ" ? " - " : "") +
+              (this.oj == "LPOJ" ? this.proid : "") +
+              " " +
+              this.title,
+            rating: parseInt(sessionStorage.rating)
+          })
+          .then(response => {
+            this.$toast.success("提交成功！");
+            clearInterval(this.$store.state.submittimer);
+            this.submitid = response.data.id;
+            this.submitbuttontext = "Pending";
+            this.judgetype = "info";
+            this.loadingshow = true;
+            //创建一个全局定时器，定时刷新状态
+            this.$store.state.submittimer = setInterval(this.timer, 1000);
+          })
+          .catch(error => {
+            this.$toast.error(
+              "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
+            );
+          });
       });
     },
     timer: function() {

@@ -1,6 +1,81 @@
 <template>
   <mu-container>
     <mu-card>
+      <mu-dialog transition="scale" :open.sync="dialogVisible" scrollable>
+        <!-- <mu-appbar color="primary" title="Submit Detail">
+          <mu-button slot="left" icon @click="dialogVisible = false">
+            <mu-icon value="close"></mu-icon>
+          </mu-button>
+          <mu-button slot="right" flat @click="dialogVisible = false">Close</mu-button>
+        </mu-appbar> -->
+
+
+          <mu-alert :color="compilemsg=='编译成功！'?'success':'warning'" delete @delete="dialogVisible = false">
+            <b>{{compilemsg}}</b>
+          </mu-alert>
+
+          <br />
+
+          <mu-button
+            full-width
+            color="success"
+            v-clipboard:copy="code"
+            v-clipboard:success="onCopy"
+            v-clipboard:error="onError"
+          >Copy Code</mu-button>
+
+          <br />
+          <br />
+          <codemirror style="font-size:11px;" v-model="code" :options="cmOptions"></codemirror>
+
+          <br />
+
+          
+            <mu-expansion-panel
+              :key="index"
+              v-for="(data,index) in dialogdata"
+              v-if="data.casedata!=''"
+              style="margin-bottom:15px;"
+            >
+              <template slot="header">
+                
+                  <font :color="data.caseresult=='Accepted'?'success':(data.caseresult=='Wrong Answer'?'error':'warning')"><b>{{' '+data.caseresult + ' on test ' + data.casetitle}}</b></font>
+             
+              </template>
+
+              <div
+                
+                v-show="data.casedata!=''"
+              >
+                <h5
+                  style="white-space:pre;margin-left:15px;"
+                  v-if="data.casedata!=''"
+                >{{'Time: '+ data.casetime + 'MS'+' Memory: '+data.casememory+'MB'}}</h5>
+                <h5 style="white-space:pre;margin-left:15px;" v-if="data.casedata!=''">Test Input:</h5>
+                <div
+                  style="white-space:pre;margin-left:15px;word-wrap:break-word;word-break: normal;"
+                  v-if="data.casedata!=''"
+                >{{data.casedata+'\n'}}</div>
+
+                <h5 style="white-space:pre;margin-left:15px;" v-if="data.casedata!=''">Your Output:</h5>
+                <div
+                  style="white-space:pre;margin-left:15px;word-wrap:break-word;word-break: normal;"
+                  v-if="data.casedata!=''"
+                >{{data.caseuseroutput+'\n'}}</div>
+
+                <h5
+                  style="white-space:pre;margin-left:15px;"
+                  v-if="data.casedata!=''"
+                >Expected Output:</h5>
+                <div
+                  style="white-space:pre;margin-left:15px;word-wrap:break-word;word-break: normal;"
+                  v-if="data.casedata!=''"
+                >{{data.caseoutputdata+'\n'}}</div>
+              </div>
+            </mu-expansion-panel>
+          
+
+      </mu-dialog>
 
       <mu-data-table
         :data="tableData"
@@ -9,11 +84,11 @@
         :loading="loading"
         :columns="columns"
       >
-        
         <template slot="expand" slot-scope="prop">
           <mu-container>
             <mu-flex justify-content="center">
               <mu-button
+                @click="rowClick(prop.row,prop.row,prop.row)"
                 full-width
                 style="margin: 8px;"
                 :color="statuetype(prop.row.result)"
@@ -23,25 +98,28 @@
             <br />
 
             <mu-flex justify-content="center">
-              <mu-chip  style="margin: 8px;" color="primary">{{ prop.row.time }}</mu-chip>
+              <mu-chip style="margin: 8px;" color="primary">{{ prop.row.time }}</mu-chip>
 
-              <mu-chip  style="margin: 8px;" color="secondary">{{ prop.row.memory }}</mu-chip>
+              <mu-chip style="margin: 8px;" color="secondary">{{ prop.row.memory }}</mu-chip>
 
-              <mu-chip  style="margin: 8px;" color="warning">{{ prop.row.language }}</mu-chip>
-              <mu-chip  style="margin: 8px;" color="success">{{ prop.row['length'] }}</mu-chip>
+              <mu-chip style="margin: 8px;" color="warning">{{ prop.row.language }}</mu-chip>
+              <mu-chip style="margin: 8px;" color="success">{{ prop.row['length'] }}</mu-chip>
             </mu-flex>
 
             <mu-flex justify-content="center">
-              <mu-button  style="margin: 8px;" color="info">{{ prop.row.submittime }}</mu-button>
+              <mu-button
+                @click="rowClick(prop.row,prop.row,prop.row)"
+                style="margin: 8px;"
+                color="info"
+              >{{ prop.row.submittime }}</mu-button>
             </mu-flex>
 
-
             <br />
 
-            <mu-button full-width color="success" @click="problemclick(prop.row.problem)">Try IT!</mu-button>
+            <mu-button v-if="contest==''" full-width color="success" @click="problemclick(prop.row.problem)">Try IT!</mu-button>
 
-            <br />
-            <br>
+            <br v-if="contest==''" />
+            <br v-if="contest==''" />
           </mu-container>
         </template>
 
@@ -51,8 +129,6 @@
           <td>{{scope.row.problemtitle}}</td>
         </template>
       </mu-data-table>
-
-
     </mu-card>
     <br />
     <mu-flex justify-content="center">
@@ -64,14 +140,11 @@
         @change="handleCurrentChange"
       ></mu-pagination>
     </mu-flex>
-
   </mu-container>
 </template>
 
 
 <style scope>
-
-
 </style>
 
 <script>
@@ -88,11 +161,11 @@ export default {
   },
   methods: {
     onCopy(e) {
-      this.$message.success("复制成功！");
+      this.$toast.success("复制成功！");
     },
     // 复制失败
     onError(e) {
-      this.$message.error("复制失败：" + e);
+      this.$toast.error("复制失败：" + e);
     },
     problemclick: function(problem) {
       this.$router.push({
@@ -101,26 +174,7 @@ export default {
       });
     },
 
-    rowClick(row, col, e) {
-      console.log(col);
-
-      if (col.label == "Problem") {
-        if (this.contest != "") return;
-        this.$router.push({
-          name: "problemdetail",
-          query: { problemID: row.problem }
-        });
-        return;
-      }
-
-      if (col.label == "User") {
-        this.$router.push({
-          name: "user",
-          query: { username: row.user }
-        });
-        return;
-      }
-
+    rowClick(index, row, e) {
       if (row.message + "" == "0" || row.result == "Accepted")
         this.compilemsg = "编译成功！";
       else this.compilemsg = row.message;
@@ -169,14 +223,6 @@ export default {
       this.timer();
       this.creattimer();
     },
-    handleSizeChange(val) {
-      if (!this.username) this.username = this.$route.query.username;
-      this.contest = this.$route.params.contestID;
-      if (!this.contest) this.contest = "";
-      if (!this.username) this.username = "";
-      this.pagesize = val;
-      this.getstatusdata();
-    },
     handleCurrentChange(val) {
       if (!this.username) this.username = this.$route.query.username;
       this.contest = this.$route.params.contestID;
@@ -189,15 +235,14 @@ export default {
       var back = "";
       if (row.result == "Accepted")
         back = "background:#e8f5e9;font-weight: bold;";
-      if (row.result == "Wrong Answer")
+      if (row.result.indexOf("Wrong Answer") >= 0)
         back = "background:#ffebee;font-weight: bold;";
-      
-      if (row.result.indexOf("Error")>=0)
+
+      if (row.result.indexOf("Error") >= 0)
         back = "background:#fff3e0;font-weight: bold;";
-      
-      if (row.result.indexOf("Limit")>=0)
+
+      if (row.result.indexOf("Limit") >= 0)
         back = "background:#fff3e0;font-weight: bold;";
-      
 
       if (row.rating >= 3000) return "color:red;" + back;
       if (row.rating >= 2600) return "color:#BB5E00;" + back;
@@ -225,7 +270,7 @@ export default {
       if (type == "Runtime Error") return "warning";
       if (type == "System Error") return "error";
 
-      return "danger";
+      return "error";
     },
     statuejudge: function(type) {
       if (type == "Pending") return true;
@@ -364,7 +409,7 @@ export default {
       if (val == true) {
         if (!sessionStorage.username) {
           this.showall = false;
-          this.$message.error("请先登录！");
+          this.$toast.error("请先登录！");
         } else this.setusername(sessionStorage.username);
       } else {
         this.setusername("");
@@ -379,15 +424,15 @@ export default {
   data() {
     return {
       columns: [
-        { title: "ID", name: "id",width: 85 },
-        { title: "User", name: "user",width: 100 },
+        { title: "ID", name: "id", width: 85 },
+        { title: "User", name: "user", width: 100 },
         { title: "Problem", name: "problemtitle" }
       ],
       cmOptions: {
         tabSize: 4,
         mode: "text/x-c++src",
         theme: "base16-light",
-        lineNumbers: true,
+        lineNumbers: false,
         readOnly: true,
         viewportMargin: Infinity,
         lineWrapping: true

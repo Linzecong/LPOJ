@@ -1,31 +1,16 @@
 <template>
-  <el-card v-loading="loading">
-    <center>
-      <h3>
-        ACM Training Team Ranking of {{school}}
-      </h3>
-    </center>
+  <mu-card>
+    <mu-card-title :title="'ACM Training Team Ranking of '+school"></mu-card-title>
 
-    <el-table :data="tableData" border stripe size="small">
-      <el-table-column prop="username" label="User" fixed></el-table-column>
-
-      <!-- <el-table-column prop="classes" label="Class" fixed></el-table-column> -->
-      <el-table-column prop="number" label="Number" fixed></el-table-column>
-      <el-table-column
-        v-for="(item,index) in boardinfo"
-        :key="index"
-        :prop="item.prop"
-        :label="item.label"
-        style="white-space: pre-line;"
-      >
+    <mu-card-text>
+      <mu-data-table :columns="columns" :data="tableData">
         <template slot-scope="scope">
-          <div style="white-space:pre-line;">{{scope.row[item.prop]}}</div>
+          <td>{{scope.row.username}}</td>
+          <td>{{scope.row.total}}</td>
         </template>
-      </el-table-column>
-
-      <el-table-column prop="total" label="AC/Submit" fixed></el-table-column>
-    </el-table>
-  </el-card>
+      </mu-data-table>
+    </mu-card-text>
+  </mu-card>
 </template>
 
 <script>
@@ -33,7 +18,7 @@ export default {
   name: "billboard",
   data() {
     return {
-      school:"",
+      school: "",
       dialogVisible: false,
       ojcount: 3,
       boardinfo: [],
@@ -43,7 +28,11 @@ export default {
         count: 0,
         msg: ""
       },
-      loading:true
+      loading: true,
+      columns: [
+        { title: "UserName", name: "username" },
+        { title: "Total", name: "total" }
+      ]
     };
   },
   created() {
@@ -55,7 +44,7 @@ export default {
         else this.school = "University";
       })
       .catch(error => {
-        this.$message.error(
+        this.$toast.error(
           "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
         );
       });
@@ -120,8 +109,8 @@ export default {
       });
     }
   },
-  mounted(){
-    this.loading=false
+  mounted() {
+    this.loading = false;
   }
 };
 </script>

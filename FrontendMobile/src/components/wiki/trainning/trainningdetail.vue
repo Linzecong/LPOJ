@@ -1,14 +1,14 @@
 <template>
-  <el-card>
-    <el-dialog title :visible.sync="dialogVisible" width="60%" :show-close="false">
-      <h2>{{dialogdata.title}}</h2>
-
-      <el-row :gutter="30">
-        <el-col :span="12">
+  <mu-container>
+    <mu-card>
+      <mu-dialog :title="dialogdata.title" scrollable :open.sync="dialogVisible">
+        <center>
           <p>{{'关卡' + dialogdata.group+'-'+dialogdata.num+', 共 '+dialogdata.totnum+' 道题' }}</p>
+          </center>
           <b>任务说明：</b>
           {{dialogdata.des}}
-          <br>
+          <br /><br />
+      <mu-divider></mu-divider>
           <p>你可以先阅读下面教程：</p>
           <p v-for="pro in dialogdata.tiplist" :key="pro">
             <a :href="'/wikidetail/'+pro+'/'" target="_blank" :class="'wa'">
@@ -16,9 +16,12 @@
               {{' 教程 - '+pro}}
             </a>
           </p>
-        </el-col>
-        <el-col :span="12">
+        
+        <br />
+        <mu-divider></mu-divider>
+        
           <p>要完成这个任务，你需要完成下面这几道题：</p>
+          
           <h3>
             <p v-for="pro in dialogdata.prolist" :key="pro">
               <a
@@ -31,51 +34,39 @@
               </a>
             </p>
           </h3>
-        </el-col>
-      </el-row>
-    </el-dialog>
+        
+      </mu-dialog>
 
-    <div slot="header">
-      <h2>{{title}}</h2>
-      <div>{{des}}</div>
-    </div>
-    <el-row :gutter="15">
-      <el-col :span="22">
-        <el-progress :text-inside="true" :stroke-width="18" :percentage="per" status="success"></el-progress>
-      </el-col>
-      <el-col :span="2">
-        <b style="text-align:center;">{{donepro + ' / '+totalpro +' 达成'}}</b>
-      </el-col>
-    </el-row>
-    <el-row :gutter="15" v-for="(item,i) in rownum" :key="i">
-      <el-col :span="6" :key="i*4+j" v-for="(item,j) in (i+1)*4>totalpro?(totalpro%4):4">
-        <el-card class="box-card" :body-style="{ padding: '0px' }">
-          <el-row style="background:#e6ffdf;height:40px;">
-            <b style="color:green;margin:15px;font-size:20px;">{{trainningdata[i*4+j].title}}</b>
-          </el-row>
-          <b
-            style="margin-left:10px;"
-          >{{'关卡' + trainningdata[i*4+j].group+'-'+trainningdata[i*4+j].num+', 共 '+trainningdata[i*4+j].totnum+' 道题' }}</b>
-          <p style="margin-left:10px;margin-top:10px;color:#909399">{{trainningdata[i*4+j].des}}</p>
-          <el-row style="float:bottom;margin:5px">
-            <el-progress
-              :text-inside="true"
-              :stroke-width="18"
-              :percentage="trainper[i*4+j]"
-              :status="trainper[i*4+j]==100?'success':''"
-              style="margin:5px;margin-top:10px;"
-            ></el-progress>
-            <el-button
-              size="small"
-              :type="trainper[i*4+j]==100?'success':'primary'"
-              style="float:right;margin-right:5px;margin-top:10px;margin-bottom:10px;"
-              @click="goclick(i*4+j)"
-            >{{trainper[i*4+j]==100?'你已完成':'进入关卡'}}</el-button>
-          </el-row>
-        </el-card>
-      </el-col>
-    </el-row>
-  </el-card>
+      <mu-card-title :title="title" :sub-title="des"></mu-card-title>
+
+      <mu-divider></mu-divider>
+      <mu-card-text>
+        <mu-linear-progress mode="determinate" :value="per" :size="15" color="green"></mu-linear-progress>
+        <center color="grey">{{donepro + ' / '+totalpro +' 达成'}}</center>
+      </mu-card-text>
+
+      <mu-card-text :key="i" v-for="(item,i) in totalpro" raised>
+        <mu-card>
+          <mu-card-title :title="trainningdata[i].title" :sub-title="trainningdata[i].des"></mu-card-title>
+
+          <mu-card-text>
+            <mu-linear-progress mode="determinate" :value="trainper[i]" :size="10"></mu-linear-progress>
+            <center
+              color="grey"
+            >{{'关卡' + trainningdata[i].group+'-'+trainningdata[i].num+', 共 '+trainningdata[i].totnum+' 道题' }}</center>
+          </mu-card-text>
+
+          <mu-card-text>
+            <mu-button
+              :color="trainper[i]==100?'success':'primary'"
+              full-width
+              @click="goclick(i)"
+            >{{trainper[i]==100?'你已完成':'进入关卡'}}</mu-button>
+          </mu-card-text>
+        </mu-card>
+      </mu-card-text>
+    </mu-card>
+  </mu-container>
 </template>
 
 <script>
@@ -137,7 +128,7 @@ export default {
       .then(response => {
         this.totalpro = response.data.length;
         var acpro = this.$store.state.acpro;
-        if(acpro==undefined) acpro=""
+        if (acpro == undefined) acpro = "";
         for (let i = 0; i < this.totalpro; i++) {
           var proli = response.data[i].problem.split("|");
           if (proli[0] == "") proli = [];
@@ -161,7 +152,10 @@ export default {
                 1.0 *
                 100
             );
-          if (response.data[i]["totnum"] == response.data[i]["acnum"]&&response.data[i]["totnum"]!=0)
+          if (
+            response.data[i]["totnum"] == response.data[i]["acnum"] &&
+            response.data[i]["totnum"] != 0
+          )
             this.donepro++;
         }
 
@@ -172,7 +166,7 @@ export default {
         this.per = parseInt(((this.donepro * 1.0) / this.totalpro) * 100);
       })
       .catch(error => {
-        this.$message.error(
+        this.$toast.error(
           "服务器错误！" + JSON.stringify(error.response.data)
         );
         return;

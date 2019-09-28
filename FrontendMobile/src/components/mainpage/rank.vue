@@ -1,38 +1,34 @@
 <template>
-  <el-card v-loading="loading">
-    <el-row :gutter="15">
-      <el-carousel :autoplay="false" arrow="never" trigger="click" type="card">
-        <el-carousel-item v-for="(item,index) in carouselData" :key="index">
-          <center>
-            <h2>{{ item.username }}</h2>
-            <h2>{{ item.des }}</h2>
-            <h3>Rating: {{ item.rating }}</h3>
-            <img :src="'https://www.lpoj.cn/'+(8-index)+'.png'" class="image">
-          </center>
-        </el-carousel-item>
-      </el-carousel>
-    </el-row>
-    <el-row>
-      <el-table :data="tableData" @cell-click="userclick" size="small" :row-style="ratingcolor">
-        <el-table-column prop="username" label="User"></el-table-column>
-        <el-table-column prop="des" label="Mood"></el-table-column>
-        <el-table-column prop="score" label="Score"></el-table-column>
-        <el-table-column prop="rating" label="Rating"></el-table-column>
-        <el-table-column prop="ac" label="AC"></el-table-column>
-        <el-table-column prop="submit" label="Submit"></el-table-column>
-        <el-table-column prop="rate" label="AC/Submit"></el-table-column>
-      </el-table>
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="currentpage"
-        :page-sizes="[10, 20, 30, 50]"
-        :page-size="pagesize"
-        layout="total, sizes, prev, pager, next, jumper"
+  <mu-container>
+    <mu-data-table
+      :data="tableData"
+      @row-click="userclick"
+      :rowStyle="ratingcolor"
+      :columns="columns"
+      :loading="loading"
+    >
+      <template slot-scope="scope">
+        <td>{{scope.row.rank}}</td>
+        <td>{{scope.row.username}}</td>
+        <td>{{scope.row.rating}}</td>
+        <td>{{scope.row.score}}</td>
+        <td>{{scope.row.des}}</td>
+        <td>{{scope.row.ac}}</td>
+        <td>{{scope.row.submit}}</td>
+        <td>{{scope.row.rate}}</td>
+      </template>
+    </mu-data-table>
+    <br>
+    <mu-flex justify-content="center">
+      <mu-pagination
+        raised
+        :page-count="5"
         :total="totaluser"
-      ></el-pagination>
-    </el-row>
-  </el-card>
+        :current.sync="currentpage"
+        @change="handleCurrentChange"
+      ></mu-pagination>
+    </mu-flex>
+  </mu-container>
 </template>
 
 <script>
@@ -41,15 +37,24 @@ export default {
   data() {
     return {
       currentpage: 1,
-      pagesize: 50,
+      pagesize: 10,
       totaluser: 10,
       tableData: [],
-      carouselData: [],
-      loading: true
+      loading: true,
+      columns: [
+        { title: "Rank", name: "rank", width:80 },
+        { title: "UserID", name: "username", width:190  },
+        { title: "Rating", name: "rating" },
+        { title: "Score", name: "score" },
+        { title: "Mood", name: "des" },
+        { title: "AC", name: "ac" },
+        { title: "Submit", name: "submit" },
+        { title: "AC/Submit", name: "rate" }
+      ]
     };
   },
   methods: {
-    ratingcolor({ row, rowIndex }) {
+    ratingcolor(  rowIndex,row ) {
       if (row.rating >= 3000) return "color:red;font-weight: bold;";
       if (row.rating >= 2600) return "color:#BB5E00;font-weight: bold;";
       if (row.rating >= 2200) return "color:#E6A23C;font-weight: bold;";
@@ -61,7 +66,7 @@ export default {
       if (row.rating >= 1200) return "color:#909399;font-weight: bold;";
       return "color:#303133;font-weight: bold;";
     },
-    userclick(row, column, cell, event) {
+    userclick(index, row, event) {
       this.$router.push({
         name: "user",
         query: { username: row.username }
@@ -69,12 +74,14 @@ export default {
     },
 
     getData(limit, offset) {
+      this.loading = true;
       this.$axios
         .get("/userdata/?limit=" + limit + "&offset=" + offset)
         .then(response => {
           //console.log(response.data.results[0])
           for (var i = 0; i < response.data.results.length; i++) {
             //console.log(response.data.results[i]["ac"])
+            response.data.results[i]["rank"] = offset + i + 1;
             response.data.results[i]["rate"] =
               (
                 (response.data.results[i]["ac"] /
@@ -85,30 +92,25 @@ export default {
             if (response.data.results[i]["submit"] == 0) {
               response.data.results[i]["rate"] = "00.00%";
             }
-            if (this.carouselData.length < 3)
-              this.carouselData.push(response.data.results[i]);
           }
           this.tableData = response.data.results;
           this.totaluser = response.data.count;
           this.loading = false;
         })
         .catch(error => {
-          this.$message.error(
+          this.$toast.error(
             "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
           );
         });
     },
-    handleSizeChange(val) {
-      this.pagesize = val;
-      this.getData(this.pagesize, (this.currentpage - 1) * this.pagesize);
-    },
+
     handleCurrentChange(val) {
       this.currentpage = val;
       this.getData(this.pagesize, (this.currentpage - 1) * this.pagesize);
     }
   },
   created() {
-    this.getData(50, 0);
+    this.getData(10, 0);
   }
 };
 </script>

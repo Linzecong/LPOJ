@@ -1,31 +1,37 @@
 <template>
-  <el-card>
-    <div slot="header">
-      <b>Top User</b>
-    </div>
-    <el-table
-      :data="tableData"
-      border
-      style="width: 100%"
-      @cell-click="userclick"
-      size="mini"
-      :row-style="ratingcolor"
-    >
-      <el-table-column type="index" width="40"></el-table-column>
-      <el-table-column prop="username" label="User"></el-table-column>
-      <el-table-column prop="rating" label="Score"></el-table-column>
-    </el-table>
-  </el-card>
+  <mu-card>
+    <mu-card-title title="Top User"></mu-card-title>
+
+    <mu-card-text>
+      <mu-data-table
+        :columns="columns"
+        :data="tableData"
+        @row-click="userclick"
+        :rowStyle="ratingcolor"
+      >
+        <template slot-scope="scope">
+          <td>{{scope.row.username}}</td>
+          <td>{{scope.row.rating}}</td>
+        </template>
+      </mu-data-table>
+    </mu-card-text>
+  </mu-card>
 </template>
 
 <script>
 export default {
   name: "topuser",
   data() {
-    return {tableData:[]};
+    return {
+      columns: [
+        { title: "UserName", name: "username" },
+        { title: "Rating", name: "rating" }
+      ],
+      tableData: []
+    };
   },
   methods: {
-    ratingcolor({ row, rowIndex }) {
+    ratingcolor(rowIndex, row) {
       if (row.rating >= 3000) return "color:red;font-weight: bold;";
       if (row.rating >= 2600) return "color:#BB5E00;font-weight: bold;";
       if (row.rating >= 2200) return "color:#E6A23C;font-weight: bold;";
@@ -37,7 +43,7 @@ export default {
       if (row.rating >= 1200) return "color:#909399;font-weight: bold;";
       return "color:#303133;font-weight: bold;";
     },
-    userclick(row, column, cell, event) {
+    userclick(index, row) {
       this.$router.push({
         name: "user",
         query: { username: row.username }
@@ -51,7 +57,7 @@ export default {
         this.tableData = response.data.results;
       })
       .catch(error => {
-        this.$message.error(
+        this.$toast.error(
           "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
         );
       });

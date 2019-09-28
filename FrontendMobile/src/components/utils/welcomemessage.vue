@@ -2,9 +2,8 @@
   <mu-card>
     <mu-card-title :title="'Welcome to '+school"></mu-card-title>
     <mu-card-text>
-      <b>Version：3.1</b>
+      <b>Mobile Version：1.0</b>
       <br />
-      <h3>船新版本！</h3>
       <h3>
         <a
           href="https://github.com/Linzecong/LPOJ"

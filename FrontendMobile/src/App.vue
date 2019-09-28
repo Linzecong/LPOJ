@@ -25,17 +25,7 @@
             </mu-list-item-content>
           </mu-list-item>
 
-          <mu-list-item button value="setting">
-            <mu-list-item-content>
-              <mu-list-item-title>Setting</mu-list-item-title>
-            </mu-list-item-content>
-          </mu-list-item>
-
-          <mu-list-item button v-show="isadmin" value="admin">
-            <mu-list-item-content>
-              <mu-list-item-title>Admin</mu-list-item-title>
-            </mu-list-item-content>
-          </mu-list-item>
+         <mu-divider></mu-divider>
 
           <mu-list-item button value="logout">
             <mu-list-item-content>
@@ -52,9 +42,9 @@
     <mu-appbar style="width: 100%;">
     </mu-appbar>
     
-    <transition name="el-fade-in-linear" mode="out-in">
+    <mu-fade-transition>
       <router-view id="route"></router-view>
-    </transition>
+    </mu-fade-transition>
 
 
     <div class="footer">
@@ -123,6 +113,20 @@
           </mu-list-item-action>
           <mu-list-item-title>Wiki</mu-list-item-title>
         </mu-list-item>
+
+        <mu-list-item button to="/blog">
+          <mu-list-item-action>
+              <mu-icon value="note"></mu-icon>
+          </mu-list-item-action>
+          <mu-list-item-title>Blog</mu-list-item-title>
+        </mu-list-item>
+
+        <mu-list-item button to="/billboard">
+          <mu-list-item-action>
+              <mu-icon value="timeline"></mu-icon>
+          </mu-list-item-action>
+          <mu-list-item-title>Billboard</mu-list-item-title>
+        </mu-list-item>
       </mu-list>
     </mu-drawer>
 
@@ -162,7 +166,7 @@ export default {
         else this.school = "LPOJ";
       })
       .catch(error => {
-        this.$message.error(
+        this.$toast.error(
           "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
         );
       });
@@ -225,10 +229,7 @@ export default {
 </script>
 
 <style scope>
-.el-dropdown-link {
-  cursor: pointer;
-  color: #409eff;
-}
+
 #button {
   float: right;
   margin: 10px;
@@ -241,7 +242,7 @@ export default {
   position: fixed;
   left: 0px;
   top: 0px;
-  z-index: 5;
+  z-index: 1000;
   width: 100%;
   /* box-shadow: 00px 0px 00px rgb(255, 255, 255),
     0px 0px 10px rgb(255, 255, 255),
@@ -252,7 +253,7 @@ export default {
   position: fixed;
   left: 0px;
   bottom: 0px;
-  z-index: 5;
+  z-index: 1000;
   width: 100%;
    box-shadow: 00px 0px 00px rgb(255, 255, 255),
     0px 0px 10px rgb(255, 255, 255),
@@ -267,9 +268,7 @@ export default {
   font-size: 20px;
   font-weight: bold;
 }
-.el-row {
-  margin-bottom: 20px;
-}
+
 .footer {
   margin-top: 20px;
   margin-bottom: 10px;

@@ -15,7 +15,6 @@
 
 <script>
 import moment from "moment";
-import contestVue from '../mainpage/contest.vue';
 export default {
   name: "ratingrule",
   data() {

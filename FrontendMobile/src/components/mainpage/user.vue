@@ -1,61 +1,57 @@
 <template>
-  <el-card shadow="always" id="card">
-    <center>
-      <h1 :style="color">{{username}}</h1>
-      <h4 :style="color">{{ des }}</h4>
-      <h4 :style="color">Rating: {{ rating }}</h4>
-    </center>
-
-    <ratingchart></ratingchart>
-
-    <center>
-      <h1 :style="color">{{ name }}</h1>
-    </center>
-
-    <el-row>
-      <el-col :span="8">
-        <center>
-          <h2 :style="color">Submittion</h2>
-          <h3 :style="color">{{ submittion }}</h3>
-        </center>
-      </el-col>
-      <el-col :span="8">
-        <center>
-          <h2 :style="color">AC</h2>
-          <h3 :style="color">{{ ac }}</h3>
-        </center>
-      </el-col>
-      <el-col :span="8">
-        <center>
-          <h2 :style="color">Score</h2>
-          <h3 :style="color">{{ score }}</h3>
-        </center>
-      </el-col>
-    </el-row>
-
-    <center>
-      <h2 :style="color">AC Problems</h2>
-      <br>
-    </center>
-    <el-button
-      id="tag"
-      v-for="(name,index) in acpro"
-      :key="index"
-      size="small"
-      @click="problemclick(name)"
-      type="success"
-      style="width:70px;"
-    >{{ name }}</el-button>
-  </el-card>
+  <mu-card>
+    <mu-card-text>
+      <center>
+        <h1 :style="color">{{username}}</h1>
+        <h4 :style="color">{{ des }}</h4>
+        <h4 :style="color">Rating: {{ rating }}</h4>
+      </center>
+    </mu-card-text>
+    <mu-card-text>
+      <center>
+        <h1 :style="color">{{ name }}</h1>
+      </center>
+    </mu-card-text>
+    <mu-card-text>
+      <center>
+        <h2 :style="color">Submittion</h2>
+        <h3 :style="color">{{ submittion }}</h3>
+      </center>
+    </mu-card-text>
+    <mu-card-text>
+      <center>
+        <h2 :style="color">AC</h2>
+        <h3 :style="color">{{ ac }}</h3>
+      </center>
+    </mu-card-text>
+    <mu-card-text>
+      <center>
+        <h2 :style="color">Score</h2>
+        <h3 :style="color">{{ score }}</h3>
+      </center>
+    </mu-card-text>
+    <mu-card-text>
+      <center>
+        <h2 :style="color">AC Problems</h2>
+        <br />
+      </center>
+    </mu-card-text>
+    <mu-card-text>
+      <mu-button
+        id="tag"
+        v-for="(name,index) in acpro"
+        :key="index"
+        @click="problemclick(name)"
+        color="success"
+        style="width:70px;"
+      >{{ name }}</mu-button>
+    </mu-card-text>
+  </mu-card>
 </template>
 
 <script>
-import ratingchart from "@/components/chart/ratingchart";
 export default {
   name: "user",
-  components: {
-    ratingchart
-  },
   data() {
     return {
       username: "",
@@ -142,7 +138,7 @@ export default {
 #tag {
   text-align: center;
   font-weight: bold;
-  margin-left: 7px;
-  margin-bottom: 7px;
+  margin-left: 10px;
+  margin-bottom: 10px;
 }
 </style>

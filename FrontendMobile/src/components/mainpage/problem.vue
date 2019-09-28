@@ -80,6 +80,9 @@
     </mu-flex>
 
     <mu-dialog title="Click to filter" scrollable :open.sync="dialogVisible">
+
+      <mu-switch v-model="islpoj" :label="'Only LPOJ: ' + islpoj" @change="statuechange"></mu-switch>
+      <br>
       <mu-button
         id="tag"
         v-for="(name,index) in tagnames"
@@ -93,11 +96,7 @@
 </template>
 
 <script>
-import prostatistice from "@/components/utils/prostatistice";
 export default {
-  components: {
-    prostatistice
-  },
   data() {
     return {
       currentpage: 1,
@@ -118,7 +117,7 @@ export default {
       searchtext: "",
       searchoj: "LPOJ",
       dialogVisible: false,
-
+      islpoj:true,
       columns: [
         { title: "ID", name: "problem", width: 80 },
         { title: "Title", name: "title" }
@@ -145,7 +144,8 @@ export default {
             "&offset=" +
             (this.currentpage - 1) * this.pagesize +
             "&auth=1&search=" +
-            this.searchtext
+            this.searchtext+
+            "&oj="+this.searchoj
         )
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {
@@ -202,7 +202,8 @@ export default {
             "&offset=" +
             (this.currentpage - 1) * this.pagesize +
             "&auth=1&search=" +
-            this.searchtext
+            this.searchtext+
+            "&oj="+this.searchoj
         )
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {
@@ -243,7 +244,8 @@ export default {
             "&offset=" +
             (this.currentpage - 1) * this.pagesize +
             "&auth=1&search=" +
-            this.searchtext
+            this.searchtext+
+            "&oj="+this.searchoj
         )
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {
@@ -299,7 +301,7 @@ export default {
   },
   mounted() {
     this.$axios
-      .get("/problemdata/?limit=10&offset=0&auth=1")
+      .get("/problemdata/?limit=10&offset=0&auth=1&oj=LPOJ")
       .then(response => {
         for (var i = 0; i < response.data.results.length; i++) {
           if (response.data.results[i]["level"] == "1")

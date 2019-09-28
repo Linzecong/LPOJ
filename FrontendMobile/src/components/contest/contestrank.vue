@@ -1,31 +1,18 @@
 <template>
-  <el-row>
-    <el-dialog
-      :visible.sync="statusshow"
-      @opened="setstatus"
-      :show-close="false"
-      @closed="statusclosed"
-    >
-      <statusmini ref="Status"></statusmini>
-    </el-dialog>
-
-    <center>
-      <h1>{{ contesttitle }}</h1>
-    </center>
-    <el-row :gutter="10">
+  
+  <mu-card>
       <el-table
         :data="tableData"
-        :cell-style="cellstyle"
         border
+        :cell-style="cellstyle"
         stripe
         size="small"
-        @cell-click="cellclick"
         :row-style="ratingcolor"
       >
-        <el-table-column type="index" width="40" fixed></el-table-column>
-        <el-table-column prop="user" label="User" fixed></el-table-column>
-        <el-table-column prop="nickname" label="Nickname" fixed></el-table-column>
-        <el-table-column prop="score" :label="SolveLabel" fixed></el-table-column>
+        <el-table-column type="index" width="40"></el-table-column>
+        <el-table-column prop="user" label="User"></el-table-column>
+        <el-table-column prop="nickname" label="Nickname"></el-table-column>
+        <el-table-column prop="score" :label="SolveLabel"></el-table-column>
         <el-table-column prop="time" label="Time"></el-table-column>
         <el-table-column
           v-for="(item,index) in probleminfo"
@@ -39,17 +26,13 @@
           </template>
         </el-table-column>
       </el-table>
-    </el-row>
-  </el-row>
+  </mu-card>
+
 </template>
 
 <script>
-import statusmini from "@/components/utils/statusmini";
 export default {
   name: "contestrank",
-  components: {
-    statusmini
-  },
   data() {
     return {
       problemcount: this.$store.state.contestproblemcount,

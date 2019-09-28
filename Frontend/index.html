@@ -8,6 +8,19 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>Welcome to LPOJ</title>
 </head>
+<script type="text/javascript">
+  // JavaScript Document
+  function urlredirect() {
+      var sUserAgent = navigator.userAgent.toLowerCase(); 
+      if ((sUserAgent.match(/(ipod|iphone os|midp|ucweb|android|windows ce|windows mobile)/i))) {
+          // PC跳转移动端
+          var thisUrl = window.location.href;
+          window.location.href ="https://m.lpoj.cn" //跳转为网址后面加mobile的路径
+            
+      }
+  }
+  urlredirect();
+  </script>
 
 <body style="background:rgb(238, 237, 237);">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
@@ -16,5 +29,7 @@
   <div id="app"></div>
   <!-- built files will be auto injected -->
 </body>
+
+
 
 </html>

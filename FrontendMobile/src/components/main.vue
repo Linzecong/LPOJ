@@ -2,31 +2,28 @@
   <mu-container>
         <welcomemessage></welcomemessage>
         <br>
+        <mu-button color="primary" to="/wiki" full-width>Go to Wiki</mu-button>
+        <br>
+        <br>
         <contestmini></contestmini>
         <br>
         <acrank></acrank>
+        <br>
+        <topuser></topuser>
   </mu-container>
 </template>
 
 <script>
-import rankchart from "@/components/chart/rankchart";
-import ojmessage from "@/components/utils/ojmessage";
 import welcomemessage from "@/components/utils/welcomemessage";
-import topuser from "@/components/utils/topuser";
-import soulrow from "@/components/utils/soulrow";
-import ratingrule from "@/components/utils/ratingrule";
 import contestmini from "@/components/utils/contestmini";
 import acrank from "@/components/utils/acrank";
+import topuser from "@/components/utils/topuser";
 export default {
   components: {
-    rankchart,
-    ojmessage,
     welcomemessage,
-    topuser,
-    soulrow,
-    ratingrule,
     contestmini,
-    acrank
+    acrank,
+    topuser
   },
   name: "main",
   data() {
@@ -50,7 +47,5 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.el-row {
-  margin-bottom: 12px;
-}
+
 </style>

@@ -1,137 +1,30 @@
 <template>
-  <el-card>
-    <el-dialog :visible.sync="clonedialogVisible">
-      <el-form :model="addcontestform" label-position="right">
-        <el-form-item label="比赛名称：">
-          <el-input v-model="addcontestform.title"></el-input>
-        </el-form-item>
-        <el-form-item label="比赛描述：">
-          <el-input type="textarea" v-model="addcontestform.des" autosize style="width:500px;"></el-input>
-        </el-form-item>
-        <el-form-item label="比赛提示：">
-          <el-input type="textarea" v-model="addcontestform.note" autosize style="width:500px;"></el-input>
-        </el-form-item>
-        <el-form-item label="比赛时间：">
-          <el-date-picker
-            v-model="addcontestform.timerange"
-            type="datetimerange"
-            align="right"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            @change="timerangechange"
-            :default-time="['12:00:00', '17:00:00']"
-          ></el-date-picker>
-        </el-form-item>
-      </el-form>
+  <mu-container>
+    <center>
+      <h1>{{ title }}</h1>
+    </center>
 
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="clonedialogVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="clonecontest">Clone</el-button>
-      </div>
-    </el-dialog>
+    <mu-container>
+      <mu-linear-progress :size="15" mode="determinate" :value="leftpercentage" :color="barstatus"></mu-linear-progress>
+      <br />
+    </mu-container>
 
-    <el-row :gutter="5">
-      <el-col :span="4">
-        <el-button
-          plain
-          v-if="contestisend"
-          style="float:left;"
-          @click="clonedialogVisible =true"
-        >Clone</el-button>
-        <el-button
-          plain
-          v-if="!contestisend"
-          :disabled="true"
-          style="float:left;"
-        >Clone</el-button>
-      </el-col>
+    <br />
 
-      <el-col :span="16">
-        <center>
-          <h1>{{ title }}</h1>
-        </center>
-      </el-col>
+    <center>
+      <h2>{{ des }}</h2>
+    </center>
 
-      <el-col :span="4">
-        <el-button
-          plain
-          round
-          :type="contestauth(auth)"
-          @click="register"
-          :foucs="false"
-          :disabled="!canregister"
-          style="float:right;"
-        >
-          <b>{{ auth }}</b>
-        </el-button>
-      </el-col>
-    </el-row>
+    <br />
 
-    <el-row :gutter="5">
-      <center>
-        <el-progress
-          :text-inside="true"
-          :stroke-width="18"
-          :percentage="leftpercentage"
-          :status="barstatus"
-        ></el-progress>
-        <br>
-        <el-rate v-model="level" disabled text-color="#409EFF" score-template="{value}"></el-rate>
-      </center>
-    </el-row>
-
-    <el-row :gutter="10">
-      <center>
-        <h2>{{ des }}</h2>
-      </center>
-    </el-row>
-
-    <el-row :gutter="10">
-      <center>
-        <h1 :id="timestyle">{{ lefttime }}</h1>
-      </center>
-    </el-row>
-    <el-row :gutter="10">
-      <center>
-        <h2 style="color:#409EFF">{{ note }}</h2>
-      </center>
-    </el-row>
-    <el-row :gutter="10">
-      <center>
-        <el-table :data="tableData">
-          <el-table-column prop="begintime" label="Begin Time"></el-table-column>
-          <el-table-column prop="endtime" label="End Time"></el-table-column>
-          <el-table-column prop="type" label="Type"></el-table-column>
-          <el-table-column prop="creator" label="Owner"></el-table-column>
-        </el-table>
-      </center>
-    </el-row>
-    <el-row :gutter="10" v-show="showp">
-      <h3>Participant:</h3>
-    </el-row>
-    <el-row :gutter="10" v-show="showp">
-      <el-table
-        :stripe="true"
-        style="width: 100%"
-        :data="tableData2"
-        @cell-click="userclick"
-        :default-sort="{prop: 'rating', order: 'descending'}"
-        :row-style="ratingcolor"
-      >
-        <el-table-column prop="user" label="UserID"></el-table-column>
-        <el-table-column prop="rating" label="Rating"></el-table-column>
-      </el-table>
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="currentpage"
-        :page-sizes="[10, 20, 30, 50]"
-        :page-size="pagesize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="totaluser"
-      ></el-pagination>
-    </el-row>
-  </el-card>
+    <center>
+      <h1 :id="timestyle">{{ lefttime }}</h1>
+    </center>
+    <br />
+    <center>
+      <h2 style="color:#409EFF">{{ note }}</h2>
+    </center>
+  </mu-container>
 </template>
 
 <script>
@@ -149,13 +42,13 @@ export default {
       note: "",
       lefttime: 0.0,
       leftpercentage: 100,
-      barstatus: "exception",
+      barstatus: "error",
       timestyle: "wait",
       left: -100,
       lasttime: 0,
       contestisend: false,
       auth: 404,
-      clonefrom:-1,
+      clonefrom: -1,
 
       currentpage: 1,
       pagesize: 10,
@@ -179,7 +72,7 @@ export default {
         lasttime: 0,
         type: "Personal",
         auth: 1,
-        clonefrom:this.$route.params.contestID,
+        clonefrom: this.$route.params.contestID
       }
     };
   },
@@ -202,116 +95,9 @@ export default {
         query: { username: row.user }
       });
     },
-    handleSizeChange(val) {
-      this.pagesize = val;
 
-      this.$axios
-        .get(
-          "/contestregister/?limit=" +
-            this.pagesize +
-            "&offset=" +
-            (this.currentpage - 1) * this.pagesize +
-            "&contestid=" +
-            this.id
-        )
-        .then(response => {
-          this.tableData2 = response.data.results;
-          this.totaluser = response.data.count;
-        })
-        .catch(error => {
-          this.$message.error(
-            "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
-          );
-        });
-    },
-    handleCurrentChange(val) {
-      this.currentpage = val;
-      this.$axios
-        .get(
-          "/contestregister/?limit=" +
-            this.pagesize +
-            "&offset=" +
-            (this.currentpage - 1) * this.pagesize +
-            "&contestid=" +
-            this.id
-        )
-        .then(response => {
-          this.tableData2 = response.data.results;
-          this.totaluser = response.data.count;
-        })
-        .catch(error => {
-          this.$message.error(
-            "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
-          );
-        });
-    },
-    register() {
-      if (this.haveauth) {
-        this.$message({
-          message: "你已注册或比赛已结束！",
-          type: "success"
-        });
-        return;
-      }
-      if (this.left > 0) {
-        this.$message.error("比赛已开始，无法注册！");
-        return;
-      }
-      if (this.type == "1") {
-        this.$message({
-          message: "公共比赛无需注册！",
-          type: "success"
-        });
-        return;
-      }
-      if (this.type == "2") {
-        this.$message.error("私有比赛，无法注册！");
-        return;
-      }
-
-      var username = sessionStorage.username;
-      if (!username) {
-        this.$message.error("请先登录！");
-        return;
-      } else {
-        this.$confirm(
-          "确定注册吗？比赛时间为：" + this.tableData[0].begintime,
-          "提示",
-          {
-            confirmButtonText: "确定",
-            cancelButtonText: "取消",
-            type: "warning"
-          }
-        ).then(() => {
-          this.$axios
-            .post("/contestregister/", {
-              contestid: parseInt(this.id),
-              user: sessionStorage.username,
-              rating: parseInt(sessionStorage.rating)
-            })
-            .then(res => {
-              this.$message({
-                message: "注册比赛成功！",
-                type: "success"
-              });
-
-              this.$router.go(0);
-            })
-            .catch(error => {
-              this.$message.error(
-                "服务器错误！" + JSON.stringify(error.response.data)
-              );
-              return;
-            });
-        });
-      }
-    },
-    contestauth: function(type) {
-      if (type == "Public") return "success";
-      if (type == "Protect(Click to register)" || type == "Protect")
-        return "warning";
-      if (type == "Private") return "danger";
-    },
+   
+   
     refresh(id) {
       this.$store.state.contestisend = false;
       this.$axios.get("/contestinfo/" + id + "/").then(response => {
@@ -338,7 +124,10 @@ export default {
         this.level = response.data.level;
         this.des = response.data.des;
         this.note = response.data.note;
-        this.addcontestform.clonefrom = response.data.clonefrom == -1?response.data.id:response.data.clonefrom
+        this.addcontestform.clonefrom =
+          response.data.clonefrom == -1
+            ? response.data.id
+            : response.data.clonefrom;
         var sDate1 = response.data.begintime;
 
         var date2 = "";
@@ -368,15 +157,14 @@ export default {
               this.timestyle = "end";
               this.$store.state.contestisend = true;
             }
-            
+
             this.$store.state.contestleft = this.left;
             var t = Math.abs(this.left);
             this.leftpercentage = parseInt(
               (Math.abs(this.left) / response.data.lasttime) * 100
             );
 
-            if(this.leftpercentage>100)
-              this.leftpercentage=100
+            if (this.leftpercentage > 100) this.leftpercentage = 100;
 
             this.lefttime =
               parseInt(t / 60 / 60) +
@@ -416,7 +204,7 @@ export default {
                 this.canregister = true;
               })
               .catch(error => {
-                this.$message.error(
+                this.$toast.error(
                   "服务器错误！" +
                     "(" +
                     JSON.stringify(error.response.data) +
@@ -425,7 +213,7 @@ export default {
               });
           })
           .catch(error => {
-            this.$message.error(
+            this.$toast.error(
               "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
             );
           });
@@ -471,8 +259,7 @@ export default {
         (Math.abs(this.left) / this.lasttime) * 100
       );
 
-      if(this.leftpercentage>100)
-        this.leftpercentage=100
+      if (this.leftpercentage > 100) this.leftpercentage = 100;
 
       this.lefttime =
         parseInt(t / 60 / 60) +
@@ -483,15 +270,15 @@ export default {
     },
     clonecontest() {
       if (this.addcontestform.lasttime < 600) {
-        this.$message.error("比赛时间太短");
+        this.$toast.error("比赛时间太短");
         return;
       }
       if (this.addcontestform.level < 1 || this.addcontestform.level > 5) {
-        this.$message.error("比赛等级应为1~5");
+        this.$toast.error("比赛等级应为1~5");
         return;
       }
       if (this.addcontestform.auth < 0 || this.addcontestform.auth > 2) {
-        this.$message.error("比赛权限应为0,1,2");
+        this.$toast.error("比赛权限应为0,1,2");
         return;
       }
 
@@ -514,7 +301,7 @@ export default {
               value: "暂无数据！"
             });
 
-            this.$message({
+            this.$toast({
               message: "复制比赛成功！比赛编号：" + response.data.id,
               type: "success"
             });
@@ -534,7 +321,7 @@ export default {
             this.clonedialogVisible = false;
           })
           .catch(error => {
-            this.$message.error(
+            this.$toast.error(
               "服务器出错！" + JSON.stringify(error.response.data)
             );
           });

@@ -22,10 +22,11 @@
 + 丰富的算法知识和体系化的套题训练
 + 一键保存和导出代码模板
 + 包含类CF的积分体系和比赛机制
-+ 现代化的界面
++ 现代化的界面 + 手机适配
 
 ## 模块列表
 + [前端 Vue.js](https://github.com/Linzecong/LPOJ/tree/master/Frontend)
++ [手机前端 Vue.js](https://github.com/Linzecong/LPOJ/tree/master/FrontendMobile)
 + [后端 Djangorestframework](https://github.com/Linzecong/LPOJ/tree/master/Backend)
 + [判题服务器 Python](https://github.com/Linzecong/LPOJ/tree/master/JudgerServer)
 + [判题程序 Python](https://github.com/Linzecong/LPOJ/tree/master/Judger)
