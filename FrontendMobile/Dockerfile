@@ -1,7 +1,7 @@
 FROM node
 MAINTAINER linzecong
-ADD . ./Frontend
-WORKDIR /Frontend
+ADD . ./FrontendMobile
+WORKDIR /FrontendMobile
 RUN apt-get update
 RUN npm install
 RUN npm run build

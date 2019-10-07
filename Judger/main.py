@@ -398,7 +398,12 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                         db.commit()
                         statue = True
                     except:
-                        db.rollback()
+                        msg = str("Fatal Compile error!")
+                        cursor.execute(
+                            "UPDATE judgestatus_judgestatus SET result = '-4',message=%s WHERE id = %s", (msg, id))
+                        cursor.execute(
+                            "UPDATE problem_problemdata SET ce = ce+1 WHERE problem = '%s'" % problem)
+                        db.commit()
                         statue = True
                     return
 
@@ -422,7 +427,12 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                         db.commit()
                         statue = True
                     except:
-                        db.rollback()
+                        msg = str("Fatal Compile error!")
+                        cursor.execute(
+                            "UPDATE judgestatus_judgestatus SET result = '-4',message=%s WHERE id = %s", (msg, id))
+                        cursor.execute(
+                            "UPDATE problem_problemdata SET ce = ce+1 WHERE problem = '%s'" % problem)
+                        db.commit()
                         statue = True
                     return
 
@@ -470,7 +480,12 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                         db.commit()
                         statue = True
                     except:
-                        db.rollback()
+                        msg = str("Fatal Compile error!")
+                        cursor.execute(
+                            "UPDATE judgestatus_judgestatus SET result = '-4',message=%s WHERE id = %s", (msg, id))
+                        cursor.execute(
+                            "UPDATE problem_problemdata SET ce = ce+1 WHERE problem = '%s'" % problem)
+                        db.commit()
                         statue = True
                     return
             else:

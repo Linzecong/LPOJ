@@ -76,7 +76,7 @@ def HDUVJudge(problemid, language, usercode):
                 restr = "-3"
             elif restr.find("Runtime Error") >= 0:
                 restr = "4"
-            elif restr == "Time Limit Exceeded":
+            elif restr == "Time Limit Exceeded" or restr == "Output Limit Exceeded":
                 restr = "1"
             elif restr == "Memory Limit Exceeded":
                 restr = "3"
