@@ -366,6 +366,27 @@ def judgeJava(timelimit, memorylimit, inputpath, outputpath, errorpath, id, judg
 
     return ret
 
+def judgeSwift(timelimit, memorylimit, inputpath, outputpath, errorpath, id, judgername):
+    return _judger.run(max_cpu_time=timelimit,
+                        max_real_time=timelimit*10,
+                        max_memory=memorylimit * 1024 * 1024,
+                        max_process_number=200,
+                        max_output_size=32 * 1024 * 1024,
+                        max_stack=32 * 1024 * 1024,
+                        # five args above can be _judger.UNLIMITED
+                        exe_path=judgername+".out",
+                        input_path=inputpath,
+                        output_path=outputpath,
+                        error_path=errorpath,
+                        args=[],
+                        # can be empty list
+                        env=[],
+                        log_path=judgername+"judger.log",
+                        # can be None
+                        seccomp_rule_name="c_cpp",
+                        uid=0,
+                        gid=0
+                        )
 
 def compileC(id,code,judgername,problem):
     file = open("%s.c" % judgername, "w")
@@ -442,6 +463,26 @@ def compileJava(id,code,judgername,problem):
         return False
     return True
 
+def compileSwift(id,code,judgername,problem):
+    file = open("%s.swift" % judgername, "w")
+    file.write(code)
+    file.close()
+    result = os.system("~/swift-5.1-RELEASE-ubuntu18.04/usr/bin/swiftc %s.swift -o %s.out 2>%sce.txt" %(judgername, judgername, judgername))
+    if result:
+        try:
+            filece = open("%sce.txt" % judgername, "r")
+            msg = str(filece.read())
+            if msg == "": msg = "Compile timeout! Maybe you define too big arrays!"
+            filece.close()
+            Controller.compileError(id,problem,msg)
+            GlobalVar.statue = True
+        except:
+            msg = str("Fatal Compile error!")
+            Controller.compileError(id,problem,msg)
+            GlobalVar.statue = True
+        return False
+    return True
+
 
 
 def judge(id, code, lang, problem, contest, username, submittime, contestproblem, oj, ojpro):
@@ -507,6 +548,10 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
 
         elif lang == "Python3": 
             if compilePython(id,code,GlobalVar.judgername,problem) == False: 
+                return
+        
+        elif lang == "Swift5.1": 
+            if compileSwift(id,code,GlobalVar.judgername,problem) == False: 
                 return
 
         elif lang == "Java": 
@@ -605,6 +650,8 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
             elif lang == "C": ret = judgeC(timelimit, memorylimit, "./ProblemData/%s/%s.in" % (problem, filename), GlobalVar.judgername+"temp.out", GlobalVar.judgername+"error.out", id, GlobalVar.judgername)
 
             elif lang == "C++": ret = judgeCPP(timelimit, memorylimit, "./ProblemData/%s/%s.in" % (problem, filename), GlobalVar.judgername+"temp.out", GlobalVar.judgername+"error.out", id, GlobalVar.judgername)
+            
+            elif lang == "Swift5.1": ret = judgeSwift(timelimit, memorylimit, "./ProblemData/%s/%s.in" % (problem, filename), GlobalVar.judgername+"temp.out", GlobalVar.judgername+"error.out", id, GlobalVar.judgername)
 
             else:
                 Controller.compileError(id,problem,"Unknow Language!")

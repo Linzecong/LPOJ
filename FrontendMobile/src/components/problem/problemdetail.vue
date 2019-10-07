@@ -75,6 +75,7 @@
           <mu-option key="C" label="C" value="C"></mu-option>
           <mu-option key="Java" label="Java" value="Java"></mu-option>
           <mu-option key="Python3" label="Python3" value="Python3"></mu-option>
+          <mu-option key="Swift5.1" label="Swift5.1" value="Swift5.1"></mu-option>
         </mu-select>
 
         <br />

@@ -69,6 +69,7 @@
                 <el-option key="C" label="C" value="C"></el-option>
                 <el-option key="Java" label="Java" value="Java"></el-option>
                 <el-option key="Python3" label="Python3" value="Python3"></el-option>
+                <el-option key="Swift5.1" label="Swift5.1" value="Swift5.1"></el-option>
               </el-select>
             </el-col>
             <el-col :span="3">

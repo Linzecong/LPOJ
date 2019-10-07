@@ -53,6 +53,21 @@ services:
     ports:
      - "8080:80"
     restart: always
+  
+  frontendmobile:
+    image: ccr.ccs.tencentyun.com/lpoj/frontendmobile
+    depends_on: 
+      - backend
+    command: >
+      /bin/bash -c '
+      sleep 60 ;
+      nginx -g "daemon off;"
+      '
+    links: 
+      - backend:lpojbackend
+    ports:
+     - "8081:8081"
+    restart: always
 
   judgerserver:
     image: ccr.ccs.tencentyun.com/lpoj/judgerserver
