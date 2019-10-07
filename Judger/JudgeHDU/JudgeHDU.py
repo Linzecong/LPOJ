@@ -2,7 +2,7 @@ import requests
 from time import sleep
 
 
-def HDUVJudge(problemid, language, usercode):
+def JudgeHDU(problemid, language, usercode):
     def substr(start_str, end, html):
         start = html.find(start_str)
         if start >= 0:
