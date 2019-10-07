@@ -1,4 +1,4 @@
-FROM mysql:latest
+FROM mysql:5.7
 MAINTAINER linzecong
 ENV AUTO_RUN_DIR /docker-entrypoint-initdb.d
 ENV INSTALL_DB_SQL init_database.sql

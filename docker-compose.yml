@@ -4,13 +4,13 @@ services:
     image: ccr.ccs.tencentyun.com/lpoj/database
     command: --default-authentication-plugin=mysql_native_password
     environment:
-            MYSQL_ROOT_PASSWORD: "lpojdatabase" # 选择性修改
+            MYSQL_ROOT_PASSWORD: "lpojdatabase" # 选择性修改，如果你有自己的数据库，请忽略
     ports:
      - "4406:3306"
     restart: always
     volumes:
         - "./Database/data:/var/lib/mysql"
-        - "./Database/conf:/etc/mysql/mysql.conf.d"
+        - "./Database/conf:/etc/mysql/conf.d"
 
   backend:
     image: ccr.ccs.tencentyun.com/lpoj/backend
@@ -124,11 +124,12 @@ services:
       DB_HOST: "lpojdatabase" # 选择性修改
       DB_USER: 'root' # 选择性修改
       DB_PORT: 4406
+
       SERVER_IP: "lpojjudgerserver"
-      SFTP_IP: "172.17.0.1"
       SFTP_PORT: 22
 
       
+      SFTP_IP: "172.17.0.1" # 必须修改，不能写127.0.0.1或localhost，必须写你的局域网地址或者公网地址
       SFTP_USER: 'ubuntu' # 必须修改
       SFTP_PASSWORD: 'ubuntuubuntu' # 必须修改
       BACKEND_PATH: "/home/ubuntu/LPOJ/Backend/" # 必须修改

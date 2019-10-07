@@ -48,10 +48,17 @@ sftp yourusername@localhost # 验证是否安装成功！
 2. 开始安装
 ```
 git clone https://github.com/Linzecong/LPOJ.git && cd LPOJ
-# 如有需要，修改docker-compose.yml中的数据库密码（DB_PASSWORD，MYSQL_ROOT_PASSWORD）
+
+# 如有需要，修改docker-compose.yml中的数据库密码（所有的 DB_PASSWORD，MYSQL_ROOT_PASSWORD 字段）
+
 # 必须修改docker-compose.yml中的BACKEND_PATH,SFTP_USER,SFTP_PASSWORD为你的LPOJ/Backend文件夹的绝对路径和服务器的用户名密码
+
+# 必须修改docker-compose.yml中的SFTP_IP为你的服务器的IP
+
 sudo docker-compose up -d --scale judger=3
+
 # 以上命令默认开启3个判题机，可以自行修改数量
+
 ```
 根据网速和配置情况，大约10到20分钟就可以自动搭建完成，全程无需人工干预。
 
@@ -70,7 +77,8 @@ sudo docker-compose up -d --scale judger=3
 sudo docker stop $(sudo docker ps -aq)
 git pull
 sudo docker-compose pull
-sudo docker-compose up -d
+sudo docker-compose up -d --scale judger=3
+# 以上命令默认开启3个判题机，可以自行修改数量
 ```
 
 **容易运行时产生的数据会保存在对应的文件夹中，如数据库文件，题目数据等**

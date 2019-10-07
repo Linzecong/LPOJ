@@ -10,7 +10,7 @@ services:
     restart: always
     volumes:
         - "./Database/data:/var/lib/mysql"
-        - "./Database/conf:/etc/mysql/mysql.conf.d"
+        - "./Database/conf:/etc/mysql/conf.d"
 
   backend:
     build: ./Backend

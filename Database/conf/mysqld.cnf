@@ -14,12 +14,12 @@ port		= 3306
 basedir		= /usr
 datadir		= /var/lib/mysql
 tmpdir		= /tmp
-lc-messages-dir	= /usr/share/mysql
+# lc-messages-dir	= /usr/share/mysql
 skip-external-locking
 #
 # Instead of skip-networking the default is now to listen only on
 # localhost which is more compatible and is not less secure.
-bind-address		= 0.0.0.0
+bind-address = 0.0.0.0
 #
 # * Fine Tuning
 #
@@ -36,8 +36,8 @@ myisam-recover-options  = BACKUP
 #
 # * Query Cache Configuration
 #
-query_cache_limit	= 1M
-query_cache_size        = 16M
+#query_cache_limit	= 1M
+#query_cache_size        = 16M
 #
 # * Logging and Replication
 #
@@ -49,7 +49,7 @@ query_cache_size        = 16M
 #
 # Error log - should be very few entries.
 #
-log_error = /var/log/mysql/error.log
+# log_error = /var/log/mysql/error.log
 #
 # Here you can see queries with especially long duration
 #slow_query_log		= 1
