@@ -15,5 +15,5 @@ RUN pip install -r requirements.txt
 RUN wget https://swift.org/builds/swift-5.1-release/ubuntu1804/swift-5.1-RELEASE/swift-5.1-RELEASE-ubuntu18.04.tar.gz
 RUN tar xzf swift-5.1-RELEASE-ubuntu18.04.tar.gz
 RUN echo "export PATH=~/swift-5.1-RELEASE-ubuntu18.04/usr/bin:"${PATH}"" >> ~/.profile
-RUN source ~/.profile
+RUN /bin/bash source ~/.profile
 CMD ["python", "main.py"]
