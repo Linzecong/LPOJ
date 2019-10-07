@@ -15,7 +15,7 @@
 + 轻量级，易于部署和自定义定制
 + 前后端分离，提高服务器性能
 + 支持多机器多进程判题，判题更高效
-+ 支持 C/C++/Java和Python3语言
++ 支持 C/C++/Java/Python3和Swift5.1语言
 + 支持 Special Judge
 + 丰富的API，开放的源代码
 + 实时爬取用户的博客和其他OJ的做题数
@@ -50,11 +50,12 @@ sftp yourusername@localhost # 验证是否安装成功！
 git clone https://github.com/Linzecong/LPOJ.git && cd LPOJ
 # 如有需要，修改docker-compose.yml中的数据库密码（DB_PASSWORD，MYSQL_ROOT_PASSWORD）
 # 必须修改docker-compose.yml中的BACKEND_PATH,SFTP_USER,SFTP_PASSWORD为你的LPOJ/Backend文件夹的绝对路径和服务器的用户名密码
-sudo docker-compose up -d
+sudo docker-compose up -d --scale judger=3
+# 以上命令默认开启3个判题机，可以自行修改数量
 ```
 根据网速和配置情况，大约10到20分钟就可以自动搭建完成，全程无需人工干预。
 
-等命令执行完成，然后运行 **docker ps -a** 当看到所有的容器的状态均为 Up 就代表 OJ 已经启动成功。
+等命令执行完成，然后运行 **sudo docker ps -a** 当看到所有的容器的状态均为 Up 就代表 OJ 已经启动成功。
 
 > 安装成功后，先通过IP:8080访问OJ，注册一个用户
 > 

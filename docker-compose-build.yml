@@ -30,7 +30,7 @@ services:
       - db:lpojdatabase 
     environment:
             DB_PASSWORD: "lpojdatabase" # 选择性修改
-            DB_HOST: "172.17.0.1" # 选择性修改
+            DB_HOST: "127.0.0.1" # 选择性修改
             DB_USER: 'root' # 选择性修改
             DB_PORT: 4406 # 选择性修改
     ports:
@@ -82,7 +82,7 @@ services:
       - db:lpojdatabase
     environment:
             DB_PASSWORD: "lpojdatabase" # 选择性修改
-            DB_HOST: "172.17.0.1" # 选择性修改
+            DB_HOST: "127.0.0.1" # 选择性修改
             DB_USER: 'root' # 选择性修改
             DB_PORT: 4406 # 选择性修改
     ports:
@@ -102,7 +102,7 @@ services:
       - db:lpojdatabase
     environment:
             DB_PASSWORD: "lpojdatabase" # 选择性修改
-            DB_HOST: "172.17.0.1" # 选择性修改
+            DB_HOST: "127.0.0.1" # 选择性修改
             DB_USER: 'root' # 选择性修改
             DB_PORT: 4406 # 选择性修改
     restart: always
@@ -121,11 +121,11 @@ services:
       - db:lpojdatabase
     environment:
       DB_PASSWORD: "lpojdatabase" # 选择性修改
-      DB_HOST: "172.17.0.1" # 选择性修改
+      DB_HOST: "127.0.0.1" # 选择性修改
       DB_USER: 'root' # 选择性修改
       DB_PORT: 4406
       SERVER_IP: "lpojjudgerserver"
-      SFTP_IP: "172.17.0.1"
+      SFTP_IP: "127.0.0.1"
       SFTP_PORT: 22
 
       
