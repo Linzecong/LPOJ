@@ -6,7 +6,7 @@
     "db_database":"LPOJ",
     "server_ip":"localhost",
     "server_port":9906,
-    "sftp_ip":"127.0.0.1",
+    "sftp_ip":"172.17.0.1",
     "sftp_port":22,
     "sftp_username":"ubuntu",
     "sftp_password":"ubuntuubuntu",
