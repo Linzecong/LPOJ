@@ -7,6 +7,9 @@ RUN apt-get install python3 -y
 RUN apt-get install python3-pip -y
 RUN ln -s /usr/bin/python3 /usr/bin/python
 RUN ln -s /usr/bin/pip3 /usr/bin/pip
+RUN apt-get install mysql-server -y 
+RUN apt-get install mysql-client -y
+RUN apt-get install libmysqlclient-dev -y
 RUN pip install -r requirements.txt
 RUN apt-get install time -y
 RUN apt-get install cmake -y
