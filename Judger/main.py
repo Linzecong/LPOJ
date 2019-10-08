@@ -594,18 +594,22 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
         for s in files:
             s = s.replace(".in", "")
             s = s.replace(".out", "")
-            if s == "casedes.txt":
-                file3 = open("./ProblemData/%s/casedes.txt" % problem,"r");
-                while file3.readable() is True:
-                    des = str(file3.readline()).strip()
-                    # print(des)
-                    if des.find("|")!=-1:
-                        casedes[des.split("|")[0]]=des.split("|")[1]
-                    if des == "":
-                        break
+            try:
+                if s == "casedes.txt":
+                    file3 = open("./ProblemData/%s/casedes.txt" % problem,"r",encoding='utf-8')
+                    while file3.readable() is True:
+                        des = str(file3.readline()).strip()
+                        # print(des)
+                        if des.find("|")!=-1:
+                            casedes[des.split("|")[0]]=des.split("|")[1]
+                        if des == "":
+                            break
 
-                file3.close()
-                continue
+                    file3.close()
+                    continue
+            except Exception as e:
+                print(e)
+                casedes = dict()
             if s in tempset:
                 newfiles.add(s)
             else:

@@ -87,7 +87,7 @@
       :http-request="myupload"
     >
       <el-button slot="trigger" size="small" type="primary">选取数据文件</el-button>
-      <div slot="tip" class="el-upload__tip">只能上传zip文件,压缩包内的不要有文件夹，输入输出文件后缀为.in和.out.添加一个casedes.txt文件可以对每一个样例进行说明，每行一个说明，中间不要有多余的空行，对应的case用|隔开，如：  data1|xxxxxx  </div>
+      <div slot="tip" class="el-upload__tip">只能上传zip文件,压缩包内的不要有文件夹，输入输出文件后缀为.in和.out.添加一个casedes.txt文件（utf-8编码）可以对每一个样例进行说明，每行一个说明，中间不要有多余的空行，对应的case用|隔开，如：  data1|xxxxxx  </div>
     </el-upload>
 
     <el-button type="success" @click="onAddProblemSubmit" style="float:right;">添加题目</el-button>
