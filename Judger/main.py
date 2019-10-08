@@ -467,7 +467,7 @@ def compileSwift(id,code,judgername,problem):
     file = open("%s.swift" % judgername, "w")
     file.write(code)
     file.close()
-    result = os.system("~/swift-5.1-RELEASE-ubuntu18.04/usr/bin/swiftc %s.swift -o %s.out 2>%sce.txt" %(judgername, judgername, judgername))
+    result = os.system("swiftc %s.swift -o %s.out 2>%sce.txt" %(judgername, judgername, judgername))
     if result:
         try:
             filece = open("%sce.txt" % judgername, "r")
