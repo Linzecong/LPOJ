@@ -21,7 +21,7 @@ class GlobalVar:
     judgername = "Unknow"
     host = "172.10.0.1"
     port = 22
-    pythonpath = "/usr/bin/python"
+    pythonpath = "/usr/bin/python3"
     cursor = None
     db = None
     sftp_t = None
