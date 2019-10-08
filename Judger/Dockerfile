@@ -3,9 +3,6 @@ MAINTAINER linzecong
 ADD . ./Judger
 WORKDIR /Judger
 RUN apt-get update
-RUN apt-get install wget -y
-RUN apt-get install tar -y
-RUN apt-get install clang -y
 RUN apt-get install python3 -y
 RUN alias python=python3
 RUN apt-get install time -y
