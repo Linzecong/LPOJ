@@ -185,14 +185,14 @@ def remote_scp(host_ip, remote_path, local_path, username, password, problem):
             remt = GlobalVar.sftp.stat(remote_path).st_mtime
 
         if str(remt) == GlobalVar.datatimejson.get(str(problem), "no"):
-            return
+            return True
 
         GlobalVar.datatimejson[str(problem)] = str(remt)
         with open("./datatime.json", 'w', encoding='utf-8') as json_file:
             json.dump(GlobalVar.datatimejson, json_file, ensure_ascii=False)
             json_file.close()
 
-        print("download……"+remote_path+"……to……"+local_path)
+        print("download "+remote_path+" to "+local_path)
         GlobalVar.sftp.get(remote_path, local_path)  # 下载文件
         # 解压文件
         dirname = str(problem)
@@ -202,13 +202,13 @@ def remote_scp(host_ip, remote_path, local_path, username, password, problem):
             f = zipfile.ZipFile("./ProblemData/"+str(problem)+".zip", 'r')
             for file1 in f.namelist():
                 f.extract(file1, "./ProblemData/"+dirname+"/")
-            print("Extract Succeed！")
+            print("Extract Succeed!")
             return True
         except:
             shutil.rmtree("./ProblemData/" +
                           dirname+"/", ignore_errors=True)
             os.remove("./ProblemData/"+str(problem)+".zip")
-            print("Extract Failed！")
+            print("Extract Failed!")
             return False
     except IOError as e:
         print(e)
@@ -389,7 +389,7 @@ def judgeSwift(timelimit, memorylimit, inputpath, outputpath, errorpath, id, jud
                         )
 
 def compileC(id,code,judgername,problem):
-    file = open("%s.c" % judgername, "w")
+    file = open("%s.c" % judgername, "w",encoding='utf-8')
     file.write(code)
     file.close()
     result = os.system("timeout 10 gcc %s.c -fmax-errors=3 -o %s.out -O2 -std=c11 2>%sce.txt" % (judgername, judgername, judgername))
@@ -402,13 +402,14 @@ def compileC(id,code,judgername,problem):
             Controller.compileError(id,problem,msg)
             GlobalVar.statue = True
         except:
+            msg = str("Fatal Compile error!")
             Controller.compileError(id,problem,msg)
             GlobalVar.statue = True
         return False
     return True
 
 def compileCPP(id,code,judgername,problem):
-    file = open("%s.cpp" % judgername, "w")
+    file = open("%s.cpp" % judgername, "w",encoding='utf-8')
     file.write(code)
     file.close()
     result = os.system("timeout 10 g++ %s.cpp -fmax-errors=3 -o %s.out -O2 -std=c++14 2>%sce.txt" %(judgername, judgername, judgername))
@@ -433,13 +434,13 @@ def compilePython(id,code,judgername,problem):
         Controller.compileError(id,problem,"Your code has sensitive words "+wo)
         GlobalVar.statue = True
         return False
-    file = open("%s.py" % judgername, "w")
+    file = open("%s.py" % judgername, "w",encoding='utf-8')
     file.write("import sys\nblacklist = ['importlib','traceback','os','sys']\nfor mod in blacklist:\n    i = __import__(mod)\n    sys.modules[mod] = None\ndel sys\ndel __builtins__.__dict__['eval']\ndel __builtins__.__dict__['exec']\ndel __builtins__.__dict__['locals']\ndel __builtins__.__dict__['open']\n" +code)
     file.close()
     return True
 
 def compileJava(id,code,judgername,problem):
-    file = open("Main.java", "w")
+    file = open("Main.java", "w",encoding='utf-8')
     file.write(code)
     file.close()
 
@@ -464,7 +465,7 @@ def compileJava(id,code,judgername,problem):
     return True
 
 def compileSwift(id,code,judgername,problem):
-    file = open("%s.swift" % judgername, "w")
+    file = open("%s.swift" % judgername, "w",encoding='utf-8')
     file.write(code)
     file.close()
     result = os.system("swiftc %s.swift -o %s.out 2>%sce.txt" %(judgername, judgername, judgername))
@@ -563,7 +564,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
             GlobalVar.statue = True
             return
 
-        # 最终的结果，用于判完所有数据！
+        # 最终的结果，用于判完所有数据!
         maxmemory = 0
         maxtime = 0
 
@@ -583,7 +584,8 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
             return
         try:
             files = os.listdir("./ProblemData/%s/" % problem)
-        except:
+        except Exception as e:
+            print(e)
             Controller.doneProblem(id,problem,"download error!",0,0,username,contest,"5","?")
             GlobalVar.statue = True
             return
@@ -701,7 +703,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 except:
                     ret["result"] = 5
 
-            # 单组样例，程序执行结束，判断是否超时等！
+            # 单组样例，程序执行结束，判断是否超时等!
             if ret["result"] != 0:
 
                 # 青岛大学判 Memory Exceed的一个迷之Bug，所以要特判一下
@@ -766,7 +768,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                     else: result = 5
 
                 else:
-                    # 比较输出文件是否一致！
+                    # 比较输出文件是否一致!
                     file1 = open(GlobalVar.judgername+"temp.out", "r")
                     file2 = open("./ProblemData/%s/%s.out" %
                                 (problem, filename), "r")
@@ -849,7 +851,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                         useroutputdata
                     )
 
-        # 所有样例评判结束，汇总结果！
+        # 所有样例评判结束，汇总结果!
         if myresult == 100:
             Controller.acProblem(id,problem,"",maxmemory/1024/1024,maxtime,username,score,HaveAC,contest)
                 

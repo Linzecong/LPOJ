@@ -114,7 +114,7 @@ services:
     command: >
       /bin/bash -c '
       sleep 65 ;
-      python main.py
+      python3 main.py
       '
     links: 
       - judgerserver:lpojjudgerserver

@@ -15,4 +15,4 @@ RUN apt-get install time -y
 RUN apt-get install cmake -y
 RUN apt-get install openjdk-8-jdk -y
 RUN apt-get install libseccomp-dev -y && mkdir build && cd build && cmake /Judger && make && make install && cd .. && cd JudgerCore && python setup.py install
-CMD ["python", "main.py"]
+CMD ["python3", "main.py"]
