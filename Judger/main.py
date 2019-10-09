@@ -160,7 +160,7 @@ class Controller:
 
 # SPJ函数，首先编译，然后运行，然后返回程序运行结果
 def specialjudge(problem,testin,testout,userout):
-    result = os.system("timeout 10 g++ ./ProblemData/%s/spj.cpp -o spj.out -O2 -std=c++14" % str(problem))
+    result = os.system("timeout 10 g++ ./ProblemData/%s/spj.cpp -o %s.out -O2 -std=c++14" % (str(problem),GlobalVar.judgername))
     if result:
         return 5
     res = os.system("timeout 20 ./spj.out %s %s %s" % (testin, testout, userout))
@@ -383,7 +383,7 @@ def judgeSwift(timelimit, memorylimit, inputpath, outputpath, errorpath, id, jud
                         env=[],
                         log_path=judgername+"judger.log",
                         # can be None
-                        seccomp_rule_name="c_cpp",
+                        seccomp_rule_name="general",
                         uid=0,
                         gid=0
                         )
