@@ -486,7 +486,7 @@ def compileSwift(id,code,judgername,problem):
 
 
 
-def judge(id, code, lang, problem, contest, username, submittime, contestproblem, oj, ojpro):
+def judge(id, code, lang, problem, contest, username, submittime, contestproblem, oj, ojpro, isoi):
     """
         id: 提交的ID
         code: 提交的代码
@@ -834,7 +834,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                         useroutputdata
                     )
 
-                    if contest != 0:
+                    if contest != 0 or isoi == False:
                         break
 
                 else:
@@ -907,8 +907,15 @@ def MainLoop():
                     try:
                         GlobalVar.cursor.execute("UPDATE judgestatus_judgestatus SET result = '-2',judger='%s' WHERE id = '%s'" % (GlobalVar.judgername, tp[1]))
                         GlobalVar.db.commit()
+                        GlobalVar.cursor.execute("SELECT * from board_settingboard")
+                        isoi = GlobalVar.cursor.fetchone()
+                        if isoi != None:
+                            isoi = isoi[5]
+                        else:
+                            isoi = True
+
                         t = threading.Thread(target=judge, args=(
-                            data[0], data[13], data[8], data[3], data[11], data[1], data[9], data[12], data[2],data[15]))
+                            data[0], data[13], data[8], data[3], data[11], data[1], data[9], data[12], data[2],data[15],isoi))
                         t.setDaemon(True)
                         t.start()
                     except:

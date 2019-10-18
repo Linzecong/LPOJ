@@ -90,11 +90,7 @@
               </el-col>
               <el-col :span="3">
                 <el-select v-model="language" placeholder="请选择">
-                  <el-option key="C++" label="C++" value="C++"></el-option>
-                  <el-option key="C" label="C" value="C"></el-option>
-                  <el-option key="Java" label="Java" value="Java"></el-option>
-                  <el-option key="Python3" label="Python3" value="Python3"></el-option>
-                  <el-option key="Swift5.1" label="Swift5.1" value="Swift5.1"></el-option>
+                  <languageselect></languageselect>
                 </el-select>
               </el-col>
               <el-col :span="3">
@@ -133,6 +129,7 @@
 <script>
 import { codemirror } from "vue-codemirror";
 import statusmini from "@/components/utils/statusmini";
+import languageselect from "@/components/utils/languageselect";
 import moment from "moment";
 require("codemirror/lib/codemirror.css");
 require("codemirror/theme/base16-light.css");
@@ -142,7 +139,8 @@ export default {
   name: "contestproblem",
   components: {
     codemirror,
-    statusmini
+    statusmini,
+    languageselect
   },
   data() {
     return {

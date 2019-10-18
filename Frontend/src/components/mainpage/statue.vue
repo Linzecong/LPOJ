@@ -76,11 +76,7 @@
         </el-form-item>
         <el-form-item label="Language：">
           <el-select v-model="searchform.language" placeholder="Choose...">
-            <el-option key="C++" label="C++" value="C%2B%2B"></el-option>
-            <el-option key="C" label="C" value="C"></el-option>
-            <el-option key="Java" label="Java" value="Java"></el-option>
-            <el-option key="Python3" label="Python3" value="Python3"></el-option>
-            <el-option key="Swift5.1" label="Swift5.1" value="Swift5.1"></el-option>
+            <languageselect></languageselect>
           </el-select>
         </el-form-item>
         <el-form-item label="Result：">
@@ -197,11 +193,12 @@ import { codemirror } from "vue-codemirror";
 require("codemirror/lib/codemirror.css");
 require("codemirror/theme/base16-light.css");
 require("codemirror/mode/clike/clike");
-
+import languageselect from "@/components/utils/languageselect";
 export default {
   name: "statue",
   components: {
-    codemirror
+    codemirror,
+    languageselect
   },
   methods: {
     onCopy(e) {
