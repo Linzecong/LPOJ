@@ -21,7 +21,7 @@
       </el-row>-->
       <el-row>
         <el-tabs type="border-card">
-          <el-tab-pane :label="label.rule" >
+          <el-tab-pane :label="label.des" >
             <description></description>
           </el-tab-pane>
           <el-tab-pane :label="label.rank" :lazy="true">
@@ -76,9 +76,10 @@ export default {
   data() {
     return {
       label: {
-        rank: "Individual",
+        rank: "Rank",
         team: "Team",
-        rule: "Rule"
+        rule: "Rule",
+        des: "Description"
       },
 
       // anpai1:{

@@ -89,7 +89,7 @@ class Controller:
 
     @staticmethod
     def setBoard(id,statue):
-        GlobalVar.cursor.execute("UPDATE contest_contestboard SET type = %d WHERE submitid = %s" , (statue, str(id)))
+        GlobalVar.cursor.execute("UPDATE contest_contestboard SET type = %d WHERE submitid = %s" % (int(statue), str(id)))
         GlobalVar.db.commit()
     
     @staticmethod
@@ -133,7 +133,7 @@ class Controller:
         if message != "":
             GlobalVar.cursor.execute("UPDATE judgestatus_judgestatus SET memory =%d, time=%d, result = '%s',testcase='%s',message='%s'  WHERE id = '%s'" % (memory, time, result, testcase,message, id))
         else:
-            GlobalVar.cursor.execute("UPDATE judgestatus_judgestatus SET memory =%d, time=%d, result = '%s' WHERE id = '%s'" % (memory, time, result, id))
+            GlobalVar.cursor.execute("UPDATE judgestatus_judgestatus SET memory =%d, time=%d, result = '%s',testcase='%s' WHERE id = '%s'" % (memory, time, result,testcase, id))
         
         if result == '2' or result == '1':
             GlobalVar.cursor.execute("UPDATE problem_problemdata SET tle = tle+1 WHERE problem = '%s'" % problem)

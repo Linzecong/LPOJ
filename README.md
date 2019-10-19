@@ -32,10 +32,9 @@
 + [判题程序 Python](https://github.com/Linzecong/LPOJ/tree/master/Judger)
 + [爬虫程序 Python](https://github.com/Linzecong/LPOJ/tree/master/CrawlingServer)
 
-## 部署（两种方式）
 
-### 使用Docker部署
-#### 环境准备
+## 使用Docker部署
+### 环境准备
 1. 安装必要的依赖
 ```
 sudo apt-get update
@@ -83,13 +82,22 @@ sudo docker-compose up -d --scale judger=3
 
 **容易运行时产生的数据会保存在对应的文件夹中，如数据库文件，题目数据等**
 
-### 一般部署
+## 自定义OJ
 
-+ [后端](https://github.com/Linzecong/LPOJ/tree/master/Backend)
-+ [前端](https://github.com/Linzecong/LPOJ/tree/master/Frontend)
-+ [判题服务器](https://github.com/Linzecong/LPOJ/tree/master/JudgerServer)
-+ [判题机](https://github.com/Linzecong/LPOJ/tree/master/Judger)
-+ [爬虫机器人](https://github.com/Linzecong/LPOJ/tree/master/CrawlingServer)
+首先先下载源代码
+```
+git clone https://github.com/Linzecong/LPOJ.git && cd LPOJ
+```
+
+然后随意修改你要修改的地方，修改完毕后，使用如下命令重新部署
+
+```
+sudo docker-compose -f docker-compose-build.yml up -d --build --scale judger=3
+```
+
+由于会重新构建整个系统，而不是拉去已构建好的镜像，所以花的时间会比较长~请耐心等待
+
+
 
 ## 如无意外，部署成功！
 具体使用，请参阅使用[文档](https://docs.lpoj.cn)
