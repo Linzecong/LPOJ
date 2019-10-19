@@ -247,7 +247,7 @@ export default {
       .then(response => {
         auth = response.data.auth;
         if ((auth == 2 || auth == 3) && (sessionStorage.type == 1||sessionStorage.type =="")) {
-          this.title = "非法访问！";
+          this.title = "非法访问！请在比赛中访问题目！";
           this.$message.error("服务器错误！" + "(" + "无权限" + ")");
           return;
         }
@@ -340,7 +340,7 @@ export default {
           });
       })
       .catch(error => {
-        this.title = "非法访问！";
+        this.title = "非法访问！请在比赛中访问题目！";
         this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
       });
   },

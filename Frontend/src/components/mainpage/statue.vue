@@ -212,7 +212,7 @@ export default {
       console.log(col);
 
       if (col.label == "Problem") {
-        if(this.contest != "")
+        if(this.contest != "0")
           return
         this.$router.push({
           name: "problemdetail",
@@ -274,13 +274,12 @@ export default {
       this.searchform.problem = "";
       this.searchform.language = "";
       this.searchform.result = "";
-      this.timer();
       this.creattimer();
     },
     handleSizeChange(val) {
       if (!this.username) this.username = this.$route.query.username;
       this.contest = this.$route.params.contestID;
-      if (!this.contest) this.contest = "";
+      if (!this.contest) this.contest = "0";
       if (!this.username) this.username = "";
       this.pagesize = val;
       this.getstatusdata();
@@ -288,7 +287,7 @@ export default {
     handleCurrentChange(val) {
       if (!this.username) this.username = this.$route.query.username;
       this.contest = this.$route.params.contestID;
-      if (!this.contest) this.contest = "";
+      if (!this.contest) this.contest = "0";
       if (!this.username) this.username = "";
       this.currentpage = val;
       this.getstatusdata();
@@ -344,7 +343,7 @@ export default {
     timer: function() {
       if (!this.username) this.username = this.$route.query.username;
       this.contest = this.$route.params.contestID;
-      if (!this.contest) this.contest = "";
+      if (!this.contest) this.contest = "0";
       if (!this.username) this.username = "";
 
       if (this.username == sessionStorage.username && sessionStorage.username)
@@ -491,7 +490,7 @@ export default {
       pagesize: 30,
       totalstatus: 10,
       username: "",
-      contest: "",
+      contest: "0",
       showall: false,
       dialogVisible: false,
       searchdialogVisible: false,

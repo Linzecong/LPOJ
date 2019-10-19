@@ -124,7 +124,7 @@ class ContestComingInfo(models.Model):
     link = models.CharField(max_length=200)
     startTime = models.BigIntegerField()
     endTime = models.BigIntegerField()
-    contestName = models.CharField(max_length=100)
+    contestName = models.CharField(max_length=500)
 
     objects = models.Manager()
 

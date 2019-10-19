@@ -406,7 +406,7 @@ export default {
                 code: this.code,
                 testcase: 0,
                 message: this.oj == "LPOJ" ? "0" : this.proid + "",
-                problemtitle: "比赛 " + this.currentcontest + this.currentrankE,
+                problemtitle: this.currentrankE,
                 rating: parseInt(sessionStorage.rating)
               })
               .then(response => {
@@ -451,8 +451,7 @@ export default {
                           code: this.code,
                           testcase: 0,
                     message: this.oj == "LPOJ" ? "0" : this.proid + "",
-                          problemtitle:
-                            "比赛 " + this.currentcontest + this.currentrankE,
+                          problemtitle:  this.currentrankE,
                           rating: parseInt(sessionStorage.rating)
                         })
                         .then(response => {
