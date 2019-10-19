@@ -110,11 +110,11 @@
       @change="statuechange"
     ></el-switch>
     <el-button
-      type="danger"
+      type="primary"
       @click="resetsearch"
       style="float: right;margin-top:6px;margin-right:10px;"
       size="mini"
-    >Reset</el-button>
+    >Refresh</el-button>
     <el-button
       type="primary"
       @click="searchdialogVisible = true"

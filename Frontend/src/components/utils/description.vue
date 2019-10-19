@@ -1,11 +1,11 @@
 <template>
   <div>
 
-    <h2>欢迎来到LPOJ</h2>
+    <h2>欢迎来到本OJ</h2>
     
     <h3>这是一个基于Vue.js和Django的轻量级在线评测系统</h3>
     <h3>有任何好的意见可以在左下角留言板留言</h3>
-    <h3><a style="text-decoration: none;color:#409EFF;" target="_blank" href="https://www.lpoj.cn">欢迎访问外网版本 www.lpoj.cn</a></h3>
+    <h3><a style="text-decoration: none;color:#409EFF;" target="_blank" href="https://www.lpoj.cn">欢迎访问公网版本 www.lpoj.cn</a></h3>
     
     <br>
     <h2>FAQ：</h2>
