@@ -21,7 +21,10 @@
       </el-row>-->
       <el-row>
         <el-tabs type="border-card">
-          <el-tab-pane :label="label.rank">
+          <el-tab-pane :label="label.rule" >
+            <description></description>
+          </el-tab-pane>
+          <el-tab-pane :label="label.rank" :lazy="true">
             <rankchart></rankchart>
           </el-tab-pane>
           <el-tab-pane :label="label.rule" :lazy="true">
@@ -55,6 +58,7 @@ import topuser from "@/components/utils/topuser";
 import soulrow from "@/components/utils/soulrow";
 import ratingrule from "@/components/utils/ratingrule";
 import contestmini from "@/components/utils/contestmini";
+import description from "@/components/utils/description";
 import acrank from "@/components/utils/acrank";
 export default {
   components: {
@@ -65,7 +69,8 @@ export default {
     soulrow,
     ratingrule,
     contestmini,
-    acrank
+    acrank,
+    description
   },
   name: "main",
   data() {
