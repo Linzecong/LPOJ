@@ -24,5 +24,6 @@ urlpatterns = [
     url(r'', include('contest.urls')),
     url(r'', include('board.urls')),
     url(r'', include('blog.urls')),
-    url(r'', include('wiki.urls'))
+    url(r'', include('wiki.urls')),
+    url(r'', include('item.urls')),
 ]

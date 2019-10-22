@@ -20,6 +20,9 @@
       <el-menu-item index="/wiki">
         <i class="el-icon-star-off"></i>Wiki
       </el-menu-item>
+      <el-menu-item index="/todolist">
+        <i class="el-icon-s-promotion"></i>TodoList
+      </el-menu-item>
 
       <el-button round id="button" @click="registeropen" v-show="!loginshow">Register</el-button>
       <el-button round id="button" @click="loginopen" v-show="!loginshow">Login</el-button>
@@ -73,7 +76,7 @@
           style="text-decoration: none;color:#409EFF;"
         >Linzecong</a>
         <span>
-          &nbsp; Version: 3.1&nbsp;&nbsp; Docs:&nbsp;&nbsp;
+          &nbsp; Version: 3.2&nbsp;&nbsp; Docs:&nbsp;&nbsp;
           <a
             href="https://docs.lpoj.cn"
             target="_blank"

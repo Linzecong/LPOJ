@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'contest',
     'board',
     'blog',
-    'wiki'
+    'wiki', 
+    'item'
 ]
 
 REST_FRAMEWORK = {

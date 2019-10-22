@@ -18,11 +18,13 @@
     "js-md5": "^0.7.3",
     "mavon-editor": "^2.7.3",
     "moment": "^2.24.0",
+    "muse-ui": "^3.0.2",
     "vue": "^2.5.2",
     "vue-clipboard2": "^0.3.0",
     "vue-codemirror": "^4.0.6",
     "vue-resource": "^1.5.1",
     "vue-router": "^3.0.1",
+    "vuedraggable": "^2.23.2",
     "vuex": "^3.1.0",
     "webpack-cli": "^3.2.1"
   },

@@ -10,6 +10,8 @@ import md5 from 'js-md5';
 import axios from 'axios';
 import VueClipboard from 'vue-clipboard2'
 import 'babel-polyfill' //兼容IE6
+import MuseUI from 'muse-ui';
+Vue.use(MuseUI);
 
 Vue.use(VueClipboard)
 Vue.use(Vuex)
