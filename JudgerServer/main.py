@@ -58,17 +58,17 @@ def deal_client(newSocket: socket, addr):
     cursor = db.cursor()
     falsetime = 0
     while True:
-        sleep(1) # 每隔一秒取一次
+        sleep(2) # 每隔一秒取两次
         if mutex.acquire(): # 获取队列锁
             try:
                 if statue == True and queue.empty() is not True:
-                    id = queue.get() # 如果可以判题，那就发送判题命令
-                    statue = False 
+                    id = queue.get() # 如果可以判题，那就发送判题命令  
                     cursor.execute(
                         "SELECT language from judgestatus_judgestatus where id = '%d'" % (id))
                     data = cursor.fetchall()
                     print(data[0][0])
                     newSocket.send(("judge|%d" % id).encode("utf-8"))
+                    statue = False 
                 else:
                     newSocket.send("getstatue".encode("utf-8"))
                     data = newSocket.recv(1024)

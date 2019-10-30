@@ -163,7 +163,7 @@ def specialjudge(problem,testin,testout,userout):
     result = os.system("timeout 10 g++ ./ProblemData/%s/spj.cpp -o %s.out -O2 -std=c++14" % (str(problem),GlobalVar.judgername))
     if result:
         return 5
-    res = os.system("timeout 20 ./spj.out %s %s %s" % (testin, testout, userout))
+    res = os.system("timeout 20 ./%s.out %s %s %s" % (GlobalVar.judgername, testin, testout, userout))
     print(res)
     return res
 
