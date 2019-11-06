@@ -3,7 +3,7 @@
     <mu-card>
       <mu-dialog :title="dialogdata.title" scrollable :open.sync="dialogVisible">
         <center>
-          <p>{{'关卡' + dialogdata.group+'-'+dialogdata.num+', 共 '+dialogdata.totnum+' 道题' }}</p>
+          <p>{{'章节' + dialogdata.group+'-'+dialogdata.num+', 共 '+dialogdata.totnum+' 道题' }}</p>
           </center>
           <b>任务说明：</b>
           {{dialogdata.des}}
@@ -53,7 +53,7 @@
             <mu-linear-progress mode="determinate" :value="trainper[i]" :size="10"></mu-linear-progress>
             <center
               color="grey"
-            >{{'关卡' + trainningdata[i].group+'-'+trainningdata[i].num+', 共 '+trainningdata[i].totnum+' 道题' }}</center>
+            >{{'章节' + trainningdata[i].group+'-'+trainningdata[i].num+', 共 '+trainningdata[i].totnum+' 道题' }}</center>
           </mu-card-text>
 
           <mu-card-text>
@@ -61,7 +61,7 @@
               :color="trainper[i]==100?'success':'primary'"
               full-width
               @click="goclick(i)"
-            >{{trainper[i]==100?'你已完成':'进入关卡'}}</mu-button>
+            >{{trainper[i]==100?'你已完成':'进入章节'}}</mu-button>
           </mu-card-text>
         </mu-card>
       </mu-card-text>

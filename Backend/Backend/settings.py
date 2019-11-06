@@ -30,6 +30,7 @@ ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
+SECURE_SSL_REDIRECT = False
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -48,7 +49,8 @@ INSTALLED_APPS = [
     'board',
     'blog',
     'wiki', 
-    'item'
+    'item',
+    "sslserver",
 ]
 
 REST_FRAMEWORK = {

@@ -897,7 +897,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 | des | 试炼介绍 | CharField |  |
 | tips | 试炼提示 | DateTimeField | 对应Wiki中的type，用竖线隔开 |
 | group | 试炼分组 | CharField | 第几章 |
-| num | 试炼关卡 | CharField | 第几关 |
+| num | 试炼章节 | CharField | 第几关 |
 | problem | 试炼题目 | DateTimeField | 中间用竖线隔开 |
 
 **permission.py**

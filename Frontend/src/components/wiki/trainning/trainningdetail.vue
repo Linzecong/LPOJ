@@ -5,7 +5,7 @@
 
       <el-row :gutter="30">
         <el-col :span="12">
-          <p>{{'关卡' + dialogdata.group+'-'+dialogdata.num+', 共 '+dialogdata.totnum+' 道题' }}</p>
+          <p>{{'章节' + dialogdata.group+'-'+dialogdata.num+', 共 '+dialogdata.totnum+' 道题' }}</p>
           <b>任务说明：</b>
           {{dialogdata.des}}
           <br>
@@ -55,7 +55,7 @@
           </el-row>
           <b
             style="margin-left:10px;"
-          >{{'关卡' + trainningdata[i*4+j].group+'-'+trainningdata[i*4+j].num+', 共 '+trainningdata[i*4+j].totnum+' 道题' }}</b>
+          >{{'章节' + trainningdata[i*4+j].group+'-'+trainningdata[i*4+j].num+', 共 '+trainningdata[i*4+j].totnum+' 道题' }}</b>
           <p style="margin-left:10px;margin-top:10px;color:#909399">{{trainningdata[i*4+j].des}}</p>
           <el-row style="float:bottom;margin:5px">
             <el-progress
@@ -70,7 +70,7 @@
               :type="trainper[i*4+j]==100?'success':'primary'"
               style="float:right;margin-right:5px;margin-top:10px;margin-bottom:10px;"
               @click="goclick(i*4+j)"
-            >{{trainper[i*4+j]==100?'你已完成':'进入关卡'}}</el-button>
+            >{{trainper[i*4+j]==100?'你已完成':'进入章节'}}</el-button>
           </el-row>
         </el-card>
       </el-col>

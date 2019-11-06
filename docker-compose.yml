@@ -37,7 +37,7 @@ services:
      - "8000:8000"
     restart: always
     volumes:
-        - "./Backend:/Backend"
+        - "./Backend/ProblemData:/Backend/ProblemData"
 
   frontend:
     image: ccr.ccs.tencentyun.com/lpoj/frontend
@@ -136,5 +136,5 @@ services:
 
     restart: always
     volumes:
-        - "./Judger:/Judger"
+        - "./Judger/ProblemData:/Judger/ProblemData"
     
