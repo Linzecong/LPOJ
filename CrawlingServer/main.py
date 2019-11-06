@@ -44,19 +44,23 @@ while True:
         CF = get_CF_data(accounts[0])
         print(accounts[0], "CF:", CF)
         if CF[0] == -1:
-            continue
+            CF[0] = 0
+            CF[1] = 0
         HDU = get_HDU_data(accounts[1])
         print(accounts[1], "HDU:", HDU)
         if HDU[0] == -1:
-            continue
+            HDU[0] = 0
+            HDU[1] = 0
         VJ = get_VJ_data(accounts[2])
         print(accounts[2], "VJ:", VJ)
         if VJ[0] == -1:
-            continue
+            VJ[0] = 0
+            VJ[1] = 0
         LPOJ = get_LPOJ_data(accounts[3])
         print(accounts[3], "LPOJ:", LPOJ)
         if LPOJ[0] == -1:
-            continue
+            LPOJ[0] = 0
+            LPOJ[1] = 0
 
         Others = [int(str(data[6]).split("|")[-1]),
                   int(str(data[7]).split("|")[-1])]  # 其他OJ
