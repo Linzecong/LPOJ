@@ -11,9 +11,12 @@
         </el-form-item>
         <el-form-item label="开启语言（中间用 | 隔开，确保语言在判题机中支持！）">
           <el-input v-model="openlanguage" placeholder="中间用 | 隔开，确保语言在判题机中支持！" style="width:300px"></el-input>
-        </el-form-item>
+        </el-form-item>openstatus
         <el-form-item label="开启OI模式（样例全判）">
           <el-switch v-model="openoi" active-text="开启" inactive-text="关闭"></el-switch>
+        </el-form-item>
+        <el-form-item label="是否开启源码查看（除管理员外不得查看源码）">
+          <el-switch v-model="openstatus" active-text="开启" inactive-text="关闭"></el-switch>
         </el-form-item>
         <el-button style="margin-top:20px;" type="primary" @click="click">提交</el-button>
       </el-form>
@@ -46,7 +49,8 @@ export default {
       tableData: [],
       msg: "",
       openlanguage:"C++|C|Python3|Swift5.1|Java",
-      openoi:true
+      openoi:true,
+      openstatus:true
     };
   },
   methods: {
@@ -89,7 +93,8 @@ export default {
             ojname: this.ojname,
             openwiki: this.wikiopen,
             openlanguage:this.openlanguage,
-            openoi:this.openoi
+            openoi:this.openoi,
+            openstatus:this.openstatus
           })
           .then(res => {
             this.$message.success("提交成功！");
@@ -106,7 +111,8 @@ export default {
             ojname: this.ojname,
             openwiki: this.wikiopen,
             openlanguage:this.openlanguage,
-            openoi:this.openoi
+            openoi:this.openoi,
+            openstatus:this.openstatus
           })
           .then(res => {
             this.$message.success("提交成功！");
@@ -129,6 +135,7 @@ export default {
           this.wikiopen = res.data[0].openwiki;
           this.openlanguage = res.data[0].openlanguage;
           this.openoi = res.data[0].openoi;
+          this.openstatus = res.data[0].openstatus;
         } else this.name = "无";
         this.reflash();
       })

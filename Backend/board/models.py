@@ -8,6 +8,7 @@ class SettingBoard(models.Model):
     openwiki = models.BooleanField(default=True)
     openlanguage = models.CharField(max_length=500, default="C++|C|Python3|Swift5.1|Java")
     openoi = models.BooleanField(default=True)
+    openstatus = models.BooleanField(default=True)
 
     objects = models.Manager()
 

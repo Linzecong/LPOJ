@@ -2,6 +2,7 @@
 from rest_framework import permissions
 from contest.models import ContestInfo
 import datetime
+from board.models import SettingBoard
 
 class ManagerOnly(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -48,6 +49,11 @@ class NoContestOnly(permissions.BasePermission):
         userid = request.session.get('user_id', None)
         if userid == blog.user:
             return True
+        
+        
+        setting = SettingBoard.objects.get(id=1)
+        if setting.openstatus == False:
+            return False
 
         if blog.contest == 0 or request.session.get('type', 1) != 1:
             return True
