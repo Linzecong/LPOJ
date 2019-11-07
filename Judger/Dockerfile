@@ -3,6 +3,7 @@ MAINTAINER linzecong
 ADD . ./Judger
 WORKDIR /Judger
 RUN apt-get update
+RUN apt-get install python2.7-minimal -y
 RUN apt-get install python3 -y
 RUN apt-get install python3-pip -y
 # RUN ln -s /usr/bin/python3 /usr/bin/python
@@ -14,5 +15,5 @@ RUN pip3 install -r requirements.txt
 RUN apt-get install time -y
 RUN apt-get install cmake -y
 RUN apt-get install openjdk-8-jdk -y
-RUN apt-get install libseccomp-dev -y && mkdir build && cd build && cmake /Judger && make && make install && cd .. && cd JudgerCore && python setup.py install
+RUN apt-get install libseccomp-dev -y && mkdir build && cd build && cmake /Judger && make && make install && cd .. && cd JudgerCore && python3 setup.py install
 CMD ["python3", "main.py"]
