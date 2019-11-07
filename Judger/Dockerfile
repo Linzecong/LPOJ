@@ -3,7 +3,9 @@ MAINTAINER linzecong
 ADD . ./Judger
 WORKDIR /Judger
 RUN apt-get update
-RUN apt-get install python2.7-minimal -y
+RUN mv /usr/lib/python2.7/site-packages /usr/lib/python2.7/dist-packages
+RUN ln -s dist-packages /usr/lib/python2.7/site-packages
+RUN apt-get install python2.7 -y
 RUN apt-get install python3 -y
 RUN apt-get install python3-pip -y
 # RUN ln -s /usr/bin/python3 /usr/bin/python
