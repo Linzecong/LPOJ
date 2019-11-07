@@ -62,6 +62,22 @@ class UserLoginDataView(viewsets.ModelViewSet):
     throttle_scope = "post"
     throttle_classes = [ScopedRateThrottle, ]
 
+class UserLoginDataAPIView(APIView):
+    throttle_scope = "post"
+    throttle_classes = [ScopedRateThrottle, ]
+
+    def post(self, request, format=None):
+        data = request.data.copy()
+        if data["ip"].find("chrome")>=0 and request.META.get('HTTP_X_FORWARDED_FOR'):
+            data["ip"] = request.META.get("HTTP_X_FORWARDED_FOR")
+
+        serializer = UserLoginDataSerializer(data=data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+        return Response('ok', status=HTTP_200_OK)
+
+
+
 class UserLoginAPIView(APIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -130,7 +146,9 @@ class UserRegisterAPIView(APIView):
         if User.objects.filter(username__exact=username):
             return Response("usererror", HTTP_200_OK)
         serializer = UserSerializer(data=data)
-        if serializer.is_valid(raise_exception=True):
+        serializer2 = UserDataSerializer(data=data)
+        if serializer.is_valid(raise_exception=True) and serializer2.is_valid(raise_exception=True):
             serializer.save()
+            serializer2.save()
             return Response(serializer.data, status=HTTP_200_OK)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)

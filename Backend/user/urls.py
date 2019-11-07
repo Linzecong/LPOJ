@@ -16,4 +16,5 @@ urlpatterns = [
     url(r'^login', views.UserLoginAPIView.as_view()),
     url(r'^logout', views.UserLogoutAPIView.as_view()),
     url(r'^updaterating', views.UserUpdateRatingAPIView.as_view()),
+    url(r'^setlogindata', views.UserLoginDataAPIView.as_view()),
 ]

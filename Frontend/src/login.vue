@@ -68,7 +68,7 @@ export default {
             
 
           this.$axios
-            .post("/userlogindata/", {
+            .post("/setlogindata/", {
               username: this.form.username,
               ip: this.$store.state.loginip,
               msg: this.$store.state.logininfo

@@ -179,9 +179,9 @@ export default {
 
       this.form.password = this.$md5(this.form.password);
 
-      this.$axios
-        .post("/userdata/", this.form)
-        .then(response => {
+      // this.$axios
+      //   .post("/userdata/", this.form)
+      //   .then(response => {
           this.$axios
             .post("/register/", this.form)
             .then(response => {
@@ -200,16 +200,16 @@ export default {
               this.$message.error(
                 "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
               );
-            });
-        })
-        .catch(error => {
-          if (JSON.stringify(error.response.data).indexOf("user") >= 0)
-            this.$message.error("用户名已存在！");
-          else
-            this.$message.error(
-              "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
-            );
-        });
+            }); 
+        //})
+        // .catch(error => {
+        //   if (JSON.stringify(error.response.data).indexOf("user") >= 0)
+        //     this.$message.error("用户名已存在！");
+        //   else
+        //     this.$message.error(
+        //       "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
+        //     );
+        // });
     }
   }
 };
