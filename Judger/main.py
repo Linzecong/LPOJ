@@ -21,7 +21,8 @@ class GlobalVar:
     judgername = "Unknow"
     host = "172.10.0.1"
     port = 22
-    pythonpath = "/usr/bin/python3"
+    python3path = "/usr/bin/python3"
+    python2path = "/usr/bin/python"
     cursor = None
     db = None
     sftp_t = None
@@ -56,7 +57,8 @@ class GlobalVar:
 
         GlobalVar.host = GlobalVar.judgerjson["server_ip"]
         GlobalVar.port = GlobalVar.judgerjson["server_port"]
-        GlobalVar.pythonpath = GlobalVar.judgerjson["python_path"]
+        GlobalVar.python3path = GlobalVar.judgerjson["python3_path"]
+        GlobalVar.python2path = GlobalVar.judgerjson["python2_path"]
 
         GlobalVar.db = MySQLdb.connect(GlobalVar.judgerjson["db_ip"], GlobalVar.judgerjson["db_user"], GlobalVar.judgerjson["db_pass"],
                             GlobalVar.judgerjson["db_database"], int(GlobalVar.judgerjson["db_port"]), charset='utf8')
@@ -258,8 +260,7 @@ def minganci(ci):
         return "frame"
     return "0"
 
-
-def judgePython(timelimit, memorylimit, inputpath, outputpath, errorpath, id, judgername):
+def judgePython2(timelimit, memorylimit, inputpath, outputpath, errorpath, id, judgername):
     return _judger.run(max_cpu_time=timelimit,
                         max_real_time=timelimit*10,
                         max_memory=memorylimit * 1024 * 1024,
@@ -267,7 +268,29 @@ def judgePython(timelimit, memorylimit, inputpath, outputpath, errorpath, id, ju
                         max_output_size=32 * 1024 * 1024,
                         max_stack=32 * 1024 * 1024,
                         # five args above can be _judger.UNLIMITED
-                        exe_path=GlobalVar.pythonpath,
+                        exe_path=GlobalVar.python2path,
+                        input_path=inputpath,
+                        output_path=outputpath,
+                        error_path=errorpath,
+                        args=[judgername+".py"],
+                        # can be empty list
+                        env=[],
+                        log_path=judgername+"judger.log",
+                        # can be None
+                        seccomp_rule_name="general",
+                        uid=0,
+                        gid=0
+                        )
+
+def judgePython3(timelimit, memorylimit, inputpath, outputpath, errorpath, id, judgername):
+    return _judger.run(max_cpu_time=timelimit,
+                        max_real_time=timelimit*10,
+                        max_memory=memorylimit * 1024 * 1024,
+                        max_process_number=200,
+                        max_output_size=32 * 1024 * 1024,
+                        max_stack=32 * 1024 * 1024,
+                        # five args above can be _judger.UNLIMITED
+                        exe_path=GlobalVar.python3path,
                         input_path=inputpath,
                         output_path=outputpath,
                         error_path=errorpath,
@@ -428,7 +451,18 @@ def compileCPP(id,code,judgername,problem):
         return False
     return True
 
-def compilePython(id,code,judgername,problem):
+def compilePython2(id,code,judgername,problem):
+    wo = minganci(code)
+    if wo != "0":
+        Controller.compileError(id,problem,"Your code has sensitive words "+wo)
+        GlobalVar.statue = True
+        return False
+    file = open("%s.py" % judgername, "w",encoding='utf-8')
+    file.write("import sys\nblacklist = ['importlib','traceback','os','sys']\nfor mod in blacklist:\n    i = __import__(mod)\n    sys.modules[mod] = None\ndel sys\ndel __builtins__.__dict__['eval']\ndel __builtins__.__dict__['exec']\ndel __builtins__.__dict__['locals']\ndel __builtins__.__dict__['open']\n" +code)
+    file.close()
+    return True
+
+def compilePython3(id,code,judgername,problem):
     wo = minganci(code)
     if wo != "0":
         Controller.compileError(id,problem,"Your code has sensitive words "+wo)
@@ -548,7 +582,11 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 return
 
         elif lang == "Python3": 
-            if compilePython(id,code,GlobalVar.judgername,problem) == False: 
+            if compilePython3(id,code,GlobalVar.judgername,problem) == False: 
+                return
+        
+        elif lang == "Python2": 
+            if compilePython2(id,code,GlobalVar.judgername,problem) == False: 
                 return
         
         elif lang == "Swift5.1": 
@@ -660,7 +698,9 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
 
             if lang == "Java": ret = judgeJava(timelimit*3, memorylimit, "./ProblemData/%s/%s.in" % (problem, filename), GlobalVar.judgername+"temp.out", GlobalVar.judgername+"error.out", id,GlobalVar.judgername)
             
-            elif lang == "Python3": ret = judgePython(timelimit, memorylimit, "./ProblemData/%s/%s.in" % (problem, filename), GlobalVar.judgername+"temp.out", GlobalVar.judgername+"error.out", id, GlobalVar.judgername)
+            elif lang == "Python3": ret = judgePython3(timelimit, memorylimit, "./ProblemData/%s/%s.in" % (problem, filename), GlobalVar.judgername+"temp.out", GlobalVar.judgername+"error.out", id, GlobalVar.judgername)
+            
+            elif lang == "Python2": ret = judgePython2(timelimit, memorylimit, "./ProblemData/%s/%s.in" % (problem, filename), GlobalVar.judgername+"temp.out", GlobalVar.judgername+"error.out", id, GlobalVar.judgername)
             
             elif lang == "C": ret = judgeC(timelimit, memorylimit, "./ProblemData/%s/%s.in" % (problem, filename), GlobalVar.judgername+"temp.out", GlobalVar.judgername+"error.out", id, GlobalVar.judgername)
 
