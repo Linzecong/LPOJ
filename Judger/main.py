@@ -246,8 +246,6 @@ def minganci(ci):
         return "eval"
     if ci.find("exec") >= 0:
         return "exec"
-    if ci.find("__") >= 0:
-        return "__"
     if ci.find("globals") >= 0:
         return "globals"
     if ci.find("locals") >= 0:
