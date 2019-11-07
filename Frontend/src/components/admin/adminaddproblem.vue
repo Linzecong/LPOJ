@@ -38,6 +38,14 @@
     <el-form-item label="是否Special Judge（规则详见 https://docs.lpoj.cn/doc/#special-judge）">
       <el-switch v-model="addproblemform.isspj" active-text="是" inactive-text="否"></el-switch>
     </el-form-item>
+    <el-form-item label="是否模板题">
+      <el-switch v-model="addproblemform.istemp" active-text="是" inactive-text="否"></el-switch>
+    </el-form-item>
+
+    <el-form-item label="模板代码：" v-show="addproblemform.istemp">
+      <el-input type="textarea" v-model="addproblemform.template" autosize style="width:800px;"></el-input>
+    </el-form-item>
+
     <el-form-item label="来源：">
       <el-input v-model="addproblemform.source" style="width:400px;"></el-input>
     </el-form-item>
@@ -119,10 +127,12 @@ export default {
         hint: "提示\n支持HTML格式和Katex公式\n\n",
         auth: 2,
         tag: "简单题|模拟",
+        template:"请删除这行",
         level: 3,
         score: 100,
         oj: "LPOJ",
         isspj:false,
+        istemp:false
       },
       addproblemdataform: {
         problem: this.problemcount + 1,
@@ -131,7 +141,8 @@ export default {
         level: 3,
         score: 100,
         auth: 2,
-        oj: ""
+        oj: "",
+    
       }
     };
   },

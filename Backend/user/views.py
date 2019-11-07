@@ -68,8 +68,9 @@ class UserLoginDataAPIView(APIView):
 
     def post(self, request, format=None):
         data = request.data.copy()
-        if data["ip"].find("chrome")>=0 and request.META.get('HTTP_X_FORWARDED_FOR'):
-            data["ip"] = request.META.get("HTTP_X_FORWARDED_FOR")
+        if data.get("ip"):
+            if data["ip"].find("chrome")>=0 and request.META.get('HTTP_X_FORWARDED_FOR'):
+                data["ip"] = request.META.get("HTTP_X_FORWARDED_FOR")
 
         serializer = UserLoginDataSerializer(data=data)
         if serializer.is_valid(raise_exception=True):

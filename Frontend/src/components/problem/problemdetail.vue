@@ -328,6 +328,7 @@ export default {
                 ((response.data.se * 100) / response.data.submission).toFixed(2)
               );
             }
+            
             this.title = response.data.title;
             this.level = response.data.level;
             this.tagnames = response.data.tag;

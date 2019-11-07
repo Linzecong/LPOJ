@@ -258,6 +258,8 @@ export default {
           this.soutput = response.data.soutput.split("|#)");
           this.author = response.data.author;
           this.source = response.data.source;
+          this.code = response.data.template;          
+
           if(this.oj!="LPOJ"){
             this.proid = this.source
           }
@@ -265,6 +267,7 @@ export default {
           this.memory = response.data.memory + "MB";
           this.hint = response.data.hint;
           this.loading = false;
+
         });
       if(sessionStorage.username!=""){
         this.$axios
