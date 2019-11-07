@@ -127,7 +127,7 @@ export default {
         hint: "提示\n支持HTML格式和Katex公式\n\n",
         auth: 2,
         tag: "简单题|模拟",
-        template:"请删除这行",
+        template:"",
         level: 3,
         score: 100,
         oj: "LPOJ",

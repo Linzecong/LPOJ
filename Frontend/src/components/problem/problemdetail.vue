@@ -267,7 +267,7 @@ export default {
         this.time = response.data.time + "MS";
         this.memory = response.data.memory + "MB";
         this.hint = response.data.hint;
-
+        this.code = response.data.template;  
         if(this.oj!="LPOJ"){
           this.proid = this.source
         }

@@ -3,7 +3,6 @@ MAINTAINER linzecong
 ADD . ./Judger
 WORKDIR /Judger
 RUN apt-get update
-RUN apt-get install python -y
 RUN apt-get install python3 -y
 RUN apt-get install python3-pip -y
 # RUN ln -s /usr/bin/python3 /usr/bin/python
