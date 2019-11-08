@@ -56,7 +56,7 @@ int main(int argc, char* argv[]) {
 
     //如果你想输出更多的信息，可以在同目录下，输出一个叫做 **spjmsg.txt** 的文件，当返回1时，系统会读取spjmsg.txt中的内容，显示在判题信息中。
 
-    #include <fiostream.h>
+    #include <fstream>
     ofstream out("spjmsg.txt");
     if (out.is_open()) 
     {

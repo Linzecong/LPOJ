@@ -604,38 +604,67 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
             GlobalVar.statue = True
             return
 
-        # 模板题测试
-        if os.path.isfile("./ProblemData/%s/template.code" %problem):
-            istemplatepro = True
-            templatefile = open("./ProblemData/%s/template.code" %problem,"r",encoding='utf-8')
-            code = code + "\n" + templatefile.read()
-            templatefile.close()
-               
+        
 
         if lang == "C": 
+            # 模板题测试
+            if os.path.isfile("./ProblemData/%s/template.c" %problem):
+                istemplatepro = True
+                templatefile = open("./ProblemData/%s/template.c" %problem,"r",encoding='utf-8')
+                code = code + "\n" + templatefile.read()
+                templatefile.close()
             if compileC(id,code,GlobalVar.judgername,problem) == False: 
                 return
 
         elif lang == "C++": 
+            # 模板题测试
+            if os.path.isfile("./ProblemData/%s/template.cpp" %problem):
+                istemplatepro = True
+                templatefile = open("./ProblemData/%s/template.cpp" %problem,"r",encoding='utf-8')
+                code = code + "\n" + templatefile.read()
+                templatefile.close()
             if compileCPP(id,code,GlobalVar.judgername,problem) == False: 
                 return
 
         elif lang == "Python3": 
+            # 模板题测试
+            if os.path.isfile("./ProblemData/%s/template.py3" %problem):
+                istemplatepro = True
+                templatefile = open("./ProblemData/%s/template.py3" %problem,"r",encoding='utf-8')
+                code = code + "\n" + templatefile.read()
+                templatefile.close()
             if compilePython3(id,code,GlobalVar.judgername,problem) == False: 
                 return
         
         elif lang == "Python2": 
+            # 模板题测试
+            if os.path.isfile("./ProblemData/%s/template.py2" %problem):
+                istemplatepro = True
+                templatefile = open("./ProblemData/%s/template.py2" %problem,"r",encoding='utf-8')
+                code = code + "\n" + templatefile.read()
+                templatefile.close()
             if compilePython2(id,code,GlobalVar.judgername,problem) == False: 
                 return
         
         elif lang == "Swift5.1": 
+            # 模板题测试
+            if os.path.isfile("./ProblemData/%s/template.swift" %problem):
+                istemplatepro = True
+                templatefile = open("./ProblemData/%s/template.swift" %problem,"r",encoding='utf-8')
+                code = code + "\n" + templatefile.read()
+                templatefile.close()
             if compileSwift(id,code,GlobalVar.judgername,problem) == False: 
                 return
 
         elif lang == "Java": 
+            # 模板题测试
+            if os.path.isfile("./ProblemData/%s/template.java" %problem):
+                istemplatepro = True
+                templatefile = open("./ProblemData/%s/template.java" %problem,"r",encoding='utf-8')
+                code = code + "\n" + templatefile.read()
+                templatefile.close()
             if compileJava(id,code,GlobalVar.judgername,problem) == False: 
                 return
-
         else:
             Controller.compileError(id,problem,"Unknow Language!")
             GlobalVar.statue = True
