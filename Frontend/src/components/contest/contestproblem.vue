@@ -271,7 +271,7 @@ export default {
           this.source = response.data.source;
 
           var li = response.data.template.split("*****")
-          for(var i = 0; i < li.length; i+=2){
+          for(var i = 1; i < li.length; i+=2){
             this.codetemplate[li[i]]=li[i+1]
           }
           this.code = this.codetemplate[this.language]         
@@ -362,7 +362,7 @@ export default {
                   this.source = response.data.source;
                   
                   var li = response.data.template.split("*****")
-                  for(var i = 0; i < li.length; i+=2){
+                  for(var i = 1; i < li.length; i+=2){
                     this.codetemplate[li[i]]=li[i+1]
                   }
                   this.code = this.codetemplate[this.language]

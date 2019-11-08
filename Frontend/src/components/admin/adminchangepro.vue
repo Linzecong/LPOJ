@@ -86,7 +86,7 @@
         <el-form-item label="来源：">
           <el-input v-model="problemform.source" style="width:400px;"></el-input>
         </el-form-item>
-        <el-form-item label="模板代码：（用*****作为语言分割，如 C++***** xxxx C***** xxxx Python2***** xxxxx）" v-show="addproblemform.istemp">
+        <el-form-item label="模板代码：（用*****作为语言分割，如 *****C++***** xxxx *****C***** xxxx *****Python2***** xxxxx）">
           <el-input type="textarea" v-model="problemform.template" autosize style="width:800px;"></el-input>
         </el-form-item>
         <el-form-item label="时间（ms）：">
@@ -194,7 +194,7 @@ export default {
         level: 3,
         score: 100,
         oj: "LPOJ",
-        template:"C++*****\n\nC*****\n\nPython2*****\n\nPython3*****\n\nJava*****\n\nSwift5.1*****\n\n",
+        template:"*****C++*****\n\n*****C*****\n\n*****Python2*****\n\n*****Python3*****\n\n*****Java*****\n\n*****Swift5.1*****\n\n",
       },
       problemdataform: {
         problem: "",

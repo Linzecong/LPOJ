@@ -131,9 +131,15 @@ class Controller:
         GlobalVar.db.commit()
     
     @staticmethod
-    def doneProblem(id,problem,message,memory,time,username,contest,result,testcase):
+    def doneProblem(id,problem,message,memory,mytime,username,contest,result,testcase):
         if message != "":
-            GlobalVar.cursor.execute("UPDATE judgestatus_judgestatus SET memory = %d, time= %d, result = %s,testcase=%s,message=%s  WHERE id = %s" , int(memory), int(time), str(result), str(testcase),str(message), str(id))
+            mm = int(memory)
+            mm = mm + 1
+            mm = mm - 1
+            tt = int(mytime)
+            tt = tt + 1
+            tt = tt - 1
+            GlobalVar.cursor.execute("UPDATE judgestatus_judgestatus SET memory = %d, time= %d, result = %s,testcase=%s,message=%s  WHERE id = %s" , (int(mm), int(tt), str(result), str(testcase),str(message), str(id)))
         else:
             GlobalVar.cursor.execute("UPDATE judgestatus_judgestatus SET memory = %d, time= %d, result = '%s',testcase='%s' WHERE id = '%s'" % (memory, time, result,testcase, id))
         
