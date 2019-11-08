@@ -139,7 +139,8 @@ class Controller:
             tt = int(mytime)
             tt = tt + 1
             tt = tt - 1
-            GlobalVar.cursor.execute("UPDATE judgestatus_judgestatus SET memory = %d, time= %d, result = %s,testcase=%s,message=%s  WHERE id = %s" , (int(mm), int(tt), str(result), str(testcase),str(message), str(id)))
+            print(mm,tt,type(mm),type(tt))
+            GlobalVar.cursor.execute("UPDATE judgestatus_judgestatus SET memory = %s, time= %s, result = %s,testcase=%s,message=%s  WHERE id = %s" , (str(mm), str(tt), str(result), str(testcase),str(message), str(id)))
         else:
             GlobalVar.cursor.execute("UPDATE judgestatus_judgestatus SET memory = %d, time= %d, result = '%s',testcase='%s' WHERE id = '%s'" % (memory, time, result,testcase, id))
         
