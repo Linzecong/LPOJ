@@ -204,6 +204,18 @@ def remote_scp(host_ip, remote_path, local_path, username, password, problem):
             f = zipfile.ZipFile("./ProblemData/"+str(problem)+".zip", 'r')
             for file1 in f.namelist():
                 f.extract(file1, "./ProblemData/"+dirname+"/")
+
+            files = os.listdir("./ProblemData/%s/" % dirname)
+            for s in files:
+                # 去掉\r
+                tmpfile =  open("./ProblemData/%s/%s" % (problem,s),"r",encoding='utf-8')
+                tstr = tmpfile.read()
+                tstr = tstr.replace('\r','')
+                tmpfile.close()
+                tmpfile =  open("./ProblemData/%s/%s" % (problem,s),"w",encoding='utf-8')
+                tmpfile.write(tstr)
+                tmpfile.close()
+                
             print("Extract Succeed!")
             return True
         except:
@@ -456,7 +468,9 @@ def compilePython2(id,code,judgername,problem):
         GlobalVar.statue = True
         return False
     file = open("%s.py" % judgername, "w",encoding='utf-8')
-    file.write("import sys\nblacklist = ['importlib','traceback','os','sys']\nfor mod in blacklist:\n    i = __import__(mod)\n    sys.modules[mod] = None\ndel sys\ndel __builtins__.__dict__['eval']\ndel __builtins__.__dict__['exec']\ndel __builtins__.__dict__['locals']\ndel __builtins__.__dict__['open']\n" +code)
+    # 为了判模板题，暂时取消安全设置
+    #file.write("import sys\nblacklist = ['importlib','traceback','os','sys']\nfor mod in blacklist:\n    i = __import__(mod)\n    sys.modules[mod] = None\ndel sys\ndel __builtins__.__dict__['eval']\ndel __builtins__.__dict__['locals']\ndel __builtins__.__dict__['open']\n" +code)
+    file.write(code)
     file.close()
     return True
 
@@ -550,6 +564,10 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
     timelimit,memorylimit = Controller.getProblemTimeMemory(problem)
     score = Controller.getProblemScore(problem)
 
+    # 模板题测试
+    istemplatepro = False
+    templatemsg = ""
+
 
     if oj != "LPOJ":
         if oj == "HDU":
@@ -570,6 +588,29 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 GlobalVar.statue = True
         return
     else:
+
+        isdone = remote_scp(GlobalVar.judgerjson["sftp_ip"], GlobalVar.judgerjson["backend_path"]+"ProblemData/"+str(problem)+".zip", "./ProblemData/" +
+                    str(problem)+".zip", GlobalVar.judgerjson["sftp_username"], GlobalVar.judgerjson["sftp_password"], problem)
+
+        # 判断有无数据
+        if isdone == False: 
+            Controller.doneProblem(id,problem,"unzip error!",0,0,username,contest,"5","?")
+            return
+        try:
+            files = os.listdir("./ProblemData/%s/" % problem)
+        except Exception as e:
+            print(e)
+            Controller.doneProblem(id,problem,"download error!",0,0,username,contest,"5","?")
+            GlobalVar.statue = True
+            return
+
+        # 模板题测试
+        if os.path.isfile("./ProblemData/%s/template.code" %problem):
+            istemplatepro = True
+            templatefile = open("./ProblemData/%s/template.code" %problem,"r",encoding='utf-8')
+            code = code + "\n" + templatefile.read()
+            templatefile.close()
+               
 
         if lang == "C": 
             if compileC(id,code,GlobalVar.judgername,problem) == False: 
@@ -611,21 +652,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
 
         # 尝试下载数据
 
-        isdone = remote_scp(GlobalVar.judgerjson["sftp_ip"], GlobalVar.judgerjson["backend_path"]+"ProblemData/"+str(problem)+".zip", "./ProblemData/" +
-                    str(problem)+".zip", GlobalVar.judgerjson["sftp_username"], GlobalVar.judgerjson["sftp_password"], problem)
-
-        # 判断有无数据
-        if isdone == False: 
-            Controller.doneProblem(id,problem,"unzip error!",0,0,username,contest,"5","?")
-            return
-        try:
-            files = os.listdir("./ProblemData/%s/" % problem)
-        except Exception as e:
-            print(e)
-            Controller.doneProblem(id,problem,"download error!",0,0,username,contest,"5","?")
-            GlobalVar.statue = True
-            return
-
+        
         tempset = set()  # 用于判读数据是否都有in,out
         newfiles = set()
         casedes = dict()
@@ -692,6 +719,8 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 Controller.doneProblem(id,problem,"memory error!",0,0,username,contest,"5","?")
                 GlobalVar.statue = True
                 return
+
+
             ret = []
 
             if lang == "Java": ret = judgeJava(timelimit*3, memorylimit, "./ProblemData/%s/%s.in" % (problem, filename), GlobalVar.judgername+"temp.out", GlobalVar.judgername+"error.out", id,GlobalVar.judgername)
@@ -814,6 +843,11 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                     elif r == 0: result = 0
                     else: result = 5
 
+                    if result == -3: 
+                        tmsg = open("./spjmsg.txt","r",encoding='utf-8')
+                        templatemsg = tmsg.read()
+                        tmsg.close()
+
                 else:
                     # 比较输出文件是否一致!
                     file1 = open(GlobalVar.judgername+"temp.out", "r")
@@ -901,9 +935,11 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
         # 所有样例评判结束，汇总结果!
         if myresult == 100:
             Controller.acProblem(id,problem,"",maxmemory/1024/1024,maxtime,username,score,HaveAC,contest)
-                
         else:
-            Controller.doneProblem(id,problem,"",mymemory/1024/1024, mytime,username,contest,myresult,mytestcase)
+            if istemplatepro == True:
+                Controller.doneProblem(id,problem,templatemsg,mymemory/1024/1024, mytime,username,contest,myresult,mytestcase)
+            else:
+                Controller.doneProblem(id,problem,"",mymemory/1024/1024, mytime,username,contest,myresult,mytestcase)
 
         GlobalVar.statue = True
 

@@ -2,13 +2,17 @@
 
 暂无内容！欢迎补充！
 
-# Special Judge
+# Special Judge 和 模板题
+
+所谓模板题，就是类似LeetCode那种，给了特定代码的题
 
 如果要使用Special Judge，请在提交数据的时候，把特判程序一同上传
 
 如果没有一同上传，判题机会把题目视为一般题目。如果上传了spj.cpp，无论你在添加题目时有没有把题目设置为spj，判题机都会认为是spj题目。
 
 特判程序命名为 spj.cpp
+
+模板程序命名为 template.code
 
 所以你的数据文件夹内应该有如下格式的内容
 
@@ -18,7 +22,9 @@
 2.out
 ...
 spj.cpp
+template.code # 如果需要模板题就要有这个文件
 
+模板题必须包含spj.cpp，判题机会简单的把用户代码拼接在template.code上面
 
 然后spj.cpp的写法为：
 
@@ -48,7 +54,23 @@ int main(int argc, char* argv[]) {
     fclose(f_out);
     fclose(f_user);
 
+    //如果你想输出更多的信息，可以在同目录下，输出一个叫做 **spjmsg.txt** 的文件，当返回1时，系统会读取spjmsg.txt中的内容，显示在判题信息中。
+
+    #include <fiostream.h>
+    ofstream out("spjmsg.txt");
+    if (out.is_open()) 
+    {
+        out << "This is a line.\n";
+        out << "This is another line.\n";
+        out.close();
+    }
+
     return ret;//返回结果，返回值为0时，答案正确，为1时，答案错误，返回值为其他时，会报System Error
 }
+
+
+
+        
+
 
 ```

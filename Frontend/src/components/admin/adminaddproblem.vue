@@ -38,7 +38,7 @@
     <el-form-item label="是否Special Judge（规则详见 https://docs.lpoj.cn/doc/#special-judge）">
       <el-switch v-model="addproblemform.isspj" active-text="是" inactive-text="否"></el-switch>
     </el-form-item>
-    <el-form-item label="是否模板题">
+    <el-form-item label="是否模板题（是的话，必须同时也是SPJ题）">
       <el-switch v-model="addproblemform.istemp" active-text="是" inactive-text="否"></el-switch>
     </el-form-item>
 
