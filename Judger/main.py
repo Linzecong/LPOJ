@@ -133,7 +133,7 @@ class Controller:
     @staticmethod
     def doneProblem(id,problem,message,memory,time,username,contest,result,testcase):
         if message != "":
-            GlobalVar.cursor.execute("UPDATE judgestatus_judgestatus SET memory = %d, time= %d, result = %s,testcase=%s,message=%s  WHERE id = %s" , (int(memory), int(time), str(result), str(testcase),str(message), str(id)))
+            GlobalVar.cursor.execute("UPDATE judgestatus_judgestatus SET memory = %d, time= %d, result = %s,testcase=%s,message=%s  WHERE id = %s" , int(memory), int(time), str(result), str(testcase),str(message), str(id))
         else:
             GlobalVar.cursor.execute("UPDATE judgestatus_judgestatus SET memory = %d, time= %d, result = '%s',testcase='%s' WHERE id = '%s'" % (memory, time, result,testcase, id))
         

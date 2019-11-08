@@ -64,7 +64,7 @@
               <div id="des" style="padding: 5px 10px;">Language:</div>
             </el-col>
             <el-col :span="3">
-              <el-select v-model="language" placeholder="请选择">
+              <el-select v-model="language" placeholder="请选择" @change="changetemplate">
                 <languageselect></languageselect>
               </el-select>
             </el-col>
@@ -213,6 +213,8 @@ export default {
       code: "",
       language: "C++",
 
+      codetemplate:{},
+
       ac: 100,
       mle: 100,
       tle: 100,
@@ -267,10 +269,17 @@ export default {
         this.time = response.data.time + "MS";
         this.memory = response.data.memory + "MB";
         this.hint = response.data.hint;
-        this.code = response.data.template;  
+
+        var li = response.data.template.split("*****")
+        for(var i = 0; i < li.length; i+=2){
+          this.codetemplate[li[i]]=li[i+1]
+        }
+        this.code = this.codetemplate[this.language]
+
         if(this.oj!="LPOJ"){
           this.proid = this.source
         }
+        
 
         this.$axios
           .get("/problemdata/" + this.ID + "/")
@@ -346,6 +355,16 @@ export default {
       });
   },
   methods: {
+    changetemplate(lang){
+      this.$confirm("确定切换语言吗？", "切换后当前代码不会保存！", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        this.code = this.codetemplate[lang]
+      })
+      
+    },
     reRender() {
       if(window.MathJax) {
         console.log('rendering mathjax');

@@ -89,7 +89,7 @@
                 <div id="des" style="padding: 5px 10px;">Language:</div>
               </el-col>
               <el-col :span="3">
-                <el-select v-model="language" placeholder="请选择">
+                <el-select v-model="language" placeholder="请选择" @change="changetemplate">
                   <languageselect></languageselect>
                 </el-select>
               </el-col>
@@ -178,6 +178,7 @@ export default {
       code: "",
       language: "C++",
       proid:"0",
+      codetemplate:{},
 
       submitbuttontext: "提交后请勿重复刷新/支持将文件拖入代码框",
       judgetype: "primary",
@@ -207,6 +208,16 @@ export default {
     }
   },
   methods: {
+    changetemplate(lang){
+      this.$confirm("确定切换语言吗？", "切换后当前代码不会保存！", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        this.code = this.codetemplate[lang]
+      })
+      
+    },
     reRender() {
       if (window.MathJax) {
         console.log("rendering mathjax");
@@ -258,7 +269,12 @@ export default {
           this.soutput = response.data.soutput.split("|#)");
           this.author = response.data.author;
           this.source = response.data.source;
-          this.code = response.data.template;          
+
+          var li = response.data.template.split("*****")
+          for(var i = 0; i < li.length; i+=2){
+            this.codetemplate[li[i]]=li[i+1]
+          }
+          this.code = this.codetemplate[this.language]         
 
           if(this.oj!="LPOJ"){
             this.proid = this.source
@@ -344,7 +360,14 @@ export default {
                   this.soutput = response.data.soutput.split("|#)");
                   this.author = response.data.author;
                   this.source = response.data.source;
-                  this.code = response.data.template;  
+                  
+                  var li = response.data.template.split("*****")
+                  for(var i = 0; i < li.length; i+=2){
+                    this.codetemplate[li[i]]=li[i+1]
+                  }
+                  this.code = this.codetemplate[this.language]
+
+
                   if(this.oj!="LPOJ"){
                     this.proid = this.source
                   }

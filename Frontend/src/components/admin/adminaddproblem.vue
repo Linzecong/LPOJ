@@ -42,7 +42,7 @@
       <el-switch v-model="addproblemform.istemp" active-text="是" inactive-text="否"></el-switch>
     </el-form-item>
 
-    <el-form-item label="模板代码：" v-show="addproblemform.istemp">
+    <el-form-item label="模板代码：（用*****作为语言分割，如 C++***** xxxx C***** xxxx Python2***** xxxxx）" v-show="addproblemform.istemp">
       <el-input type="textarea" v-model="addproblemform.template" autosize style="width:800px;"></el-input>
     </el-form-item>
 
@@ -127,7 +127,7 @@ export default {
         hint: "提示\n支持HTML格式和Katex公式\n\n",
         auth: 2,
         tag: "简单题|模拟",
-        template:"",
+        template:"C++*****\n\nC*****\n\nPython2*****\n\nPython3*****\n\nJava*****\n\nSwift5.1*****\n\n",
         level: 3,
         score: 100,
         oj: "LPOJ",
