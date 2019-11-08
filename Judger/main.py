@@ -133,9 +133,9 @@ class Controller:
     @staticmethod
     def doneProblem(id,problem,message,memory,time,username,contest,result,testcase):
         if message != "":
-            GlobalVar.cursor.execute("UPDATE judgestatus_judgestatus SET memory =%d, time=%d, result = %s,testcase=%s,message=%s  WHERE id = %s" , (memory, time, result, testcase,message, id))
+            GlobalVar.cursor.execute("UPDATE judgestatus_judgestatus SET memory = %d, time= %d, result = %s,testcase=%s,message=%s  WHERE id = %s" , (int(memory), int(time), str(result), str(testcase),str(message), str(id)))
         else:
-            GlobalVar.cursor.execute("UPDATE judgestatus_judgestatus SET memory =%d, time=%d, result = '%s',testcase='%s' WHERE id = '%s'" % (memory, time, result,testcase, id))
+            GlobalVar.cursor.execute("UPDATE judgestatus_judgestatus SET memory = %d, time= %d, result = '%s',testcase='%s' WHERE id = '%s'" % (memory, time, result,testcase, id))
         
         if result == '2' or result == '1':
             GlobalVar.cursor.execute("UPDATE problem_problemdata SET tle = tle+1 WHERE problem = '%s'" % problem)
@@ -262,8 +262,6 @@ def minganci(ci):
         return "globals"
     if ci.find("locals") >= 0:
         return "locals"
-    if ci.find("raise") >= 0:
-        return "raise"
     if ci.find("compile") >= 0:
         return "compile"
     if ci.find("frame") >= 0:
