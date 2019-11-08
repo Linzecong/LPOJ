@@ -133,16 +133,10 @@ class Controller:
     @staticmethod
     def doneProblem(id,problem,message,memory,mytime,username,contest,result,testcase):
         if message != "":
-            mm = int(memory)
-            mm = mm + 1
-            mm = mm - 1
-            tt = int(mytime)
-            tt = tt + 1
-            tt = tt - 1
-            print(mm,tt,type(mm),type(tt))
-            GlobalVar.cursor.execute("UPDATE judgestatus_judgestatus SET memory = %s, time= %s, result = %s,testcase=%s,message=%s  WHERE id = %s" , (str(mm), str(tt), str(result), str(testcase),str(message), str(id)))
+            print(message)
+            GlobalVar.cursor.execute("UPDATE judgestatus_judgestatus SET memory = %s, time= %s, result = %s,testcase=%s,message=%s  WHERE id = %s" , (str(memory), str(mytime), str(result), str(testcase),str(message), str(id)))
         else:
-            GlobalVar.cursor.execute("UPDATE judgestatus_judgestatus SET memory = %d, time= %d, result = '%s',testcase='%s' WHERE id = '%s'" % (memory, time, result,testcase, id))
+            GlobalVar.cursor.execute("UPDATE judgestatus_judgestatus SET memory = %d, time= %d, result = '%s',testcase='%s' WHERE id = '%s'" % (memory, mytime, result,testcase, id))
         
         if result == '2' or result == '1':
             GlobalVar.cursor.execute("UPDATE problem_problemdata SET tle = tle+1 WHERE problem = '%s'" % problem)
