@@ -133,7 +133,7 @@ class Controller:
     @staticmethod
     def doneProblem(id,problem,message,memory,time,username,contest,result,testcase):
         if message != "":
-            GlobalVar.cursor.execute("UPDATE judgestatus_judgestatus SET memory =%d, time=%d, result = '%s',testcase='%s',message='%s'  WHERE id = '%s'" % (memory, time, result, testcase,message, id))
+            GlobalVar.cursor.execute("UPDATE judgestatus_judgestatus SET memory =%d, time=%d, result = %s,testcase=%s,message=%s  WHERE id = %s" , (memory, time, result, testcase,message, id))
         else:
             GlobalVar.cursor.execute("UPDATE judgestatus_judgestatus SET memory =%d, time=%d, result = '%s',testcase='%s' WHERE id = '%s'" % (memory, time, result,testcase, id))
         
@@ -718,16 +718,9 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
             else:
                 tempset.add(s)
 
-        import re
-        def sort_key(s):
-            if s:
-                try:
-                    c = re.findall('^\d+', s)[0]
-                except:
-                    c = -1
-                return int(c)
+
         newfiles = list(newfiles)
-        newfiles.sort(key=sort_key) # 将数据排个序
+        newfiles = sorted(newfiles) # 将数据排个序
 
         for filename in newfiles:
             print("judging!!!", id, "/%s/%s.in" % (problem, filename))

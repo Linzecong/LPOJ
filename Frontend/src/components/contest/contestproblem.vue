@@ -344,6 +344,7 @@ export default {
                   this.soutput = response.data.soutput.split("|#)");
                   this.author = response.data.author;
                   this.source = response.data.source;
+                  this.code = response.data.template;  
                   if(this.oj!="LPOJ"){
                     this.proid = this.source
                   }
