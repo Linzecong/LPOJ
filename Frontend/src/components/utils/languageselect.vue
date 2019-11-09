@@ -10,7 +10,7 @@ export default {
 
   data() {
     return {
-      languagelist: ["C++","C","Python3","Swift5.1","Java"]
+      languagelist: ["C++","C","Python3","Python2","Swift5.1","Java"]
     };
   },
   created() {

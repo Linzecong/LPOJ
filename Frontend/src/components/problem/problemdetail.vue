@@ -408,6 +408,12 @@ export default {
         this.$message.error("请选择语言！");
         return;
       }
+
+      if (this.code.length<20) {
+        this.$message.error("代码过短！");
+        return;
+      }
+
       this.$confirm("确定提交吗？", "提交", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",

@@ -62,7 +62,12 @@ export default {
           sessionStorage.setItem("name", response.data.name);
           sessionStorage.setItem("type", response.data.type);
 
+
+
           this.dialogLoginVisible = false;
+          if(this.$store.state.loginip==""){
+            this.$store.state.loginip = "chrome" // 后台会处理
+          }
 
           this.$axios
             .post("/setlogindata/", {

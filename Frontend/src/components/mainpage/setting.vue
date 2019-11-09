@@ -162,6 +162,16 @@ export default {
         this.form.des="这个人很懒，什么都没有没有留下。"
       }
 
+ this.$confirm(
+        "确定更新吗?",
+        "如果你在参与一场比赛，请勿更新你的【昵称】，会影响排行榜计算，后果自负！",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }
+      ).then(() => {
+
       this.form.password = this.$md5(this.form.password);
       this.$axios
         .put(
@@ -195,6 +205,10 @@ export default {
               }
             );
         });
+      })
+
+
+
     }
   },
   created() {

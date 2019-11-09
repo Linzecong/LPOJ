@@ -70,12 +70,8 @@
 
     <mu-card raised>
       <mu-card-text>
-        <mu-select v-model="language" label="Choose a language..." full-width>
-          <mu-option key="C++" label="C++" value="C++"></mu-option>
-          <mu-option key="C" label="C" value="C"></mu-option>
-          <mu-option key="Java" label="Java" value="Java"></mu-option>
-          <mu-option key="Python3" label="Python3" value="Python3"></mu-option>
-          <mu-option key="Swift5.1" label="Swift5.1" value="Swift5.1"></mu-option>
+        <mu-select v-model="language" label="Choose a language..." full-width @change="changetemplate">
+          <mu-option v-for="item in languagelist" :key="item" :label="item" :value="item"></mu-option>
         </mu-select>
 
         <br />
@@ -149,6 +145,9 @@ export default {
       code: "",
       language: "C++",
 
+      codetemplate:{},
+      languagelist: ["C++","C","Python3","Python2","Swift5.1","Java"],
+
       ac: 100,
       mle: 100,
       tle: 100,
@@ -207,6 +206,12 @@ export default {
         this.time = response.data.time + "MS";
         this.memory = response.data.memory + "MB";
         this.hint = response.data.hint;
+
+        var li = response.data.template.split("*****")
+        for(var i = 1; i < li.length; i+=2){
+          this.codetemplate[li[i]]=li[i+1]
+        }
+        this.code = this.codetemplate[this.language]
 
         if (this.oj != "LPOJ") {
           this.proid = this.source;
@@ -291,8 +296,31 @@ export default {
           "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
         );
       });
+
+      this.$axios
+      .get("/settingboard/")
+      .then(res => {
+        if (res.data.length > 0) {
+          this.languagelist = res.data[0].openlanguage.split("|");
+        } 
+      })
+      .catch(error => {
+        this.$message.error(
+          "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
+        );
+      });
   },
   methods: {
+    changetemplate(lang){
+      this.$confirm("确定切换语言吗？", "切换后当前代码不会保存！", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        this.code = this.codetemplate[lang]
+      })
+      
+    },
     reRender() {
       if (window.MathJax) {
         console.log("rendering mathjax");
