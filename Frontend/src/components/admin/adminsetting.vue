@@ -11,7 +11,7 @@
         </el-form-item>
         <el-form-item label="开启语言（中间用 | 隔开，确保语言在判题机中支持！）">
           <el-input v-model="openlanguage" placeholder="中间用 | 隔开，确保语言在判题机中支持！" style="width:300px"></el-input>
-        </el-form-item>openstatus
+        </el-form-item>
         <el-form-item label="开启OI模式（样例全判）">
           <el-switch v-model="openoi" active-text="开启" inactive-text="关闭"></el-switch>
         </el-form-item>

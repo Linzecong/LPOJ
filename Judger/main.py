@@ -465,7 +465,7 @@ def compilePython2(id,code,judgername,problem):
         GlobalVar.statue = True
         return False
     file = open("%s.py" % judgername, "w",encoding='utf-8')
-    file.write("import sys\nblacklist = ['importlib','traceback','os']\nfor mod in blacklist:\n    i = __import__(mod)\n    sys.modules[mod] = None\ndel __builtins__.__dict__['eval']\ndel __builtins__.__dict__['locals']\ndel __builtins__.__dict__['open']\n" +code)
+    # file.write("import sys\nblacklist = ['importlib','traceback','os']\nfor mod in blacklist:\n    i = __import__(mod)\n    sys.modules[mod] = None\ndel __builtins__.__dict__['eval']\ndel __builtins__.__dict__['locals']\ndel __builtins__.__dict__['open']\n" +code)
     file.write(code)
     file.close()
     return True
@@ -477,7 +477,7 @@ def compilePython3(id,code,judgername,problem):
         GlobalVar.statue = True
         return False
     file = open("%s.py" % judgername, "w",encoding='utf-8')
-    file.write("import sys\nblacklist = ['importlib','traceback','os']\nfor mod in blacklist:\n    i = __import__(mod)\n    sys.modules[mod] = None\ndel __builtins__.__dict__['eval']\ndel __builtins__.__dict__['exec']\ndel __builtins__.__dict__['locals']\ndel __builtins__.__dict__['open']\n" +code)
+    # file.write("import sys\nblacklist = ['importlib','traceback','os']\nfor mod in blacklist:\n    i = __import__(mod)\n    sys.modules[mod] = None\ndel __builtins__.__dict__['eval']\ndel __builtins__.__dict__['exec']\ndel __builtins__.__dict__['locals']\ndel __builtins__.__dict__['open']\n" +code)
     file.close()
     return True
 
