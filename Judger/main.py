@@ -253,8 +253,6 @@ def minganci(ci):
         return " os"
     if ci.find("__import__") >= 0:
         return "__import__"
-    if ci.find("getattr") >= 0:
-        return "getattr"
     if ci.find("eval") >= 0:
         return "eval"
     if ci.find("exec") >= 0:
@@ -611,6 +609,12 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 templatefile = open("./ProblemData/%s/template.c" %problem,"r",encoding='utf-8')
                 code = code + "\n" + templatefile.read()
                 templatefile.close()
+            if os.path.isfile("./ProblemData/%s/template.c.top" %problem):
+                istemplatepro = True
+                templatefile = open("./ProblemData/%s/template.c.top" %problem,"r",encoding='utf-8')
+                code = templatefile.read() + '\n' + code
+                templatefile.close()
+            
             if compileC(id,code,GlobalVar.judgername,problem) == False: 
                 return
 
@@ -621,6 +625,13 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 templatefile = open("./ProblemData/%s/template.cpp" %problem,"r",encoding='utf-8')
                 code = code + "\n" + templatefile.read()
                 templatefile.close()
+
+            if os.path.isfile("./ProblemData/%s/template.cpp.top" %problem):
+                istemplatepro = True
+                templatefile = open("./ProblemData/%s/template.cpp.top" %problem,"r",encoding='utf-8')
+                code = templatefile.read() + '\n' + code
+                templatefile.close()
+
             if compileCPP(id,code,GlobalVar.judgername,problem) == False: 
                 return
 
@@ -631,6 +642,13 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 templatefile = open("./ProblemData/%s/template.py3" %problem,"r",encoding='utf-8')
                 code = code + "\n" + templatefile.read()
                 templatefile.close()
+
+            if os.path.isfile("./ProblemData/%s/template.py3.top" %problem):
+                istemplatepro = True
+                templatefile = open("./ProblemData/%s/template.py3.top" %problem,"r",encoding='utf-8')
+                code = templatefile.read() + '\n' + code
+                templatefile.close()
+
             if compilePython3(id,code,GlobalVar.judgername,problem) == False: 
                 return
         
@@ -640,6 +658,12 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 istemplatepro = True
                 templatefile = open("./ProblemData/%s/template.py2" %problem,"r",encoding='utf-8')
                 code = code + "\n" + templatefile.read()
+                templatefile.close()
+
+            if os.path.isfile("./ProblemData/%s/template.py2.top" %problem):
+                istemplatepro = True
+                templatefile = open("./ProblemData/%s/template.py2.top" %problem,"r",encoding='utf-8')
+                code = templatefile.read() + '\n' + code
                 templatefile.close()
             if compilePython2(id,code,GlobalVar.judgername,problem) == False: 
                 return
@@ -651,6 +675,13 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 templatefile = open("./ProblemData/%s/template.swift" %problem,"r",encoding='utf-8')
                 code = code + "\n" + templatefile.read()
                 templatefile.close()
+
+            if os.path.isfile("./ProblemData/%s/template.swift.top" %problem):
+                istemplatepro = True
+                templatefile = open("./ProblemData/%s/template.swift.top" %problem,"r",encoding='utf-8')
+                code = templatefile.read() + '\n' + code
+                templatefile.close()
+
             if compileSwift(id,code,GlobalVar.judgername,problem) == False: 
                 return
 
@@ -661,6 +692,13 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 templatefile = open("./ProblemData/%s/template.java" %problem,"r",encoding='utf-8')
                 code = code + "\n" + templatefile.read()
                 templatefile.close()
+
+            if os.path.isfile("./ProblemData/%s/template.java.top" %problem):
+                istemplatepro = True
+                templatefile = open("./ProblemData/%s/template.java.top" %problem,"r",encoding='utf-8')
+                code = templatefile.read() + '\n' + code
+                templatefile.close()
+
             if compileJava(id,code,GlobalVar.judgername,problem) == False: 
                 return
         else:
