@@ -82,6 +82,7 @@
                 :type="judgetype"
                 :loading="loadingshow"
                 style="font-weight:bold;margin-left:10px;"
+                @click="showdialog"
               >{{submitbuttontext}}</el-button>
             </el-col>
           </el-row>
@@ -356,6 +357,10 @@ export default {
       });
   },
   methods: {
+    showdialog(){
+      if(this.submitid != -1)
+        this.$refs["Statusmini"].showdialog(this.submitid)
+    },
     changetemplate(lang){
       this.$confirm("确定切换语言吗？", "切换后当前代码不会保存！", {
         confirmButtonText: "确定",

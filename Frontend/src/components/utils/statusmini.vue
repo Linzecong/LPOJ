@@ -143,21 +143,18 @@ export default {
       this.$message.error("复制失败：" + e);
     },
     showdialog(id){
-
-    },
-    rowClick(row, col, e) {
-      if (row.message + "" == "0") this.compilemsg = "编译成功！";
-      else this.compilemsg = row.message;
-
       this.dialogdata = [];
       this.code = "";
 
       this.$axios
-        .get("/judgestatuscode/" + row.id + "/")
+        .get("/judgestatuscode/" + id + "/")
         .then(response => {
           this.code = response.data.code;
 
-          this.$axios.get("/casestatus/?statusid=" + row.id).then(res => {
+          if (response.data.message + "" == "0") this.compilemsg = "编译成功！";
+          else this.compilemsg = response.data.message;
+
+          this.$axios.get("/casestatus/?statusid=" + id).then(res => {
             for (var i = 0; i < res.data.length; i++) {
               this.dialogdata.push({
                 caseresult: res.data[i]["result"],
@@ -176,6 +173,10 @@ export default {
         });
 
       this.dialogVisible = true;
+    },
+
+    rowClick(row, col, e) {
+      this.showdialog(row.id)
     },
 
     tableRowClassName({ row, rowIndex }) {
@@ -316,7 +317,7 @@ export default {
 
       dialogVisible: false,
       code: "",
-      compilemsg: "",
+      compilemsg: "无权限查看！",
       dialogdata: [],
       
     };

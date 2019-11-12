@@ -208,6 +208,7 @@ export default {
     onError(e) {
       this.$message.error("复制失败：" + e);
     },
+
     rowClick(row, col, e) {
       console.log(col);
 
@@ -229,9 +230,7 @@ export default {
         return;
       }
 
-      if (row.message + "" == "0" || row.result == "Accepted")
-        this.compilemsg = "编译成功！";
-      else this.compilemsg = row.message;
+      
 
       this.dialogdata = [];
       this.code = "";
@@ -240,6 +239,10 @@ export default {
         .get("/judgestatuscode/" + row.id + "/")
         .then(response => {
           this.code = response.data.code;
+
+          if (response.data.message + "" == "0" || row.result == "Accepted")
+            this.compilemsg = "编译成功！";
+          else this.compilemsg = response.data.message;
 
           this.$axios.get("/casestatus/?statusid=" + row.id).then(res => {
             for (var i = 0; i < res.data.length; i++) {
@@ -495,7 +498,7 @@ export default {
       dialogVisible: false,
       searchdialogVisible: false,
       code: "",
-      compilemsg: "",
+      compilemsg: "无权限查看！",
       dialogdata: [],
       loading: false,
       searchform: {

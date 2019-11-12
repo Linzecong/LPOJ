@@ -107,6 +107,7 @@
                   :type="judgetype"
                   :loading="loadingshow"
                   style="font-weight:bold;margin-left:10px;"
+                  @click="showdialog"
                 >{{submitbuttontext}}</el-button>
               </el-col>
             </el-row>
@@ -189,7 +190,8 @@ export default {
       currentcontest: this.$route.params.contestID,
       currentrank: -1,
       currentrankE: "A",
-      loading: false
+      loading: false,
+      curindex:0
     };
   },
   filters: {
@@ -208,6 +210,10 @@ export default {
     }
   },
   methods: {
+    showdialog(){
+      if(this.submitid != -1)
+        this.$refs["Statusmini"+this.curindex][0].showdialog(this.submitid)
+    },
     changetemplate(lang){
       this.$confirm("确定切换语言吗？", "切换后当前代码不会保存！", {
         confirmButtonText: "确定",
@@ -258,6 +264,7 @@ export default {
       this.currentrank = tab.index;
       this.currentrankE = this.toCharM(tab.index);
       this.$refs["Statusmini" + tab.index][0].setstatus(this.currentproblem,sessionStorage.username,this.$route.params.contestID);
+      this.curindex = tab.index
       this.$axios
         .get("/problem/" + this.currentproblem + "/")
         .then(response => {
@@ -621,7 +628,7 @@ export default {
         }
 
         this.submitbuttontext = response.data["result"];
-        this.$refs["Statusmini"][0].reflash()
+        this.$refs["Statusmini"+this.curindex][0].reflash()
       });
     }
   },

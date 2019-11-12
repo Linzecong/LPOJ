@@ -7,7 +7,7 @@ from .models import JudgeStatus, CaseStatus
 class JudgeStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = JudgeStatus
-        exclude = ['code']
+        exclude = ['code', 'message']
 
 
 class JudgeStatusCodeSerializer(serializers.ModelSerializer):
