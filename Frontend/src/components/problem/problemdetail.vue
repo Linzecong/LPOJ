@@ -344,6 +344,7 @@ export default {
             this.$refs.prosta.setdata(this.$data)
             console.log(this.$refs["Statusmini"])
             this.$refs["Statusmini"].setstatus(this.ID,sessionStorage.username,"");
+            
           })
           .catch(error => {
             this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
@@ -553,6 +554,7 @@ export default {
         }
 
         this.submitbuttontext = response.data["result"];
+        this.$refs["Statusmini"].reflash()
       });
     }
   },

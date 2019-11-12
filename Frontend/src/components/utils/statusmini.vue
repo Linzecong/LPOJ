@@ -142,6 +142,9 @@ export default {
     onError(e) {
       this.$message.error("复制失败：" + e);
     },
+    showdialog(id){
+
+    },
     rowClick(row, col, e) {
       if (row.message + "" == "0") this.compilemsg = "编译成功！";
       else this.compilemsg = row.message;

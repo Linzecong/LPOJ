@@ -621,6 +621,7 @@ export default {
         }
 
         this.submitbuttontext = response.data["result"];
+        this.$refs["Statusmini"][0].reflash()
       });
     }
   },

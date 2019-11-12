@@ -241,30 +241,30 @@ def getmem():
 
 # 敏感词列表，用于Python安全机制
 def minganci(ci):
-    if ci.find("thread") >= 0:
-        return "thread"
-    if ci.find("process") >= 0:
-        return "process"
-    if ci.find("resource") >= 0:
-        return "resource"
-    if ci.find("ctypes") >= 0:
-        return "ctypes"
-    if ci.find(" os") >= 0:
-        return " os"
-    if ci.find("__import__") >= 0:
-        return "__import__"
-    if ci.find("eval") >= 0:
-        return "eval"
-    if ci.find("exec") >= 0:
-        return "exec"
-    if ci.find("globals") >= 0:
-        return "globals"
-    if ci.find("locals") >= 0:
-        return "locals"
-    if ci.find("compile") >= 0:
-        return "compile"
-    if ci.find("frame") >= 0:
-        return "frame"
+    # if ci.find("thread") >= 0:
+    #     return "thread"
+    # if ci.find("process") >= 0:
+    #     return "process"
+    # if ci.find("resource") >= 0:
+    #     return "resource"
+    # if ci.find("ctypes") >= 0:
+    #     return "ctypes"
+    # if ci.find(" os") >= 0:
+    #     return " os"
+    # if ci.find("__import__") >= 0:
+    #     return "__import__"
+    # if ci.find("eval") >= 0:
+    #     return "eval"
+    # if ci.find("exec") >= 0:
+    #     return "exec"
+    # if ci.find("globals") >= 0:
+    #     return "globals"
+    # if ci.find("locals") >= 0:
+    #     return "locals"
+    # if ci.find("compile") >= 0:
+    #     return "compile"
+    # if ci.find("frame") >= 0:
+    #     return "frame"
     return "0"
 
 def judgePython2(timelimit, memorylimit, inputpath, outputpath, errorpath, id, judgername):
@@ -902,7 +902,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                     elif r == 0: result = 0
                     else: result = 5
 
-                    if result == -3: 
+                    if os.path.isfile("./spjmsg.txt"):
                         tmsg = open("./spjmsg.txt","r",encoding='utf-8')
                         templatemsg = tmsg.read()
                         tmsg.close()
