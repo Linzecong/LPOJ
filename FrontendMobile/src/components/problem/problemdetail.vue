@@ -312,14 +312,9 @@ export default {
   },
   methods: {
     changetemplate(lang){
-      this.$confirm("确定切换语言吗？", "切换后当前代码不会保存！", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(() => {
-        this.code = this.codetemplate[lang]
-      })
       
+      this.code = this.codetemplate[lang]
+
     },
     reRender() {
       if (window.MathJax) {
