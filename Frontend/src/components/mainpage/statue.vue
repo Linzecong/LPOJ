@@ -72,7 +72,7 @@
           <el-input v-model="searchform.user" placeholder="User..."></el-input>
         </el-form-item>
         <el-form-item label="Problem Number：">
-          <el-input v-model="searchform.problem" placeholder="Problem Number..."></el-input>
+          <el-input v-model="searchform.problem" placeholder="Problem Number...or ABCDE"></el-input>
         </el-form-item>
         <el-form-item label="Language：">
           <el-select v-model="searchform.language" placeholder="Choose...">
@@ -357,9 +357,24 @@ export default {
 
     getstatusdata() {
       this.loading = true;
-      this.$axios
-        .get(
-          "/judgestatus/?user=" +
+      var url = ""
+      if(this.contest != 0)
+        url =  "/judgestatus/?user=" +
+            this.username +
+            "&limit=" +
+            this.pagesize +
+            "&offset=" +
+            (this.currentpage - 1) * this.pagesize +
+            "&problemtitle=" +
+            this.searchform.problem +
+            "&language=" +
+            this.searchform.language +
+            "&result=" +
+            this.searchform.result +
+            "&contest=" +
+            this.contest
+      else
+        url =  "/judgestatus/?user=" +
             this.username +
             "&limit=" +
             this.pagesize +
@@ -373,7 +388,9 @@ export default {
             this.searchform.result +
             "&contest=" +
             this.contest
-        )
+
+      this.$axios
+        .get(url)
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {
             var testcase = response.data.results[i]["testcase"];

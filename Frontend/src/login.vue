@@ -69,6 +69,13 @@ export default {
             this.$store.state.loginip = "chrome" // 后台会处理
           }
 
+          if(this.$store.state.loginip==""){
+            this.$store.state.loginip = "chrome" // 后台会处理
+          }
+          if(this.$store.state.loginip==undefined){
+            this.$store.state.loginip = "chrome" // 后台会处理
+          }
+
           this.$axios
             .post("/setlogindata/", {
               username: this.form.username,

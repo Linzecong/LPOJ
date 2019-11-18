@@ -28,13 +28,16 @@
 ## 简述
 + 轻量级，易于部署和自定义定制
 + 前后端分离，提高服务器性能
-+ 支持多进程判题，判题更高效
-+ 支持 C/C++和Java语言
++ 支持多机器多进程判题，判题更高效
++ 支持 C/C++/Java/Python2/Python3和Swift5.1语言
++ 支持 Special Judge
 + 丰富的API，开放的源代码
 + 实时爬取用户的博客和其他OJ的做题数
 + 丰富的算法知识和体系化的套题训练
 + 一键保存和导出代码模板
 + 包含类CF的积分体系和比赛机制
++ 现代化的界面 + 手机适配
++ **支持类似LeetCode的模板题判题功能**
 
 ## 模块列表
 + [前端 Vue.js](https://github.com/Linzecong/LPOJ/tree/master/Frontend)
