@@ -215,13 +215,17 @@ export default {
         this.$refs["Statusmini"+this.curindex][0].showdialog(this.submitid)
     },
     changetemplate(lang){
-      this.$confirm("确定切换语言吗？", "切换后当前代码不会保存！", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(() => {
-        this.code = this.codetemplate[lang]
-      })
+      var t = this.codetemplate[lang]
+        if(t){
+          this.$confirm("确定切换语言吗？", "切换后当前代码不会保存！", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(() => {
+          
+          this.code = this.codetemplate[lang]
+        })
+      }
       
     },
     reRender() {

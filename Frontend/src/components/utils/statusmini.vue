@@ -73,7 +73,7 @@
       @row-click="rowClick"
       size="mini"
     >
-      <el-table-column prop="id" label="ID" :width="50"></el-table-column>
+      <el-table-column prop="id" label="ID" :width="70"></el-table-column>
       <el-table-column prop="result" label="Status" :width="180">
         <template slot-scope="scope">
           <el-tag size="mini" :type="statuetype(scope.row.result)" disable-transitions hit>
