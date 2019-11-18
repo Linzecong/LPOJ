@@ -12,6 +12,13 @@ RUN apt-get install python3-pip -y
 # RUN ln -s /usr/bin/pip3 /usr/bin/pip
 RUN apt-get install mysql-server -y 
 RUN apt-get install mysql-client -y
+RUN apt-get install libatomic1 -y
+RUN apt-get install libssl-dev -y
+RUN apt-get install libz-dev -y
+RUN apt install pkg-config -y
+RUN apt install net-tools -y
+RUN apt install nano -y
+RUN apt-get install iputils-ping -y
 RUN apt-get install libmysqlclient-dev -y
 RUN pip3 install -r requirements.txt
 RUN apt-get install time -y
