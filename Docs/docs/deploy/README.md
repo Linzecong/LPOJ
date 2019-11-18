@@ -63,10 +63,9 @@ sudo docker-compose up -d
 
 如要更新OJ只需在LPOJ目录下执行如下步骤
 ```
-sudo docker stop $(sudo docker ps -aq)
-git pull
+sudo docker-compose stop
 sudo docker-compose pull
-sudo docker-compose up -d
+sudo docker-compose up -d --scale judger=3
 ```
 
 **容易运行时产生的数据会保存在对应的文件夹中，如数据库文件，题目数据等**

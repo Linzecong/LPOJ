@@ -74,8 +74,7 @@ sudo docker-compose up -d --scale judger=3
 
 如要更新OJ只需在LPOJ目录下执行如下步骤
 ```
-sudo docker stop $(sudo docker ps -aq)
-git pull
+sudo docker-compose stop
 sudo docker-compose pull
 sudo docker-compose up -d --scale judger=3
 # 以上命令默认开启3个判题机，可以自行修改数量

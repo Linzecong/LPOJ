@@ -1,0 +1,764 @@
+/* Latop Device :1200px. */
+@media (min-width: 1200px) and (max-width: 1500px) {}
+
+
+/* LG  Device :992px. */
+@media (min-width: 992px) and (max-width: 1200px) {
+    .search-form-centered {
+        width: 90%;
+    }
+
+    .header-top-btn {
+        margin: 25px 0 0 40px;
+    }
+
+    .footer-widget.widget-2 {
+        margin-left: 30px;
+    }
+
+    .appnox-latest-blog-area {
+        margin: 100px 0 0 0;
+    }
+
+    .appnox-pagination {
+        margin: 0 0 30px 15px;
+    }
+}
+
+
+/* MD Device :768px. */
+@media (min-width: 768px) and (max-width: 991px) {
+    .header-logo {
+        margin-top: 30px;
+    }
+
+    .search-form-centered {
+        width: 90%;
+    }
+
+    .header-top-btn {
+        margin: 25px 0 0 30px;
+    }
+
+    .header-top-btn .btn {
+        margin-right: 70px;
+    }
+
+    .hero-mobile-img {
+        display: none;
+    }
+
+    .appnox-about-img {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 50px;
+    }
+
+    .faq-img {
+        margin-top: 50px;
+    }
+
+    .appnox-breadcrumb-area {
+        padding: 60px 0 140px 0;
+    }
+
+    .appnox-latest-blog-area {
+        margin: 50px 0;
+    }
+
+    .appnox-latest-blog-area .pr-45 {
+        padding-right: 25px;
+    }
+
+    .blog-details-content h3 {
+        font-size: 26px;
+    }
+
+    .post-comments-form-area {
+        margin: 40px 0 40px 0;
+    }
+
+    .appnox-footer-area {
+        background: #5e2ced;
+        padding-top: 100px;
+    }
+
+    .footer-widget.widget-2 {
+        margin-left: 30px;
+    }
+
+    .appnox-contact-area {
+        margin: 50px 0;
+    }
+
+    .contact-info-area {
+        margin: 50px 0 0 0;
+    }
+
+    #appnox-map {
+        margin-bottom: 50px;
+    }
+
+
+
+
+
+
+
+}
+
+
+/* small mobile (XS) :320px. */
+@media only screen and (min-width: 576px) and (max-width: 767px) {
+
+    .search-form-centered {
+        width: 90%;
+    }
+
+    .section-title {
+        margin-bottom: 50px;
+    }
+
+    .header-top-btn {
+        margin: 20px 0 0 30px;
+    }
+
+    .header-top-btn .btn {
+        margin-right: 70px;
+    }
+
+    .hero-bg {
+        height: 650px;
+    }
+
+    .hero-content {
+        padding: 135px 0;
+    }
+
+    .hero-mobile-img {
+        display: none;
+    }
+
+    .appnox-services-area {
+        margin: 50px 0 20px 0;
+    }
+
+    .single-services {
+        margin: 0 0 30px 0 !important;
+    }
+
+    .appnox-about-area {
+        padding-top: 50px;
+        margin-bottom: 50px;
+    }
+
+    .section-title h3 {
+        font-size: 34px;
+    }
+
+    .appnox-about-img {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 50px;
+    }
+
+    .faq-img {
+        margin-top: 50px;
+    }
+
+    .appnox-pricing-area {
+        padding: 50px 0 20px 0;
+    }
+
+    .appnox-videos-area {
+        margin: 50px 0;
+    }
+
+    .videos-icon-text h3 {
+        font-size: 40px;
+    }
+
+    .videos-icon-text i {
+        height: 100px;
+        width: 100px;
+        line-height: 100px;
+    }
+
+    .appnox-screenshot-area {
+        padding-bottom: 50px;
+    }
+
+    .appnox-faq-area {
+        margin: 50px 0;
+    }
+
+    .appnox-testimonial-area {
+        padding: 50px 0 150px 0;
+    }
+
+    .testimonial-wraper .owl-nav div {
+        display: none !important;
+    }
+
+    .appnox-blog-area {
+        margin: 0 0 20px 0;
+    }
+
+    .appnox-footer-area {
+        padding-top: 50px;
+        background: #5e2ced;
+    }
+
+    .footer-widget.widget-2 {
+        margin-left: 0;
+    }
+
+    .footer-newsletter-form-area {
+        text-align: left !important;
+    }
+
+    .footer-copyright {
+        margin-top: 30px;
+    }
+
+    .error-content {
+        margin-top: 50px;
+    }
+
+    .error-content h2 {
+        font-size: 45px;
+    }
+
+    .error-content p {
+        margin: 30px 0;
+    }
+
+    .appnox-error-area {
+        margin-bottom: 50px;
+    }
+
+    .appnox-breadcrumb-area {
+        padding: 70px 0 140px 0;
+    }
+
+    .appnox-latest-blog-area {
+        margin: 50px 0 0 0;
+    }
+
+    .appnox-latest-blog-area .pr-45 {
+        padding-right: 15px;
+    }
+
+    .appnox-pagination {
+        margin: 0 0 30px 15px;
+    }
+
+    .blog-details-content h3 {
+        font-size: 25px;
+        line-height: 30px;
+    }
+
+    .post-comments-form-area {
+        margin: 40px 0 40px 0;
+    }
+
+    .comments-reply {
+        padding-left: 60px;
+    }
+
+    .appnox-contact-area {
+        margin: 50px 0;
+    }
+
+    .contact-info-area {
+        margin: 50px 0 0 0;
+    }
+
+    #appnox-map {
+        margin-bottom: 50px;
+    }
+
+
+
+
+
+
+
+
+
+}
+
+
+/* SM Device :480px. */
+@media (min-width: 361px) and (max-width: 575px) {
+
+
+    .search-form-centered {
+        width: 90%;
+    }
+
+    .header-area {
+        text-align: center;
+        padding: 20px 0 0 0;
+    }
+
+    .header-logo {
+        margin: 0;
+    }
+
+    .header-top-right {
+        float: left !important;
+        margin-top: -40px;
+    }
+
+    ul.header-search {
+        margin: 0;
+    }
+
+    .header-top-btn {
+        display: none;
+    }
+
+    .mean-container a.meanmenu-reveal {
+        margin-top: -48px;
+    }
+
+    .hero-btn a.btn:first-child {
+        margin-right: 15px;
+    }
+
+    .hero-bg {
+        height: 650px;
+    }
+
+    .hero-content {
+        padding: 130px 0;
+    }
+
+    .hero-mobile-img {
+        display: none;
+    }
+
+    .appnox-services-area {
+        margin: 50px 0 20px 0;
+    }
+
+    .single-services {
+        margin: 0 0 30px 0 !important;
+    }
+
+    .appnox-about-area {
+        padding-top: 50px;
+        margin-bottom: 20px;
+    }
+
+    .section-title h3 {
+        font-size: 34px;
+    }
+
+    .appnox-about-img {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 50px;
+    }
+
+    .faq-img {
+        margin-top: 50px;
+    }
+
+    .appnox-pricing-area {
+        padding: 0 0 20px 0;
+    }
+
+    .appnox-videos-area {
+        margin: 50px 0;
+    }
+
+    .videos-icon-text h3 {
+        font-size: 40px;
+    }
+
+    .videos-icon-text i {
+        height: 100px;
+        width: 100px;
+        line-height: 100px;
+    }
+
+    .appnox-screenshot-area {
+        padding-bottom: 50px;
+    }
+
+    .appnox-faq-area {
+        margin: 50px 0;
+    }
+
+    .appnox-testimonial-area {
+        padding: 50px 0 150px 0;
+    }
+
+    .testimonial-wraper .owl-nav div {
+        display: none !important;
+    }
+
+    .appnox-blog-area {
+        margin: 0 0 20px 0;
+    }
+
+    .appnox-footer-area {
+        padding-top: 50px;
+        background: #5e2ced;
+    }
+
+    .footer-widget.widget-2 {
+        margin-left: 0;
+    }
+
+    .footer-newsletter-form-area {
+        text-align: left !important;
+    }
+
+    .footer-copyright {
+        margin-top: 30px;
+    }
+
+    .error-content {
+        margin-top: 50px;
+    }
+
+    .error-content h2 {
+        font-size: 45px;
+    }
+
+    .error-content p {
+        margin: 30px 0;
+    }
+
+    .appnox-error-area {
+        margin-bottom: 50px;
+    }
+
+    .appnox-breadcrumb-area {
+        padding: 60px 0 140px 0;
+    }
+
+    .appnox-latest-blog-area {
+        margin: 50px 0 0 0;
+    }
+
+    .appnox-latest-blog-area .pr-45 {
+        padding-right: 15px;
+    }
+
+    .appnox-pagination {
+        margin: 0 0 30px 15px;
+    }
+
+    .blog-details-content h3 {
+        font-size: 25px;
+        line-height: 30px;
+    }
+
+    .post-comments-form-area {
+        margin: 40px 0 40px 0;
+    }
+
+    .comments-reply {
+        padding-left: 60px;
+    }
+
+    .appnox-contact-area {
+        margin: 50px 0;
+    }
+
+    .contact-info-area {
+        margin: 50px 0 0 0;
+    }
+
+    #appnox-map {
+        margin-bottom: 50px;
+    }
+
+
+
+
+}
+
+/* SM Device :480px. */
+@media (max-width: 360px) {
+    .search-form-centered {
+        width: 90%;
+    }
+
+    .header-area {
+        text-align: center;
+        padding: 20px 0 0 0;
+    }
+
+    .header-logo {
+        margin: 0;
+    }
+
+    .header-top-right {
+        float: left !important;
+        margin-top: -40px;
+    }
+
+    ul.header-search {
+        margin: 0;
+    }
+
+    .header-top-btn {
+        display: none;
+    }
+
+    .mean-container a.meanmenu-reveal {
+        margin-top: -48px;
+    }
+
+    .hero-btn a.btn:first-child {
+        margin-right: 15px;
+    }
+
+    .section-title p {
+        font-size: 15px;
+    }
+
+    .section-title {
+        margin-bottom: 35px;
+    }
+
+    .hero-content h2 {
+        font-size: 35px;
+        margin-bottom: 15px;
+    }
+
+    .hero-content p {
+        font-size: 16px;
+    }
+
+    .search-form-centered {
+        width: 90%;
+    }
+
+    .header-area {
+        text-align: center;
+        padding: 20px 0 2px 0;
+    }
+
+    .header-logo {
+        margin: 0;
+    }
+
+    .header-top-right {
+        float: left !important;
+        margin-top: -32px;
+    }
+
+    ul.header-search {
+        margin: 0;
+    }
+
+    .header-top-btn {
+        display: none;
+    }
+
+    .mean-container a.meanmenu-reveal {
+        margin-top: -44px;
+    }
+
+    .hero-btn a.btn:first-child {
+        margin: 0 0 20px 0;
+    }
+
+    .hero-bg {
+        height: 650px;
+    }
+
+    .hero-content {
+        padding: 130px 0;
+    }
+
+    .hero-mobile-img {
+        display: none;
+    }
+
+    .appnox-services-area {
+        margin: 50px 0 20px 0;
+    }
+
+    .single-services {
+        margin: 0 0 30px 0 !important;
+    }
+
+    .appnox-about-area {
+        padding-top: 50px;
+        margin-bottom: 20px;
+    }
+
+    .section-title h3 {
+        font-size: 30px;
+        margin-bottom: 15px;
+    }
+
+    .appnox-about-img {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 50px;
+    }
+
+    .faq-img {
+        margin-top: 50px;
+    }
+
+    .appnox-pricing-area {
+        padding: 0 0 20px 0;
+    }
+
+    .appnox-videos-area {
+        margin: 50px 0;
+    }
+
+    .videos-icon-text h3 {
+        font-size: 40px;
+    }
+
+    .videos-icon-text i {
+        height: 100px;
+        width: 100px;
+        line-height: 100px;
+    }
+
+    .appnox-screenshot-area {
+        padding-bottom: 50px;
+    }
+
+    .appnox-faq-area {
+        margin: 50px 0;
+    }
+
+    .appnox-testimonial-area {
+        padding: 50px 0 150px 0;
+    }
+
+    .testimonial-wraper .owl-nav div {
+        display: none !important;
+    }
+
+    .appnox-blog-area {
+        margin: 0 0 20px 0;
+    }
+
+    .appnox-footer-area {
+        padding-top: 50px;
+        background: #5e2ced;
+    }
+
+    .footer-widget.widget-2 {
+        margin-left: 0;
+    }
+
+    .footer-newsletter-form-area {
+        text-align: left !important;
+    }
+
+    .footer-copyright {
+        margin-top: 30px;
+    }
+
+    .error-content {
+        margin-top: 50px;
+    }
+
+    .error-content h2 {
+        font-size: 45px;
+    }
+
+    .error-content p {
+        margin: 30px 0;
+    }
+
+    .appnox-error-area {
+        margin-bottom: 50px;
+    }
+
+    .appnox-breadcrumb-area {
+        padding: 60px 0 130px 0;
+    }
+
+    .appnox-latest-blog-area {
+        margin: 50px 0 0 0;
+    }
+
+    .appnox-latest-blog-area .pr-45 {
+        padding-right: 15px;
+    }
+
+    .blog-title h3 a {
+        font-size: 20px;
+        line-height: 1 !important;
+    }
+
+    .appnox-pagination {
+        margin: 0 0 30px 15px;
+    }
+
+    .block-quote {
+        padding: 39px 20px 40px 65px;
+    }
+
+    .block-quote:before {
+        padding: 22px 18px;
+        width: 90px;
+        height: 90px;
+    }
+
+    .block-quote p {
+        font-size: 15px;
+        line-height: 28px;
+    }
+
+    .blog-share-icon {
+        float: left !important;
+        margin: 30px 0;
+    }
+
+    .blog-author-area {
+        display: block;
+        margin-top: 30px;
+    }
+
+    .blog-author-img {
+        margin-bottom: 20px;
+    }
+
+    .blog-details-content h3 {
+        font-size: 25px;
+        line-height: 30px;
+    }
+
+    .post-comments-form-area {
+        margin: 40px 0 40px 0;
+    }
+
+    .comments-reply {
+        padding-left: 60px;
+    }
+
+    .appnox-contact-form-area {
+        padding: 30px;
+    }
+
+    .appnox-contact-area {
+        margin: 50px 0;
+    }
+
+    .contact-info-area {
+        margin: 50px 0 0 0;
+    }
+
+    #appnox-map {
+        margin-bottom: 50px;
+    }
+
+
+}
