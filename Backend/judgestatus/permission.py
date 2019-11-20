@@ -50,12 +50,14 @@ class NoContestOnly(permissions.BasePermission):
         if userid == blog.user:
             return True
         
-        
+        if request.session.get('type', 1) != 1:
+            return True
+
         setting = SettingBoard.objects.get(id=1)
         if setting.openstatus == False:
             return False
 
-        if blog.contest == 0 or request.session.get('type', 1) != 1:
+        if blog.contest == 0:
             return True
 
         info = ContestInfo.objects.get(id=blog.contest)

@@ -53,6 +53,8 @@ services:
     ports:
      - "8080:80"
     restart: always
+    volumes:
+      - "./Frontend/dist/img:/Frontend/dist/img"
   
   frontendmobile:
     image: ccr.ccs.tencentyun.com/lpoj/frontendmobile
@@ -68,6 +70,8 @@ services:
     ports:
      - "8081:8081"
     restart: always
+    volumes:
+      - "./FrontendMobile/dist/img:/FrontendMobile/dist/img"
 
   judgerserver:
     image: ccr.ccs.tencentyun.com/lpoj/judgerserver
