@@ -30,11 +30,6 @@ export default new Router({
   mode: 'history',
   routes: [
     {
-      path: '/',
-      name: 'main',
-      component: main
-    },
-    {
       path: '/problem',
       name: 'problem',
       component: problem,
