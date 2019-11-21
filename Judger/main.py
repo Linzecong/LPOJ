@@ -724,13 +724,13 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
         casedes = dict()
         for s in files:
             # 去掉\r
-            tmpfile =  open("./ProblemData/%s/%s" % (problem,s),"r",encoding='utf-8')
-            tstr = tmpfile.read()
-            tstr = tstr.replace('\r','')
-            tmpfile.close()
-            tmpfile =  open("./ProblemData/%s/%s" % (problem,s),"w",encoding='utf-8')
-            tmpfile.write(tstr)
-            tmpfile.close()
+#             tmpfile =  open("./ProblemData/%s/%s" % (problem,s),"r",encoding='utf-8')
+#             tstr = tmpfile.read()
+#             tstr = tstr.replace('\r','')
+#             tmpfile.close()
+#             tmpfile =  open("./ProblemData/%s/%s" % (problem,s),"w",encoding='utf-8')
+#             tmpfile.write(tstr)
+#             tmpfile.close()
 
             s = s.replace(".in", "")
             s = s.replace(".out", "")
