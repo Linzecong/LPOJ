@@ -491,7 +491,7 @@ export default {
     creattimer() {
       clearInterval(this.$store.state.timer);
       this.timer();
-      this.$store.state.timer = setInterval(this.timer, 10000);
+      this.$store.state.timer = setInterval(this.timer, 60000);
     }
   },
   data() {
@@ -533,7 +533,7 @@ export default {
     //创建一个全局定时器，定时刷新状态
 
     this.timer();
-    this.$store.state.timer = setInterval(this.timer, 10000);
+    this.$store.state.timer = setInterval(this.timer, 60000);
   }
 };
 </script>
