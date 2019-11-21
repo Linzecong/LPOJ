@@ -5,3 +5,4 @@ django-cors-headers==2.5.3
 mysqlclient==1.4.2.post1
 django-sslserver
 gevent
+gunicorn==19.9.0
