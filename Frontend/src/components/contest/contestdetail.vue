@@ -149,7 +149,7 @@ export default {
       });
   },
   mounted() {
-    this.$store.state.antimer = setInterval(this.getan, 120000);
+    this.$store.state.antimer = setInterval(this.getan, 3600000);
     this.getan()
   },
   destroyed() {

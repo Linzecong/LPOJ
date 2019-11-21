@@ -97,6 +97,7 @@ sudo docker-compose -f docker-compose-build.yml up -d --build --scale judger=3
 
 由于会重新构建整个系统，而不是拉去已构建好的镜像，所以花的时间会比较长~请耐心等待
 
+网站的静态文件可以放在 ./Frontend/dist/img中，比如存放题目所用的图片
 
 
 ## 如无意外，部署成功！

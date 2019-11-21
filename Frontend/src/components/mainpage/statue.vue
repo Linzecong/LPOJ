@@ -491,7 +491,7 @@ export default {
     creattimer() {
       clearInterval(this.$store.state.timer);
       this.timer();
-      this.$store.state.timer = setInterval(this.timer, 60000);
+      this.$store.state.timer = setInterval(this.timer, 360000);
     }
   },
   data() {
