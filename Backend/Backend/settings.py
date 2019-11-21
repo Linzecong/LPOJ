@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'wiki', 
     'item',
     "sslserver",
+    'gunicorn',
 ]
 
 REST_FRAMEWORK = {
