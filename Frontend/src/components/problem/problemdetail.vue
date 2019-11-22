@@ -466,7 +466,7 @@ export default {
               this.judgetype = "info";
               this.loadingshow = true;
               //创建一个全局定时器，定时刷新状态
-              this.$store.state.submittimer = setInterval(this.timer, 1000);
+              this.$store.state.submittimer = setInterval(this.timer, 3000);
             })
             .catch(error => {
               this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");

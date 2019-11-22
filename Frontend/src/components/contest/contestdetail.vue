@@ -44,7 +44,7 @@
       <contestannounce ref="Announcements"></contestannounce>
     </el-tab-pane>
 
-    <el-tab-pane label="Comments" :disabled="!haveauth">
+    <el-tab-pane label="Comments" :disabled="!haveauth" :lazy="true">
       <span slot="label">
         <b>
           <i class="el-icon-info"></i> Comments
@@ -52,7 +52,7 @@
       </span>
       <contestcomment ref="Comments"></contestcomment>
     </el-tab-pane>
-    <el-tab-pane label="Tutorial" :disabled="!haveauth">
+    <el-tab-pane label="Tutorial" :disabled="!haveauth" :lazy="true">
       <span slot="label">
         <b>
           <i class="el-icon-notebook-1"></i> Tutorial
@@ -149,7 +149,7 @@ export default {
       });
   },
   mounted() {
-    this.$store.state.antimer = setInterval(this.getan, 3600000);
+    this.$store.state.antimer = setInterval(this.getan, 300000); //改为5分钟刷一次，减少刷新率
     this.getan()
   },
   destroyed() {

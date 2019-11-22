@@ -465,7 +465,7 @@ export default {
                 this.judgetype = "info";
                 this.loadingshow = true;
 
-                this.$store.state.submittimer = setInterval(this.timer, 1000);
+                this.$store.state.submittimer = setInterval(this.timer, 3000);
               })
               .catch(error => {
                 this.$message.error(
@@ -523,7 +523,7 @@ export default {
                               //创建一个全局定时器，定时刷新状态
                               this.$store.state.submittimer = setInterval(
                                 this.timer,
-                                1000
+                                3000
                               );
                             }).catch(error => {
                           this.$message.error(

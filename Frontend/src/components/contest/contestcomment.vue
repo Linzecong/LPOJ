@@ -162,6 +162,7 @@ export default {
     for (var i = 65; i < 65 + 26; i++) {
       this.pros.push(String.fromCharCode(i));
     }
+    this.reflash()
   }
 };
 </script>

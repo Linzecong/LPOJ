@@ -11,8 +11,7 @@
 
     <center>
       <h1>{{ contesttitle }}</h1>
-      <el-button @click="exportExcel">点击导出</el-button>
-      <br>
+      
     </center>
     <el-row :gutter="10">
       <el-table
@@ -42,6 +41,9 @@
           </template>
         </el-table-column>
       </el-table>
+      <br>
+      <el-button type="primary" @click="exportExcel">点击导出</el-button>
+      <br>
     </el-row>
   </el-row>
 </template>
