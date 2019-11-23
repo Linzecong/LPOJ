@@ -33,7 +33,7 @@ thread_cache_size       = 8
 myisam-recover-options  = BACKUP
 max_connections        = 2000
 table_open_cache       = 128
-thread_concurrency     = 20
+#thread_concurrency     = 20
 #
 # * Query Cache Configuration
 #

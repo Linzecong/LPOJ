@@ -93,9 +93,9 @@ services:
       nginx -g "daemon off;"
       '
     links: 
-      - backend1:lpojbackend_1
-      - backend2:lpojbackend_2
-      - backend3:lpojbackend_3
+      - backend1:lpojbackend1
+      - backend2:lpojbackend2
+      - backend3:lpojbackend3
     ports:
      - "8080:80"
     restart: always
@@ -112,9 +112,9 @@ services:
       nginx -g "daemon off;"
       '
     links: 
-      - backend1:lpojbackend_1
-      - backend2:lpojbackend_2
-      - backend3:lpojbackend_3
+      - backend1:lpojbackend1
+      - backend2:lpojbackend2
+      - backend3:lpojbackend3
     ports:
      - "8081:8081"
     restart: always

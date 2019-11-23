@@ -56,7 +56,7 @@ services:
             DB_USER: 'root' # 选择性修改
             DB_PORT: 3306 # 选择性修改
     ports:
-     - "8000:8000"
+     - "8001:8000"
     restart: always
     volumes:
         - "./Backend/ProblemData:/Backend/ProblemData"
@@ -78,7 +78,7 @@ services:
             DB_USER: 'root' # 选择性修改
             DB_PORT: 3306 # 选择性修改
     ports:
-     - "8000:8000"
+     - "8002:8000"
     restart: always
     volumes:
         - "./Backend/ProblemData:/Backend/ProblemData"
@@ -86,16 +86,16 @@ services:
   frontend:
     build: ./Frontend
     depends_on: 
-      - backend
+      - backend3
     command: >
       /bin/bash -c '
       sleep 80 ;
       nginx -g "daemon off;"
       '
     links: 
-      - backend1:lpojbackend_1
-      - backend2:lpojbackend_2
-      - backend3:lpojbackend_3
+      - backend1:lpojbackend1
+      - backend2:lpojbackend2
+      - backend3:lpojbackend3
     ports:
      - "8080:80"
     restart: always
@@ -105,16 +105,16 @@ services:
   frontendmobile:
     build: ./FrontendMobile
     depends_on: 
-      - backend
+      - backend3
     command: >
       /bin/bash -c '
       sleep 80 ;
       nginx -g "daemon off;"
       '
     links: 
-      - backend1:lpojbackend_1
-      - backend2:lpojbackend_2
-      - backend3:lpojbackend_3
+      - backend1:lpojbackend1
+      - backend2:lpojbackend2
+      - backend3:lpojbackend3
     ports:
      - "8081:8081"
     restart: always
@@ -144,7 +144,7 @@ services:
   crawlingserver:
     build: ./CrawlingServer
     depends_on: 
-      - backend 
+      - backend3
     command: >
       /bin/bash -c '
       sleep 60 ;
