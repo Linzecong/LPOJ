@@ -72,17 +72,26 @@ export default {
     }
   },
   mounted() {
-    this.$axios
+  
+  var sb = this.$store.state.sb
+    if( sb ==undefined){
+      this.$axios
       .get("/settingboard/")
       .then(res => {
         if (res.data.length > 0) this.label.school = res.data[0].schoolname;
         else this.label.school = "University";
+        this.$store.state.sb = res.data
       })
       .catch(error => {
         this.$message.error(
           "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
         );
       });
+    }
+    else{
+      if (sb.length > 0) this.label.school = sb[0].schoolname;
+        else this.label.school = "University";
+    }
       
     this.$axios
       .get("/teamboard/")

@@ -7,5 +7,5 @@ RUN npm install
 RUN npm run build
 RUN apt-get install nginx -y
 EXPOSE 80
-ADD default.conf /etc/nginx/sites-available/default
+ADD nginx.conf /etc/nginx/nginx.conf
 CMD ["nginx", "-g", "daemon off;"]

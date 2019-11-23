@@ -14,18 +14,29 @@ export default {
     };
   },
   created() {
-    this.$axios
+
+    var sb = this.$store.state.sb
+    if( sb ==undefined){
+      this.$axios
       .get("/settingboard/")
       .then(res => {
         if (res.data.length > 0) {
           this.languagelist = res.data[0].openlanguage.split("|");
         } 
+        this.$store.state.sb = res.data
       })
       .catch(error => {
         this.$message.error(
           "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
         );
       });
+    }
+    else{
+      if (sb.length > 0) {
+          this.languagelist = sb[0].openlanguage.split("|");
+        } 
+    }
+
   },
   methods: {}
 };

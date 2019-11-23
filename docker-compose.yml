@@ -12,7 +12,7 @@ services:
         - "./Database/data:/var/lib/mysql"
         - "./Database/conf:/etc/mysql/mysql.conf.d"
 
-  backend:
+  backend1:
     image: ccr.ccs.tencentyun.com/lpoj/backend
     depends_on: 
        - db
@@ -39,17 +39,63 @@ services:
     volumes:
         - "./Backend/ProblemData:/Backend/ProblemData"
 
+  backend2:
+    image: ccr.ccs.tencentyun.com/lpoj/backend
+    depends_on: 
+       - backend1
+    command: >
+      /bin/bash -c '
+      sleep 70 ;
+      gunicorn -w 5 --bind 0.0.0.0:8000 -k 'gevent' Backend.wsgi:application
+      '
+    links: 
+      - db:lpojdatabase 
+    environment:
+            DB_PASSWORD: "lpojdatabase" # 选择性修改
+            DB_HOST: "lpojdatabase" # 选择性修改
+            DB_USER: 'root' # 选择性修改
+            DB_PORT: 3306 # 选择性修改
+    ports:
+     - "8000:8000"
+    restart: always
+    volumes:
+        - "./Backend/ProblemData:/Backend/ProblemData"
+    
+  backend3:
+    image: ccr.ccs.tencentyun.com/lpoj/backend
+    depends_on: 
+       - backend1
+    command: >
+      /bin/bash -c '
+      sleep 70 ;
+      gunicorn -w 5 --bind 0.0.0.0:8000 -k 'gevent' Backend.wsgi:application
+      '
+    links: 
+      - db:lpojdatabase 
+    environment:
+            DB_PASSWORD: "lpojdatabase" # 选择性修改
+            DB_HOST: "lpojdatabase" # 选择性修改
+            DB_USER: 'root' # 选择性修改
+            DB_PORT: 3306 # 选择性修改
+    ports:
+     - "8000:8000"
+    restart: always
+    volumes:
+        - "./Backend/ProblemData:/Backend/ProblemData"
+
   frontend:
     image: ccr.ccs.tencentyun.com/lpoj/frontend
     depends_on: 
       - backend
     command: >
       /bin/bash -c '
-      sleep 60 ;
+      sleep 80 ;
       nginx -g "daemon off;"
       '
     links: 
-      - backend:lpojbackend
+      - backend1:lpojbackend_1
+      - backend2:lpojbackend_2
+      - backend3:lpojbackend_3
     ports:
      - "8080:80"
     restart: always
@@ -62,11 +108,13 @@ services:
       - backend
     command: >
       /bin/bash -c '
-      sleep 60 ;
+      sleep 80 ;
       nginx -g "daemon off;"
       '
     links: 
-      - backend:lpojbackend
+      - backend1:lpojbackend_1
+      - backend2:lpojbackend_2
+      - backend3:lpojbackend_3
     ports:
      - "8081:8081"
     restart: always

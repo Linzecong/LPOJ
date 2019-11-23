@@ -11,7 +11,6 @@
 
     <center>
       <h1>{{ contesttitle }}</h1>
-      
     </center>
     <el-row :gutter="10">
       <el-table
@@ -26,24 +25,32 @@
       >
         <el-table-column type="index" width="40" fixed></el-table-column>
         <el-table-column prop="user" label="User" fixed></el-table-column>
-        <el-table-column prop="nickname" label="Nickname" fixed></el-table-column>
-        <el-table-column prop="score" :label="SolveLabel" fixed></el-table-column>
+        <el-table-column
+          prop="nickname"
+          label="Nickname"
+          fixed
+        ></el-table-column>
+        <el-table-column
+          prop="score"
+          :label="SolveLabel"
+          fixed
+        ></el-table-column>
         <el-table-column prop="time" label="Time"></el-table-column>
         <el-table-column
-          v-for="(item,index) in probleminfo"
+          v-for="(item, index) in probleminfo"
           :key="index"
           :prop="item.prop"
           :label="item.label"
           style="white-space: pre-line;"
         >
           <template slot-scope="scope">
-            <div style="white-space:pre-line;">{{scope.row[item.prop]}}</div>
+            <div style="white-space:pre-line;">{{ scope.row[item.prop] }}</div>
           </template>
         </el-table-column>
       </el-table>
-      <br>
+      <br />
       <el-button type="primary" @click="exportExcel">点击导出</el-button>
-      <br>
+      <br />
     </el-row>
   </el-row>
 </template>
@@ -79,30 +86,30 @@ export default {
   },
   methods: {
     exportExcel() {
-        /* 从表生成工作簿对象 */
-        var wb = XLSX.utils.table_to_book(document.querySelector("#out-table"));
-        /* 获取二进制字符串作为输出 */
-        var wbout = XLSX.write(wb, {
-            bookType: "xlsx",
-            bookSST: true,
-            type: "array"
-        });
-        try {
-            FileSaver.saveAs(
-            //Blob 对象表示一个不可变、原始数据的类文件对象。
-            //Blob 表示的不一定是JavaScript原生格式的数据。
-            //File 接口基于Blob，继承了 blob 的功能并将其扩展使其支持用户系统上的文件。
-            //返回一个新创建的 Blob 对象，其内容由参数中给定的数组串联组成。
-            new Blob([wbout], { type: "application/octet-stream" }),
-            //设置导出文件名称
-            "contestrank.xlsx"
-            );
-        } catch (e) {
-            if (typeof console !== "undefined") console.log(e, wbout);
-        }
-        return wbout;
+      /* 从表生成工作簿对象 */
+      var wb = XLSX.utils.table_to_book(document.querySelector("#out-table"));
+      /* 获取二进制字符串作为输出 */
+      var wbout = XLSX.write(wb, {
+        bookType: "xlsx",
+        bookSST: true,
+        type: "array"
+      });
+      try {
+        FileSaver.saveAs(
+          //Blob 对象表示一个不可变、原始数据的类文件对象。
+          //Blob 表示的不一定是JavaScript原生格式的数据。
+          //File 接口基于Blob，继承了 blob 的功能并将其扩展使其支持用户系统上的文件。
+          //返回一个新创建的 Blob 对象，其内容由参数中给定的数组串联组成。
+          new Blob([wbout], { type: "application/octet-stream" }),
+          //设置导出文件名称
+          "contestrank.xlsx"
+        );
+      } catch (e) {
+        if (typeof console !== "undefined") console.log(e, wbout);
+      }
+      return wbout;
     },
-    
+
     sortByProperty(p1, p2) {
       function sortfun(obj1, obj2) {
         //核心代码
@@ -127,15 +134,14 @@ export default {
       this.statusdata.problemid = this.problemids[
         column.property.charCodeAt() - A.charCodeAt()
       ];
-      if(row.nickname.indexOf("[Clone]")>-1)
+      if (row.nickname.indexOf("[Clone]") > -1)
         this.statusdata.contest = this.$store.state.contestfrom;
-      else
-        this.statusdata.contest = this.$route.params.contestID;
+      else this.statusdata.contest = this.$route.params.contestID;
 
       this.statusshow = true;
     },
     statusclosed() {
-      this.$refs.Status.setstatus("0", "|#)","-1");
+      this.$refs.Status.setstatus("0", "|#)", "-1");
     },
     setstatus() {
       this.$refs.Status.setstatus(
@@ -145,8 +151,7 @@ export default {
       );
     },
     ratingcolor({ row, rowIndex }) {
-      if(row.nickname.indexOf("[Clone]")>-1)
-        return "color:#AAAAAA";
+      if (row.nickname.indexOf("[Clone]") > -1) return "color:#AAAAAA";
       if (row.rating >= 3000) return "color:red;font-weight: bold;";
       if (row.rating >= 2600) return "color:#BB5E00;font-weight: bold;";
       if (row.rating >= 2200) return "color:#E6A23C;font-weight: bold;";
@@ -259,7 +264,9 @@ export default {
           nameset.add(
             response.data[index].username + "|" + response.data[index].user
           );
-          namevis[response.data[index].username + "|" + response.data[index].user] = 0;
+          namevis[
+            response.data[index].username + "|" + response.data[index].user
+          ] = 0;
         }
 
         //遍历每一个人，计算每一个人的信息
@@ -296,7 +303,10 @@ export default {
 
           //找出每一道题AC的时间
           for (let index = 0; index < response.data.length; index++) {
-            if (response.data[index].username == username&&response.data[index].user == nickname) {
+            if (
+              response.data[index].username == username &&
+              response.data[index].user == nickname
+            ) {
               PaticipantData["rating"] = response.data[index].rating;
               if (parseInt(response.data[index]["type"]) == 1) {
                 let time = ProblemDataList[response.data[index].problemrank][0];
@@ -310,7 +320,10 @@ export default {
 
           //找出每一道题AC前的提交次数，作为罚时
           for (let index = 0; index < response.data.length; index++) {
-            if (response.data[index].username == username&&response.data[index].user == nickname) {
+            if (
+              response.data[index].username == username &&
+              response.data[index].user == nickname
+            ) {
               if (parseInt(response.data[index]["type"]) == 0) {
                 if (
                   parseInt(response.data[index]["submittime"]) <
@@ -328,7 +341,6 @@ export default {
             else if (ii == 1) ProblemScore = 1500;
             else if (ii == 2) ProblemScore = 1600;
             else ProblemScore = 2000;
-
 
             //如果AC了
             if (ProblemDataList[ii][0] != 5552304570991) {

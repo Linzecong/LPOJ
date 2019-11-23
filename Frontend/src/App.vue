@@ -120,17 +120,21 @@ export default {
   },
   mounted() {
     this.isadmin = sessionStorage.type == 2 || sessionStorage.type == 3;
-    this.$axios
+
+      this.$axios
       .get("/settingboard/")
       .then(res => {
         if (res.data.length > 0) this.school = res.data[0].ojname;
         else this.school = "LPOJ";
+        this.$store.state.sb = res.data
       })
       .catch(error => {
         this.$message.error(
           "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
         );
       });
+
+    
   },
   methods: {
     loginopen() {
