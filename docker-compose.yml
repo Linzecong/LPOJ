@@ -56,7 +56,7 @@ services:
             DB_USER: 'root' # 选择性修改
             DB_PORT: 3306 # 选择性修改
     ports:
-     - "8000:8000"
+     - "8001:8000"
     restart: always
     volumes:
         - "./Backend/ProblemData:/Backend/ProblemData"
@@ -78,7 +78,7 @@ services:
             DB_USER: 'root' # 选择性修改
             DB_PORT: 3306 # 选择性修改
     ports:
-     - "8000:8000"
+     - "8002:8000"
     restart: always
     volumes:
         - "./Backend/ProblemData:/Backend/ProblemData"
@@ -86,7 +86,7 @@ services:
   frontend:
     image: ccr.ccs.tencentyun.com/lpoj/frontend
     depends_on: 
-      - backend
+      - backend3
     command: >
       /bin/bash -c '
       sleep 80 ;
@@ -105,7 +105,7 @@ services:
   frontendmobile:
     image: ccr.ccs.tencentyun.com/lpoj/frontendmobile
     depends_on: 
-      - backend
+      - backend3
     command: >
       /bin/bash -c '
       sleep 80 ;
@@ -144,7 +144,7 @@ services:
   crawlingserver:
     image: ccr.ccs.tencentyun.com/lpoj/crawlingserver
     depends_on: 
-      - backend 
+      - backend3
     command: >
       /bin/bash -c '
       sleep 60 ;
