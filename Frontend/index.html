@@ -21,9 +21,7 @@
   function urlredirect() {
       var sUserAgent = navigator.userAgent.toLowerCase(); 
       if ((sUserAgent.match(/(ipod|iphone os|midp|ucweb|android|windows ce|windows mobile)/i))) {
-          var thisUrl = window.location.href;
-          thisUrl = thisUrl.replace("8080","8081");
-          window.location.href = thisUrl
+        window.location.href ="https://m.lpoj.cn"
       }
   }
   urlredirect();
