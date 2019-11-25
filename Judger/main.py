@@ -172,6 +172,34 @@ def specialjudge(problem,testin,testout,userout):
 
 # 用于远程下载数据文件，首先判断数据文件有没有更新，有的话就更新
 def remote_scp(host_ip, remote_path, local_path, username, password, problem):
+    if GlobalVar.judgerjson["nodownload"] == True: # 如果采用手动直接上传的方式，那么不用下载
+        dirname = str(problem)
+        try:
+            shutil.rmtree("./ProblemData/" +
+                          dirname+"/", ignore_errors=True)
+            f = zipfile.ZipFile("./ProblemData/"+str(problem)+".zip", 'r')
+            for file1 in f.namelist():
+                f.extract(file1, "./ProblemData/"+dirname+"/")
+
+            files = os.listdir("./ProblemData/%s/" % dirname)
+            for s in files:
+                # 去掉\r
+                tmpfile =  open("./ProblemData/%s/%s" % (problem,s),"r",encoding='utf-8')
+                tstr = tmpfile.read()
+                tstr = tstr.replace('\r','')
+                tmpfile.close()
+                tmpfile =  open("./ProblemData/%s/%s" % (problem,s),"w",encoding='utf-8')
+                tmpfile.write(tstr)
+                tmpfile.close()
+                
+            print("Extract Succeed!")
+            return True
+        except:
+            shutil.rmtree("./ProblemData/" +
+                          dirname+"/", ignore_errors=True)
+            os.remove("./ProblemData/"+str(problem)+".zip")
+            print("Extract Failed!")
+            return False
     try:
         if GlobalVar.sftp_t.is_authenticated() == False:
             GlobalVar.sftp_t.close()
