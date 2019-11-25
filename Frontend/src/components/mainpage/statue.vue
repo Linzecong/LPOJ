@@ -16,6 +16,10 @@
           v-clipboard:success="onCopy"
           v-clipboard:error="onError"
         >Copy</el-button>
+        <el-button
+          size="mini"
+          @click="downloadFile(''+curid+'.txt',code)"
+        >Download</el-button>
       </el-alert>
 
       <codemirror id="mycode" v-model="code" :options="cmOptions"></codemirror>
@@ -239,6 +243,7 @@ export default {
         .get("/judgestatuscode/" + row.id + "/")
         .then(response => {
           this.code = response.data.code;
+          this.curid = row.id;
 
           if (response.data.message + "" == "0" || row.result == "Accepted")
             this.compilemsg = "编译成功！";
@@ -492,6 +497,18 @@ export default {
       clearInterval(this.$store.state.timer);
       this.timer();
       //this.$store.state.timer = setInterval(this.timer, 60000); 取消自动刷新
+    },
+    downloadFile(fileName, content) {
+      var aLink = document.createElement("a");
+      var blob = new Blob([content], { type: "data:text/plain" });
+      var downloadElement = document.createElement("a");
+      var href = window.URL.createObjectURL(blob); //创建下载的链接
+      downloadElement.href = href;
+      downloadElement.download = fileName; //下载后文件名
+      document.body.appendChild(downloadElement);
+      downloadElement.click(); //点击下载
+      document.body.removeChild(downloadElement); //下载完成移除元素
+      window.URL.revokeObjectURL(href); //释放掉blob对象
     }
   },
   data() {
@@ -505,6 +522,7 @@ export default {
         viewportMargin: Infinity,
         lineWrapping: true
       },
+      curid:0,
       tableData: [],
       currentpage: 1,
       pagesize: 30,

@@ -16,6 +16,10 @@
           v-clipboard:success="onCopy"
           v-clipboard:error="onError"
         >Copy</el-button>
+        <el-button
+          size="mini"
+          @click="downloadFile(''+curid+'.txt',code)"
+        >Download</el-button>
       </el-alert>
       <codemirror v-model="code" :options="cmOptions"></codemirror>
 
@@ -150,6 +154,7 @@ export default {
         .get("/judgestatuscode/" + id + "/")
         .then(response => {
           this.code = response.data.code;
+          this.curid = id
 
           if (response.data.message + "" == "0") this.compilemsg = "编译成功！";
           else this.compilemsg = response.data.message;
@@ -295,6 +300,18 @@ export default {
           }
           this.tableData = response.data;
         });
+    },
+    downloadFile(fileName, content) {
+      var aLink = document.createElement("a");
+      var blob = new Blob([content], { type: "data:text/plain" });
+      var downloadElement = document.createElement("a");
+      var href = window.URL.createObjectURL(blob); //创建下载的链接
+      downloadElement.href = href;
+      downloadElement.download = fileName; //下载后文件名
+      document.body.appendChild(downloadElement);
+      downloadElement.click(); //点击下载
+      document.body.removeChild(downloadElement); //下载完成移除元素
+      window.URL.revokeObjectURL(href); //释放掉blob对象
     }
 
   },
@@ -314,7 +331,7 @@ export default {
       problem: -1,
       username: "",
       contest:"",
-
+      curid:0,
       dialogVisible: false,
       code: "",
       compilemsg: "无权限查看！",

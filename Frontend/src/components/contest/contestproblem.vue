@@ -88,18 +88,25 @@
               <el-col :span="3">
                 <div id="des" style="padding: 5px 10px;">Language:</div>
               </el-col>
-              <el-col :span="3">
+              <el-col :span="2">
                 <el-select v-model="language" placeholder="请选择" @change="changetemplate">
                   <languageselect></languageselect>
                 </el-select>
               </el-col>
-              <el-col :span="3">
+              <el-col :span="2">
                 <el-button
                   type="primary"
                   @click="submit"
                   style="font-weight:bold;margin-left:10px;"
                 >Submit</el-button>
               </el-col>
+              <el-col :span="2">
+              <el-button
+                type="primary"
+                @click="code = ''"
+                style="font-weight:bold;margin-left:10px;"
+              >Reset</el-button>
+            </el-col>
 
               <el-col :span="15">
                 <el-button

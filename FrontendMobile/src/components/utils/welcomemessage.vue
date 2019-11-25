@@ -18,8 +18,7 @@
           style="text-decoration: none;color:#67C23A;"
         >Documentation</a>
       </h3>
-      服务器流量需要一定的开支！欢迎捐赠，一起把LPOJ做好~我会把你们的名字放在LPOJ首页！谢谢大家支持！~~<br><br>捐赠地址：<a href="https://docs.lpoj.cn/faq/">https://docs.lpoj.cn/faq/</a>
-    </mu-card-text>
+      </mu-card-text>
   </mu-card>
 </template>
 
