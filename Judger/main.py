@@ -65,10 +65,11 @@ class GlobalVar:
                             GlobalVar.judgerjson["db_database"], int(GlobalVar.judgerjson["db_port"]), charset='utf8')
         GlobalVar.cursor = GlobalVar.db.cursor()
 
-        GlobalVar.sftp_t = paramiko.Transport((GlobalVar.judgerjson["sftp_ip"], 22))
-        GlobalVar.sftp_t.connect(username=GlobalVar.judgerjson["sftp_username"],
-                    password=GlobalVar.judgerjson["sftp_password"])  # 登录远程服务器
-        GlobalVar.sftp = paramiko.SFTPClient.from_transport(GlobalVar.sftp_t)  # sftp传输协议
+        if GlobalVar.judgerjson["nodownload"] != "yes":
+            GlobalVar.sftp_t = paramiko.Transport((GlobalVar.judgerjson["sftp_ip"], 22))
+            GlobalVar.sftp_t.connect(username=GlobalVar.judgerjson["sftp_username"],
+                        password=GlobalVar.judgerjson["sftp_password"])  # 登录远程服务器
+            GlobalVar.sftp = paramiko.SFTPClient.from_transport(GlobalVar.sftp_t)  # sftp传输协议
 
         GlobalVar.clientsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         GlobalVar.clientsocket.connect((GlobalVar.host, GlobalVar.port))
