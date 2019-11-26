@@ -13,5 +13,5 @@
     "backend_path":"/home/ubuntu/LPOJ/Backend/",
     "python3_path": "/usr/bin/python3",
     "python2_path": "/usr/bin/python2.7",
-    "nodownload":false
+    "nodownload":"no"
 }

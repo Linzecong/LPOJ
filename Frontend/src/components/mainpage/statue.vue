@@ -20,6 +20,12 @@
           size="mini"
           @click="downloadFile(''+curid+'.txt',code)"
         >Download</el-button>
+        <el-button
+          v-if="isadmin"
+          type="danger"
+          size="mini"
+          @click="deletestatus(curid)"
+        >Delete</el-button>
       </el-alert>
 
       <codemirror id="mycode" v-model="code" :options="cmOptions"></codemirror>
@@ -205,6 +211,15 @@ export default {
     languageselect
   },
   methods: {
+    deletestatus(id){
+      this.$axios
+        .delete("/judgestatus/" + id + "/").then(response => {
+            this.$message.success("成功！")
+        })
+        .catch(error => {
+          this.$message.error("失败！"+error)
+        });
+    },
     onCopy(e) {
       this.$message.success("复制成功！");
     },
@@ -522,6 +537,7 @@ export default {
         viewportMargin: Infinity,
         lineWrapping: true
       },
+      isadmin: false,
       curid:0,
       tableData: [],
       currentpage: 1,
@@ -549,7 +565,7 @@ export default {
   },
   created() {
     //创建一个全局定时器，定时刷新状态
-
+    this.isadmin = sessionStorage.type == 2 || sessionStorage.type == 3;
     this.timer();
     //this.$store.state.timer = setInterval(this.timer, 60000);取消自动刷新
   }

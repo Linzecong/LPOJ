@@ -48,6 +48,7 @@ class GlobalVar:
             GlobalVar.judgerjson["sftp_username"] = os.environ.get("SFTP_USER")
             GlobalVar.judgerjson["sftp_password"] = os.environ.get("SFTP_PASSWORD")
             GlobalVar.judgerjson["backend_path"] = os.environ.get("BACKEND_PATH")
+            GlobalVar.judgerjson["nodownload"] = os.environ.get("NO_DOWNLOAD")
 
         datajsonfile = open("./datatime.json", 'r')
         GlobalVar.datatimejson = json.loads(datajsonfile.read())
@@ -172,7 +173,7 @@ def specialjudge(problem,testin,testout,userout):
 
 # 用于远程下载数据文件，首先判断数据文件有没有更新，有的话就更新
 def remote_scp(host_ip, remote_path, local_path, username, password, problem):
-    if GlobalVar.judgerjson["nodownload"] == True: # 如果采用手动直接上传的方式，那么不用下载
+    if GlobalVar.judgerjson["nodownload"] == "yes": # 如果采用手动直接上传的方式，那么不用下载
         dirname = str(problem)
         try:
             shutil.rmtree("./ProblemData/" +
