@@ -143,7 +143,7 @@ export default {
       activeNames: ["1", "2", "3", "4", "5", "6"],
       level: "Easy",
       code: "",
-      language: "C++",
+      language: "Python2",
 
       codetemplate:{},
       languagelist: ["C++","C","Python3","Python2","Swift5.1","Java"],

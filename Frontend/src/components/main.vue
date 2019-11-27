@@ -70,11 +70,10 @@ export default {
         des: "Description"
       },
 
-    
     };
   },
   mounted() {
-    
+
   },
   methods: {
  

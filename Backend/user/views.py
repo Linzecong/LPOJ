@@ -10,7 +10,17 @@ from rest_framework.throttling import ScopedRateThrottle
 from .models import User, UserData,UserLoginData
 from .serializers import UserSerializer, UserDataSerializer, UserNoPassSerializer, UserNoTypeSerializer, UserLoginDataSerializer
 from .permission import UserSafePostOnly, UserPUTOnly, AuthPUTOnly,ManagerOnly
+from board.models import SettingBoard
 
+def getRegisterPermission(request):
+    setting = SettingBoard.objects.filter(id=1)
+    if len(setting) != 0:
+        if setting[0].openregister is False:
+            return False
+        else:
+            return True
+    else:
+        return True
 
 
 class UserDataView(viewsets.ModelViewSet):
@@ -141,6 +151,9 @@ class UserRegisterAPIView(APIView):
     throttle_classes = [ScopedRateThrottle, ]
 
     def post(self, request, format=None):
+        if getRegisterPermission(request) == False:
+            return Response('register is not allow on this oj !!', status=HTTP_400_BAD_REQUEST)
+
         data = request.data.copy()
         data['type'] = 1
         username = data.get('username')

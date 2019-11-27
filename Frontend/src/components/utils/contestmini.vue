@@ -47,11 +47,6 @@ export default {
 
         }
         this.tableData = response.data;
-      })
-      .catch(error => {
-        this.$message.error(
-          "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
-        );
       });
   },
   methods: {

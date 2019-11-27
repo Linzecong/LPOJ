@@ -1,9 +1,26 @@
 # coding=utf-8
 from rest_framework import permissions
 from .models import User
+from board.models import SettingBoard
+
+def getVisitorPermission(request):
+    setting = SettingBoard.objects.filter(id=1)
+    if len(setting) != 0:
+        if setting[0].openvisitor is False:
+            userid = request.session.get('user_id', None)
+            if userid:
+                return True
+            else:
+                return False
+        else:
+            return True
+    else:
+        return True
 
 class ManagerOnly(permissions.BasePermission):
     def has_permission(self, request, view):
+        if getVisitorPermission(request) == False:
+            return False
         if request.method in permissions.SAFE_METHODS or request.method=="POST":
             return True
 
@@ -15,6 +32,8 @@ class ManagerOnly(permissions.BasePermission):
 
 class UserSafePostOnly(permissions.BasePermission):
     def has_permission(self, request, view):
+        if getVisitorPermission(request) == False:
+            return False
         if request.method in permissions.SAFE_METHODS:
             return True
 
@@ -55,6 +74,8 @@ class UserSafePostOnly(permissions.BasePermission):
 
 class UserPUTOnly(permissions.BasePermission):
     def has_permission(self, request, view):
+        if getVisitorPermission(request) == False:
+            return False
         if request.method != "PUT":
             return False
 
@@ -67,6 +88,8 @@ class UserPUTOnly(permissions.BasePermission):
             return False
 
     def has_object_permission(self, request, view, blog):
+        if getVisitorPermission(request) == False:
+            return False
         if request.method != "PUT":
             return False
         data = request.data
@@ -80,6 +103,8 @@ class UserPUTOnly(permissions.BasePermission):
 
 class AuthPUTOnly(permissions.BasePermission):
     def has_permission(self, request, view):
+        if getVisitorPermission(request) == False:
+            return False
         if request.method != "PATCH" and request.method != "PUT":
             return False
         if request.session.get('type', 1) == 3:
@@ -88,6 +113,8 @@ class AuthPUTOnly(permissions.BasePermission):
             return False
 
     def has_object_permission(self, request, view, blog):
+        if getVisitorPermission(request) == False:
+            return False
         if request.method != "PATCH" and request.method != "PUT":
             return False
         if request.session.get('type', 1) == 3:

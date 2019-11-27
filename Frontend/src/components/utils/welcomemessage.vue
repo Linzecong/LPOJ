@@ -5,7 +5,6 @@
     </div>
     <b>Version：3.3</b>
     <br>
-    <h3><a href="https://www.lpoj.cn/problemdetail?problemID=5777" target="_blank" style="text-decoration: none;color:#409EFF;">添加模板题支持！快来试试这题</a></h3>
     <h3><a href="https://github.com/Linzecong/LPOJ" target="_blank" style="text-decoration: none;color:#409EFF;">Github (Star Me!)</a></h3>
     <h3><a href="https://docs.lpoj.cn" target="_blank" style="text-decoration: none;color:#67C23A;">Documentation</a></h3>
   </el-card>
@@ -33,7 +32,7 @@ export default {
       })
       .catch(error => {
         this.$message.error(
-          "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
+          "服务器错误！可能是本OJ没有开启游客访问，请先登录！"
         );
       });
     }

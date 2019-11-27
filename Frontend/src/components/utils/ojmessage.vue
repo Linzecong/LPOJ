@@ -84,11 +84,6 @@ export default {
           this.$message.success("提交成功！");
           this.dialogVisible = false;
           this.getdata();
-        })
-        .catch(error => {
-          this.$message.error(
-            "服务器错误！" + JSON.stringify(error.response.data)
-          );
         });
     },
     handleSizeChange(val) {

@@ -31,6 +31,11 @@ const store = new Vuex.Store({
   },
 })
 
+axios
+.get("/settingboard/")
+.then(res => {
+  store.state.sb = res.data
+});
 
 
 if (sessionStorage.username != ""&&sessionStorage.username!=undefined) {
