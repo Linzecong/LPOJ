@@ -74,6 +74,7 @@ sudo docker-compose up -d --scale judger=3
 
 如要更新OJ只需在LPOJ目录下执行如下步骤
 ```
+git pull
 sudo docker-compose stop
 sudo docker-compose pull
 sudo docker-compose up -d --scale judger=3

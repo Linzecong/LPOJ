@@ -37,7 +37,7 @@ services:
      - "8000:8000"
     restart: always
     volumes:
-        - "./Backend/ProblemData:/Backend/ProblemData"
+        - "./Backend:/Backend"
 
   backend2:
     build: ./Backend
@@ -59,7 +59,7 @@ services:
      - "8001:8000"
     restart: always
     volumes:
-        - "./Backend/ProblemData:/Backend/ProblemData"
+        - "./Backend:/Backend"
     
   backend3:
     build: ./Backend
@@ -81,7 +81,7 @@ services:
      - "8002:8000"
     restart: always
     volumes:
-        - "./Backend/ProblemData:/Backend/ProblemData"
+        - "./Backend:/Backend"
 
   frontend:
     build: ./Frontend

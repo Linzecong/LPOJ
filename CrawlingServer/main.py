@@ -15,7 +15,6 @@ from urllib import request
 import datetime
 
 
-
 myjsonfile = open("./setting.json", 'r')
 judgerjson = json.loads(myjsonfile.read())
 
@@ -44,23 +43,19 @@ while True:
         CF = get_CF_data(accounts[0])
         print(accounts[0], "CF:", CF)
         if CF[0] == -1:
-            CF[0] = 0
-            CF[1] = 0
+            continue
         HDU = get_HDU_data(accounts[1])
         print(accounts[1], "HDU:", HDU)
         if HDU[0] == -1:
-            HDU[0] = 0
-            HDU[1] = 0
+            continue
         VJ = get_VJ_data(accounts[2])
         print(accounts[2], "VJ:", VJ)
         if VJ[0] == -1:
-            VJ[0] = 0
-            VJ[1] = 0
+            continue
         LPOJ = get_LPOJ_data(accounts[3])
         print(accounts[3], "LPOJ:", LPOJ)
         if LPOJ[0] == -1:
-            LPOJ[0] = 0
-            LPOJ[1] = 0
+            continue
 
         Others = [int(str(data[6]).split("|")[-1]),
                   int(str(data[7]).split("|")[-1])]  # 其他OJ
@@ -93,14 +88,17 @@ while True:
     for user in users.items():
         username = user[0]
         address = user[1]
-        fp = feedparser.parse(address)
-        for e in fp.entries:
-            title = e.title
-            url = e.links[0].href
-            summary = e.summary
-            time2 = e.published
-            cursor.execute("INSERT INTO blog_blog(username,title,url,summary,time) SELECT %s, %s,%s,%s,%s FROM DUAL WHERE NOT EXISTS(SELECT * FROM blog_blog WHERE url= %s)",
-                           (username, title, url, summary, time2, url))
+        try:
+            fp = feedparser.parse(address)
+            for e in fp.entries:
+                title = e.title
+                url = e.links[0].href
+                summary = e.summary
+                time2 = e.published
+                cursor.execute("INSERT INTO blog_blog(username,title,url,summary,time) SELECT %s, %s,%s,%s,%s FROM DUAL WHERE NOT EXISTS(SELECT * FROM blog_blog WHERE url= %s)",
+                            (username, title, url, summary, time2, url))
+        except:
+            pass
         db.commit()
         print(user, " Done!")
 

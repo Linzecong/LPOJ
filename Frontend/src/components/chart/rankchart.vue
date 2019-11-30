@@ -7,7 +7,7 @@
     <h2></h2>
     <el-button size="mini" @click="seeall" type="primary">{{label.seeall}}</el-button><el-button style="margin-left:15px;" size="mini" @click="seeallblog" type="primary">{{label.viewblog}}</el-button>
     <h2></h2>
-    <div ref="myEchart" style="height:500px;width:100%"></div>
+    <div ref="myEchart" style="height:550px;width:100%"></div>
   </center>
 </template>
 
@@ -47,7 +47,7 @@ export default {
           trigger: "axis",
           confine: true,
           textStyle: {
-            fontSize: 9
+            fontSize: 8
           },
           formatter: function(parmas) {
             var func = function sortfun(obj1, obj2) {
