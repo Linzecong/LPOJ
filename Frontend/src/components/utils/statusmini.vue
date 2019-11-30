@@ -18,7 +18,7 @@
         >Copy</el-button>
         <el-button
           size="mini"
-          @click="downloadFile(''+curid+'.txt',code)"
+          @click="downloadFile(curid,code)"
         >Download</el-button>
       </el-alert>
       <codemirror v-model="code" :options="cmOptions"></codemirror>
@@ -155,6 +155,12 @@ export default {
         .then(response => {
           this.code = response.data.code;
           this.curid = id
+          if(response.data.language=="Python2") this.curlang = 'py'
+          if(response.data.language=="Python3") this.curlang = 'py'
+          if(response.data.language=="C++") this.curlang = 'cpp'
+          if(response.data.language=="C") this.curlang = 'c'
+          if(response.data.language=="Java") this.curlang = 'java'
+          if(response.data.language=="Swift5.1") this.curlang = 'swift'
 
           if (response.data.message + "" == "0") this.compilemsg = "编译成功！";
           else this.compilemsg = response.data.message;
@@ -301,13 +307,13 @@ export default {
           this.tableData = response.data;
         });
     },
-    downloadFile(fileName, content) {
+    downloadFile(codeid, content) {
       var aLink = document.createElement("a");
       var blob = new Blob([content], { type: "data:text/plain" });
       var downloadElement = document.createElement("a");
       var href = window.URL.createObjectURL(blob); //创建下载的链接
       downloadElement.href = href;
-      downloadElement.download = fileName; //下载后文件名
+      downloadElement.download = codeid + '.' + this.curlang; //下载后文件名
       document.body.appendChild(downloadElement);
       downloadElement.click(); //点击下载
       document.body.removeChild(downloadElement); //下载完成移除元素
@@ -332,6 +338,7 @@ export default {
       username: "",
       contest:"",
       curid:0,
+      curlang:'cpp',
       dialogVisible: false,
       code: "",
       compilemsg: "无权限查看！",

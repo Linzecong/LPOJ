@@ -49,11 +49,6 @@ export default {
       .get("/userdata/?limit=10&offset=0")
       .then(response => {
         this.tableData = response.data.results;
-      })
-      .catch(error => {
-        this.$message.error(
-          "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
-        );
       });
   }
 };

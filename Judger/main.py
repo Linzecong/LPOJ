@@ -48,6 +48,7 @@ class GlobalVar:
             GlobalVar.judgerjson["sftp_username"] = os.environ.get("SFTP_USER")
             GlobalVar.judgerjson["sftp_password"] = os.environ.get("SFTP_PASSWORD")
             GlobalVar.judgerjson["backend_path"] = os.environ.get("BACKEND_PATH")
+            GlobalVar.judgerjson["nodownload"] = os.environ.get("NO_DOWNLOAD")
 
         datajsonfile = open("./datatime.json", 'r')
         GlobalVar.datatimejson = json.loads(datajsonfile.read())
@@ -64,10 +65,11 @@ class GlobalVar:
                             GlobalVar.judgerjson["db_database"], int(GlobalVar.judgerjson["db_port"]), charset='utf8')
         GlobalVar.cursor = GlobalVar.db.cursor()
 
-        GlobalVar.sftp_t = paramiko.Transport((GlobalVar.judgerjson["sftp_ip"], 22))
-        GlobalVar.sftp_t.connect(username=GlobalVar.judgerjson["sftp_username"],
-                    password=GlobalVar.judgerjson["sftp_password"])  # 登录远程服务器
-        GlobalVar.sftp = paramiko.SFTPClient.from_transport(GlobalVar.sftp_t)  # sftp传输协议
+        if GlobalVar.judgerjson["nodownload"] != "yes":
+            GlobalVar.sftp_t = paramiko.Transport((GlobalVar.judgerjson["sftp_ip"], 22))
+            GlobalVar.sftp_t.connect(username=GlobalVar.judgerjson["sftp_username"],
+                        password=GlobalVar.judgerjson["sftp_password"])  # 登录远程服务器
+            GlobalVar.sftp = paramiko.SFTPClient.from_transport(GlobalVar.sftp_t)  # sftp传输协议
 
         GlobalVar.clientsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         GlobalVar.clientsocket.connect((GlobalVar.host, GlobalVar.port))
@@ -172,7 +174,7 @@ def specialjudge(problem,testin,testout,userout):
 
 # 用于远程下载数据文件，首先判断数据文件有没有更新，有的话就更新
 def remote_scp(host_ip, remote_path, local_path, username, password, problem):
-    if GlobalVar.judgerjson["nodownload"] == True: # 如果采用手动直接上传的方式，那么不用下载
+    if GlobalVar.judgerjson["nodownload"] == "yes": # 如果采用手动直接上传的方式，那么不用下载
         dirname = str(problem)
         try:
             shutil.rmtree("./ProblemData/" +

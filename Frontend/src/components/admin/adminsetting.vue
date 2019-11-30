@@ -18,6 +18,14 @@
         <el-form-item label="是否开启源码查看（除管理员外不得查看源码）">
           <el-switch v-model="openstatus" active-text="开启" inactive-text="关闭"></el-switch>
         </el-form-item>
+
+        <el-form-item label="是否游客访问（关闭后，必须登录才能访问到OJ内容）">
+          <el-switch v-model="openvisitor" active-text="开启" inactive-text="关闭"></el-switch>
+        </el-form-item>
+
+        <el-form-item label="是否开放注册">
+          <el-switch v-model="openregister" active-text="开启" inactive-text="关闭"></el-switch>
+        </el-form-item>
         <el-button style="margin-top:20px;" type="primary" @click="click">提交</el-button>
       </el-form>
       <br>
@@ -50,7 +58,9 @@ export default {
       msg: "",
       openlanguage:"C++|C|Python3|Swift5.1|Java",
       openoi:true,
-      openstatus:true
+      openstatus:true,
+      openvisitor:true,
+      openregister:true,
     };
   },
   methods: {
@@ -94,7 +104,9 @@ export default {
             openwiki: this.wikiopen,
             openlanguage:this.openlanguage,
             openoi:this.openoi,
-            openstatus:this.openstatus
+            openstatus:this.openstatus,
+            openvisitor:this.openvisitor,
+            openregister:this.openregister,
           })
           .then(res => {
             this.$message.success("提交成功！");
@@ -112,7 +124,9 @@ export default {
             openwiki: this.wikiopen,
             openlanguage:this.openlanguage,
             openoi:this.openoi,
-            openstatus:this.openstatus
+            openstatus:this.openstatus,
+            openvisitor:this.openvisitor,
+            openregister:this.openregister,
           })
           .then(res => {
             this.$message.success("提交成功！");
@@ -136,6 +150,8 @@ export default {
           this.openlanguage = res.data[0].openlanguage;
           this.openoi = res.data[0].openoi;
           this.openstatus = res.data[0].openstatus;
+          this.openvisitor =res.data[0].openvisitor;
+          this.openregister =res.data[0].openregister;
         } else this.name = "无";
         this.reflash();
       })

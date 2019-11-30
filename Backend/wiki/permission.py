@@ -2,10 +2,19 @@
 from rest_framework import permissions
 from board.models import SettingBoard
 
+def getWikiPermission():
+    setting = SettingBoard.objects.filter(id=1)
+    if len(setting) != 0:
+        if setting[0].openwiki is False:
+            return False
+        else:
+            return True
+    else:
+        return False
+
 class WikiUserOnly(permissions.BasePermission):
     def has_permission(self, request, view):
-        setting = SettingBoard.objects.get(id=1)
-        if setting.openwiki is False:
+        if getWikiPermission() == False:
             return False
         
         if request.method in permissions.SAFE_METHODS:
@@ -20,9 +29,9 @@ class WikiUserOnly(permissions.BasePermission):
             return False
 
     def has_object_permission(self, request, view, wiki):
-        setting = SettingBoard.objects.get(id=1)
-        if setting.openwiki is False:
+        if getWikiPermission() == False:
             return False
+
         if request.method in permissions.SAFE_METHODS:
             return True
         username = wiki.username
@@ -36,9 +45,9 @@ class WikiUserOnly(permissions.BasePermission):
 
 class UserOnly(permissions.BasePermission):
     def has_permission(self, request, view):
-        setting = SettingBoard.objects.get(id=1)
-        if setting.openwiki is False:
+        if getWikiPermission() == False:
             return False
+
         if request.method in permissions.SAFE_METHODS or request.method == "DELETE":
             return True
 
@@ -51,9 +60,9 @@ class UserOnly(permissions.BasePermission):
             return False
 
     def has_object_permission(self, request, view, blog):
-        setting = SettingBoard.objects.get(id=1)
-        if setting.openwiki is False:
+        if getWikiPermission() == False:
             return False
+
         if request.method in permissions.SAFE_METHODS:
             return True
         username = blog.username
@@ -67,9 +76,9 @@ class UserOnly(permissions.BasePermission):
 class ManagerOnly(permissions.BasePermission):
 
     def has_permission(self, request, view):
-        setting = SettingBoard.objects.get(id=1)
-        if setting.openwiki is False:
+        if getWikiPermission() == False:
             return False
+
         if request.method in permissions.SAFE_METHODS:
             return True
         if request.session.get('type', 1) == 3:
@@ -78,9 +87,9 @@ class ManagerOnly(permissions.BasePermission):
             return False
 
     def has_object_permission(self, request, view, blog):
-        setting = SettingBoard.objects.get(id=1)
-        if setting.openwiki is False:
+        if getWikiPermission() == False:
             return False
+
         if request.method in permissions.SAFE_METHODS:
             return True
         if request.session.get('type', 1) == 3:
