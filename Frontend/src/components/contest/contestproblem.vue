@@ -184,7 +184,7 @@ export default {
       activeNames: ["4", "5"],
       level: "Easy",
       code: "",
-      language: "Python2",
+      language: "C++",
       proid:"0",
       codetemplate:{},
 

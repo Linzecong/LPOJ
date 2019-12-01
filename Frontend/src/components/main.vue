@@ -7,9 +7,9 @@
       <el-row :gutter="10">
         <acrank></acrank>
       </el-row>
-      <el-row :gutter="10">
+      <!-- <el-row :gutter="10">
         <topuser></topuser>
-      </el-row>
+      </el-row> -->
       <el-row :gutter="10">
         <ojmessage></ojmessage>
       </el-row>
