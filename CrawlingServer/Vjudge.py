@@ -6,8 +6,8 @@ ssl._create_default_https_context = ssl._create_unverified_context
 
 def get_VJ_data(name):
     try:
-        api_url = "http://vjudge.net/user/"+name
-        response = urllib.request.urlopen(api_url,timeout=2000)
+        api_url = "https://vjudge.net/user/"+name
+        response = urllib.request.urlopen(api_url)
         response_data=response.read()
         response_data = str(response_data)
         

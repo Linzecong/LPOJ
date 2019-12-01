@@ -9,8 +9,8 @@ from rest_framework.views import APIView
 from rest_framework.throttling import ScopedRateThrottle
 from rest_framework import viewsets, mixins, filters
 from .permission import ManagerOnly, UserRatingOnly, UserRatingOnly2
-from .models import ContestComingInfo,ContestTutorial, ContestAnnouncement, ContestRatingChange, ContestBoard, ContestComment, ContestInfo, ContestProblem, ContestRegister
-from .serializers import ContestComingInfoSerializer,ContestTutorialSerializer, ContestRatingChangeSerializer, ContestAnnouncementSerializer, ContestBoardSerializer, ContestCommentSerializer, ContestInfoSerializer, ContestProblemSerializer, ContestRegisterSerializer
+from .models import ContestBoardTotal, ContestComingInfo,ContestTutorial, ContestAnnouncement, ContestRatingChange, ContestBoard, ContestComment, ContestInfo, ContestProblem, ContestRegister
+from .serializers import ContestBoardTotalSerializer, ContestComingInfoSerializer,ContestTutorialSerializer, ContestRatingChangeSerializer, ContestAnnouncementSerializer, ContestBoardSerializer, ContestCommentSerializer, ContestInfoSerializer, ContestProblemSerializer, ContestRegisterSerializer
 import datetime
 
 
@@ -114,3 +114,14 @@ class ContestRatingChangeView(viewsets.ModelViewSet):
 class CurrentTimeView(APIView):
     def get(self, request):
         return Response(datetime.datetime.now(), HTTP_200_OK)
+
+
+class ContestBoardTotalView(viewsets.ModelViewSet):
+    queryset = ContestBoardTotal.objects.all()
+    serializer_class = ContestBoardTotalSerializer
+    pagination_class = LimitOffsetPagination
+    filter_backends = (DjangoFilterBackend,)
+    permission_classes = (ManagerOnly,)
+    filter_fields = ('user','nickname', "contestid")
+    throttle_scope = "post"
+    throttle_classes = [ScopedRateThrottle, ]

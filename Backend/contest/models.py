@@ -130,3 +130,18 @@ class ContestComingInfo(models.Model):
 
     def __str__(self):
         return self.contestName
+
+
+class ContestBoardTotal(models.Model):
+
+    user = models.CharField(max_length=100)
+    nickname = models.CharField(max_length=100)
+    contestid = models.IntegerField()
+    score = models.IntegerField()
+    time = models.CharField(max_length=100)
+    detail = models.CharField(max_length=500) # |
+
+    objects = models.Manager()
+
+    def __str__(self):
+        return self.user
