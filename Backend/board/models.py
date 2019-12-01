@@ -31,6 +31,7 @@ class Board(models.Model):
     acnum = models.CharField(max_length=50, default="0|0|0|0|0")
     submitnum = models.CharField(max_length=50, default="0|0|0|0|0")
     blogaddress = models.CharField(max_length=500, default="")
+    cfrate = models.IntegerField(default=0)
 
     objects = models.Manager()
 
@@ -43,6 +44,7 @@ class DailyBoard(models.Model):
     username = models.CharField(max_length=50)
     account = models.IntegerField(default=0)
     collecttime = models.DateField(auto_now=True)
+    cfrate = models.IntegerField(default=0)
 
     objects = models.Manager()
 

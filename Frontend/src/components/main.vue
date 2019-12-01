@@ -13,6 +13,9 @@
       <el-row :gutter="10">
         <ojmessage></ojmessage>
       </el-row>
+      <el-row :gutter="10">
+        <cfrate></cfrate>
+      </el-row>
     </el-col>
     <el-col :span="18">
       <soulrow></soulrow>
@@ -48,6 +51,7 @@ import ratingrule from "@/components/utils/ratingrule";
 import contestmini from "@/components/utils/contestmini";
 import description from "@/components/utils/description";
 import acrank from "@/components/utils/acrank";
+import cfrate from "@/components/utils/cfrate";
 export default {
   components: {
     rankchart,
@@ -58,7 +62,8 @@ export default {
     ratingrule,
     contestmini,
     acrank,
-    description
+    description,
+    cfrate
   },
   name: "main",
   data() {
