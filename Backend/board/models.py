@@ -44,7 +44,6 @@ class DailyBoard(models.Model):
     username = models.CharField(max_length=50)
     account = models.IntegerField(default=0)
     collecttime = models.DateField(auto_now=True)
-    cfrate = models.IntegerField(default=0)
 
     objects = models.Manager()
 
