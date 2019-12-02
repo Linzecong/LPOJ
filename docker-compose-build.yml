@@ -184,6 +184,7 @@ services:
       SFTP_USER: 'ubuntu' # 必须修改
       SFTP_PASSWORD: 'ubuntuubuntu' # 必须修改
       BACKEND_PATH: "/home/ubuntu/LPOJ/Backend/" # 必须修改
+      NO_DOWNLOAD: "no"
 
     restart: always
     volumes:

@@ -271,6 +271,9 @@ export default {
             this.compilemsg = "编译成功！";
           else this.compilemsg = response.data.message;
 
+          if (row.result!="Accepted")
+            this.compilemsg = row.result
+
           this.$axios.get("/casestatus/?statusid=" + row.id).then(res => {
             for (var i = 0; i < res.data.length; i++) {
               this.dialogdata.push({

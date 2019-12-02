@@ -146,7 +146,7 @@ export default {
     onError(e) {
       this.$message.error("复制失败：" + e);
     },
-    showdialog(id){
+    showdialog(id,result){
       this.dialogdata = [];
       this.code = "";
 
@@ -164,6 +164,9 @@ export default {
 
           if (response.data.message + "" == "0") this.compilemsg = "编译成功！";
           else this.compilemsg = response.data.message;
+
+          if (row.result!="Accepted")
+            this.compilemsg = result
 
           this.$axios.get("/casestatus/?statusid=" + id).then(res => {
             for (var i = 0; i < res.data.length; i++) {
@@ -187,7 +190,7 @@ export default {
     },
 
     rowClick(row, col, e) {
-      this.showdialog(row.id)
+      this.showdialog(row.id, row.result)
     },
 
     tableRowClassName({ row, rowIndex }) {
