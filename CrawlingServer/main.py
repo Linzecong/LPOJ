@@ -77,8 +77,10 @@ while True:
 
         today = time.strftime('%Y-%m-%d', time.localtime(time.time()))
         totleac = CF[0] + HDU[0] + VJ[0] + LPOJ[0] + Others[0]
-        cursor.execute("INSERT INTO board_dailyboard(username,account,collecttime) SELECT '%s', %d, %s FROM DUAL WHERE NOT EXISTS(SELECT * FROM board_dailyboard WHERE username = '%s' and collecttime= '%s')" %
-                       (username, totleac, today, username, today))
+
+        cursor.execute("INSERT INTO board_dailyboard(username,account,collecttime,cfrate) SELECT '%s', %d, '%s',%d FROM DUAL WHERE NOT EXISTS(SELECT * FROM board_dailyboard WHERE username = '%s' and collecttime= '%s')" %
+                            (username, totleac, today,int(CFRate), username, today))
+
 
         ac = str(CF[0]) + "|" + str(HDU[0]) + "|" + str(VJ[0]) + \
             "|" + str(LPOJ[0]) + "|" + str(Others[0])
