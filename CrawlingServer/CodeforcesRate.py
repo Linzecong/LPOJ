@@ -10,7 +10,7 @@ def get_CF_Rate(name):
 #         print(response_data)
 #         response_data = re.sub('<span class="legendary-user-first-letter">','',response_data);
         score = re.findall('<span style="font-weight:bold;" class=".*?">[0-9]{2,4}</span>', response_data)[0]
-#         print(score)
+#        print(score)
         # score = re.findall('[0-9]{2,4}',score)[0]
         return re.sub('[^0-9]','',score)
     except:
