@@ -165,7 +165,7 @@ export default {
           if (response.data.message + "" == "0") this.compilemsg = "编译成功！";
           else this.compilemsg = response.data.message;
 
-          if (row.result!="Accepted")
+          if (result!="Accepted")
             this.compilemsg = result
 
           this.$axios.get("/casestatus/?statusid=" + id).then(res => {
