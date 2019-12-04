@@ -125,7 +125,7 @@ export default {
           k["ac"] = acnum;
           k["sub"] = subnum;
           k["total"] = acnum + "/" + subnum;
-          k["cfrate"] = response.data[i]["cfrate"]
+          k["cfrate"] = response.data[i]["cfrate"].split("|")[0];
 
           data.push(k);
         }

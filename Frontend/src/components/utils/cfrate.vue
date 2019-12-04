@@ -12,7 +12,7 @@
     >
       <el-table-column type="index" width="40"></el-table-column>
       <el-table-column prop="username" label="User"></el-table-column>
-      <el-table-column prop="cfrate" label="Rate"></el-table-column>
+      <el-table-column prop="cfratestr" label="Rate"></el-table-column>
     </el-table>
   </el-card>
 </template>
@@ -53,9 +53,24 @@ export default {
       .get("/board/")
       .then(response => {
 
-        for(let i =0;i<response.data.length;i++)
-          if(response.data[i].cfrate==1500)
-            response.data[i].cfrate=0;
+        var tot = 0
+        for(let i =0;i<response.data.length;i++){
+          var ls = response.data[i].cfrate.split("|")
+          tot = tot + parseInt(ls[2])
+          response.data[i]["cfratestr"] = ""
+        }
+        tot = parseInt(tot / response.data.length)
+
+        if(tot<0)
+          tot = 0
+
+        for(let i =0;i<response.data.length;i++){
+          var ls = response.data[i].cfrate.split("|")
+          var score = ls[0] + parseInt(ls[1]) * (-tot)
+          response.data[i].cfrate = score
+          response.data[i]["cfratestr"] = score + "(" + ls[0]+" + "+ls[1]+" * "+tot+ ")"
+        }
+            
         
         response.data.sort(this.sortByProperty("cfrate", "username"));
 

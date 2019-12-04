@@ -477,9 +477,7 @@ export default {
               .catch(error => {
                 this.$message.error(
                   "服务器错误！" +
-                    "(" +
-                    JSON.stringify(error.response.data) +
-                    ")"
+                    "(请检查编码（代码需要utf-8编码）或联系管理员)"
                 );
               });
           } else {
@@ -535,18 +533,14 @@ export default {
                             }).catch(error => {
                           this.$message.error(
                             "服务器错误！" +
-                              "(" +
-                              JSON.stringify(error.response.data) +
-                              ")"
+                              "(请检查编码（代码需要utf-8编码）或联系管理员)"
                           );
                         });
                         })
                         .catch(error => {
                           this.$message.error(
                             "服务器错误！" +
-                              "(" +
-                              JSON.stringify(error.response.data) +
-                              ")"
+                              "(请检查编码（代码需要utf-8编码）或联系管理员)"
                           );
                         });
           }

@@ -31,7 +31,7 @@ class Board(models.Model):
     acnum = models.CharField(max_length=50, default="0|0|0|0|0")
     submitnum = models.CharField(max_length=50, default="0|0|0|0|0")
     blogaddress = models.CharField(max_length=500, default="")
-    cfrate = models.IntegerField(default=0)
+    cfrate = models.CharField(max_length=500, default="0|0|0") # 分数|最近一个月场数|上下分
 
     objects = models.Manager()
 
@@ -44,7 +44,7 @@ class DailyBoard(models.Model):
     username = models.CharField(max_length=50)
     account = models.IntegerField(default=0)
     collecttime = models.DateField(auto_now=True)
-    cfrate = models.IntegerField(default=0)
+    cfrate = models.IntegerField(default=0) # 分数
     
     objects = models.Manager()
 
