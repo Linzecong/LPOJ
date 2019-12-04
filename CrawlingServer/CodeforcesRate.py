@@ -7,12 +7,8 @@ def get_CF_Rate(name):
         response = urllib.request.urlopen(api_url,timeout=2000)
         response_data=response.read().decode('utf-8')
         
-#         print(response_data)
-#         response_data = re.sub('<span class="legendary-user-first-letter">','',response_data);
-        score = re.findall('<span style="font-weight:bold;" class=".*">[0-9]{2,4}</span>', response_data)[0]
-#         print(score)
-        score = re.findall('[0-9]{2,4}',score)[0]
-        return re.sub('[^0-9]','',score)
+        score = re.findall('<span style="font-weight:bold;" class=".*?">([0-9]{2,4})</span>', response_data)[0]
+        return score
     except:
         return -1
 
