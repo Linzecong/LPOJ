@@ -9,7 +9,7 @@ import os
 from time import sleep
 from Codeforces import get_CF_data
 from CodeforcesRate import get_CF_Rate
-from CrawlingServer.CodeForceContestCounter import getContestsTimeLine, get_CF_ContestCount
+from CodeForceContestCounter import getContestsTimeLine, get_CF_ContestCount
 from HDU import get_HDU_data
 from Vjudge import get_VJ_data
 from LPOJ import get_LPOJ_data
