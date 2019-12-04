@@ -9,6 +9,7 @@ import os
 from time import sleep
 from Codeforces import get_CF_data
 from CodeforcesRate import get_CF_Rate
+from CodeForceContestCounter import getContestsTimeLine, get_CF_ContestCount
 from HDU import get_HDU_data
 from Vjudge import get_VJ_data
 from LPOJ import get_LPOJ_data
@@ -33,6 +34,8 @@ except Exception as e:
     exit(1)
 
 while True:
+    # CF contest
+    contestsTimeLine = getContestsTimeLine()
     # AC num
     cursor = db.cursor()
     cursor.execute("SELECT * from board_board")
@@ -53,6 +56,12 @@ while True:
         print(accounts[0], "CFRate:", CFRate)
         if CFRate == -1:
             CFRate = 0
+        
+        CFCount = get_CF_ContestCount(accounts[0],contestsTimeLine)
+        print(accounts[0], "CFCount:", CFCount)
+        if CFCount[0] == -1:
+            CFCount[0] = 0
+            CFCount[1] = 0
         
         while True:
             HDU = get_HDU_data(accounts[1])
@@ -77,15 +86,17 @@ while True:
 
         today = time.strftime('%Y-%m-%d', time.localtime(time.time()))
         totleac = CF[0] + HDU[0] + VJ[0] + LPOJ[0] + Others[0]
-        cursor.execute("INSERT INTO board_dailyboard(username,account,collecttime,cfrate) SELECT '%s', %d, %s,'%d' FROM DUAL WHERE NOT EXISTS(SELECT * FROM board_dailyboard WHERE username = '%s' and collecttime= '%s')" %
-                       (username, totleac, today,int(CFRate), username, today))
+
+        cursor.execute("INSERT INTO board_dailyboard(username,account,collecttime,cfrate) SELECT '%s', %d, '%s',%d FROM DUAL WHERE NOT EXISTS(SELECT * FROM board_dailyboard WHERE username = '%s' and collecttime= '%s')" %
+                            (username, totleac, today,int(CFRate), username, today))
+
 
         ac = str(CF[0]) + "|" + str(HDU[0]) + "|" + str(VJ[0]) + \
             "|" + str(LPOJ[0]) + "|" + str(Others[0])
         submit = str(CF[1]) + "|" + str(HDU[1]) + "|" + \
             str(VJ[1]) + "|" + str(LPOJ[1]) + "|" + str(Others[1])
         cursor.execute("UPDATE board_board SET acnum = '%s' ,submitnum = '%s',cfrate='%s'  WHERE username = '%s'" % (
-            ac, submit,CFRate, username))
+            ac, submit,str(CFRate)+"|"+str(CFCount[0])+"|"+str(CFCount[1]), username))
         db.commit()
         print(username, ac, submit)
 

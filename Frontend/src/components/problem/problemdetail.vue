@@ -476,7 +476,7 @@ export default {
               this.$store.state.submittimer = setInterval(this.timer, 3000);
             })
             .catch(error => {
-              this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
+              this.$message.error("服务器错误！" + "(请检查编码（代码需要utf-8编码）或联系管理员)");
             });
         });
       });

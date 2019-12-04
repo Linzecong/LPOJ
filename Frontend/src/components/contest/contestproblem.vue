@@ -269,7 +269,7 @@ export default {
       this.loadingshow = false;
       this.submitid = -1;
       this.code = "";
-      this.language = "C++";
+      this.language = "Python2";
       this.currentproblem = this.problemids[tab.index];
       this.title = this.problemtitles[tab.index];
       this.currentrank = tab.index;
@@ -332,7 +332,7 @@ export default {
       this.loadingshow = false;
       this.submitid = -1;
       this.code = "";
-      this.language = "C++";
+      this.language = "Python2";
 
       this.$axios.get("/contestinfo/" + id + "/").then(response => {
         this.begintime = response.data.begintime;
@@ -477,9 +477,7 @@ export default {
               .catch(error => {
                 this.$message.error(
                   "服务器错误！" +
-                    "(" +
-                    JSON.stringify(error.response.data) +
-                    ")"
+                    "(请检查编码（代码需要utf-8编码）或联系管理员)"
                 );
               });
           } else {
@@ -535,18 +533,14 @@ export default {
                             }).catch(error => {
                           this.$message.error(
                             "服务器错误！" +
-                              "(" +
-                              JSON.stringify(error.response.data) +
-                              ")"
+                              "(请检查编码（代码需要utf-8编码）或联系管理员)"
                           );
                         });
                         })
                         .catch(error => {
                           this.$message.error(
                             "服务器错误！" +
-                              "(" +
-                              JSON.stringify(error.response.data) +
-                              ")"
+                              "(请检查编码（代码需要utf-8编码）或联系管理员)"
                           );
                         });
           }

@@ -266,10 +266,10 @@ export default {
           if(response.data.language=="Java") this.curlang = 'java'
           if(response.data.language=="Swift5.1") this.curlang = 'swift'
 
-
-          if (response.data.message + "" == "0" || row.result == "Accepted")
-            this.compilemsg = "编译成功！";
-          else this.compilemsg = response.data.message;
+          this.compilemsg = "编译成功！"
+          if (row.result!="Accepted")
+            this.compilemsg = row.result
+          if (response.data.message + "" != "0") this.compilemsg = response.data.message
 
           this.$axios.get("/casestatus/?statusid=" + row.id).then(res => {
             for (var i = 0; i < res.data.length; i++) {

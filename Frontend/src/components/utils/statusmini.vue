@@ -146,7 +146,7 @@ export default {
     onError(e) {
       this.$message.error("复制失败：" + e);
     },
-    showdialog(id){
+    showdialog(id,result){
       this.dialogdata = [];
       this.code = "";
 
@@ -162,8 +162,10 @@ export default {
           if(response.data.language=="Java") this.curlang = 'java'
           if(response.data.language=="Swift5.1") this.curlang = 'swift'
 
-          if (response.data.message + "" == "0") this.compilemsg = "编译成功！";
-          else this.compilemsg = response.data.message;
+          this.compilemsg = "编译成功！"
+          if (result!="Accepted")
+            this.compilemsg = result
+          if (response.data.message + "" != "0") this.compilemsg = response.data.message
 
           this.$axios.get("/casestatus/?statusid=" + id).then(res => {
             for (var i = 0; i < res.data.length; i++) {
@@ -187,7 +189,7 @@ export default {
     },
 
     rowClick(row, col, e) {
-      this.showdialog(row.id)
+      this.showdialog(row.id, row.result)
     },
 
     tableRowClassName({ row, rowIndex }) {
