@@ -27,12 +27,13 @@ def timeCmp(a, b):
 
 def getContestsTimeLine():
     api_url = "https://codeforces.com/contests"
-    tar = r'<td>\r\n(.*?)<br/>\r\n.*?<a style="font-size: 0.8em;" href="/contest/[0-9]{1,6}">'
+    tar = r'<td>\r\n(.*?)\r\n.*?<br/>\r\n.*?<a style="font-size: 0.8em;" href="/contest/[0-9]{1,6}">'
     tar2 = '<span class="format-date" data-locale="en">(.*?) .*?</span>'
     try:
         page = urllib.request.urlopen(api_url, timeout=1000)
         page_data = page.read().decode('utf-8')
         page_data = page_data[1000: len(page_data) // 2]
+        # print(page_data)
         contests = re.findall(tar, page_data)
         times = re.findall(tar2, page_data)
 
