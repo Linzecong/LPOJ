@@ -23,23 +23,3 @@ if __name__ == "__main__":
     while(True):
         name = input("请输入要爬的ID:")
         print(get_LPOJ_data(name))
-
-ai = a
-bi = b
-ci = c
-ans = min(ans,  abs(ai-bi) + abs(ai-ci) + abs(bi-ci))
-
-ai = a - 1
-bi = b
-ci = c
-ans = min(ans,  abs(ai-bi) + abs(ai-ci) + abs(bi-ci))
-
-ai = a + 1
-bi = b
-ci = c
-ans = min(ans,  abs(ai-bi) + abs(ai-ci) + abs(bi-ci))
-
-ai = a
-bi = b - 1
-ci = c
-ans = min(ans,  abs(ai-bi) + abs(ai-ci) + abs(bi-ci))
