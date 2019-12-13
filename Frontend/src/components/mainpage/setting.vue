@@ -19,7 +19,7 @@
       </el-row>
       <el-row :gutter="10">
         <el-col :span="3">
-          <div style="text-align:center;margin:5px;">密码</div>
+          <div style="text-align:center;margin:5px;">新密码（不更改，请输入上次密码）</div>
         </el-col>
         <el-col :span="12">
           <el-input type="password" v-model="form.password" autocomplete="off"></el-input>
@@ -107,7 +107,7 @@ export default {
         password: "",
         comfirm: "",
         name: "",
-        des:"这个人很懒，什么都没有没有留下。",
+        des:"",
         school: "",
         course: "",
         classes: "",
@@ -175,19 +175,10 @@ export default {
       this.form.password = this.$md5(this.form.password);
       this.$axios
         .put(
-          "/change/" +
-            this.userid +
-            "/",
+          "/changeone/",
           this.form
         )
-        .then(response => {
-          this.$axios
-            .put(
-              "/userdata/" +
-                this.userid +
-                "/",
-              this.form
-            )
+        
             .then(
               response => {
                 this.$message({
@@ -204,7 +195,7 @@ export default {
                 this.$message.error("更新失败（" + response + "）");
               }
             );
-        });
+        
       })
 
 

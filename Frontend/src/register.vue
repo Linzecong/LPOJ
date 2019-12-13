@@ -162,7 +162,7 @@ export default {
       }
       if (
         this.form.username.indexOf("|") >= 0 ||
-        this.form.username.indexOf("'") >= 0 ||
+        this.form.username.indexOf(".") >= 0 ||
         this.form.username.indexOf("#") >= 0
       ) {
         this.$message.error("用户名包含非法字符！");

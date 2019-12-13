@@ -6,8 +6,8 @@ from rest_framework import routers
 routers = routers.DefaultRouter()
 routers.register('userdata', views.UserDataView)
 routers.register('user', views.UserView)
-routers.register('change', views.UserChangeView)
-routers.register('changeall', views.UserChangeAllView)
+#routers.register('change', views.UserChangeView)
+#routers.register('changeall', views.UserChangeAllView)
 routers.register('userlogindata', views.UserLoginDataView)
 
 urlpatterns = [
@@ -17,4 +17,6 @@ urlpatterns = [
     url(r'^logout', views.UserLogoutAPIView.as_view()),
     url(r'^updaterating', views.UserUpdateRatingAPIView.as_view()),
     url(r'^setlogindata', views.UserLoginDataAPIView.as_view()),
+    url(r'^changeone', views.UserChangeView.as_view()),
+    url(r'^changeall', views.UserChangeAllView.as_view()),
 ]
