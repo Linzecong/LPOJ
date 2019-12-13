@@ -380,8 +380,11 @@ export default {
 
         myform["password"] = this.password;
       }
+      else{
+        myform["password"] = "." //用于后台特判
+      }
 
-      this.$axios.patch("/changeall/" + this.userid + "/", myform).then(
+      this.$axios.put("/changeall/", myform).then(
         response => {
           this.$message({
             message: "更新成功！",

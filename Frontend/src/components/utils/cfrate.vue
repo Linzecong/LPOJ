@@ -11,7 +11,7 @@
       :row-style="ratingcolor"
     >
       <el-table-column type="index" width="40"></el-table-column>
-      <el-table-column prop="username" label="User"></el-table-column>
+      <el-table-column prop="username" label="User" width="100"></el-table-column>
       <el-table-column prop="cfratestr" label="Rate"></el-table-column>
     </el-table>
   </el-card>
@@ -39,7 +39,7 @@ export default {
     },
     ratingcolor({ row, rowIndex }) {
       if (row.cfrate >= 2400) return "color:red;font-weight: bold;";
-      if (row.rating >= 2300) return "color:#BB5E00;font-weight: bold;";
+      if (row.cfrate >= 2300) return "color:#BB5E00;font-weight: bold;";
       if (row.cfrate >= 2100) return "color:#E6A23C;font-weight: bold;";
       if (row.cfrate >= 1900) return "color:#930093;font-weight: bold;";
       if (row.cfrate >= 1600) return "color:#0000AA;font-weight: bold;";
@@ -61,14 +61,19 @@ export default {
         }
         tot = parseInt(tot / response.data.length)
 
-        if(tot<0)
+        if(tot>0)
           tot = 0
 
         for(let i =0;i<response.data.length;i++){
           var ls = response.data[i].cfrate.split("|")
-          var score = ls[0] + parseInt(ls[1]) * (-tot)
+
+          var score = parseInt(ls[0])
+
           response.data[i].cfrate = score
-          response.data[i]["cfratestr"] = score + "(" + ls[0]+" + "+ls[1]+" * "+tot+ ")"
+          
+          response.data[i]["cfratestr"] = score
+          
+          
         }
             
         
