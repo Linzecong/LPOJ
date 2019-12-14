@@ -244,7 +244,7 @@ export default {
     },
 
     setboard(cid, response) {
-      this.$axios.get("/contestboard/?contestid=" + cid).then(res1 => {
+      this.$axios.get("/contestboard/?contestid=" + cid+"&type=1").then(res1 => {
         for (let i = 0; i < res1.data.length; i++) {
           response.data.push(res1.data[i]);
         }
