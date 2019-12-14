@@ -67,14 +67,14 @@ export default {
         for(let i =0;i<response.data.length;i++){
           var ls = response.data[i].cfrate.split("|")
 
-          var score = parseInt(ls[0]) + (parseInt(ls[1]) - 3) * (parseInt(ls[1]) - 3)<0?100:(40-tot)
+          var score = parseInt(ls[0]) + ((parseInt(ls[1]) - 3)<0?(parseInt(ls[1]) - 3):parseInt(ls[1])) * ((parseInt(ls[1]) - 3)<0?100:(50-tot))
 
           response.data[i].cfrate = score
           if((parseInt(ls[1]) - 3)<0){
             response.data[i]["cfratestr"] = score + "(" + ls[0]+" + ("+ls[1]+" - 3) * 100)"
           }
           else{
-            response.data[i]["cfratestr"] = score + "(" + ls[0]+" + ("+ls[1]+" - 3) * " + (40-tot)+ ")"
+            response.data[i]["cfratestr"] = score + "(" + ls[0]+" + "+ls[1]+" * " + (50-tot)+ ")"
           }
           
         }
