@@ -12,6 +12,22 @@
     <center>
       <h1>{{ contesttitle }}</h1>
     </center>
+
+    <el-form :inline="true" :model="filterform" v-if="isadmin">
+      <el-form-item label="学校">
+        <el-input v-model="filterform.school" placeholder="school"></el-input>
+      </el-form-item>
+      <el-form-item label="专业">
+        <el-input v-model="filterform.course" placeholder="course"></el-input>
+      </el-form-item>
+      <el-form-item label="班级">
+        <el-input v-model="filterform.class" placeholder="class"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="onfilterboard">查询</el-button>
+      </el-form-item>
+    </el-form>
+
     <el-row :gutter="10">
       <el-table
         :data="tableData"
@@ -78,10 +94,19 @@ export default {
         problemid: ""
       },
       statusshow: false,
-      SolveLabel: "Solved"
+      SolveLabel: "Solved",
+
+      filterform:{
+        contestid: this.$route.params.contestID,
+        school:"",
+        course:"",
+        class:""
+      },
+      isadmin:false,
     };
   },
   created() {
+    this.isadmin = sessionStorage.type == 2 || sessionStorage.type == 3;
     //this.setproblemcount(this.$route.params.contestID);
   },
   methods: {
@@ -176,6 +201,11 @@ export default {
 
       return "background-color:white";
     },
+
+    onfilterboard(){
+      this.setproblemcount(this.$route.params.contestID);
+    },
+
     setproblemcount(cid) {
       if (this.$store.state.contesttype == "Rated") this.SolveLabel = "Score";
 
@@ -191,60 +221,15 @@ export default {
           });
           this.problemids.push(response3.data[i].problemid);
         }
+ 
+        this.setboard(cid,{ data: [] });
 
-        if (
-          this.$store.state.contesttype == "Personal" &&
-          this.$store.state.contestboardid != cid
-        ) {
-          this.$axios
-            .get("/contestboard/?contestid=" + this.$store.state.contestfrom)
-            .then(response1 => {
-              this.$store.state.contestboardres = response1;
-              this.$store.state.contestboardid = cid;
-              this.setboard2(cid);
-            });
-        } else {
-          this.setboard2(cid);
-        }
       });
     },
 
-    setboard2(cid) {
-      var response = { data: [] };
-      //筛选
-      if (this.$store.state.contesttype == "Personal") {
-        this.$axios
-          .get("/contestinfo/" + this.$store.state.contestfrom + "/")
-          .then(res => {
-            var beginmis = new Date(Date.parse(res.data.begintime)).getTime();
-            var newres = { data: [] };
-            for (
-              let i = 0;
-              i < this.$store.state.contestboardres.data.length;
-              i++
-            ) {
-              let bt = this.$store.state.contestboardres.data[i].submittime;
-              if (bt - beginmis <= this.$store.state.contestleft * 1000) {
-                var t = JSON.parse(
-                  JSON.stringify(this.$store.state.contestboardres.data[i])
-                );
-                t.user = "[Clone] " + t.user;
-                t.submittime =
-                  t.submittime +
-                  (this.$store.state.contestbegintime - beginmis);
-                newres.data.push(t);
-              }
-            }
-            response = newres;
-            this.setboard(cid, response);
-          });
-      } else {
-        this.setboard(cid, response);
-      }
-    },
-
     setboard(cid, response) {
-      this.$axios.get("/contestboard/?contestid=" + cid+"&type=1").then(res1 => {
+      
+      this.$axios.post("/contestfilterboard/",this.filterform).then(res1 => {
         for (let i = 0; i < res1.data.length; i++) {
           response.data.push(res1.data[i]);
         }

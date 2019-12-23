@@ -13,6 +13,8 @@ from .models import ContestBoardTotal, ContestComingInfo,ContestTutorial, Contes
 from .serializers import ContestBoardTotalSerializer, ContestComingInfoSerializer,ContestTutorialSerializer, ContestRatingChangeSerializer, ContestAnnouncementSerializer, ContestBoardSerializer, ContestCommentSerializer, ContestInfoSerializer, ContestProblemSerializer, ContestRegisterSerializer
 import datetime
 
+from user.models import User
+
 
 class ContestAnnouncementView(viewsets.ModelViewSet):
     queryset = ContestAnnouncement.objects.all()
@@ -125,3 +127,54 @@ class ContestBoardTotalView(viewsets.ModelViewSet):
     filter_fields = ('user','nickname', "contestid")
     throttle_scope = "post"
     throttle_classes = [ScopedRateThrottle, ]
+
+
+class ContestBoardFilterAPIView(APIView):
+    
+    throttle_scope = "post"
+    throttle_classes = [ScopedRateThrottle, ]
+
+    def post(self, request, format=None):
+        # if request.session.get("type") != 3:
+        #     return Response("nopermission", status=HTTP_400_BAD_REQUEST)
+        
+        data = request.data
+
+        contestid = data.get("contestid")
+        schoolname = data.get("school","")
+        coursename = data.get("course","")
+        classname = data.get("class","")
+        reslist = []
+        boards = ContestBoard.objects.filter(contestid=contestid)
+        
+        usermap = {}
+
+        for b in boards:
+            username = b.username
+            if usermap.get(username,None)!=None:
+                if usermap.get(username) == True:
+                    reslist.append(b)
+                continue
+
+            user = User.objects.get(username=username)
+            flag = True
+
+            if schoolname != "": 
+                if str(user.school) != str(schoolname):
+                    flag = False
+            
+            if coursename != "": 
+                if str(user.course) != str(coursename):
+                    flag = False
+            
+            if classname != "": 
+                if str(user.classes) != str(classname):
+                    flag = False
+            
+            if flag == True:
+                reslist.append(b)
+            
+            usermap[username] = flag
+
+       # res = ContestBoard.objects.filter(pk__in=reslist)
+        return Response(ContestBoardSerializer(reslist,many=True).data, HTTP_200_OK)

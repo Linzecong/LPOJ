@@ -18,4 +18,5 @@ routers.register('contesttotalboard', views.ContestBoardTotalView)
 urlpatterns = [
     url('', include(routers.urls)),
     url(r'^currenttime', views.CurrentTimeView.as_view()),
+    url(r'^contestfilterboard', views.ContestBoardFilterAPIView.as_view()),
 ]
