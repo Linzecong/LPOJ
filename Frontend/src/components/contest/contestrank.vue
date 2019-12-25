@@ -39,7 +39,7 @@
         :row-style="ratingcolor"
         id="out-table"
       >
-        <el-table-column type="index" width="40" fixed></el-table-column>
+        <el-table-column type="index" width="45" fixed></el-table-column>
         <el-table-column prop="user" label="User" fixed></el-table-column>
         <el-table-column
           prop="nickname"

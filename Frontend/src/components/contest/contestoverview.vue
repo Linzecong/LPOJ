@@ -441,9 +441,9 @@ export default {
       this.left++;
       this.$store.state.contestleft = this.left;
 
-      if (this.left == 0) {
-        this.$router.go(0);
-      }
+      // if (this.left == 0) {
+      //   this.$router.go(0);
+      // } //取消自动刷新
 
       if (this.left < 0) this.timestyle = "wait";
       else {

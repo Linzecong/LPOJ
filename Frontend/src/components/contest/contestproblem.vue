@@ -184,7 +184,7 @@ export default {
       activeNames: ["4", "5"],
       level: "Easy",
       code: "",
-      language: "Python2",
+      language: "C++",
       proid:"0",
       codetemplate:{},
 
@@ -269,7 +269,7 @@ export default {
       this.loadingshow = false;
       this.submitid = -1;
       this.code = "";
-      this.language = "Python2";
+      this.language = "C++";
       this.currentproblem = this.problemids[tab.index];
       this.title = this.problemtitles[tab.index];
       this.currentrank = tab.index;
@@ -332,7 +332,7 @@ export default {
       this.loadingshow = false;
       this.submitid = -1;
       this.code = "";
-      this.language = "Python2";
+      this.language = "C++";
 
       this.$axios.get("/contestinfo/" + id + "/").then(response => {
         this.begintime = response.data.begintime;
