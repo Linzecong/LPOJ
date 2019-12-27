@@ -76,15 +76,8 @@ class NoContestOnly(permissions.BasePermission):
 
         if userid == blog.user:
             if setting.openstatus == False:
-                if blog.contest == 0:
-                    return False
-                info = ContestInfo.objects.get(id=blog.contest)
-                if (datetime.datetime.now()-info.begintime).total_seconds()<info.lasttime:
-                    return True
                 return False
-
             return True
-        
 
         if setting.openstatus == False:
             return False
