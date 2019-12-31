@@ -8,7 +8,7 @@
 > 一个基于Vue.js和Django的轻量级在线评测系统
 >
 > 目前应用于广东外语外贸大学
-## Demo地址：[www.lpoj.cn](https://www.lpoj.cn)
+## Demo地址：[oj.lpoj.cn](https://oj.lpoj.cn)
 ## 说明文档：[docs.lpoj.cn](https://docs.lpoj.cn)
 
 ## 简述
@@ -118,7 +118,7 @@ sudo docker-compose -f docker-compose-build.yml up -d --build --scale judger=3
 
 ![image6](https://www.lpoj.cn/githubimage/image6.png)
 
-或者你可以直接访问我们  [www.lpoj.cn](https://www.lpoj.cn)
+或者你可以直接访问我们  [oj.lpoj.cn](https://oj.lpoj.cn)
 
 ## 浏览器支持
 
