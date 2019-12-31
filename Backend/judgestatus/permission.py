@@ -67,13 +67,18 @@ class NoContestOnly(permissions.BasePermission):
     def has_object_permission(self, request, view, blog):
         if getVisitorPermission(request) == False:
             return False
+
+        if request.session.get('type', 1) != 1:
+            return True
+
+        setting = SettingBoard.objects.get(id=1)
         userid = request.session.get('user_id', None)
+
         if userid == blog.user:
             if setting.openstatus == False:
                 return False
             return True
 
-        setting = SettingBoard.objects.get(id=1)
         if setting.openstatus == False:
             return False
 

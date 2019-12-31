@@ -85,7 +85,7 @@
       :action="uploadaddress"
       :on-exceed="handleExceed"
       :on-change="handleChange"
-      :on-success="handleSuccess"
+      :on-success="handleSuccessNone"
       :on-error="handleError"
       :on-remove="handleRemove"
       :file-list="fileList"
@@ -148,7 +148,7 @@ export default {
   },
   methods: {
     myupload(f) {
-      this.$message.success("提交中！请等待自动刷新！");
+      this.$message.success("正在上传数据！");
       let param = new FormData(); //创建form对象
 
       var newfile = new File([f.file], this.addproblemform.problem + ".zip");
@@ -158,7 +158,7 @@ export default {
         headers: { "Content-Type": "multipart/form-data" }
       }; //添加请求头
       this.$axios
-        .post(f.action, param, config) //上传图片
+        .post(f.action, param, config) //上传文件
         .then(response => {
           console.log(response.data);
           f.onSuccess(response.data);
@@ -185,6 +185,11 @@ export default {
     },
     handleError(response, file, fileList) {
       this.$message.error("数据上传失败！" + response);
+    },
+    handleSuccessNone(response, file, fileList){
+      this.$message.success("上传成功！");
+      this.loading = false;
+      this.$router.go(0);
     },
     handleSuccess(response, file, fileList) {
       if(this.addproblemform.isspj == true) {
@@ -217,8 +222,7 @@ export default {
               message: "提交成功！题目编号为：" + response2.data.problem,
               type: "success"
             });
-            this.loading = false;
-            this.$router.go(0);
+            
           });
       });
     },
@@ -238,6 +242,7 @@ export default {
         });
         return;
       }
+
       console.log(this.fileList);
       var name = this.fileList[0].name;
       var li = name.split(".");
@@ -245,14 +250,20 @@ export default {
         this.$message.error("数据文件名名不正确！后缀应为zip");
         this.fileList = [];
       }
+
+
       this.$confirm("确定添加吗？", "添加题目", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       }).then(() => {
         this.loading = true;
+        this.handleSuccess(1, 2, 3);
+        
         this.$refs.upload.submit();
       });
+
+
     }
   },
   created() {

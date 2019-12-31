@@ -176,6 +176,15 @@ def specialjudge(problem,testin,testout,userout):
 def remote_scp(host_ip, remote_path, local_path, username, password, problem):
     if GlobalVar.judgerjson["nodownload"] == "yes": # 如果采用手动直接上传的方式，那么不用下载
         dirname = str(problem)
+
+        filemt = int(os.stat("./ProblemData/"+str(problem)+".zip").st_mtime)
+        if str(filemt) == GlobalVar.datatimejson.get(str(problem), "no"):
+            return True
+        GlobalVar.datatimejson[str(problem)] = str(filemt)
+        with open("./datatime.json", 'w', encoding='utf-8') as json_file:
+            json.dump(GlobalVar.datatimejson, json_file, ensure_ascii=False)
+            json_file.close()
+
         try:
             shutil.rmtree("./ProblemData/" +
                           dirname+"/", ignore_errors=True)

@@ -12,7 +12,7 @@
     >
       <el-table-column type="index" width="40"></el-table-column>
       <el-table-column prop="username" label="User" width="100"></el-table-column>
-      <el-table-column prop="cfratestr" label="Rate + f(rate,time) 其中f(x,y)请咨询队长"></el-table-column>
+      <el-table-column prop="cfratestr" label="Rate"></el-table-column>
     </el-table>
   </el-card>
 </template>
@@ -67,15 +67,12 @@ export default {
         for(let i =0;i<response.data.length;i++){
           var ls = response.data[i].cfrate.split("|")
 
-          var score = parseInt(ls[0]) + ((parseInt(ls[1]) - 3)<0?(parseInt(ls[1]) - 3):parseInt(ls[1])) * ((parseInt(ls[1]) - 3)<0?100:(50-tot))
+          var score = parseInt(ls[0])
 
           response.data[i].cfrate = score
-          if((parseInt(ls[1]) - 3)<0){
-            response.data[i]["cfratestr"] = score + "(" + ls[0]+" + ("+ls[1]+" - 3) * 100)"
-          }
-          else{
-            response.data[i]["cfratestr"] = score + "(" + ls[0]+" + "+ls[1]+" * " + (50-tot)+ ")"
-          }
+          
+          response.data[i]["cfratestr"] = score
+          
           
         }
             
