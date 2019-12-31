@@ -69,9 +69,8 @@ class NoContestOnly(permissions.BasePermission):
             return False
         userid = request.session.get('user_id', None)
         if userid == blog.user:
-            return True
-        
-        if request.session.get('type', 1) != 1:
+            if setting.openstatus == False:
+                return False
             return True
 
         setting = SettingBoard.objects.get(id=1)
