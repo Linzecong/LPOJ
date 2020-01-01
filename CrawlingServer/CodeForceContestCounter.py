@@ -5,25 +5,19 @@ import datetime
 
 def getLastDate():
     lastDate = datetime.datetime.now() + datetime.timedelta(days=-31)
-    return [lastDate.year, lastDate.month, lastDate.day]
+    return lastDate.timestamp()
 
 
 def timeCmp(a, b):
     mouths = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May',
               'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     cut = a.split('/')
-    if(int(cut[2]) > b[0]):
-        return True
     for i in range(len(mouths)):
         if cut[0] == mouths[i]:
             cut[0] = str(i)
             break
-    if(int(cut[0]) > b[1]):
-        return True
-    if(int(cut[1]) >= b[2]):
-        return True
-    return False
-
+    nowDate = datetime.datetime(int(cut[2]), int(cut[0]), int(cut[1])).timestamp()
+    return nowDate >= b
 
 def getContestsTimeLine():
     api_url = "https://codeforces.com/contests"
@@ -50,7 +44,7 @@ def getContestsTimeLine():
         return {}
 
 
-#返回一个月内的cf场数和上/掉分情况
+# 返回一个月内的cf场数和上/掉分情况
 def get_CF_ContestCount(name, contestsTimeLine):
     if not contestsTimeLine:
         return [-1, -1]
