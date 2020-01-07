@@ -75,7 +75,7 @@ class NoContestOnly(permissions.BasePermission):
         userid = request.session.get('user_id', None)
 
         if userid == blog.user:
-            if setting.openstatus == False:
+            if setting.openselfstatus == False:
                 return False
             return True
 

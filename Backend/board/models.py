@@ -12,6 +12,7 @@ class SettingBoard(models.Model):
 
     openvisitor = models.BooleanField(default=True) # 是否开启游客访问
     openregister = models.BooleanField(default=True) # 是否开启注册
+    openselfstatus = models.BooleanField(default=True) # 自己是否能查看自己的代码
 
 
     objects = models.Manager()
