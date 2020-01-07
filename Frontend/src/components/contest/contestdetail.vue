@@ -109,9 +109,9 @@ export default {
           var left = parseInt(
             (new Date(Date.parse(date2)).getTime() - date1.getTime()) / 1000
           );
-          if (left >= response.data.lasttime) {
-            auth = "1";
-          }
+          // if (left >= response.data.lasttime) {
+          //   auth = "1";
+          // }
           if (auth == "1") {
             this.haveauth = 1;
             this.$refs.Overview.haveauth = 1;
