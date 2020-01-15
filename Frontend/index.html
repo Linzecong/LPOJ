@@ -22,7 +22,9 @@
       var sUserAgent = navigator.userAgent.toLowerCase(); 
       if ((sUserAgent.match(/(ipod|iphone os|midp|ucweb|android|windows ce|windows mobile)/i))) {
           var thisUrl = window.location.href;
+          var t = thisUrl
           thisUrl = thisUrl.replace("8080","8081");
+          if(thisUrl!=t)
           window.location.href = thisUrl
       }
   }
