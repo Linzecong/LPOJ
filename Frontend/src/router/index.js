@@ -13,6 +13,8 @@ import admin from '@/components/mainpage/admin'
 import billboard from '@/components/mainpage/billboard'
 import blog from '@/components/mainpage/blog'
 import wiki from '@/components/mainpage/wiki'
+import classes from '@/components/mainpage/classes'
+import classdetail from '@/components/mainpage/classdetail'
 import algorithm from '@/components/wiki/algorithm'
 import mbcode from '@/components/wiki/code'
 import trainning from '@/components/wiki/trainning'
@@ -98,6 +100,16 @@ export default new Router({
       path: '/wiki',
       name: 'wiki',
       component: wiki,
+    },
+    {
+      path: '/classdetail',
+      name: 'classdetail',
+      component: classdetail,
+    },
+    {
+      path: '/classes',
+      name: 'classes',
+      component: classes,
     },
     {
       path: '/wiki/algorithm',

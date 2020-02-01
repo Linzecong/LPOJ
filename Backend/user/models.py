@@ -1,17 +1,15 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-
-
 class User(models.Model):
     username = models.CharField(max_length=50, null=False, primary_key=True)
     password = models.CharField(max_length=50, null=False)
     name = models.CharField(max_length=50, null=False)  # 名称
     regtime = models.DateTimeField(auto_now=True)
     logintime = models.DateTimeField(auto_now=True)
-    school = models.CharField(max_length=50, null=False)
-    course = models.CharField(max_length=50, null=False)
-    classes = models.CharField(max_length=50, null=False)
-    number = models.CharField(max_length=50, null=False)
+    school = models.CharField(max_length=50, null=False, default="")
+    course = models.CharField(max_length=50, null=False, default="")
+    class1 = models.CharField(max_length=50, null=False, default="") #行政班
+    number = models.CharField(max_length=50, null=False, default="")
     realname = models.CharField(max_length=50, null=False)
     qq = models.CharField(max_length=50, null=True, default="")
     email = models.CharField(max_length=50, null=True, default="")
@@ -47,3 +45,5 @@ class UserLoginData(models.Model):
 
     def __str__(self):
         return self.username
+
+

@@ -19,7 +19,7 @@ class Problem(models.Model):
     memory = models.IntegerField()
     hint = models.TextField(null=True)
     auth = models.IntegerField(default=1)  # 1公开 2私密 3 比赛中的题
-    template = models.CharField(max_length=50000, default="请删除这行")
+    template = models.CharField(max_length=10000, default="请删除这行")
 
     objects = models.Manager()
 
@@ -44,7 +44,7 @@ class ProblemData(models.Model):
     score = models.IntegerField(default=1000)
     auth = models.IntegerField(default=1)  # 1公开 2私密 3 比赛中的题
     oj = models.CharField(max_length=50, default="LPOJ")
-    
+
 
     objects = models.Manager()
 

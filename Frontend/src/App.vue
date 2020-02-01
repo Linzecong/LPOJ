@@ -1,7 +1,12 @@
 <template>
-  <div id="app" style="top:0px;left:0px;">
-    <el-menu :default-active="activeIndex" mode="horizontal" v-bind:router="true" id="nav">
-      <el-menu-item index="/" id="title">{{school}}</el-menu-item>
+  <div id="app"
+       style="top:0px;left:0px;">
+    <el-menu :default-active="activeIndex"
+             mode="horizontal"
+             v-bind:router="true"
+             id="nav">
+      <el-menu-item index="/"
+                    id="title">{{school}}</el-menu-item>
       <el-menu-item index="/main">
         <i class="el-icon-star-off"></i>Home
       </el-menu-item>
@@ -24,23 +29,31 @@
         <i class="el-icon-s-promotion"></i>TodoList
       </el-menu-item>
 
-      <el-button round id="button" @click="registeropen" v-show="!loginshow">Register</el-button>
-      <el-button round id="button" @click="loginopen" v-show="!loginshow">Login</el-button>
+      <el-button round
+                 id="button"
+                 @click="registeropen"
+                 v-show="!loginshow">Register</el-button>
+      <el-button round
+                 id="button"
+                 @click="loginopen"
+                 v-show="!loginshow">Login</el-button>
 
-      <el-dropdown
-        id="user"
-        v-show="loginshow"
-        @command="handleCommand"
-        :show-timeout="100"
-        :split-button="true"
-      >
+      <el-dropdown id="user"
+                   v-show="loginshow"
+                   @command="handleCommand"
+                   :show-timeout="100"
+                   :split-button="true">
         <span class="el-dropdown-link">Welcome {{name}}</span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item command="home">Home</el-dropdown-item>
           <el-dropdown-item command="submittion">Submittion</el-dropdown-item>
           <el-dropdown-item command="setting">Setting</el-dropdown-item>
-          <el-dropdown-item command="admin" divided v-show="isadmin">Admin</el-dropdown-item>
-          <el-dropdown-item command="logout" divided>Logout</el-dropdown-item>
+          <el-dropdown-item command="classes">Class</el-dropdown-item>
+          <el-dropdown-item command="admin"
+                            divided
+                            v-show="isadmin">Admin</el-dropdown-item>
+          <el-dropdown-item command="logout"
+                            divided>Logout</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </el-menu>
@@ -48,9 +61,9 @@
     <register ref="registerdialog"></register>
 
     <login ref="logindialog"></login>
+
     <el-backtop :bottom="50">
-      <div
-        style="{
+      <div style="{
         height: 100%;
         width: 100%;
         background-color: #f2f5f6;
@@ -58,37 +71,31 @@
         text-align: center;
         line-height: 40px;
         color: #1989fa;
-      }"
-      >UP</div>
+      }">UP</div>
     </el-backtop>
-    <transition name="el-fade-in-linear" mode="out-in">
+
+    <transition name="el-fade-in-linear"
+                mode="out-in">
       <router-view id="route"></router-view>
     </transition>
+
     <div class="footer">
       <p>
         Powered by
-        <a
-          href="https://github.com/Linzecong/LPOJ"
-          target="_blank"
-          style="text-decoration: none;color:#409EFF;"
-        >Linzecong</a>
+        <a href="https://github.com/Linzecong/LPOJ"
+           target="_blank"
+           style="text-decoration: none;color:#409EFF;">Linzecong</a>
         <span>
           &nbsp; Version: 3.3&nbsp;&nbsp; Docs:&nbsp;&nbsp;
-          <a
-            href="https://docs.lpoj.cn"
-            target="_blank"
-            style="text-decoration: none;color:#409EFF;"
-          >LPOJ Docs</a>&nbsp;&nbsp;欢迎加入LPOJ讨论群: 875136693&nbsp;&nbsp;
-          <a
-            target="_blank"
-            href="//shang.qq.com/wpa/qunwpa?idkey=dcc9d5c63a744d5c09eda5dd7f4b208451e66b42ba633ea23ec6fa4d49135825"
-          >
-            <img
-              border="0"
-              src="//pub.idqqimg.com/wpa/images/group.png"
-              alt="LPOJ讨论群"
-              title="LPOJ讨论群"
-            >
+          <a href="https://docs.lpoj.cn"
+             target="_blank"
+             style="text-decoration: none;color:#409EFF;">LPOJ Docs</a>&nbsp;&nbsp;欢迎加入LPOJ讨论群: 875136693&nbsp;&nbsp;
+          <a target="_blank"
+             href="//shang.qq.com/wpa/qunwpa?idkey=dcc9d5c63a744d5c09eda5dd7f4b208451e66b42ba633ea23ec6fa4d49135825">
+            <img border="0"
+                 src="//pub.idqqimg.com/wpa/images/group.png"
+                 alt="LPOJ讨论群"
+                 title="LPOJ讨论群">
           </a>
         </span>
       </p>
@@ -105,7 +112,7 @@ export default {
     login,
     register
   },
-  data() {
+  data () {
     return {
       activeIndex: "1",
       school: "LPOJ",
@@ -115,35 +122,35 @@ export default {
       isadmin: false
     };
   },
-  mounted() {
+  mounted () {
     this.isadmin = sessionStorage.type == 2 || sessionStorage.type == 3;
 
     var sb = this.$store.state.sb
-    if( sb ==undefined){
+    if (sb == undefined) {
       this.$axios
-      .get("/settingboard/")
-      .then(res => {
-        if (res.data.length > 0) this.school = res.data[0].ojname;
-        else this.school = "LPOJ";
-        this.$store.state.sb = res.data
-      });
+        .get("/settingboard/")
+        .then(res => {
+          if (res.data.length > 0) this.school = res.data[0].ojname;
+          else this.school = "LPOJ";
+          this.$store.state.sb = res.data
+        });
     }
-    else{
+    else {
       if (sb.length > 0) this.school = sb[0].ojname;
-        else this.school = "LPOJ";
+      else this.school = "LPOJ";
     }
 
-    
+
   },
   methods: {
-    loginopen() {
+    loginopen () {
       this.$refs.logindialog.open();
     },
-    registeropen() {
+    registeropen () {
       this.$refs.registerdialog.open();
     },
 
-    handleCommand(command) {
+    handleCommand (command) {
       if (command == "logout") {
         this.$axios
           .get("/logout/")
@@ -187,6 +194,11 @@ export default {
       if (command == "admin") {
         this.$router.push({
           name: "admin"
+        });
+      }
+      if (command == "classes") {
+        this.$router.push({
+          name: "classes"
         });
       }
     }

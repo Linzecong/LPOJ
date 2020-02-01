@@ -55,7 +55,7 @@ class CaseStatusView(viewsets.ModelViewSet):
 
 class ACRankView(viewsets.ModelViewSet):
     queryset = JudgeStatus.objects.filter(submittime__gte=datetime.datetime.now(
-    )-datetime.timedelta(days=7),result=0) # 注意这里只是临时这么写！如果OJ使用的人多！这里会有性能问题！！
+)-datetime.timedelta(days=7),result=0) # 注意这里只是临时这么写！如果OJ使用的人多！这里会有性能问题！！
     serializer_class = JudgeStatusSerializer
     pagination_class = LimitOffsetPagination
     filter_backends = (DjangoFilterBackend,)
