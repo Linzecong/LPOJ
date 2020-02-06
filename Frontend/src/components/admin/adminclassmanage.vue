@@ -1,7 +1,6 @@
 <template>
   <el-row>
     <el-row>
-
       <el-form>
         <el-column>
           <el-form-item label="班级名称">
@@ -133,6 +132,9 @@ export default {
         console.log(response.data),
           this.tableData = response.data;
       })
+// this.$set(this.tableData);
+
+
 
   },
   mounted () {

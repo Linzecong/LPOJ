@@ -1,84 +1,103 @@
 <template>
-  <el-tabs type="card" tab-position="left" @tab-click="problemtabClick">
+
+  <el-tabs type="card"
+           tab-position="left"
+           @tab-click="problemtabClick">
     <center v-if="!begin">
       <h1>The Contest is Coming</h1>
     </center>
-   
-    <el-tab-pane v-for="(name,index) in problemtitles" :key="name" v-if="begin">
-      <span slot="label" style="float:left;" :ref="'A'+index">
+    <center>
+      <h1>{{ ip }}</h1>
+    </center>
+    <el-tab-pane v-for="(name,index) in problemtitles"
+                 :key="name"
+                 v-if="begin">
+      <span slot="label"
+            style="float:left;"
+            :ref="'A'+index">
         <i class="el-icon-date"></i>
         Problem {{index | toChar}}:
         {{name}}
       </span>
-      <el-col :span="24" v-loading="loading">
+
+      <el-col :span="24"
+              v-loading="loading">
         <el-row>
           <el-card shadow="always">
-            <el-row :gutter="18" id="title">
+            <el-row :gutter="18"
+                    id="title">
               {{currentrankE}}{{' '+title}}
-              <el-tag
-                size="medium"
-                disable-transitions
-                hit
-                style="float:right;margin-right:20px;"
-                type="success"
-              >{{ time }}</el-tag>
-              <el-tag
-                size="medium"
-                disable-transitions
-                hit
-                style="float:right;margin-right:20px;"
-                type="primary"
-              >{{ memory }}</el-tag>
+              <el-tag size="medium"
+                      disable-transitions
+                      hit
+                      style="float:right;margin-right:20px;"
+                      type="success">{{ time }}</el-tag>
+              <el-tag size="medium"
+                      disable-transitions
+                      hit
+                      style="float:right;margin-right:20px;"
+                      type="primary">{{ memory }}</el-tag>
             </el-row>
             <br>
-            <el-row :gutter="18" id="des">Description</el-row>
-            <el-row :gutter="18" id="detail">
-              <div
-                style="margin-right:50px;word-break:break-all;white-space:pre-line;"
-                v-html="des"
-                :key="des"
-              ></div>
+            <el-row :gutter="18"
+                    id="des">Description</el-row>
+            <el-row :gutter="18"
+                    id="detail">
+              <div style="margin-right:50px;word-break:break-all;white-space:pre-line;"
+                   v-html="des"
+                   :key="des"></div>
             </el-row>
-            <el-row :gutter="18" id="des">Input</el-row>
-            <el-row :gutter="18" id="detail">
-              <div
-                style="margin-right:50px;word-break:break-all;white-space:pre-line;"
-                v-html="input"
-              ></div>
+            <el-row :gutter="18"
+                    id="des">Input</el-row>
+            <el-row :gutter="18"
+                    id="detail">
+              <div style="margin-right:50px;word-break:break-all;white-space:pre-line;"
+                   v-html="input"></div>
             </el-row>
-            <el-row :gutter="18" id="des">Output</el-row>
-            <el-row :gutter="18" id="detail">
-              <div
-                style="margin-right:50px;word-break:break-all;white-space:pre-line;"
-                v-html="output"
-              ></div>
+            <el-row :gutter="18"
+                    id="des">Output</el-row>
+            <el-row :gutter="18"
+                    id="detail">
+              <div style="margin-right:50px;word-break:break-all;white-space:pre-line;"
+                   v-html="output"></div>
             </el-row>
 
-            <el-row :gutter="18" style="left:10px">
-              <el-row :gutter="18" v-for="(item,index) in sinput.length" :key="index">
-                <el-col :span="11" id="text">
-                  <el-row :gutter="18" id="des" style="margin-bottom: 0px;">Sample Input {{item}}<el-button
-                      size="mini"
-                      v-clipboard:copy="sinput[index]"
-                      v-clipboard:success="onCopy"
-                      v-clipboard:error="onError"
-                      style="margin-left:8px;float:top;"
-                    >Copy</el-button>
+            <el-row :gutter="18"
+                    style="left:10px">
+              <el-row :gutter="18"
+                      v-for="(item,index) in sinput.length"
+                      :key="index">
+                <el-col :span="11"
+                        id="text">
+                  <el-row :gutter="18"
+                          id="des"
+                          style="margin-bottom: 0px;">Sample Input {{item}}<el-button size="mini"
+                               v-clipboard:copy="sinput[index]"
+                               v-clipboard:success="onCopy"
+                               v-clipboard:error="onError"
+                               style="margin-left:8px;float:top;">Copy</el-button>
                   </el-row>
-                  <el-row :gutter="18" id="data" style="margin-bottom: 0px;">{{sinput[index]}}</el-row>
+                  <el-row :gutter="18"
+                          id="data"
+                          style="margin-bottom: 0px;">{{sinput[index]}}</el-row>
                 </el-col>
-                <el-col :span="11" id="text">
-                  <el-row :gutter="18" id="des" style="margin-bottom: 0px;">Sample Output {{item}}</el-row>
-                  <el-row :gutter="18" id="data" style="margin-bottom: 0px;">{{soutput[index]}}</el-row>
+                <el-col :span="11"
+                        id="text">
+                  <el-row :gutter="18"
+                          id="des"
+                          style="margin-bottom: 0px;">Sample Output {{item}}</el-row>
+                  <el-row :gutter="18"
+                          id="data"
+                          style="margin-bottom: 0px;">{{soutput[index]}}</el-row>
                 </el-col>
               </el-row>
             </el-row>
-            <el-row :gutter="18" id="des">Hint</el-row>
-            <el-row :gutter="18" id="detail">
-              <div
-                style="margin-right:50px;word-break:break-all;white-space:pre-line;"
-                v-html="hint"
-              ></div>
+            <el-row :gutter="18"
+                    id="des">Hint</el-row>
+            <el-row :gutter="18"
+                    id="detail">
+              <div style="margin-right:50px;word-break:break-all;white-space:pre-line;"
+                   v-html="hint"></div>
             </el-row>
           </el-card>
         </el-row>
@@ -86,41 +105,42 @@
           <el-card shadow="always">
             <el-row :gutter="15">
               <el-col :span="3">
-                <div id="des" style="padding: 5px 10px;">Language:</div>
+                <div id="des"
+                     style="padding: 5px 10px;">Language:</div>
               </el-col>
               <el-col :span="2">
-                <el-select v-model="language" placeholder="请选择" @change="changetemplate">
+                <el-select v-model="language"
+                           placeholder="请选择"
+                           @change="changetemplate">
                   <languageselect></languageselect>
                 </el-select>
               </el-col>
               <el-col :span="2">
-                <el-button
-                  type="primary"
-                  @click="submit"
-                  style="font-weight:bold;margin-left:10px;"
-                >Submit</el-button>
+                <el-button type="primary"
+                           @click="submit"
+                           style="font-weight:bold;margin-left:10px;">Submit</el-button>
               </el-col>
+
               <el-col :span="2">
-              <el-button
-                type="primary"
-                @click="code = ''"
-                style="font-weight:bold;margin-left:10px;"
-              >Reset</el-button>
-            </el-col>
+                <el-button type="primary"
+                           @click="code = ''"
+                           style="font-weight:bold;margin-left:10px;">Reset</el-button>
+              </el-col>
 
               <el-col :span="15">
-                <el-button
-                  round
-                  :type="judgetype"
-                  :loading="loadingshow"
-                  style="font-weight:bold;margin-left:10px;"
-                  @click="showdialog"
-                >{{submitbuttontext}}</el-button>
+                <el-button round
+                           :type="judgetype"
+                           :loading="loadingshow"
+                           style="font-weight:bold;margin-left:10px;"
+                           @click="showdialog">{{submitbuttontext}}</el-button>
               </el-col>
             </el-row>
             <el-row :gutter="15">
               <el-col :span="17">
-                <codemirror ref="myCm" v-model="code" :options="cmOptions" class="code"></codemirror>
+                <codemirror ref="myCm"
+                            v-model="code"
+                            :options="cmOptions"
+                            class="code"></codemirror>
               </el-col>
               <el-col :span="7">
                 <statusmini :ref="'Statusmini'+index"></statusmini>
@@ -150,8 +170,10 @@ export default {
     statusmini,
     languageselect
   },
-  data() {
+  data () {
     return {
+      ip: "",
+      userip: "",
       cmOptions: {
         tabSize: 4,
         mode: "text/x-c++src",
@@ -185,8 +207,8 @@ export default {
       level: "Easy",
       code: "",
       language: "C++",
-      proid:"0",
-      codetemplate:{},
+      proid: "0",
+      codetemplate: {},
 
       submitbuttontext: "提交后请勿重复刷新/支持将文件拖入代码框",
       judgetype: "primary",
@@ -198,18 +220,22 @@ export default {
       currentrank: -1,
       currentrankE: "A",
       loading: false,
-      curindex:0
+      curindex: 0,
+
+      ContestId: "",
+      SubmitIp: "",
+      ContestIpRange: ""
     };
   },
   filters: {
-    toChar(val) {
+    toChar (val) {
       var A = "A";
       val = parseInt(val);
       return String.fromCharCode(val + A.charCodeAt());
     }
   },
   watch: {
-    des: function() {
+    des: function () {
       console.log("data changed");
       this.$nextTick().then(() => {
         this.reRender();
@@ -217,51 +243,51 @@ export default {
     }
   },
   methods: {
-    showdialog(){
-      if(this.submitid != -1)
-        this.$refs["Statusmini"+this.curindex][0].showdialog(this.submitid)
+    showdialog () {
+      if (this.submitid != -1)
+        this.$refs["Statusmini" + this.curindex][0].showdialog(this.submitid)
     },
-    changetemplate(lang){
+    changetemplate (lang) {
       var t = this.codetemplate[lang]
-        if(t){
-          this.$confirm("确定切换语言吗？", "切换后当前代码不会保存！", {
+      if (t) {
+        this.$confirm("确定切换语言吗？", "切换后当前代码不会保存！", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
         }).then(() => {
-          
+
           this.code = this.codetemplate[lang]
         })
       }
-      
+
     },
-    reRender() {
+    reRender () {
       if (window.MathJax) {
         console.log("rendering mathjax");
         MathJax.Hub.Config({
-            tex2jax: {
+          tex2jax: {
             inlineMath: [["$", "$"], ["\\(", "\\)"]],
             displayMath: [["$$", "$$"], ["\\[", "\\]"]]
-            }
+          }
         });
         window.MathJax.Hub.Queue(["Typeset", window.MathJax.Hub], () =>
           console.log("done")
         );
       }
     },
-    toCharM(val) {
+    toCharM (val) {
       var A = "A";
       val = parseInt(val);
       return String.fromCharCode(val + A.charCodeAt());
     },
-    onCopy(e) {
+    onCopy (e) {
       this.$message.success("复制成功！");
     },
     // 复制失败
-    onError(e) {
+    onError (e) {
       this.$message.error("复制失败：" + e);
     },
-    problemtabClick(tab) {
+    problemtabClick (tab) {
       this.loading = true;
       clearInterval(this.$store.state.submittimer);
       this.submitbuttontext = "提交后请勿重复刷新/支持将文件拖入代码框";
@@ -274,7 +300,7 @@ export default {
       this.title = this.problemtitles[tab.index];
       this.currentrank = tab.index;
       this.currentrankE = this.toCharM(tab.index);
-      this.$refs["Statusmini" + tab.index][0].setstatus(this.currentproblem,sessionStorage.username,this.$route.params.contestID);
+      this.$refs["Statusmini" + tab.index][0].setstatus(this.currentproblem, sessionStorage.username, this.$route.params.contestID);
       this.curindex = tab.index
       this.$axios
         .get("/problem/" + this.currentproblem + "/")
@@ -289,12 +315,12 @@ export default {
           this.source = response.data.source;
 
           var li = response.data.template.split("*****")
-          for(var i = 1; i < li.length; i+=2){
-            this.codetemplate[li[i]]=li[i+1]
+          for (var i = 1; i < li.length; i += 2) {
+            this.codetemplate[li[i]] = li[i + 1]
           }
-          this.code = this.codetemplate[this.language]         
+          this.code = this.codetemplate[this.language]
 
-          if(this.oj!="LPOJ"){
+          if (this.oj != "LPOJ") {
             this.proid = this.source
           }
           this.time = response.data.time + "MS";
@@ -303,28 +329,28 @@ export default {
           this.loading = false;
 
         });
-      if(sessionStorage.username!=""){
+      if (sessionStorage.username != "") {
         this.$axios
-        .get(
-          "/contestboard/?contestid=" +
+          .get(
+            "/contestboard/?contestid=" +
             this.currentcontest +
             "&username=" +
             sessionStorage.username +
             "&type=1"
-        )
-        .then(response => {
-          for (var ii = 0; ii < this.$store.state.contestproblemcount; ii++)
-            this.$refs["A" + ii][0].style["color"] = "black";
-          for (var i = 0; i < response.data.length; i++) {
-            this.$refs["A" + response.data[i].problemrank][0].style["color"] =
-              "#67C23A";    
-          }
-          this.$refs["A" + tab.index][0].style["color"] = "#409EFF";    
-        });
+          )
+          .then(response => {
+            for (var ii = 0; ii < this.$store.state.contestproblemcount; ii++)
+              this.$refs["A" + ii][0].style["color"] = "black";
+            for (var i = 0; i < response.data.length; i++) {
+              this.$refs["A" + response.data[i].problemrank][0].style["color"] =
+                "#67C23A";
+            }
+            this.$refs["A" + tab.index][0].style["color"] = "#409EFF";
+          });
       }
-      
+
     },
-    getproblem(id) {
+    getproblem (id) {
       this.loading = true;
       clearInterval(this.$store.state.submittimer);
       this.submitbuttontext = "提交后请勿重复刷新/支持将文件拖入代码框";
@@ -344,7 +370,7 @@ export default {
 
           var left = parseInt((d1.getTime() - d2.getTime()) / 1000);
 
-          if (left < 0&&(sessionStorage.type==1||sessionStorage.type=="")) {
+          if (left < 0 && (sessionStorage.type == 1 || sessionStorage.type == "")) {
             this.$message.error("比赛未开始！");
             this.begin = false;
             return;
@@ -378,36 +404,32 @@ export default {
                   this.soutput = response.data.soutput.split("|#)");
                   this.author = response.data.author;
                   this.source = response.data.source;
-                  
+
                   var li = response.data.template.split("*****")
-                  for(var i = 1; i < li.length; i+=2){
-                    this.codetemplate[li[i]]=li[i+1]
+                  for (var i = 1; i < li.length; i += 2) {
+                    this.codetemplate[li[i]] = li[i + 1]
                   }
                   this.code = this.codetemplate[this.language]
 
 
-                  if(this.oj!="LPOJ"){
+                  if (this.oj != "LPOJ") {
                     this.proid = this.source
                   }
                   this.time = response.data.time + "MS";
                   this.memory = response.data.memory + "MB";
                   this.hint = response.data.hint;
-                  this.$refs["Statusmini0"][0].setstatus(this.currentproblem,sessionStorage.username,this.$route.params.contestID);
+                  this.$refs["Statusmini0"][0].setstatus(this.currentproblem, sessionStorage.username, this.$route.params.contestID);
                   this.loading = false;
                 });
             });
         });
       });
     },
-    submit: function() {
+    submit: function () {
       if (this.hint == "") {
         this.$message.error("非法操作！");
         return;
       }
-      // if (this.$store.state.contestisend == true) {
-      //   this.$message.error("比赛已结束");
-      //   return;
-      // }
       if (!sessionStorage.username) {
         this.$message.error("请先登录！");
         return;
@@ -420,22 +442,64 @@ export default {
         this.$message.error("请选择语言！");
         return;
       }
-      
-      if (this.code.length<20) {
+
+      if (this.code.length < 20) {
         this.$message.error("代码过短！");
         return;
       }
+      // console.log("this.$route.params.contestID");
+      // console.log(this.$route.params.contestID);
+      // console.log("this.currentcontest");
+      // console.log(this.currentcontest);
+      this.$axios.get("/contestinfo/?id=" + this.currentcontest)
+        .then(
+          res => {
+            this.ContestIpRange = res.data[0].iprange;
+            // console.log("res.data[0].iprange");
+            // console.log(res.data[0].iprange);
+            // console.log("this.ContestIpRange");
+            // console.log(this.ContestIpRange);
+          }
+        ).catch(error => {
+          this.$message.error(
+            "服务器错误！"
+          );
+        });
+      var Myip = require('ip').address();
+      var ipr = JSON.stringify(this.ContestIpRange);
 
+      // if (this.ContestIpRange != "None") {
+      //   console.log("开始比较");
+      //   this.ContestIpRange = this.ContestIpRange.split(";");
+      //   console.log(this.ContestIpRange);
+      //   var cani = false;
+      //   for (var i = 0; i < this.ContestIpRange.length; i++) {
+      //     var c = this.ContestIpRange[i].split(",");
+      //     console.log(c[0]);
+      //     console.log(c[1]);
+      //     if (this.Myip >= this.c[0] && this.Myip <= this.c[1]) {
+      //       this.cani = true;
+      //       console.log("在范围内");
+      //       break;
+      //     }
+      //   }
+      //   if (!this.cani) {
+      //     this.$message.error("提交失败！");
+      //     return;
+      //   }
+      // }
       this.$confirm("确定提交该题吗？ 题目：" + this.title, "提交确认", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       }).then(() => {
+        console.log("提交成功");
         this.$message({
           type: "success",
           message: "提交中..."
         });
-
+        console.log("this.userip");
+        console.log(this.userip);
         this.$axios.get("/currenttime/").then(response2 => {
           var curtime = response2.data;
 
@@ -458,7 +522,9 @@ export default {
                 testcase: 0,
                 message: this.oj == "LPOJ" ? "0" : this.proid + "",
                 problemtitle: this.currentrankE,
-                rating: parseInt(sessionStorage.rating)
+                rating: parseInt(sessionStorage.rating),
+                ip: this.userip
+
               })
               .then(response => {
                 this.$message({
@@ -477,77 +543,78 @@ export default {
               .catch(error => {
                 this.$message.error(
                   "服务器错误！" +
-                    "(请检查编码（代码需要utf-8编码）或联系管理员)"
+                  "(请检查编码（代码需要utf-8编码）或联系管理员)"
                 );
               });
           } else {
             var date1 = moment(curtime).toDate()
-            //var date1 = new Date(Date.parse(curtime)+ ' UTC +8'); 
-                      this.$axios
-                        .post("/judgestatusput/", {
-                          user: sessionStorage.username,
-                          oj: this.oj,
-                          problem: this.currentproblem,
-                          result: -1,
-                          time: 0,
-                          memory: 0,
-                          length: this.code.length,
-                          language: this.language,
-                          submittime: curtime,
-                          judger: "waiting for judger",
-                          contest: this.currentcontest,
-                          contestproblem: this.currentrank,
-                          code: this.code,
-                          testcase: 0,
-                    message: this.oj == "LPOJ" ? "0" : this.proid + "",
-                          problemtitle:  this.currentrankE,
-                          rating: parseInt(sessionStorage.rating)
-                        })
-                        .then(response => {
-                              this.$message({
-                                message: "提交成功！",
-                                type: "success"
-                              });
-                              this.$axios
-                        .post("/contestboard/", {
-                          username: sessionStorage.username,
-                          user: sessionStorage.name,
-                          type: -1,
-                          submitid: response.data.id,
-                          contestid: parseInt(this.currentcontest),
-                          problemrank: this.currentrank,
-                          submittime: date1.getTime(),
-                          rating: parseInt(sessionStorage.rating)
-                        })
-                        .then(response2 => {
-                              clearInterval(this.$store.state.submittimer);
-                              this.submitid = response.data.id;
-                              this.submitbuttontext = "Pending";
-                              this.judgetype = "info";
-                              this.loadingshow = true;
-                              //创建一个全局定时器，定时刷新状态
-                              this.$store.state.submittimer = setInterval(
-                                this.timer,
-                                3000
-                              );
-                            }).catch(error => {
-                          this.$message.error(
-                            "服务器错误！" +
-                              "(请检查编码（代码需要utf-8编码）或联系管理员)"
-                          );
-                        });
-                        })
-                        .catch(error => {
-                          this.$message.error(
-                            "服务器错误！" +
-                              "(请检查编码（代码需要utf-8编码）或联系管理员)"
-                          );
-                        });
+            var date1 = new Date(Date.parse(curtime) + ' UTC +8');
+            this.$axios
+              .post("/judgestatusput/", {
+                user: sessionStorage.username,
+                oj: this.oj,
+                problem: this.currentproblem,
+                result: -1,
+                time: 0,
+                memory: 0,
+                length: this.code.length,
+                language: this.language,
+                submittime: curtime,
+                judger: "waiting for judger",
+                contest: this.currentcontest,
+                contestproblem: this.currentrank,
+                code: this.code,
+                testcase: 0,
+                message: this.oj == "LPOJ" ? "0" : this.proid + "",
+                problemtitle: this.currentrankE,
+                rating: parseInt(sessionStorage.rating),
+                ip: this.userip
+              })
+              .then(response => {
+                this.$message({
+                  message: "提交成功！",
+                  type: "success"
+                });
+                this.$axios
+                  .post("/contestboard/", {
+                    username: sessionStorage.username,
+                    user: sessionStorage.name,
+                    type: -1,
+                    submitid: response.data.id,
+                    contestid: parseInt(this.currentcontest),
+                    problemrank: this.currentrank,
+                    submittime: date1.getTime(),
+                    rating: parseInt(sessionStorage.rating)
+                  })
+                  .then(response2 => {
+                    clearInterval(this.$store.state.submittimer);
+                    this.submitid = response.data.id;
+                    this.submitbuttontext = "Pending";
+                    this.judgetype = "info";
+                    this.loadingshow = true;
+                    //创建一个全局定时器，定时刷新状态
+                    this.$store.state.submittimer = setInterval(
+                      this.timer,
+                      3000
+                    );
+                  }).catch(error => {
+                    this.$message.error(
+                      "服务器错误！" +
+                      "(请检查编码（代码需要utf-8编码）或联系管理员)"
+                    );
+                  });
+              })
+              .catch(error => {
+                this.$message.error(
+                  "服务器错误！" +
+                  "(请检查编码（代码需要utf-8编码）或联系管理员)"
+                );
+              });
           }
         });
       });
     },
-    timer: function() {
+    timer: function () {
       if (this.submitbuttontext == "提交后请勿重复刷新/支持将文件拖入代码框")
         return;
       this.$axios.get("/judgestatus/" + this.submitid + "/").then(response => {
@@ -633,16 +700,21 @@ export default {
         }
 
         this.submitbuttontext = response.data["result"];
-        this.$refs["Statusmini"+this.curindex][0].reflash()
+        this.$refs["Statusmini" + this.curindex][0].reflash()
       });
     }
   },
-  created() {
+  created () {
+
+    var myip = require('ip');
+    this.userip = myip.address();
     this.getproblem(this.$route.params.contestID);
   },
-  destroyed() {
+  destroyed () {
     clearInterval(this.$store.state.submittimer);
-  }
+  },
+
+
 };
 </script>
 

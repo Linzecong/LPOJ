@@ -28,7 +28,5 @@ urlpatterns = [
     url(r'', include('wiki.urls')),
     url(r'', include('item.urls')),
     url(r'', include('classes.urls')),
-    # url(r'^api/', include('classes.urls')),#test
-    # path('classes/',include('classes.urls')),
 
 ]

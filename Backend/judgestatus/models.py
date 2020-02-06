@@ -22,6 +22,7 @@ class JudgeStatus(models.Model):
     message = models.TextField() # 也作为 其他OJ 的 proid
     problemtitle = models.CharField(max_length=100, default="")
     rating = models.IntegerField(default=1500)
+    ip = models.CharField(max_length=50, default="无法获取ip")
 
     objects = models.Manager()
 

@@ -29,7 +29,7 @@
       </el-table>
     </el-dialog>
 
-    
+
       <el-input
         v-model="searchtitle"
         placeholder="输入Title来筛选..."
@@ -70,7 +70,7 @@
       </el-table>
 
       <el-dialog title="修改比赛" :visible.sync="dialogTableVisible2" width="85%">
-    
+
     <el-row>
       <el-form :model="changecontestform" label-position="right">
         <el-form-item label="比赛编号：">
@@ -297,7 +297,7 @@ export default {
               ":" +
               parseInt((response.data.results[i]["lasttime"] % 60) % 60);
           }
-          
+
           this.gridData2 = response.data.results;
           this.totalcontest = response.data.count;
         });

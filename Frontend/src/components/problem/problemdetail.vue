@@ -3,57 +3,79 @@
     <el-col :span="18">
       <el-row>
         <el-card shadow="always">
-          <el-row :gutter="18" id="title">{{(this.oj=="LPOJ"?"LPOJ":"")+(this.oj=="LPOJ"?" - ":"")+(this.oj=="LPOJ"?this.proid:"")+' '}}{{title}}</el-row>
+          <el-row :gutter="18"
+                  id="title">{{(this.oj=="LPOJ"?"LPOJ":"")+(this.oj=="LPOJ"?" - ":"")+(this.oj=="LPOJ"?this.proid:"")+' '}}{{title}}</el-row>
           <br>
-          <el-row :gutter="18" id="des">Description</el-row>
-          <el-row :gutter="18" id="detail">
-            <div style="margin-right:50px;word-break:break-all;white-space:pre-line;" v-html="des" :key="des"></div>
-          </el-row>
-          <el-row :gutter="18" id="des">Input</el-row>
-          <el-row :gutter="18" id="detail">
-            <div
-              style="margin-right:50px;word-break:break-all;white-space:pre-line;"
-              v-html="input"
-            ></div>
-          </el-row>
-          <el-row :gutter="18" id="des">Output</el-row>
-          <el-row :gutter="18" id="detail">
-            <div
-              style="margin-right:50px;word-break:break-all;white-space:pre-line;"
-              v-html="output"
-            ></div>
+          <el-row :gutter="18"
+                  id="des">Description</el-row>
+          <el-row :gutter="18"
+                  id="detail">
+            <div style="margin-right:50px;word-break:break-all;white-space:pre-line;"
+                 v-html="des"
+                 :key="des"></div>
           </el-row>
 
-          <el-row :gutter="18" style="left:10px">
-            <el-row :gutter="18" v-for="(item,index) in sinput.length" :key="index">
-              <el-col :span="11" id="text">
-                <el-row :gutter="18" id="des" style="margin-bottom: 0px;">Sample Input {{item}}<el-button
-                    size="mini"
-                    v-clipboard:copy="sinput[index]"
-                    v-clipboard:success="onCopy"
-                    v-clipboard:error="onError"
-                    style="margin-left:8px;float:top;"
-                  >Copy</el-button>
+          <img :src="'data:image/jpeg;base64,'+imgcode"
+               class="img-responsive">
+
+          <el-row :gutter="18"
+                  id="des">Input</el-row>
+          <el-row :gutter="18"
+                  id="detail">
+            <div style="margin-right:50px;word-break:break-all;white-space:pre-line;"
+                 v-html="input"></div>
+          </el-row>
+          <el-row :gutter="18"
+                  id="des">Output</el-row>
+          <el-row :gutter="18"
+                  id="detail">
+            <div style="margin-right:50px;word-break:break-all;white-space:pre-line;"
+                 v-html="output"></div>
+          </el-row>
+
+          <el-row :gutter="18"
+                  style="left:10px">
+            <el-row :gutter="18"
+                    v-for="(item,index) in sinput.length"
+                    :key="index">
+              <el-col :span="11"
+                      id="text">
+                <el-row :gutter="18"
+                        id="des"
+                        style="margin-bottom: 0px;">Sample Input {{item}}<el-button size="mini"
+                             v-clipboard:copy="sinput[index]"
+                             v-clipboard:success="onCopy"
+                             v-clipboard:error="onError"
+                             style="margin-left:8px;float:top;">Copy</el-button>
                 </el-row>
-                <el-row :gutter="18" id="data" style="margin-bottom: 0px;">{{sinput[index]}}</el-row>
+                <el-row :gutter="18"
+                        id="data"
+                        style="margin-bottom: 0px;">{{sinput[index]}}</el-row>
               </el-col>
-              <el-col :span="11" id="text">
-                <el-row :gutter="18" id="des" style="margin-bottom: 0px;">Sample Output {{item}}</el-row>
-                <el-row :gutter="18" id="data" style="margin-bottom: 0px;">{{soutput[index]}}</el-row>
+              <el-col :span="11"
+                      id="text">
+                <el-row :gutter="18"
+                        id="des"
+                        style="margin-bottom: 0px;">Sample Output {{item}}</el-row>
+                <el-row :gutter="18"
+                        id="data"
+                        style="margin-bottom: 0px;">{{soutput[index]}}</el-row>
               </el-col>
             </el-row>
           </el-row>
 
-          <el-row :gutter="18" id="des">Source</el-row>
-          <el-row :gutter="18" id="detail">
+          <el-row :gutter="18"
+                  id="des">Source</el-row>
+          <el-row :gutter="18"
+                  id="detail">
             <div style="margin-right:50px;">{{source}}</div>
           </el-row>
-          <el-row :gutter="18" id="des">Hint</el-row>
-          <el-row :gutter="18" id="detail">
-            <div
-              style="margin-right:50px;word-break:break-all;white-space:pre-line;"
-              v-html="hint"
-            ></div>
+          <el-row :gutter="18"
+                  id="des">Hint</el-row>
+          <el-row :gutter="18"
+                  id="detail">
+            <div style="margin-right:50px;word-break:break-all;white-space:pre-line;"
+                 v-html="hint"></div>
           </el-row>
         </el-card>
       </el-row>
@@ -61,40 +83,38 @@
         <el-card shadow="always">
           <el-row :gutter="15">
             <el-col :span="3">
-              <div id="des" style="padding: 5px 10px;">Language:</div>
+              <div id="des"
+                   style="padding: 5px 10px;">Language:</div>
             </el-col>
             <el-col :span="2">
-              <el-select v-model="language" placeholder="请选择" @change="changetemplate">
+              <el-select v-model="language"
+                         placeholder="请选择"
+                         @change="changetemplate">
                 <languageselect></languageselect>
               </el-select>
             </el-col>
             <el-col :span="2">
-              <el-button
-                type="primary"
-                @click="submit"
-                style="font-weight:bold;margin-left:10px;"
-              >Submit</el-button>
+              <el-button type="primary"
+                         @click="submit"
+                         style="font-weight:bold;margin-left:10px;">Submit</el-button>
             </el-col>
             <el-col :span="2">
-              <el-button
-                type="primary"
-                @click="code = ''"
-                style="font-weight:bold;margin-left:10px;"
-              >Reset</el-button>
+              <el-button type="primary"
+                         @click="code = ''"
+                         style="font-weight:bold;margin-left:10px;">Reset</el-button>
             </el-col>
 
             <el-col :span="15">
-              <el-button
-                round
-                :type="judgetype"
-                :loading="loadingshow"
-                style="font-weight:bold;margin-left:10px;"
-                @click="showdialog"
-              >{{submitbuttontext}}</el-button>
+              <el-button round
+                         :type="judgetype"
+                         :loading="loadingshow"
+                         style="font-weight:bold;margin-left:10px;"
+                         @click="showdialog">{{submitbuttontext}}</el-button>
             </el-col>
           </el-row>
           <el-row>
-            <codemirror v-model="code" :options="cmOptions"></codemirror>
+            <codemirror v-model="code"
+                        :options="cmOptions"></codemirror>
           </el-row>
         </el-card>
       </el-row>
@@ -104,55 +124,70 @@
       <el-row :gutter="15">
         <el-card shadow="always">
           <el-collapse v-model="activeNames">
-            <el-collapse-item name="1" id="des">
+            <el-collapse-item name="1"
+                              id="des">
               <template slot="title">
-                <font color="deepskyblue" size="4">Creator:</font>
+                <font color="deepskyblue"
+                      size="4">Creator:</font>
               </template>
               <div>{{author}}</div>
             </el-collapse-item>
-            <el-collapse-item name="2" id="des">
+            <el-collapse-item name="2"
+                              id="des">
               <template slot="title">
-                <font color="deepskyblue" size="4">Date:</font>
+                <font color="deepskyblue"
+                      size="4">Date:</font>
               </template>
               <div>{{addtime}}</div>
             </el-collapse-item>
-            <el-collapse-item name="3" id="des">
+            <el-collapse-item name="3"
+                              id="des">
               <template slot="title">
-                <font color="deepskyblue" size="4">OJ:</font>
+                <font color="deepskyblue"
+                      size="4">OJ:</font>
               </template>
               <div>{{oj}}</div>
             </el-collapse-item>
-            <el-collapse-item name="4" id="des">
+            <el-collapse-item name="4"
+                              id="des">
               <template slot="title">
-                <font color="deepskyblue" size="4">Time:</font>
+                <font color="deepskyblue"
+                      size="4">Time:</font>
               </template>
               <div>{{time}}</div>
             </el-collapse-item>
-            <el-collapse-item name="5" id="des">
+            <el-collapse-item name="5"
+                              id="des">
               <template slot="title">
-                <font color="deepskyblue" size="4">Memory:</font>
+                <font color="deepskyblue"
+                      size="4">Memory:</font>
               </template>
               <div>{{memory}}</div>
             </el-collapse-item>
-            <el-collapse-item name="7" id="des">
+            <el-collapse-item name="7"
+                              id="des">
               <template slot="title">
-                <font color="deepskyblue" size="4">Level:</font>
+                <font color="deepskyblue"
+                      size="4">Level:</font>
               </template>
-              <el-tag size="medium" :type="problemlevel(level)" disable-transitions hit>{{ level }}</el-tag>
+              <el-tag size="medium"
+                      :type="problemlevel(level)"
+                      disable-transitions
+                      hit>{{ level }}</el-tag>
             </el-collapse-item>
-            <el-collapse-item name="6" id="des">
+            <el-collapse-item name="6"
+                              id="des">
               <template slot="title">
-                <font color="deepskyblue" size="4">Tags:</font>
+                <font color="deepskyblue"
+                      size="4">Tags:</font>
               </template>
-              <el-tag
-                id="tag"
-                v-for="(name,index) in tagnames"
-                :key="index"
-                size="medium"
-                type="info"
-                disable-transitions
-                hit
-              >{{ name }}</el-tag>
+              <el-tag id="tag"
+                      v-for="(name,index) in tagnames"
+                      :key="index"
+                      size="medium"
+                      type="info"
+                      disable-transitions
+                      hit>{{ name }}</el-tag>
             </el-collapse-item>
           </el-collapse>
         </el-card>
@@ -193,8 +228,11 @@ export default {
     prostatistice,
     languageselect
   },
-  data() {
+  data () {
     return {
+      imgcode: "",
+      ip: "",
+      userip: "",
       cmOptions: {
         tabSize: 4,
         mode: "text/x-c++src",
@@ -210,7 +248,7 @@ export default {
       author: "",
       addtime: "",
       oj: "",
-      proid:"",
+      proid: "",
       source: "",
       time: "",
       memory: "",
@@ -221,7 +259,7 @@ export default {
       code: "",
       language: "C++",
 
-      codetemplate:{},
+      codetemplate: {},
 
       ac: 100,
       mle: 100,
@@ -238,25 +276,40 @@ export default {
     };
   },
   watch: {
-    des: function() {
+    des: function () {
       console.log('data changed');
-      this.$nextTick().then(()=>{
+      this.$nextTick().then(() => {
         this.reRender();
       });
     }
   },
-  created() {
+  created () {
+
+    var myip = require('ip');
+    this.userip = myip.address();
     this.ID = this.$route.query.problemID;
     if (!this.ID) {
       this.$message.error("参数错误" + "(" + this.ID + ")");
       return;
     }
     var auth = 1;
+
+
+    this.$axios
+      .get("/showpic/")
+      .then(res => {
+        this.imgcode = res.data;
+        console.log(res);
+        console.log(res.data);
+      });
+
+
+
     this.$axios
       .get("/problem/" + this.ID + "/")
       .then(response => {
         auth = response.data.auth;
-        if ((auth == 2 || auth == 3) && (sessionStorage.type == 1||sessionStorage.type =="")) {
+        if ((auth == 2 || auth == 3) && (sessionStorage.type == 1 || sessionStorage.type == "")) {
           this.title = "非法访问！请在比赛中访问题目！";
           this.$message.error("服务器错误！" + "(" + "无权限" + ")");
           return;
@@ -279,15 +332,15 @@ export default {
         this.hint = response.data.hint;
 
         var li = response.data.template.split("*****")
-        for(var i = 1; i < li.length; i+=2){
-          this.codetemplate[li[i]]=li[i+1]
+        for (var i = 1; i < li.length; i += 2) {
+          this.codetemplate[li[i]] = li[i + 1]
         }
         this.code = this.codetemplate[this.language]
 
-        if(this.oj!="LPOJ"){
+        if (this.oj != "LPOJ") {
           this.proid = this.source
         }
-        
+
 
         this.$axios
           .get("/problemdata/" + this.ID + "/")
@@ -345,14 +398,14 @@ export default {
                 ((response.data.se * 100) / response.data.submission).toFixed(2)
               );
             }
-            
+
             this.title = response.data.title;
             this.level = response.data.level;
             this.tagnames = response.data.tag;
             this.$refs.prosta.setdata(this.$data)
             console.log(this.$refs["Statusmini"])
-            this.$refs["Statusmini"].setstatus(this.ID,sessionStorage.username,"");
-            
+            this.$refs["Statusmini"].setstatus(this.ID, sessionStorage.username, "");
+
           })
           .catch(error => {
             this.$message.error("服务器错误！" + "(" + JSON.stringify(error.response.data) + ")");
@@ -364,52 +417,52 @@ export default {
       });
   },
   methods: {
-    showdialog(){
-      if(this.submitid != -1)
+    showdialog () {
+      if (this.submitid != -1)
         this.$refs["Statusmini"].showdialog(this.submitid)
     },
-    changetemplate(lang){
+    changetemplate (lang) {
       var t = this.codetemplate[lang]
-        if(t){
-          this.$confirm("确定切换语言吗？", "切换后当前代码不会保存！", {
+      if (t) {
+        this.$confirm("确定切换语言吗？", "切换后当前代码不会保存！", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
         }).then(() => {
-          
+
           this.code = this.codetemplate[lang]
         })
       }
-      
-      
+
+
     },
-    reRender() {
-      if(window.MathJax) {
+    reRender () {
+      if (window.MathJax) {
         console.log('rendering mathjax');
         MathJax.Hub.Config({
-            tex2jax: {
-                inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-                displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-            }
+          tex2jax: {
+            inlineMath: [['$', '$'], ["\\(", "\\)"]],
+            displayMath: [['$$', '$$'], ["\\[", "\\]"]]
+          }
         });
         window.MathJax.Hub.Queue(["Typeset", window.MathJax.Hub], () => console.log('done'));
       }
     },
-    onCopy(e) {
+    onCopy (e) {
       this.$message.success("复制成功！");
     },
     // 复制失败
-    onError(e) {
+    onError (e) {
       this.$message.error("复制失败：" + e);
     },
-    problemlevel: function(type) {
+    problemlevel: function (type) {
       if (type == "Easy") return "info";
       if (type == "Medium") return "success";
       if (type == "Hard") return "";
       if (type == "VeryHard") return "warning";
       if (type == "ExtremelyHard") return "danger";
     },
-    submit: function() {
+    submit: function () {
       if (this.addtime == "") {
         this.$message.error("非法操作！");
         return;
@@ -427,7 +480,7 @@ export default {
         return;
       }
 
-      if (this.code.length<20) {
+      if (this.code.length < 20) {
         this.$message.error("代码过短！");
         return;
       }
@@ -442,7 +495,9 @@ export default {
           message: "提交中..."
         });
         this.$axios.get("/currenttime/").then(response2 => {
+          console.log(this.userip);
           var curtime = response2.data;
+          this.$axios.get("/")
           this.$axios
             .post("/judgestatusput/", {
               user: sessionStorage.username,
@@ -458,9 +513,10 @@ export default {
               contest: 0,
               code: this.code,
               testcase: 0,
-              message: this.oj=="LPOJ"?"0":(this.proid+""),
-              problemtitle: (this.oj=="LPOJ"?"LPOJ":"") + (this.oj=="LPOJ"?' - ':"") + (this.oj=="LPOJ"?this.proid:"")+' ' + this.title,
-              rating: parseInt(sessionStorage.rating)
+              message: this.oj == "LPOJ" ? "0" : (this.proid + ""),
+              problemtitle: (this.oj == "LPOJ" ? "LPOJ" : "") + (this.oj == "LPOJ" ? ' - ' : "") + (this.oj == "LPOJ" ? this.proid : "") + ' ' + this.title,
+              rating: parseInt(sessionStorage.rating),
+              ip: this.userip
             })
             .then(response => {
               this.$message({
@@ -481,7 +537,7 @@ export default {
         });
       });
     },
-    timer: function() {
+    timer: function () {
       if (this.submitbuttontext == "提交后请勿重复刷新/支持将文件拖入代码框") return;
       this.$axios.get("/judgestatus/" + this.submitid + "/").then(response => {
         this.loadingshow = false;
@@ -502,8 +558,8 @@ export default {
           response.data["result"] = "Wrong Answer on test " + testcase;
           this.judgetype = "danger";
           clearInterval(this.$store.state.submittimer);
-          if(testcase=="?")
-                response.data["result"] ="Wrong Answer"
+          if (testcase == "?")
+            response.data["result"] = "Wrong Answer"
         }
 
         if (response.data["result"] == "-4") {
@@ -516,8 +572,8 @@ export default {
           response.data["result"] = "Presentation Error on test " + testcase;
           this.judgetype = "warning";
           clearInterval(this.$store.state.submittimer);
-          if(testcase=="?")
-                response.data["result"] ="Presentation Error"
+          if (testcase == "?")
+            response.data["result"] = "Presentation Error"
         }
 
         if (response.data["result"] == "-6") {
@@ -536,32 +592,32 @@ export default {
           response.data["result"] = "Time Limit Exceeded on test " + testcase;
           this.judgetype = "warning";
           clearInterval(this.$store.state.submittimer);
-          if(testcase=="?")
-                response.data["result"] ="Time Limit Exceeded"
+          if (testcase == "?")
+            response.data["result"] = "Time Limit Exceeded"
         }
 
         if (response.data["result"] == "2") {
           response.data["result"] = "Time Limit Exceeded on test " + testcase;
           this.judgetype = "warning";
           clearInterval(this.$store.state.submittimer);
-          if(testcase=="?")
-                response.data["result"] ="Time Limit Exceeded"
+          if (testcase == "?")
+            response.data["result"] = "Time Limit Exceeded"
         }
 
         if (response.data["result"] == "3") {
           response.data["result"] = "Memory Limit Exceeded on test " + testcase;
           this.judgetype = "warning";
           clearInterval(this.$store.state.submittimer);
-          if(testcase=="?")
-                response.data["result"] ="Memory Limit Exceeded"
+          if (testcase == "?")
+            response.data["result"] = "Memory Limit Exceeded"
         }
 
         if (response.data["result"] == "4") {
           response.data["result"] = "Runtime Error on test " + testcase;
           this.judgetype = "warning";
           clearInterval(this.$store.state.submittimer);
-          if(testcase=="?")
-                response.data["result"] ="Runtime Error"
+          if (testcase == "?")
+            response.data["result"] = "Runtime Error"
         }
 
         if (response.data["result"] == "5") {
@@ -575,7 +631,7 @@ export default {
       });
     }
   },
-  destroyed() {
+  destroyed () {
     clearInterval(this.$store.state.submittimer);
   }
 };
@@ -620,5 +676,10 @@ export default {
 
 .el-row {
   margin-bottom: 20px;
+}
+.img-responsive {
+  display: inline-block;
+  height: auto;
+  max-width: 75%;
 }
 </style>

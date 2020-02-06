@@ -13,4 +13,5 @@ routers.register('acrank', views.ACRankView)
 urlpatterns = [
     url('', include(routers.urls)),
     url(r'^rejudge', views.RejudgeAPIView.as_view()),
+    url(r'^checkip',views.InOrOutIpRange.as_view()),
 ]

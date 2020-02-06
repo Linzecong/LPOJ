@@ -47,11 +47,24 @@
                            align="center"
                            min-width="200">
             　　　　<template slot-scope="scope">
+              <el-button type="primary"
+                         size="small"
+                         round
+                         @click="homework(scope.row)">作业</el-button>
+            </template>
+            　　</el-table-column>
+
+          <el-table-column label="操作"
+                           align="center"
+                           min-width="200">
+            　　　　<template slot-scope="scope">
+
               　　　　　　<el-button type="primary"
                          size="small"
                          round
                          @click="QuitClick(scope.row)">退出</el-button>
-              　　　　</template>
+              　　　　
+            </template>
             　　</el-table-column>
 
         </el-table>
@@ -77,6 +90,9 @@ export default {
     };
   },
   methods: {
+    homework(row){
+      window.open("/homework?className=" + row.className);
+    },
     JoinClick (row) {
       this.$confirm(
         "确定加入" + row.className + "吗?",
@@ -179,8 +195,6 @@ export default {
         console.log(response.data),
           this.tableData2 = response.data;
       })
-  },
-  mounted () {
   },
 }
 </script>

@@ -15,6 +15,8 @@ class ContestInfo(models.Model):
     type = models.CharField(max_length=50, default="ACM")
     auth = models.IntegerField(default=2)  # 1 public 2 private 0 protect(需注册)
     clonefrom = models.IntegerField(default=-1)
+    classes = models.CharField(max_length=500, default="All")
+    iprange = models.CharField(max_length=2000, default="iprange")
 
     objects = models.Manager()
 

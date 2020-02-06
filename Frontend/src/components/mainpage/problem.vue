@@ -2,69 +2,67 @@
   <el-row :gutter="15">
     <el-col :span="18">
       <el-card shadow="always">
-        <el-switch
-          style="float: right;"
-          v-model="islpoj"
-          active-text="LPOJ"
-          inactive-text="All"
-          @change="statuechange"
-        ></el-switch>
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="currentpage"
-          :page-sizes="[15, 20, 30, 50]"
-          :page-size="pagesize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="totalproblem"
-        ></el-pagination>
+        <el-switch style="float: right;"
+                   v-model="islpoj"
+                   active-text="LPOJ"
+                   inactive-text="All"
+                   @change="statuechange"></el-switch>
+        <el-pagination @size-change="handleSizeChange"
+                       @current-change="handleCurrentChange"
+                       :current-page="currentpage"
+                       :page-sizes="[15, 20, 30, 50]"
+                       :page-size="pagesize"
+                       layout="total, sizes, prev, pager, next, jumper"
+                       :total="totalproblem"></el-pagination>
 
-
-        <el-table
-          :data="tableData"
-          :row-class-name="tableRowClassName"
-          @cell-mouse-enter="changestatistices"
-          @cell-click="problemclick"
-          size="small"
-        >
-          <el-table-column prop="problem" label="ID" :width="70"></el-table-column>
-          <el-table-column prop="title" label="Title" :width="250"></el-table-column>
-          <el-table-column prop="level" label="Level" :width="170">
+        <el-table :data="tableData"
+                  :row-class-name="tableRowClassName"
+                  @cell-mouse-enter="changestatistices"
+                  @cell-click="problemclick"
+                  size="small">
+          <el-table-column prop="problem"
+                           label="ID"
+                           :width="70"></el-table-column>
+          <el-table-column prop="title"
+                           label="Title"
+                           :width="250"></el-table-column>
+          <el-table-column prop="level"
+                           label="Level"
+                           :width="170">
             <template slot-scope="scope1">
-              <el-tag
-                id="leveltag"
-                size="medium"
-                :type="problemlevel(scope1.row.level)"
-                disable-transitions
-                hit
-              >{{ scope1.row.level }}</el-tag>
+              <el-tag id="leveltag"
+                      size="medium"
+                      :type="problemlevel(scope1.row.level)"
+                      disable-transitions
+                      hit>{{ scope1.row.level }}</el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="rate" label="A/S" :width="70"></el-table-column>
-          <el-table-column prop="tag" label="Tag">
+          <el-table-column prop="rate"
+                           label="A/S"
+                           :width="70"></el-table-column>
+          <el-table-column prop="tag"
+                           label="Tag">
             <template slot-scope="scope">
-              <el-tag
-                id="protag"
-                v-for="(name,index) in scope.row.tag"
-                :key="index"
-                size="medium"
-                disable-transitions
-                hit
-              >{{ name }}</el-tag>
+              <el-tag id="protag"
+                      v-for="(name,index) in scope.row.tag"
+                      :key="index"
+                      size="medium"
+                      disable-transitions
+                      hit>{{ name }}</el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="score" label="Score" :width="70"></el-table-column>
+          <el-table-column prop="score"
+                           label="Score"
+                           :width="70"></el-table-column>
         </el-table>
         <center>
-          <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="currentpage"
-            :page-sizes="[15, 20, 30, 50]"
-            :page-size="pagesize"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="totalproblem"
-          ></el-pagination>
+          <el-pagination @size-change="handleSizeChange"
+                         @current-change="handleCurrentChange"
+                         :current-page="currentpage"
+                         :page-sizes="[15, 20, 30, 50]"
+                         :page-size="pagesize"
+                         layout="total, sizes, prev, pager, next, jumper"
+                         :total="totalproblem"></el-pagination>
         </center>
       </el-card>
     </el-col>
@@ -76,8 +74,12 @@
       </el-row>
       <el-row>
         <el-card shadow="always">
-          <el-input placeholder="Search..." v-model="searchtext" @keyup.native.enter="searchtitle">
-            <el-button slot="append" icon="el-icon-search" @click="searchtitle"></el-button>
+          <el-input placeholder="Search..."
+                    v-model="searchtext"
+                    @keyup.native.enter="searchtitle">
+            <el-button slot="append"
+                       icon="el-icon-search"
+                       @click="searchtitle"></el-button>
           </el-input>
         </el-card>
       </el-row>
@@ -85,14 +87,12 @@
         <el-col>
           <el-card shadow="always">
             <h4>Tags (Click to filter)</h4>
-            <el-button
-              id="tag"
-              v-for="(name,index) in tagnames"
-              :key="index"
-              size="mini"
-              @click="tagclick(name)"
-              :ref="name"
-            >{{ name }}</el-button>
+            <el-button id="tag"
+                       v-for="(name,index) in tagnames"
+                       :key="index"
+                       size="mini"
+                       @click="tagclick(name)"
+                       :ref="name">{{ name }}</el-button>
           </el-card>
         </el-col>
       </el-row>
@@ -107,7 +107,7 @@ export default {
   components: {
     prostatistice
   },
-  data() {
+  data () {
     return {
       currentpage: 1,
       pagesize: 15,
@@ -124,31 +124,31 @@ export default {
       se: 100,
       title: "Statistics",
       currenttag: "",
-      islpoj:true,
+      islpoj: true,
       searchtext: "",
       searchoj: "LPOJ"
     };
   },
   methods: {
-    statuechange(val){
+    statuechange (val) {
       if (val == true) {
-        this.searchoj="LPOJ"
+        this.searchoj = "LPOJ"
       } else {
-        this.searchoj=""
+        this.searchoj = ""
       }
       this.searchtitle()
     },
-    searchtitle() {
+    searchtitle () {
       this.currentpage = 1;
       this.$axios
         .get(
           "/problemdata/?limit=" +
-            this.pagesize +
-            "&offset=" +
-            (this.currentpage - 1) * this.pagesize +
-            "&auth=1&search=" +
-            this.searchtext +
-            "&oj="+this.searchoj
+          this.pagesize +
+          "&offset=" +
+          (this.currentpage - 1) * this.pagesize +
+          "&auth=1&search=" +
+          this.searchtext +
+          "&oj=" + this.searchoj
         )
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {
@@ -179,7 +179,7 @@ export default {
           this.totalproblem = response.data.count;
         });
     },
-    tagclick(name) {
+    tagclick (name) {
       if (this.currenttag.indexOf(name) >= 0) {
         this.$refs[name][0].type = "default";
         var li = this.currenttag.split("+");
@@ -201,12 +201,12 @@ export default {
       this.$axios
         .get(
           "/problemdata/?limit=" +
-            this.pagesize +
-            "&offset=" +
-            (this.currentpage - 1) * this.pagesize +
-            "&auth=1&search=" +
-            this.searchtext +
-            "&oj="+this.searchoj
+          this.pagesize +
+          "&offset=" +
+          (this.currentpage - 1) * this.pagesize +
+          "&auth=1&search=" +
+          this.searchtext +
+          "&oj=" + this.searchoj
         )
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {
@@ -237,18 +237,18 @@ export default {
           this.totalproblem = response.data.count;
         });
     },
-    handleSizeChange(val) {
+    handleSizeChange (val) {
       this.pagesize = val;
 
       this.$axios
         .get(
           "/problemdata/?limit=" +
-            this.pagesize +
-            "&offset=" +
-            (this.currentpage - 1) * this.pagesize +
-            "&auth=1&search=" +
-            this.searchtext +
-            "&oj="+this.searchoj
+          this.pagesize +
+          "&offset=" +
+          (this.currentpage - 1) * this.pagesize +
+          "&auth=1&search=" +
+          this.searchtext +
+          "&oj=" + this.searchoj
         )
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {
@@ -279,17 +279,17 @@ export default {
           this.totalproblem = response.data.count;
         });
     },
-    handleCurrentChange(val) {
+    handleCurrentChange (val) {
       this.currentpage = val;
       this.$axios
         .get(
           "/problemdata/?limit=" +
-            this.pagesize +
-            "&offset=" +
-            (this.currentpage - 1) * this.pagesize +
-            "&auth=1&search=" +
-            this.searchtext +
-            "&oj="+this.searchoj
+          this.pagesize +
+          "&offset=" +
+          (this.currentpage - 1) * this.pagesize +
+          "&auth=1&search=" +
+          this.searchtext +
+          "&oj=" + this.searchoj
         )
         .then(response => {
           for (var i = 0; i < response.data.results.length; i++) {
@@ -320,7 +320,7 @@ export default {
           this.totalproblem = response.data.count;
         });
     },
-    tableRowClassName({ row, rowIndex }) {
+    tableRowClassName ({ row, rowIndex }) {
       var acpro = this.$store.state.acpro;
       if (acpro)
         if (acpro.indexOf(row.problem + "") != -1) {
@@ -328,14 +328,14 @@ export default {
         }
       return "";
     },
-    problemlevel: function(type) {
+    problemlevel: function (type) {
       if (type == "Easy") return "info";
       if (type == "Medium") return "success";
       if (type == "Hard") return "";
       if (type == "VeryHard") return "warning";
       if (type == "ExtremelyHard") return "danger";
     },
-    changestatistices: function(row, column, cell, event) {
+    changestatistices: function (row, column, cell, event) {
       if (row.submission == 0) {
         this.ac = 0;
         this.mle = 0;
@@ -358,17 +358,20 @@ export default {
       this.title = row.title;
       this.$refs.prosta.setdata(this.$data);
     },
-    problemclick: function(row, column, cell, event) {
+    problemclick: function (row, column, cell, event) {
       this.$router.push({
         name: "problemdetail",
         query: { problemID: row.problem }
       });
     }
   },
-  mounted() {
+  mounted () {
     this.$axios
       .get("/problemdata/?limit=15&offset=0&auth=1&oj=LPOJ")
       .then(response => {
+
+        console.log("@@@@@@@@");
+        console.log(response.data);
         for (var i = 0; i < response.data.results.length; i++) {
           if (response.data.results[i]["level"] == "1")
             response.data.results[i]["level"] = "Easy";

@@ -11,4 +11,6 @@ routers.register('problemtag', views.ProblemTagView)
 urlpatterns = [
     url('', include(routers.urls)),
     url(r'^uploadfile', views.UploadFileAPIView.as_view()),
+    url(r'^downloadfile/',views.filedown,name='download'),
+    url(r'^showpic/',views.showpic,name='show_picture'),
 ]

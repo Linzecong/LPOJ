@@ -3,6 +3,8 @@
     <el-row>
       <center>
         <h1>{{className}}</h1>
+        <br>
+        <h2>目前共{{classPeopleCount}}人</h2>
 
       </center>
     </el-row>
@@ -17,6 +19,19 @@
                          label="学号"
                          width="300">
         </el-table-column>
+
+        <el-table-column prop="Operate"
+                         label="操作"
+                         width="500">
+          　　　　<template slot-scope="scope">
+            　　　　　　
+            　　　　　　<el-button type="primary"
+                       size="small"
+                       @click="DeleteStudent(scope.row)">删除</el-button>
+
+            　　　　</template>
+        </el-table-column>
+
       </el-table>
     </el-row>
   </el-column>
@@ -26,9 +41,22 @@
 export default {
   data () {
     return {
+      classPeopleCount: "",
       className: "",
       TableData: [],
     }
+  },
+  methods: {
+    DeleteStudent (row) {
+      this.$axios.get("/classStudent/?studentName="+row.studentName+"&className="+this.className)
+        .then(
+          response => {
+            var deleteStudentId = response.data[0].id;
+            this.$axios.delete("/classStudent/" + deleteStudentId + "/");
+            this.$message.error("已删除");
+          }
+        )
+    },
   },
   created () {
     console.log(this.className);
@@ -38,11 +66,13 @@ export default {
         response => {
 
           console.log(response.data);
+          this.classPeopleCount = response.data.length;
           this.TableData = response.data;
         }
       )
 
   },
+
 }
 </script>
 

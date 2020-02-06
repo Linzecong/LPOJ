@@ -28,7 +28,9 @@
                   v-model="code"
                   :options="cmOptions"></codemirror>
       <el-collapse>
-        <el-collapse-item :key="index" v-for="(data,index) in dialogdata" v-if="data.casedata!=''" >
+        <el-collapse-item :key="index"
+                          v-for="(data,index) in dialogdata"
+                          v-if="data.casedata!=''">
 
           <template slot="title">
             <el-alert :show-icon="true"
@@ -204,6 +206,8 @@
                        :width="180"></el-table-column>
       <el-table-column prop="judger"
                        label="Judger"></el-table-column>
+      <el-table-column prop="ip"
+                       label="Submitted By"></el-table-column>
     </el-table>
     <center>
       <el-pagination @size-change="handleSizeChange"
