@@ -296,7 +296,11 @@ export default {
 
 
     this.$axios
-      .get("/showpic/")
+      .get("/showpic/", {
+        params: {
+          ProblemId: this.$route.query.problemID
+        }
+      })
       .then(res => {
         this.imgcode = res.data;
         console.log(res);

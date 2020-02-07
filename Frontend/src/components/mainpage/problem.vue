@@ -370,7 +370,6 @@ export default {
       .get("/problemdata/?limit=15&offset=0&auth=1&oj=LPOJ")
       .then(response => {
 
-        console.log("@@@@@@@@");
         console.log(response.data);
         for (var i = 0; i < response.data.results.length; i++) {
           if (response.data.results[i]["level"] == "1")

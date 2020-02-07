@@ -172,12 +172,12 @@ export default {
               this.$message.error("加入班级失败（" + response + "）");
               return;
             }
-            if (response.data == "QuitOk") {
-              this.$message({
-                message: "已退出班级" + this.form.className,
-                type: "success"
-              });
-            }
+            // if (response.data == "QuitOk") {
+            //   this.$message({
+            //     message: "已退出班级" + this.form.className,
+            //     type: "success"
+            //   });
+            // }
           })
       })
     },
