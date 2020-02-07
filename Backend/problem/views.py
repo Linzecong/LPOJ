@@ -92,9 +92,9 @@ def filedown(request):
     return response
 
 def showpic(request):
-    name = request.GET.get('name')
-    # file = open('./ProblemData/'+name+'.jpg','rb')
-    file = open('./ProblemData/1.jpg','rb')
+    name = request.GET.get('ProblemId')
+    file = open('./ProblemData/'+name+'.jpg','rb')
+    #file = open('./ProblemData/1.jpg','rb')
     result = file.read()
 
     result = base64.b64encode(result)

@@ -8,7 +8,7 @@ class User(models.Model):
     logintime = models.DateTimeField(auto_now=True)
     school = models.CharField(max_length=50, null=False, default="")
     course = models.CharField(max_length=50, null=False, default="")
-    class1 = models.CharField(max_length=50, null=False, default="") #行政班
+    originclass = models.CharField(max_length=50, null=False, default="") #行政班
     number = models.CharField(max_length=50, null=False, default="")
     realname = models.CharField(max_length=50, null=False)
     qq = models.CharField(max_length=50, null=True, default="")
