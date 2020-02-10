@@ -6,6 +6,10 @@
       <adminaddproblem></adminaddproblem>
     </el-tab-pane>
 
+    <el-tab-pane label="添加选择题">
+      <adminaddchoiceproblem></adminaddchoiceproblem>
+    </el-tab-pane>
+
     <el-tab-pane label="添加比赛"
                  :lazy="true">
       <adminaddcontest></adminaddcontest>
@@ -14,6 +18,12 @@
                  :lazy="true">
       <adminchangepro></adminchangepro>
     </el-tab-pane>
+
+    <el-tab-pane label="选择题列表"
+                 :lazy="true">
+      <adminchangechoiceproblem></adminchangechoiceproblem>
+    </el-tab-pane>
+
     <el-tab-pane label="比赛列表"
                  :lazy="true">
       <adminchangecontest></adminchangecontest>
@@ -61,6 +71,8 @@ import admintrainning from "@/components/admin/admintrainning";
 import adminboard from "@/components/admin/adminboard";
 import adminsetting from "@/components/admin/adminsetting";
 import adminclassmanage from "@/components/admin/adminclassmanage";
+import adminaddchoiceproblem from "@/components/admin/adminaddchoiceproblem";
+import adminchangechoiceproblem from "@/components/admin/adminchangechoiceproblem"
 
 export default {
   name: "admin",
@@ -74,7 +86,9 @@ export default {
     admintrainning,
     adminboard,
     adminsetting,
-    adminclassmanage
+    adminclassmanage,
+    adminaddchoiceproblem,
+    adminchangechoiceproblem
   },
   data () {
     return {
@@ -95,9 +109,9 @@ export default {
       return;
     }
     this.canshow = true;
-     if (this.type == 3) {
-    this.isadmin = true;
-     }
+    if (this.type == 3) {
+      this.isadmin = true;
+    }
   },
   mounted () {
     this.loading = false

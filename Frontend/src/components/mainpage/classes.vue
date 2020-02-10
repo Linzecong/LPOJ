@@ -83,14 +83,15 @@ export default {
       tableData2: [],
       form: {
         className: "",
-        studentName: "",
+        studentUserName: "",
         studentNumber: "",
+        studentRealName: "",
       },
       deleteId: "",
     };
   },
   methods: {
-    homework(row){
+    homework (row) {
       window.open("/homework?className=" + row.className);
     },
     JoinClick (row) {
@@ -103,18 +104,22 @@ export default {
         }
       ).then(() => {
         this.form.className = row.className;
-
         this.$axios.get("/user/?username=" + sessionStorage.username)
           .then(
             response => {
+              this.form.studentUserName = response.data[0].username;
+              this.form.studentRealName = response.data[0].realname;
               this.form.studentNumber = response.data[0].number;
             }
           ).catch(function (error) {
             console.log(error);
           });
-
         this.$axios.post("/AddClass/", this.form)
           .then(response => {
+            if (response.data == "JoinOk") {
+              this.$message.success("加入成功！");
+              return;
+            }
             if (response.data == "RepeatJoin") {
               this.$message.error("请不要重复加入同一班级！");
               return;
@@ -142,58 +147,71 @@ export default {
         }
       ).then(() => {
         //获取学号
-        this.$axios.get("/user/?username=" + sessionStorage.username)
+        // this.$axios.get("/user/?username=" + sessionStorage.username)
+        //   .then(
+        //     response => {
+        //       this.form.studentNumber = response.data[0].number;
+        //     }
+        //   ).catch(function (error) {
+        //     console.log(error);
+        //   });
+        // this.form.className = row.className;
+
+        this.$axios.get("/classStudent/?studentUserName=" + sessionStorage.username + "&className=" + row.className)
           .then(
             response => {
-              this.form.studentNumber = response.data[0].number;
+
+              var deleteId = response.data[0].id;
+              this.$axios.delete("/classStudent/" + deleteId + "/");
+              this.$message("已退出班级");
             }
           ).catch(function (error) {
             console.log(error);
           });
-        this.form.className = row.className;
-        console.log("this.form");
-        console.log(this.form);
 
-        this.$axios.delete("/QuitClass/",
-          {
-            data: {
-              studentNumber: this.form.studentNumber,
-              studentName: this.form.studentName,
-              className: row.className
-            }
-          })
-          .then(response => {
 
-            if (response.data == "AlreadyQuit") {
-              this.$message.error("已退出班级");
-              return;
-            }
-            if (response.data == "QuitFail") {
-              this.$message.error("加入班级失败（" + response + "）");
-              return;
-            }
-            // if (response.data == "QuitOk") {
-            //   this.$message({
-            //     message: "已退出班级" + this.form.className,
-            //     type: "success"
-            //   });
-            // }
-          })
+        // this.$axios.delete("/QuitClass/",
+        //   {
+        //     data: {
+        //       studentNumber: this.form.studentNumber,
+        //       studentUserName: this.form.studentUserName,
+        //       studentRealName: this.form.studentRealName,
+        //       className: row.className
+        //     }
+        //   })
+        //   .then(response => {
+        //     if (response.data == "QuitOk") {
+        //       this.$message.success("已退出班级");
+        //       return;
+        //     }
+        //     if (response.data == "AlreadyQuit") {
+        //       this.$message.error("已退出班级");
+        //       return;
+        //     }
+        //     if (response.data == "QuitFail") {
+        //       this.$message.error("退出班级失败（" + response + "）");
+        //       return;
+        //     }
+        //     // if (response.data == "QuitOk") {
+        //     //   this.$message({
+        //     //     message: "已退出班级" + this.form.className,
+        //     //     type: "success"
+        //     //   });
+        //     // }
+        //   })
       })
     },
   },
   created () {
-    this.form.studentName = sessionStorage.username;
+    this.form.studentUserName = sessionStorage.username;
 
     this.$axios.get("/classes/")
       .then(response => {
-        console.log(response.data),
-          this.tableData = response.data;
+        this.tableData = response.data;
       })
-    this.$axios.get("/classStudent/?studentName=" + sessionStorage.username)
+    this.$axios.get("/classStudent/?studentUserName=" + sessionStorage.username)
       .then(response => {
-        console.log(response.data),
-          this.tableData2 = response.data;
+        this.tableData2 = response.data;
       })
   },
 }

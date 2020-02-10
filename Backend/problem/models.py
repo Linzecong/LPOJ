@@ -26,6 +26,19 @@ class Problem(models.Model):
     def __str__(self):
         return self.title
 
+class ChoiceProblem(models.Model):
+    ChoiceProblemId = models.IntegerField(default=-1)
+    des = models.TextField()
+    choiceA = models.TextField()
+    choiceB = models.TextField()
+    choiceC = models.TextField()
+    choiceD = models.TextField()
+
+    objects = models.Manager()
+
+    def __str__(self):
+        return self.des
+
 
 class ProblemData(models.Model):
     problem = models.CharField(max_length=50, primary_key=True)
@@ -60,3 +73,4 @@ class ProblemTag(models.Model):
 
     def __str__(self):
         return self.tagname
+

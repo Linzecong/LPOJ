@@ -11,8 +11,12 @@
     <el-row>
       <el-table :data="TableData"
                 style="width: 100%">
-        <el-table-column prop="studentName"
-                         label="姓名"
+        <el-table-column prop="studentUserName"
+                         label="用户名"
+                         width="300">
+        </el-table-column>
+        <el-table-column prop="studentRealName"
+                         label="真实姓名"
                          width="300">
         </el-table-column>
         <el-table-column prop="studentNumber"
@@ -48,7 +52,7 @@ export default {
   },
   methods: {
     DeleteStudent (row) {
-      this.$axios.get("/classStudent/?studentName="+row.studentName+"&className="+this.className)
+      this.$axios.get("/classStudent/?studentName=" + row.studentName + "&className=" + this.className)
         .then(
           response => {
             var deleteStudentId = response.data[0].id;

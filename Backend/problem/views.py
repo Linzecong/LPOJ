@@ -7,8 +7,8 @@ from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_403_FO
 from rest_framework.views import APIView
 from rest_framework.throttling import ScopedRateThrottle
 from rest_framework import viewsets, mixins, filters
-from .models import Problem, ProblemData, ProblemTag
-from .serializers import ProblemSerializer, ProblemDataSerializer, ProblemTagSerializer
+from .models import Problem, ProblemData, ProblemTag, ChoiceProblem
+from .serializers import ProblemSerializer, ProblemDataSerializer, ProblemTagSerializer,ChoiceProblemSerializer
 from .permission import ManagerOnly, AuthOnly
 from django.shortcuts import render
 from django.views.generic import View
@@ -28,6 +28,12 @@ class ProblemView(viewsets.GenericViewSet, mixins.DestroyModelMixin, mixins.Crea
     permission_classes = (AuthOnly,)
     throttle_scope = "post"
     throttle_classes = [ScopedRateThrottle, ]
+
+class ChoiceProblemView(viewsets.ModelViewSet):
+    queryset = ChoiceProblem.objects.all()
+    serializer_class = ChoiceProblemSerializer
+    filter_fields = ('ChoiceProblemId','des')
+    throttle_scope = "post"
 
 class ProblemDataView(viewsets.ModelViewSet):
 

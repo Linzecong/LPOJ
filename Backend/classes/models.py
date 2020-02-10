@@ -2,9 +2,10 @@
 from django.db import models
 # Create your models here.
 class ClassStudentData(models.Model):
-    studentName = models.CharField(max_length=50, null=False)
+    studentUserName = models.CharField(max_length=50, null=False,default="")
     studentNumber = models.CharField(max_length=50, null=False)
     className = models.CharField(max_length=50, null=False)
+    studentRealName = models.CharField(max_length=50, null=False)
 
     objects = models.Manager()
 

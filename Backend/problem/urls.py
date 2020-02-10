@@ -7,6 +7,7 @@ routers = routers.DefaultRouter()
 routers.register('problem', views.ProblemView)
 routers.register('problemdata', views.ProblemDataView)
 routers.register('problemtag', views.ProblemTagView)
+routers.register('choiceproblem', views.ChoiceProblemView)
 
 urlpatterns = [
     url('', include(routers.urls)),

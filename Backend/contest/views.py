@@ -9,8 +9,8 @@ from rest_framework.views import APIView
 from rest_framework.throttling import ScopedRateThrottle
 from rest_framework import viewsets, mixins, filters
 from .permission import ManagerOnly, UserRatingOnly, UserRatingOnly2
-from .models import ContestBoardTotal, ContestComingInfo,ContestTutorial, ContestAnnouncement, ContestRatingChange, ContestBoard, ContestComment, ContestInfo, ContestProblem, ContestRegister
-from .serializers import ContestBoardTotalSerializer, ContestComingInfoSerializer,ContestTutorialSerializer, ContestRatingChangeSerializer, ContestAnnouncementSerializer, ContestBoardSerializer, ContestCommentSerializer, ContestInfoSerializer, ContestProblemSerializer, ContestRegisterSerializer
+from .models import ContestBoardTotal, ContestComingInfo,ContestTutorial, ContestAnnouncement, ContestRatingChange, ContestBoard, ContestComment, ContestInfo, ContestProblem, ContestRegister, StudentChoiceAnswer
+from .serializers import ContestBoardTotalSerializer, ContestComingInfoSerializer,ContestTutorialSerializer, ContestRatingChangeSerializer, ContestAnnouncementSerializer, ContestBoardSerializer, ContestCommentSerializer, ContestInfoSerializer, ContestProblemSerializer, ContestRegisterSerializer, StudentChoiceAnswerSerializer
 import datetime
 
 from user.models import User
@@ -178,3 +178,9 @@ class ContestBoardFilterAPIView(APIView):
 
        # res = ContestBoard.objects.filter(pk__in=reslist)
         return Response(ContestBoardSerializer(reslist,many=True).data, HTTP_200_OK)
+
+
+class StudentChoiceAnswerView(viewsets.ModelViewSet):
+    queryset = StudentChoiceAnswer.objects.all()
+    serializer_class = StudentChoiceAnswerSerializer
+    throttle_scope = "post"

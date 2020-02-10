@@ -48,6 +48,8 @@ class ContestProblem(models.Model):
         return self.contestid
 
 
+
+
 class ContestBoard(models.Model):
 
     contestid = models.IntegerField()
@@ -142,6 +144,28 @@ class ContestBoardTotal(models.Model):
     score = models.IntegerField()
     time = models.CharField(max_length=100)
     detail = models.CharField(max_length=500) # |
+
+    objects = models.Manager()
+
+    def __str__(self):
+        return self.user
+
+class ContestChoiceProblem(models.Model):
+
+    ContestId = models.IntegerField()
+    ChoiceProblemId = models.CharField(max_length=50)
+    rank = models.IntegerField()  # 顺序
+
+    objects = models.Manager()
+
+    def __str__(self):
+        return self.contestid
+
+class StudentChoiceAnswer(models.Model):
+    user = models.CharField(max_length=100)
+    ContestId = models.IntegerField()
+    ChoiceProblemId = models.IntegerField(default=-1)
+    answer = models.CharField(max_length=1)
 
     objects = models.Manager()
 

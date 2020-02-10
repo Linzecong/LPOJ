@@ -21,6 +21,7 @@ class ClassDataView(viewsets.ModelViewSet):
     filter_fields = ('className',)
     search_fields = ('className', 'classSize')
     pagination_class = LimitOffsetPagination
+    throttle_scope = "post"
 
 class ClassDataAPIView(APIView):
     queryset = Classes.objects.all()
@@ -51,9 +52,9 @@ class DeleteClassDataAPIView(APIView):
 class ClassStudentDataView(viewsets.ModelViewSet):
     queryset = ClassStudentData.objects.all()
     serializer_class = ClassStudentDataSerializer
-    filter_backends = (DjangoFilterBackend, filters.SearchFilter)
-    filter_fields = ('studentName','studentNumber','className')
-    search_fields = ('studentName','studentNumber','className')
+    filter_fields = ('studentUserName','studentNumber','className','studentRealName')
+    search_fields = ('studentUserName','studentNumber','className','studentRealName')
+    throttle_scope = "post"
     pagination_class = LimitOffsetPagination
 
 class ClassStudentDataAPIView(APIView):
@@ -61,13 +62,18 @@ class ClassStudentDataAPIView(APIView):
     serializer_class = ClassStudentDataSerializer
     def post(self, request, format=None):
         data = request.data.copy()
-        Name = data["studentName"]
+        Name = data["studentUserName"]
+        RName = data["studentRealName"]
         CName = data["className"]
+        Number = data["studentNumber"]
         serializer = ClassStudentDataSerializer(data=data)
 
-        if ClassStudentData.objects.filter(studentName__exact=Name,className__exact=CName):
-            return Response("RepeatJoin", HTTP_200_OK)
         if serializer.is_valid(raise_exception=True):
+            if ClassStudentData.objects.filter(studentUserName__exact=Name,className__exact=CName,studentNumber__exact=Number):
+                print("case1")
+                return Response("RepeatJoin", HTTP_200_OK)
+
+            print("case2")
             serializer.save()
             return Response("JoinOk", status=HTTP_200_OK)
 
@@ -78,11 +84,12 @@ class QuitClassAPIView(APIView):
     serializer_class = ClassStudentDataSerializer
     def delete(self, request, format=None):
         data = request.data.copy()
-        Name = data["studentName"]
+        Name = data["studentUserName"]
+        RName = data["studentRealName"]
         CName = data["className"]
         Number = data["studentNumber"]
-        if ClassStudentData.objects.filter(studentName__exact=Name,className__exact=CName):
-            if ClassStudentData.objects.filter(className__exact=CName,studentNumber__exact=Number).delete():
+        # if ClassStudentData.objects.filter(studentUserName__exact=Name,className__exact=CName,studentNumber__exact=Number):
+        if ClassStudentData.objects.filter(studentUserName__exact=Name,className__exact=CName,studentNumber__exact=Number).delete():
                 return Response("QuitOk", status=HTTP_200_OK)
         else:
             return Response("AlreadyQuit", HTTP_200_OK)

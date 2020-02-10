@@ -178,9 +178,6 @@ export default {
   name: "admin",
   data () {
     return {
-
-
-
       problemcount: 0,
       uploadaddress: "/uploadfile/",
       fileList: [],
@@ -276,7 +273,6 @@ export default {
         this.addproblemform.hint = this.addproblemform.hint + "\n <b>【本题为Special Judge，即答案可能有多种情况】</b>"
       }
       console.log(this.addproblemform);
-      console.log("111111111");
       this.$axios.post("/problem/", this.addproblemform).then(response => {
         this.addproblemdataform.problem = this.addproblemform.problem;
         this.addproblemdataform.title = this.addproblemform.title;
@@ -288,8 +284,6 @@ export default {
 
         var tag = this.addproblemdataform.tag.split("|");
 
-
-        console.log("2222222");
         for (var i = 0; i < tag.length; i++) {
           this.$axios
             .post("/problemtag/", {
@@ -298,7 +292,6 @@ export default {
             })
             .catch(error => { });
         }
-        console.log("3333333");
         this.$axios
           .post("/problemdata/", this.addproblemdataform)
           .then(response2 => {
