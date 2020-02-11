@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from rest_framework import serializers
-from .models import ContestAnnouncement,ContestTutorial, ContestComingInfo, ContestRatingChange, ContestBoard, ContestComment, ContestInfo, ContestProblem, ContestRegister, ContestBoardTotal, StudentChoiceAnswer
+from .models import ContestAnnouncement,ContestTutorial, ContestComingInfo, ContestRatingChange, ContestBoard, ContestComment, ContestInfo, ContestProblem, ContestRegister, ContestBoardTotal, StudentChoiceAnswer,ContestChoiceProblem
 
 
 class ContestAnnouncementSerializer(serializers.ModelSerializer):
@@ -63,4 +63,9 @@ class ContestBoardTotalSerializer(serializers.ModelSerializer):
 class StudentChoiceAnswerSerializer(serializers.ModelSerializer):
     class Meta:
         model = StudentChoiceAnswer
+        fields = '__all__'
+
+class ContestChoiceProblemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContestChoiceProblem
         fields = '__all__'

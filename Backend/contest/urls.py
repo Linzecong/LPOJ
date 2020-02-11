@@ -15,6 +15,7 @@ routers.register('contestratingchange', views.ContestRatingChangeView)
 routers.register('contesttutorial', views.ContestTutorialView)
 routers.register('contesttotalboard', views.ContestBoardTotalView)
 routers.register('studentchoice', views.StudentChoiceAnswerView)
+routers.register('contestchoiceproblem', views.ContestChoiceProblemView)
 
 urlpatterns = [
     url('', include(routers.urls)),

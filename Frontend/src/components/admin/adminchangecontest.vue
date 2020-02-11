@@ -1,191 +1,319 @@
 <template>
   <el-row>
-    <el-dialog title="选择题目" :visible.sync="dialogTableVisible" width="75%">
-      <el-input
-        placeholder="输入Title来筛选..."
-        v-model="searchpro"
-        @keyup.native.enter="searchprotitle"
-        style="float:right;width:200px;"
-      >
-        <el-button slot="append" icon="el-icon-search" @click="searchprotitle"></el-button>
+    <el-dialog title="选择题目"
+               :visible.sync="dialogTableVisible"
+               width="75%">
+      <el-input placeholder="输入Title来筛选..."
+                v-model="searchpro"
+                @keyup.native.enter="searchprotitle"
+                style="float:right;width:200px;">
+        <el-button slot="append"
+                   icon="el-icon-search"
+                   @click="searchprotitle"></el-button>
       </el-input>
-      <el-pagination
-        @current-change="handleCurrentChange"
-        :current-page="currentpage"
-        :page-size="20"
-        :total="totalproblem"
-        layout="total,prev, pager, next, jumper"
-      ></el-pagination>
+      <el-pagination @current-change="handleCurrentChange"
+                     :current-page="currentpage"
+                     :page-size="20"
+                     :total="totalproblem"
+                     layout="total,prev, pager, next, jumper"></el-pagination>
 
-      <el-table :data="gridData" @cell-click="problemclick">
-        <el-table-column property="problem" label="ID" width="70"></el-table-column>
-        <el-table-column property="title" label="标题" width="350"></el-table-column>
-        <el-table-column property="tag" label="标签"></el-table-column>
-        <el-table-column property="score" label="分数" width="80"></el-table-column>
-        <el-table-column property="oj" label="OJ" width="70"></el-table-column>
-        <el-table-column property="level" label="难度" width="70"></el-table-column>
-        <el-table-column property="ac" label="AC数" width="70"></el-table-column>
-        <el-table-column property="submission" label="提交数" width="70"></el-table-column>
+      <el-table :data="gridData"
+                @cell-click="problemclick">
+        <el-table-column property="problem"
+                         label="ID"
+                         width="70"></el-table-column>
+        <el-table-column property="title"
+                         label="标题"
+                         width="350"></el-table-column>
+        <el-table-column property="tag"
+                         label="标签"></el-table-column>
+        <el-table-column property="score"
+                         label="分数"
+                         width="80"></el-table-column>
+        <el-table-column property="oj"
+                         label="OJ"
+                         width="70"></el-table-column>
+        <el-table-column property="level"
+                         label="难度"
+                         width="70"></el-table-column>
+        <el-table-column property="ac"
+                         label="AC数"
+                         width="70"></el-table-column>
+        <el-table-column property="submission"
+                         label="提交数"
+                         width="70"></el-table-column>
       </el-table>
     </el-dialog>
 
-
-      <el-input
-        v-model="searchtitle"
-        placeholder="输入Title来筛选..."
-        style="float:right;width:200px;"
-        @change="searchcontest"
-        @keyup.native.enter="searchcontest"
-      >
-        <el-button slot="append" icon="el-icon-search" @click="searchcontest"></el-button>
-      </el-input>
-      <el-pagination
-        @current-change="handleCurrentContestChange"
-        :current-page="currentpage2"
-        :page-size="20"
-        :total="totalcontest"
-        layout="total,prev, pager, next, jumper"
-      ></el-pagination>
-
-      <el-table
-        :data="gridData2"
-        :default-sort="{prop: 'id', order: 'descending'}"
-      >
-        <el-table-column property="id" label="ID" width="70"></el-table-column>
-        <el-table-column property="title" label="比赛标题" ></el-table-column>
-        <el-table-column prop="type" label="比赛类型" width="100"></el-table-column>
-        <el-table-column prop="begintime" label="开始时间" width="200"></el-table-column>
-        <el-table-column prop="lasttime" label="持续时间" width="90"></el-table-column>
-        <el-table-column
-      fixed="right"
-      label="操作"
-      width="240">
-      <template slot-scope="scope">
-        <el-button @click="handleEdit(scope.row)" type="primary" size="small">编辑</el-button>
-        <el-button @click="contestclick(scope.row)" type="primary" size="small">查看</el-button>
-        <el-button @click="handleDel(scope.row)" type="danger" size="small">删除</el-button>
-      </template>
-    </el-table-column>
-
+    <el-dialog title="选择题目"
+               :visible.sync="dialogTableVisible3"
+               width="75%">
+      <el-table :data="TableData"
+                @cell-click="choiceproblemclick">
+        <el-table-column property="ChoiceProblemId"
+                         label="ID"
+                         width="50"></el-table-column>
+        <el-table-column :show-overflow-tooltip="true"
+                         property="des"
+                         label="题目"
+                         width="350"></el-table-column>
+        <el-table-column :show-overflow-tooltip="true"
+                         property="choiceA"
+                         label="A"
+                         width="70"></el-table-column>
+        <el-table-column :show-overflow-tooltip="true"
+                         property="choiceB"
+                         label="B"
+                         width="70"></el-table-column>
+        <el-table-column :show-overflow-tooltip="true"
+                         property="choiceC"
+                         label="C"
+                         width="70"></el-table-column>
+        <el-table-column :show-overflow-tooltip="true"
+                         property="choiceD"
+                         label="D"
+                         width="70"></el-table-column>
       </el-table>
+    </el-dialog>
 
-      <el-dialog title="修改比赛" :visible.sync="dialogTableVisible2" width="85%">
+    <el-input v-model="searchtitle"
+              placeholder="输入Title来筛选..."
+              style="float:right;width:200px;"
+              @change="searchcontest"
+              @keyup.native.enter="searchcontest">
+      <el-button slot="append"
+                 icon="el-icon-search"
+                 @click="searchcontest"></el-button>
+    </el-input>
+    <el-pagination @current-change="handleCurrentContestChange"
+                   :current-page="currentpage2"
+                   :page-size="20"
+                   :total="totalcontest"
+                   layout="total,prev, pager, next, jumper"></el-pagination>
 
-    <el-row>
-      <el-form :model="changecontestform" label-position="right">
-        <el-form-item label="比赛编号：">
-          <el-input
-            style="width:200px;"
-            v-model="contestid"
-            @change="contestchange"
-            placeholder="请输入比赛编号"
-            readonly
-          ></el-input>
-        </el-form-item>
+    <el-table :data="gridData2"
+              :default-sort="{prop: 'id', order: 'descending'}">
+      <el-table-column property="id"
+                       label="ID"
+                       width="70"></el-table-column>
+      <el-table-column property="title"
+                       label="比赛标题"></el-table-column>
+      <el-table-column prop="type"
+                       label="比赛类型"
+                       width="100"></el-table-column>
+      <el-table-column prop="begintime"
+                       label="开始时间"
+                       width="200"></el-table-column>
+      <el-table-column prop="lasttime"
+                       label="持续时间"
+                       width="90"></el-table-column>
+      <el-table-column fixed="right"
+                       label="操作"
+                       width="240">
+        <template slot-scope="scope">
+          <el-button @click="handleEdit(scope.row)"
+                     type="primary"
+                     size="small">编辑</el-button>
+          <el-button @click="contestclick(scope.row)"
+                     type="primary"
+                     size="small">查看</el-button>
+          <el-button @click="handleDel(scope.row)"
+                     type="danger"
+                     size="small">删除</el-button>
+        </template>
+      </el-table-column>
 
-        <el-form-item label="作者：">
-          <el-input v-model="changecontestform.creator" style="width:200px;"></el-input>
-        </el-form-item>
-        <el-form-item label="比赛名称：">
-          <el-input v-model="changecontestform.title" style="width:400px;"></el-input>
-        </el-form-item>
-        <el-form-item label="比赛难度：">
-          <el-select v-model="changecontestform.level" placeholder="请选择" style="width:200px;">
-            <el-option key="1" label="简单" :value="1"></el-option>
-            <el-option key="2" label="普通" :value="2"></el-option>
-            <el-option key="3" label="中等" :value="3"></el-option>
-            <el-option key="4" label="困难" :value="4"></el-option>
-            <el-option key="5" label="极其困难" :value="5"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="比赛描述：">
-          <el-input type="textarea" v-model="changecontestform.des" autosize style="width:800px;"></el-input>
-        </el-form-item>
-        <el-form-item label="比赛提示：">
-          <el-input type="textarea" v-model="changecontestform.note" autosize style="width:800px;"></el-input>
-        </el-form-item>
-        <el-form-item label="比赛时间：">
-          <el-date-picker
-            v-model="changecontestform.timerange"
-            type="datetimerange"
-            align="right"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            @change="timerangechange"
-            :default-time="['12:00:00', '17:00:00']"
-          ></el-date-picker>
-        </el-form-item>
-        <el-form-item label="比赛类型（ACM/OI/其他）：">
-          <el-select v-model="changecontestform.type" placeholder="Choose type...">
-            <el-option key="0" label="ACM" value="ACM"></el-option>
-            <el-option key="1" label="Rated" value="Rated"></el-option>
-            <el-option key="2" label="Homework" value="Homework"></el-option>
-            <el-option key="3" label="Personal" value="Personal"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="比赛权限：">
-          <el-select
-            style="width:200px;"
-            v-model="changecontestform.auth"
-            placeholder="Choose type..."
-          >
-            <el-option key="0" label="Public" :value="1"></el-option>
-            <el-option key="1" label="Private" :value="2"></el-option>
-            <el-option key="2" label="Protect(可注册)" :value="0"></el-option>
-          </el-select>
-        </el-form-item>
+    </el-table>
 
-        <el-form-item label="默认参赛人员（如果是公开比赛，请忽略，私有比赛请务必填写，因为私有比赛不可注册，中间用英文逗号或换行隔开）：">
-          <el-input type="textarea" v-model="contestregister" autosize></el-input>
-        </el-form-item>
+    <el-dialog title="修改比赛"
+               :visible.sync="dialogTableVisible2"
+               width="85%">
 
-        <el-form-item>
-          <el-button type="success" @click="onChangeContestSubmit">更新比赛</el-button>
-        </el-form-item>
-      </el-form>
-    </el-row>
-
-    <el-row>
       <el-row>
-        <el-tag
-          :key="index"
-          v-for="(tag,index) in problemnames"
-          closable
-          :disable-transitions="false"
-          @close="handleClose(tag)"
-        >{{tag}}</el-tag>
+        <el-form :model="changecontestform"
+                 label-position="right">
+          <el-form-item label="比赛编号：">
+            <el-input style="width:200px;"
+                      v-model="contestid"
+                      @change="contestchange"
+                      placeholder="请输入比赛编号"
+                      readonly></el-input>
+          </el-form-item>
+
+          <el-form-item label="作者：">
+            <el-input v-model="changecontestform.creator"
+                      style="width:200px;"></el-input>
+          </el-form-item>
+          <el-form-item label="比赛名称：">
+            <el-input v-model="changecontestform.title"
+                      style="width:400px;"></el-input>
+          </el-form-item>
+          <el-form-item label="比赛难度：">
+            <el-select v-model="changecontestform.level"
+                       placeholder="请选择"
+                       style="width:200px;">
+              <el-option key="1"
+                         label="简单"
+                         :value="1"></el-option>
+              <el-option key="2"
+                         label="普通"
+                         :value="2"></el-option>
+              <el-option key="3"
+                         label="中等"
+                         :value="3"></el-option>
+              <el-option key="4"
+                         label="困难"
+                         :value="4"></el-option>
+              <el-option key="5"
+                         label="极其困难"
+                         :value="5"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="比赛描述：">
+            <el-input type="textarea"
+                      v-model="changecontestform.des"
+                      autosize
+                      style="width:800px;"></el-input>
+          </el-form-item>
+          <el-form-item label="比赛提示：">
+            <el-input type="textarea"
+                      v-model="changecontestform.note"
+                      autosize
+                      style="width:800px;"></el-input>
+          </el-form-item>
+          <el-form-item label="比赛时间：">
+            <el-date-picker v-model="changecontestform.timerange"
+                            type="datetimerange"
+                            align="right"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                            @change="timerangechange"
+                            :default-time="['12:00:00', '17:00:00']"></el-date-picker>
+          </el-form-item>
+          <el-form-item label="比赛类型（ACM/OI/其他）：">
+            <el-select v-model="changecontestform.type"
+                       placeholder="Choose type...">
+              <el-option key="0"
+                         label="ACM"
+                         value="ACM"></el-option>
+              <el-option key="1"
+                         label="Rated"
+                         value="Rated"></el-option>
+              <el-option key="2"
+                         label="Homework"
+                         value="Homework"></el-option>
+              <el-option key="3"
+                         label="Personal"
+                         value="Personal"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="比赛权限：">
+            <el-select style="width:200px;"
+                       v-model="changecontestform.auth"
+                       placeholder="Choose type...">
+              <el-option key="0"
+                         label="Public"
+                         :value="1"></el-option>
+              <el-option key="1"
+                         label="Private"
+                         :value="2"></el-option>
+              <el-option key="2"
+                         label="Protect(可注册)"
+                         :value="0"></el-option>
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="默认参赛人员（如果是公开比赛，请忽略，私有比赛请务必填写，因为私有比赛不可注册，中间用英文逗号或换行隔开）：">
+            <el-input type="textarea"
+                      v-model="contestregister"
+                      autosize></el-input>
+          </el-form-item>
+
+          <el-form-item>
+            <el-button type="success"
+                       @click="onChangeContestSubmit">更新比赛</el-button>
+          </el-form-item>
+        </el-form>
       </el-row>
+
       <el-row>
-        <el-row :gutter="20">
-          <el-col :span="5">
-            <el-input @change="addproblemchange" v-model="tmpaddproblemid" placeholder="题目编号">
-              <el-button slot="append" icon="el-icon-search" @click="addproblemchange"></el-button>
-            </el-input>
-          </el-col>
-          <el-col :span="6">
-            <el-input v-model="tmpaddproblemtitle" placeholder="比赛中的题目标题"></el-input>
-          </el-col>
-          <el-col :span="3">
-            <el-button type="success" @click="dialogTableVisible = true">选择题目</el-button>
-          </el-col>
-          <el-col :span="4">
-            <el-button type="primary" @click="addproblemclick" plain :disabled="!canadd">添加题目</el-button>
-          </el-col>
+        <el-row>
+          <el-tag :key="index"
+                  v-for="(tag,index) in problemnames"
+                  closable
+                  :disable-transitions="false"
+                  @close="handleClose(tag)">{{tag}}</el-tag>
         </el-row>
-        <el-button type="success" @click="uploadproblemclick" :disabled="contestid==-1">更新题目</el-button>
-      </el-row>
-    </el-row>
+        <el-row>
+          <el-row :gutter="20">
+            <el-col :span="5">
+              <el-input @change="addproblemchange"
+                        v-model="tmpaddproblemid"
+                        placeholder="题目编号">
+                <el-button slot="append"
+                           icon="el-icon-search"
+                           @click="addproblemchange"></el-button>
+              </el-input>
+            </el-col>
+            <el-col :span="6">
+              <el-input v-model="tmpaddproblemtitle"
+                        placeholder="比赛中的题目标题"></el-input>
+            </el-col>
+            <el-col :span="3">
+              <el-button type="success"
+                         @click="dialogTableVisible = true">选择题目</el-button>
+            </el-col>
+            <el-col :span="4">
+              <el-button type="primary"
+                         @click="addproblemclick"
+                         plain
+                         :disabled="!canadd">添加题目</el-button>
+            </el-col>
+          </el-row>
 
-    <el-row>
-      编辑题解：
-      <mavon-editor
-        style="margin-top:20px"
-        v-model="context"
-        :toolbars="toolbars"
-        @save="savemethod"
-        @imgAdd="$imgAdd"
-      />
-    </el-row>
+        </el-row>
+      </el-row>
+
+      <el-row>
+        <el-row>
+          <el-tag :key="index"
+                  v-for="(tag,index) in choiceproblemids"
+                  closable
+                  :disable-transitions="false"
+                  @close="handleClose2(tag)">{{tag}}</el-tag>
+        </el-row>
+        <el-row>
+          <el-row :gutter="20">
+
+            <el-col :span="6">
+              <el-input v-model="tmpaddchoiceproblemid"
+                        placeholder="选择题编号"></el-input>
+            </el-col>
+            <el-col :span="3">
+              <el-button type="success"
+                         @click="dialogTableVisible3 = true">选择题目</el-button>
+            </el-col>
+            <el-col :span="4">
+              <el-button type="primary"
+                         @click="addchoiceproblemclick"
+                         plain
+                         :disabled="!canadd2">添加选择题（选择题只会显示题目编号）</el-button>
+            </el-col>
+          </el-row>
+          <el-button type="success"
+                     @click="uploadproblemclick"
+                     :disabled="contestid==-1">更新题目</el-button>
+        </el-row>
+      </el-row>
+
+      <el-row>
+        编辑题解：
+        <mavon-editor style="margin-top:20px"
+                      v-model="context"
+                      :toolbars="toolbars"
+                      @save="savemethod"
+                      @imgAdd="$imgAdd" />
+      </el-row>
 
     </el-dialog>
   </el-row>
@@ -200,22 +328,27 @@ export default {
   components: {
     mavonEditor
   },
-  data() {
+  data () {
     return {
+      dialogTableVisible3: false,
       dialogTableVisible2: false,
       dialogTableVisible: false,
       currentpage: 1,
       currentpage2: 1,
       gridData: [],
       gridData2: [],
+      TableData: [],
       totalproblem: 0,
       totalcontest: 0,
       contestregister: "",
       contestid: -1,
       problemnames: [],
+      choiceproblemids: [],
       tmpaddproblemid: "",
       tmpaddproblemtitle: "",
+      tmpaddchoiceproblemid: "",
       canadd: false,
+      canadd2: false,
 
       searchtitle: "",
       searchpro: "",
@@ -259,31 +392,31 @@ export default {
     };
   },
   methods: {
-    contestclick(row) {
-      window.open("/contest/" + row.id+"/");
+    contestclick (row) {
+      window.open("/contest/" + row.id + "/");
     },
-    searchprotitle() {
+    searchprotitle () {
       this.currentpage = 1;
       this.$axios
         .get(
           "/problemdata/?limit=20&offset=" +
-            (this.currentpage - 1) * 20 +
-            "&search=" +
-            this.searchpro
+          (this.currentpage - 1) * 20 +
+          "&search=" +
+          this.searchpro
         )
         .then(response => {
           this.totalproblem = response.data.count;
           this.gridData = response.data.results;
         });
     },
-    searchcontest() {
+    searchcontest () {
       this.currentpage2 = 1;
       this.$axios
         .get(
           "/contestinfo/?limit=20&offset=" +
-            (this.currentpage2 - 1) * 20 +
-            "&search=" +
-            this.searchtitle
+          (this.currentpage2 - 1) * 20 +
+          "&search=" +
+          this.searchtitle
         )
         .then(response => {
           for (let i = 0; i < response.data.results.length; i++) {
@@ -302,34 +435,34 @@ export default {
           this.totalcontest = response.data.count;
         });
     },
-    handleEdit(row) {
+    handleEdit (row) {
       this.contestid = row.id;
       this.contestchange(row.id);
       this.dialogTableVisible2 = true;
     },
-    handleCurrentChange(val) {
+    handleCurrentChange (val) {
       this.currentpage = val;
       this.$axios
         .get(
           "/problemdata/?limit=20&offset=" +
-            (this.currentpage - 1) * 20 +
-            "&search=" +
-            this.searchpro
+          (this.currentpage - 1) * 20 +
+          "&search=" +
+          this.searchpro
         )
         .then(response => {
           this.totalproblem = response.data.count;
           this.gridData = response.data.results;
         });
     },
-    handleCurrentContestChange(val) {
+    handleCurrentContestChange (val) {
       this.currentpage2 = val;
 
       this.$axios
         .get(
           "/contestinfo/?limit=20&offset=" +
-            (this.currentpage2 - 1) * 20 +
-            "&search=" +
-            this.searchtitle
+          (this.currentpage2 - 1) * 20 +
+          "&search=" +
+          this.searchtitle
         )
         .then(response => {
           for (let i = 0; i < response.data.results.length; i++) {
@@ -347,16 +480,28 @@ export default {
           this.totalcontest = response.data.count;
         });
     },
-    problemclick: function(row, column, cell, event) {
+    problemclick: function (row, column, cell, event) {
       this.tmpaddproblemid = row.problem;
       this.tmpaddproblemtitle = row.title;
       this.addproblemchange(row.problem);
       this.dialogTableVisible = false;
     },
-    $imgAdd(pos, $file) {
+
+    choiceproblemclick: function (row, column, cell, event) {
+      this.tmpaddchoiceproblemid = row.ChoiceProblemId;
+      this.canadd2 = true;
+      this.dialogTableVisible3 = false;
+    },
+
+
+
+
+
+
+    $imgAdd (pos, $file) {
       this.$message.error("暂不支持上传图片！请使用链接添加！");
     },
-    savemethod(v, r) {
+    savemethod (v, r) {
       this.$axios
         .get("/contesttutorial/?contestid=" + this.contestid)
         .then(response2 => {
@@ -381,7 +526,7 @@ export default {
           );
         });
     },
-    contestchange(num) {
+    contestchange (num) {
       this.$axios
         .get("/contesttutorial/?contestid=" + num)
         .then(response22 => {
@@ -402,7 +547,7 @@ export default {
           response.data.timerange.push(
             moment(
               new Date(response.data.begintime).getTime() +
-                response.data.lasttime * 1000
+              response.data.lasttime * 1000
             ).format("YYYY-MM-DD HH:mm:ss")
           );
           this.changecontestform = response.data;
@@ -425,8 +570,8 @@ export default {
                   for (var i = 0; i < response3.data.length; i++) {
                     li.push(
                       response3.data[i].problemid +
-                        "|" +
-                        response3.data[i].problemtitle
+                      "|" +
+                      response3.data[i].problemtitle
                     );
                   }
                   this.problemnames = li;
@@ -450,7 +595,7 @@ export default {
           this.changecontestform = {};
         });
     },
-    handleDel(row) {
+    handleDel (row) {
       this.$confirm("删除比赛id：" + row.id, "确定删除比赛吗？", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -476,12 +621,14 @@ export default {
         });
       });
     },
-    uploadproblemclick() {
+    uploadproblemclick () {
       this.$confirm(
         "更新题目的比赛id：" +
-          this.contestid +
-          "         更新的题目：  " +
-          this.problemnames,
+        this.contestid +
+        "         更新的题目：  " +
+        this.problemnames +
+        "         更新的选择的题：  " +
+        this.choiceproblemids,
         "确定更新题目吗？",
         {
           confirmButtonText: "确定",
@@ -509,13 +656,32 @@ export default {
             }
           });
 
+
+        this.$axios
+          .get("/contestchoiceproblem/?ContestId=" + this.contestid)
+          .then(response4 => {
+            for (var i = 0; i < response4.data.length; i++) {
+              this.$axios.delete(
+                "/contestchoiceproblem/" + response4.data[i].id + "/"
+              );
+            }
+            for (var i = 0; i < this.choiceproblemids.length; i++) {
+              var AddId = this.choiceproblemids[i];
+                this.$axios.post("/contestchoiceproblem/", {
+                  ContestId: this.contestid,
+                  ChoiceProblemId: AddId,
+                  rank: i
+                });
+            }
+          });
+
         this.$message({
           message: "更新题目成功！",
           type: "success"
         });
       });
     },
-    addproblemclick() {
+    addproblemclick () {
       if (
         this.tmpaddproblemtitle.indexOf("|") >= 0 ||
         this.tmpaddproblemid.indexOf("|") >= 0
@@ -527,7 +693,15 @@ export default {
         this.tmpaddproblemid + "|" + this.tmpaddproblemtitle
       );
     },
-    addproblemchange(num) {
+
+    addchoiceproblemclick () {
+      this.choiceproblemids.push(
+        this.tmpaddchoiceproblemid
+      );
+    },
+
+
+    addproblemchange (num) {
       this.$axios
         .get("/problemdata/" + num + "/")
         .then(response2 => {
@@ -541,11 +715,15 @@ export default {
           );
         });
     },
-    handleClose(tag) {
+    handleClose (tag) {
       this.problemnames.splice(this.problemnames.indexOf(tag), 1);
     },
 
-    timerangechange(range) {
+    handleClose2 (tag) {
+      this.choiceproblemids.splice(this.choiceproblemids.indexOf(tag), 1);
+    },
+
+    timerangechange (range) {
       this.changecontestform.begintime = moment(range[0]).format(
         "YYYY-MM-DD HH:mm:ss"
       );
@@ -555,7 +733,7 @@ export default {
       console.log(this.changecontestform.begintime);
     },
 
-    onChangeContestSubmit() {
+    onChangeContestSubmit () {
       if (this.contestid <= 0 || isNaN(this.contestid)) {
         this.$message.error("比赛ID不合法");
         return;
@@ -620,13 +798,13 @@ export default {
       });
     }
   },
-  created() {
+  created () {
     this.$axios
       .get(
         "/problemdata/?limit=20&offset=" +
-          (this.currentpage - 1) * 20 +
-          "&search=" +
-          this.searchpro
+        (this.currentpage - 1) * 20 +
+        "&search=" +
+        this.searchpro
       )
       .then(response => {
         this.totalproblem = response.data.count;
@@ -634,9 +812,9 @@ export default {
         this.$axios
           .get(
             "/contestinfo/?limit=20&offset=" +
-              (this.currentpage2 - 1) * 20 +
-              "&search=" +
-              this.searchtitle
+            (this.currentpage2 - 1) * 20 +
+            "&search=" +
+            this.searchtitle
           )
           .then(response2 => {
             for (let i = 0; i < response2.data.results.length; i++) {
@@ -644,17 +822,23 @@ export default {
                 response2.data.results[i].begintime
               ).format("YYYY-MM-DD HH:mm:ss");
               response2.data.results[i]["lasttime"] =
-              parseInt(response2.data.results[i]["lasttime"] / 60 / 60) +
-              ":" +
-              parseInt((response2.data.results[i]["lasttime"] / 60) % 60) +
-              ":" +
-              parseInt((response2.data.results[i]["lasttime"] % 60) % 60);
+                parseInt(response2.data.results[i]["lasttime"] / 60 / 60) +
+                ":" +
+                parseInt((response2.data.results[i]["lasttime"] / 60) % 60) +
+                ":" +
+                parseInt((response2.data.results[i]["lasttime"] % 60) % 60);
             }
             this.gridData2 = response2.data.results;
             this.totalcontest = response2.data.count;
           });
+
+        this.$axios.get("/choiceproblem/")
+          .then(response => {
+            this.TableData = response.data;
+          })
       });
-  }
+  },
+
 };
 </script>
 
