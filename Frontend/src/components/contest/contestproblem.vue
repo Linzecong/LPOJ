@@ -6,9 +6,7 @@
     <center v-if="!begin">
       <h1>The Contest is Coming</h1>
     </center>
-    <center>
-      <h1>{{ ip }}</h1>
-    </center>
+
     <el-tab-pane v-for="(name,index) in problemtitles"
                  :key="name"
                  v-if="begin">

@@ -60,19 +60,19 @@
         <el-table-column :show-overflow-tooltip="true"
                          property="choiceA"
                          label="A"
-                         width="70"></el-table-column>
+                         width="200"></el-table-column>
         <el-table-column :show-overflow-tooltip="true"
                          property="choiceB"
                          label="B"
-                         width="70"></el-table-column>
+                         width="200"></el-table-column>
         <el-table-column :show-overflow-tooltip="true"
                          property="choiceC"
                          label="C"
-                         width="70"></el-table-column>
+                         width="200"></el-table-column>
         <el-table-column :show-overflow-tooltip="true"
                          property="choiceD"
                          label="D"
-                         width="70"></el-table-column>
+                         width="200"></el-table-column>
       </el-table>
     </el-dialog>
 
