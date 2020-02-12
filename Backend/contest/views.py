@@ -188,4 +188,5 @@ class StudentChoiceAnswerView(viewsets.ModelViewSet):
 class ContestChoiceProblemView(viewsets.ModelViewSet):
     queryset = ContestChoiceProblem.objects.all()
     serializer_class = ContestChoiceProblemSerializer
+    filter_fields = ('ContestId','ChoiceProblemId', "rank")
     throttle_scope = "post"

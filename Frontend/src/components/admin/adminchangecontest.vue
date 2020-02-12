@@ -493,11 +493,6 @@ export default {
       this.dialogTableVisible3 = false;
     },
 
-
-
-
-
-
     $imgAdd (pos, $file) {
       this.$message.error("暂不支持上传图片！请使用链接添加！");
     },
@@ -581,6 +576,26 @@ export default {
                     "服务器出错！" + JSON.stringify(error.response.data)
                   );
                 });
+
+
+                this.$axios
+                .get("/contestchoiceproblem/?ContestId=" + num)
+                .then(response3 => {
+                  var li = [];
+                  for (var i = 0; i < response3.data.length; i++) {
+                    li.push(
+                      response3.data[i].ChoiceProblemId
+                    );
+                  }
+                  this.choiceproblemids = li;
+                })
+                .catch(error => {
+                  this.$message.error(
+                    "服务器出错！" + JSON.stringify(error.response.data)
+                  );
+                });
+
+
             })
             .catch(error => {
               this.$message.error(
@@ -699,7 +714,6 @@ export default {
         this.tmpaddchoiceproblemid
       );
     },
-
 
     addproblemchange (num) {
       this.$axios

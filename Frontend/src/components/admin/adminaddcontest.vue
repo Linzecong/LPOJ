@@ -45,6 +45,37 @@
       </el-table>
     </el-dialog>
 
+    <el-dialog title="选择题目"
+               :visible.sync="dialogTableVisible3"
+               width="75%">
+      <el-table :data="TableData"
+                @cell-click="choiceproblemclick">
+        <el-table-column property="ChoiceProblemId"
+                         label="ID"
+                         width="50"></el-table-column>
+        <el-table-column :show-overflow-tooltip="true"
+                         property="des"
+                         label="题目"
+                         width="350"></el-table-column>
+        <el-table-column :show-overflow-tooltip="true"
+                         property="choiceA"
+                         label="A"
+                         width="200"></el-table-column>
+        <el-table-column :show-overflow-tooltip="true"
+                         property="choiceB"
+                         label="B"
+                         width="200"></el-table-column>
+        <el-table-column :show-overflow-tooltip="true"
+                         property="choiceC"
+                         label="C"
+                         width="200"></el-table-column>
+        <el-table-column :show-overflow-tooltip="true"
+                         property="choiceD"
+                         label="D"
+                         width="200"></el-table-column>
+      </el-table>
+    </el-dialog>
+
     <el-dialog title="选择班级"
                :visible.sync="dialogTableVisible2"
                width="50%">
@@ -211,6 +242,37 @@
                        :disabled="!canadd">添加题目</el-button>
           </el-col>
         </el-row>
+
+        <el-row>
+          <el-row>
+            <el-tag :key="index"
+                    v-for="(tag,index) in choiceproblemids"
+                    closable
+                    :disable-transitions="false"
+                    @close="handleClose2(tag)">{{tag}}</el-tag>
+          </el-row>
+          <el-row>
+            <el-row :gutter="20">
+
+              <el-col :span="6">
+                <el-input v-model="tmpaddchoiceproblemid"
+                          placeholder="选择题编号"></el-input>
+              </el-col>
+              <el-col :span="3">
+                <el-button type="success"
+                           @click="dialogTableVisible3 = true">选择题目</el-button>
+              </el-col>
+              <el-col :span="4">
+                <el-button type="primary"
+                           @click="addchoiceproblemclick"
+                           plain
+                           :disabled="!canadd2">添加选择题（选择题只会显示题目编号）</el-button>
+              </el-col>
+            </el-row>
+
+          </el-row>
+        </el-row>
+
         <el-button type="success"
                    @click="uploadproblemclick"
                    :disabled="contestid==-1">确认保存题目</el-button>
@@ -227,7 +289,10 @@ export default {
   data () {
     return {
       tableData: [],
-
+      TableData: [],
+      choiceproblemids: [],
+      tmpaddchoiceproblemid: "",
+      dialogTableVisible3: false,
       dialogTableVisible2: false,
       dialogTableVisible: false,
       currentpage: 1,
@@ -239,6 +304,7 @@ export default {
       tmpaddproblemid: "",
       tmpaddproblemtitle: "",
       canadd: false,
+      canadd2: false,
       searchpro: "",
 
       addClassName: "",
@@ -322,12 +388,25 @@ export default {
             rank: i
           });
         }
+
+        for (var i = 0; i < this.choiceproblemids.length; i++) {
+          var AddId = this.choiceproblemids[i];
+          this.$axios.post("/contestchoiceproblem/", {
+            ContestId: this.contestid,
+            ChoiceProblemId: AddId,
+            rank: i
+          });
+        }
+
+
         this.$message({
           message: "添加题目成功！",
           type: "success"
         });
         this.problemnames = [];
         this.contestid = -1;
+
+
       });
     },
     addproblemclick () {
@@ -359,6 +438,9 @@ export default {
 
     handleClose (tag) {
       this.problemnames.splice(this.problemnames.indexOf(tag), 1);
+    },
+    handleClose2 (tag) {
+      this.choiceproblemids.splice(this.choiceproblemids.indexOf(tag), 1);
     },
 
     timerangechange (range) {
@@ -424,7 +506,19 @@ export default {
             );
           });
       });
-    }
+    },
+
+    choiceproblemclick: function (row, column, cell, event) {
+      this.tmpaddchoiceproblemid = row.ChoiceProblemId;
+      this.canadd2 = true;
+      this.dialogTableVisible3 = false;
+    },
+    addchoiceproblemclick () {
+      this.choiceproblemids.push(
+        this.tmpaddchoiceproblemid
+      );
+    },
+
   },
   created () {
     this.$axios.get("/classes/")
@@ -446,6 +540,11 @@ export default {
         this.totalproblem = response.data.count;
         this.gridData = response.data.results;
       });
+
+    this.$axios.get("/choiceproblem/")
+      .then(response => {
+        this.TableData = response.data;
+      })
   },
 
 
