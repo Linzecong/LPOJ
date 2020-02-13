@@ -26,6 +26,7 @@ import trainningdetail from '@/components/wiki/trainning/trainningdetail'
 import newalgorithm from '@/components/wiki/newalgorithm'
 import todolist from '@/components/utils/todolist'
 import homework from '@/components/mainpage/homework'
+import givechoiceproblemscore from "@/components/admin/givechoiceproblemscore"
 
 Vue.use(Router)
 
@@ -166,6 +167,11 @@ export default new Router({
       path: '/homework',
       name: 'homework',
       component: homework,
+    },
+    {
+      path: '/givechoiceproblemscore',
+      name: 'givechoiceproblemscore',
+      component: givechoiceproblemscore,
     }
   ]
 })

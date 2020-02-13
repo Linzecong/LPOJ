@@ -72,7 +72,7 @@ import adminboard from "@/components/admin/adminboard";
 import adminsetting from "@/components/admin/adminsetting";
 import adminclassmanage from "@/components/admin/adminclassmanage";
 import adminaddchoiceproblem from "@/components/admin/adminaddchoiceproblem";
-import adminchangechoiceproblem from "@/components/admin/adminchangechoiceproblem"
+import adminchangechoiceproblem from "@/components/admin/adminchangechoiceproblem";
 
 export default {
   name: "admin",
@@ -88,7 +88,7 @@ export default {
     adminsetting,
     adminclassmanage,
     adminaddchoiceproblem,
-    adminchangechoiceproblem
+    adminchangechoiceproblem,
   },
   data () {
     return {

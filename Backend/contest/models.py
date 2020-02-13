@@ -162,12 +162,15 @@ class ContestChoiceProblem(models.Model):
         return self.contestid
 
 class StudentChoiceAnswer(models.Model):
-    user = models.CharField(max_length=100)
-    ContestId = models.IntegerField()
-    ChoiceProblemId = models.IntegerField(default=-1)
-    answer = models.CharField(max_length=1)
+    username = models.CharField(max_length=100,default="")
+    realname = models.CharField(max_length=100,default="")
+    number = models.CharField(max_length=100,default="")
+    contestid = models.CharField(max_length=100,default="")
+    answer = models.CharField(max_length=100)
+    score = models.IntegerField()
 
     objects = models.Manager()
 
     def __str__(self):
         return self.user
+

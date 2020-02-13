@@ -183,7 +183,9 @@ class ContestBoardFilterAPIView(APIView):
 class StudentChoiceAnswerView(viewsets.ModelViewSet):
     queryset = StudentChoiceAnswer.objects.all()
     serializer_class = StudentChoiceAnswerSerializer
-    throttle_scope = "post"
+    filter_fields = ('username','contestid')
+
+
 
 class ContestChoiceProblemView(viewsets.ModelViewSet):
     queryset = ContestChoiceProblem.objects.all()

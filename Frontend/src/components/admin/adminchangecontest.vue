@@ -109,11 +109,14 @@
                        width="90"></el-table-column>
       <el-table-column fixed="right"
                        label="操作"
-                       width="240">
+                       width="400">
         <template slot-scope="scope">
           <el-button @click="handleEdit(scope.row)"
                      type="primary"
                      size="small">编辑</el-button>
+          <el-button @click="choiceproblemgrade(scope.row)"
+                     type="primary"
+                     size="small">选择题成绩</el-button>
           <el-button @click="contestclick(scope.row)"
                      type="primary"
                      size="small">查看</el-button>
@@ -392,6 +395,9 @@ export default {
     };
   },
   methods: {
+    choiceproblemgrade (row) {
+      window.open("/givechoiceproblemscore?contestid=" + row.id);
+    },
     contestclick (row) {
       window.open("/contest/" + row.id + "/");
     },
@@ -578,7 +584,7 @@ export default {
                 });
 
 
-                this.$axios
+              this.$axios
                 .get("/contestchoiceproblem/?ContestId=" + num)
                 .then(response3 => {
                   var li = [];
@@ -682,11 +688,11 @@ export default {
             }
             for (var i = 0; i < this.choiceproblemids.length; i++) {
               var AddId = this.choiceproblemids[i];
-                this.$axios.post("/contestchoiceproblem/", {
-                  ContestId: this.contestid,
-                  ChoiceProblemId: AddId,
-                  rank: i
-                });
+              this.$axios.post("/contestchoiceproblem/", {
+                ContestId: this.contestid,
+                ChoiceProblemId: AddId,
+                rank: i
+              });
             }
           });
 
