@@ -496,8 +496,6 @@ export default {
           type: "success",
           message: "提交中..."
         });
-        console.log("this.userip");
-        console.log(this.userip);
         this.$axios.get("/currenttime/").then(response2 => {
           var curtime = response2.data;
 

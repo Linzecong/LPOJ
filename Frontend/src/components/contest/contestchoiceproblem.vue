@@ -73,61 +73,68 @@ export default {
       }
     },
     Submit () {
-      this.$confirm("确定提交答案吗？只能提交一次！",
-        {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(() => {
+      console.log(this.$store.state.contestisend);
+      if (this.$store.state.contestisend == true) {
+        this.$message.error("比赛已结束");
+      }
+      else {
+        this.$confirm("确定提交答案吗？只能提交一次！",
+          {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning"
+          }).then(() => {
 
-          this.$axios.get(
-            "/conteststudentchoiceanswer/?username=" +
-            this.form.username +
-            "&contestid=" +
-            this.form.contestid
-          )
-            .then(
-              response => {
-                if (response.data[0]) {
-                  this.$message.error("你已经提交过答案");
-                }
-                else {
-                  this.form.answer = "";
-                  for (var i = 0; i < this.ProblenCount; i++) {
-                    if (this.allRadio[i]) {
-                      this.form.answer += this.allRadio[i];
-                    }
-                    else {
-                      this.form.answer += "X";
-                    }
+            this.$axios.get(
+              "/conteststudentchoiceanswer/?username=" +
+              this.form.username +
+              "&contestid=" +
+              this.form.contestid
+            )
+              .then(
+                response => {
+                  if (response.data[0]) {
+                    this.$message.error("你已经提交过答案");
                   }
-                  console.log(this.form.username);
-                  this.$axios.get("/user/?username=" + this.form.username)
-                    .then(response2 => {
-                      this.form.realname = response2.data[0].realname;
-                      this.form.number = response2.data[0].number;
-
-                      console.log(this.form);
-                      this.$axios.post("/conteststudentchoiceanswer/", this.form)
-                        .then(
-                          response3 => {
-                            this.$message({
-                              message: "提交成功！",
-                              type: "success"
-                            });
-                          }
-                        ).catch(error => {
-                          this.$message.error(
-                            "提交失败！请再提交一次" + "(" + JSON.stringify(error.response.data) + ")"
-                          );
-                        });
+                  else {
+                    this.form.answer = "";
+                    for (var i = 0; i < this.ProblenCount; i++) {
+                      if (this.allRadio[i]) {
+                        this.form.answer += this.allRadio[i];
+                      }
+                      else {
+                        this.form.answer += "X";
+                      }
                     }
-                    )
+                    console.log(this.form.username);
+                    this.$axios.get("/user/?username=" + this.form.username)
+                      .then(response2 => {
+                        this.form.realname = response2.data[0].realname;
+                        this.form.number = response2.data[0].number;
+
+                        console.log(this.form);
+                        this.$axios.post("/conteststudentchoiceanswer/", this.form)
+                          .then(
+                            response3 => {
+                              this.$message({
+                                message: "提交成功！",
+                                type: "success"
+                              });
+                            }
+                          ).catch(error => {
+                            this.$message.error(
+                              "提交失败！请再提交一次" + "(" + JSON.stringify(error.response.data) + ")"
+                            );
+                          });
+                      }
+                      )
 
 
-                }
-              })
-        })
+                  }
+                })
+          })
+      };
+
     },
     getIputValue (index) {
       var ChooseAnswer = this.radio[index].split(".");
