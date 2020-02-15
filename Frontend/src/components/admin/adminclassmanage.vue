@@ -38,17 +38,30 @@
 
         <el-table-column prop="Operate"
                          label="操作"
-                         width="500">
+                         width="600">
           　　　　<template slot-scope="scope">
             　　　　　　<el-button type="primary"
                        size="small"
                        @click="CheckDetail(scope.row)">查看详情</el-button>
             　　　　　　
-            　　　　　　<el-button type="primary"
+            　　　　　　<el-button type="danger"
                        size="small"
                        @click="DeleteClass(scope.row)">删除</el-button>
 
-            　　　　</template>
+            <el-button type="success"
+                       size="small"
+                       @click="openClass(scope.row)">开放加入</el-button>
+
+            <el-button type="warning"
+                       size="small"
+                       @click="closeClass(scope.row)">关闭加入</el-button>
+
+          </template>
+        </el-table-column>
+
+        <el-table-column prop="canjoinclass"
+                         label="开放状态"
+                         width="300">
         </el-table-column>
 
       </el-table>
@@ -67,7 +80,7 @@ export default {
       tableData2: [],
       cName: [],
       classCount: "",
-
+      tmpform: [],
       cPeoplecount: [],
       form: {
         className: "",
@@ -77,6 +90,53 @@ export default {
     };
   },
   methods: {
+    openClass (row) {
+      this.tmpform = row;
+      this.tmpform.canjoinclass = "open";
+
+      var tmpsize = this.tmpform.classSize.split("/");
+      this.tmpform.classSize = tmpsize[1];
+      this.$axios.get("/classes/?className=" + row.className)
+        .then(res => {
+          var putId = res.data[0].id;
+          this.$axios.put("/classes/" + putId + "/", this.tmpform)
+            .then(res2 => {
+              this.$message.success("已开放班级" + row.className);
+            })
+            .catch(error => {
+              this.$message.error(
+                "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
+              );
+            });
+        })
+
+      this.tmpform.classSize = tmpsize[0] + "/" + tmpsize[1];
+
+    },
+    closeClass (row) {
+      this.tmpform = row;
+      this.tmpform.canjoinclass = "close";
+
+      var tmpsize = this.tmpform.classSize.split("/");
+      this.tmpform.classSize = tmpsize[1];
+
+      this.$axios.get("/classes/?className=" + row.className)
+        .then(res => {
+          var putId = res.data[0].id;
+          this.$axios.put("/classes/" + putId + "/", this.tmpform)
+            .then(res2 => {
+              this.$message.success("已关闭班级" + row.className);
+            })
+            .catch(error => {
+              this.$message.error(
+                "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
+              );
+            });
+        })
+
+
+      this.tmpform.classSize = tmpsize[0] + "/" + tmpsize[1];
+    },
     AddClass () {
       console.log(this.form);
       this.$axios.post("/ADDclasses/", this.form)

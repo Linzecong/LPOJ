@@ -12,14 +12,12 @@ class ClassStudentData(models.Model):
     def __str__(self):
         return self.studentName
 
-class Classes(models.Model):
-    className = models.CharField(max_length=50, null=False, primary_key=True)
-    classSize = models.CharField(max_length=50, null=False)
-    studentCount = models.CharField(max_length=50, null=False,default="0")
+class theClasses(models.Model):
+    className = models.CharField(max_length=50,default="None")
+    classSize = models.CharField(max_length=50, default="None")
+    canjoinclass = models.CharField(max_length=50, default="open")
 
     objects = models.Manager()
 
     def __str__(self):
             return self.className
-
-

@@ -7,24 +7,22 @@ from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST,HTTP_204_NO_
 from rest_framework.views import APIView
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.throttling import ScopedRateThrottle
-from .models import Classes
-from .models import ClassStudentData
-from .serializers import ClassDataSerializer
-from .serializers import ClassStudentDataSerializer
+from .models import  theClasses,ClassStudentData
+from .serializers import ClassDataSerializer,ClassStudentDataSerializer
 # Create your views here.
 
 
 class ClassDataView(viewsets.ModelViewSet):
-    queryset = Classes.objects.all()
+    queryset = theClasses.objects.all()
     serializer_class = ClassDataSerializer
-    filter_backends = (DjangoFilterBackend, filters.SearchFilter)
     filter_fields = ('className',)
     search_fields = ('className', 'classSize')
     pagination_class = LimitOffsetPagination
     throttle_scope = "post"
 
+
 class ClassDataAPIView(APIView):
-    queryset = Classes.objects.all()
+    queryset = theClasses.objects.all()
     serializer_class = ClassDataSerializer
     def post(self, request, format = None):
         data = request.data.copy()
@@ -35,7 +33,7 @@ class ClassDataAPIView(APIView):
         return Response("AddFail", status=HTTP_400_BAD_REQUEST)
 
 class DeleteClassDataAPIView(APIView):
-    queryset = Classes.objects.all()
+    queryset = theClasses.objects.all()
     serializer_class = ClassDataSerializer
     def delete(self, request, format=None):
         data = request.data.copy()

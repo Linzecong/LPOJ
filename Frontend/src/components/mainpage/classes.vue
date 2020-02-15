@@ -100,47 +100,61 @@ export default {
       window.open("/homework?className=" + row.className);
     },
     JoinClick (row) {
-      this.$confirm(
-        "确定加入" + row.className + "吗?",
-        {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }
-      ).then(() => {
-        this.form.className = row.className;
-        this.$axios.get("/user/?username=" + sessionStorage.username)
-          .then(
-            response => {
-              this.form.studentUserName = response.data[0].username;
-              this.form.studentRealName = response.data[0].realname;
-              this.form.studentNumber = response.data[0].number;
-            }
-          ).catch(function (error) {
-            console.log(error);
-          });
-        this.$axios.post("/AddClass/", this.form)
-          .then(response => {
-            if (response.data == "JoinOk") {
-              this.$message.success("加入成功！");
-
-              return;
-            }
-            if (response.data == "RepeatJoin") {
-              this.$message.error("请不要重复加入同一班级！");
-              return;
-            }
-            if (response.data == "JoinFail") {
-              this.$message.error("加入班级失败（" + response + "）");
-              return;
-            }
-            this.$message({
-              message: "加入班级成功！",
-              type: "success"
-            });
+      this.$axios.get("/classes/?className=" + row.className)
+        .then(res => {
+          if (res.data[0].canjoinclass === "close") {
+            this.$message.error(row.className + "目前不开放加入");
+            return;
           }
+          else {
+            this.$confirm(
+              "确定加入" + row.className + "吗?",
+              {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning"
+              }
+            ).then(() => {
+              this.form.className = row.className;
+              this.$axios.get("/user/?username=" + sessionStorage.username)
+                .then(
+                  response => {
+                    this.form.studentUserName = response.data[0].username;
+                    this.form.studentRealName = response.data[0].realname;
+                    this.form.studentNumber = response.data[0].number;
+                  }
+                ).catch(function (error) {
+                  console.log(error);
+                });
+              this.$axios.post("/AddClass/", this.form)
+                .then(response => {
+                  if (response.data == "JoinOk") {
+                    this.$message.success("加入成功！");
+
+                    return;
+                  }
+                  if (response.data == "RepeatJoin") {
+                    this.$message.error("请不要重复加入同一班级！");
+                    return;
+                  }
+                  if (response.data == "JoinFail") {
+                    this.$message.error("加入班级失败（" + response + "）");
+                    return;
+                  }
+                  this.$message({
+                    message: "加入班级成功！",
+                    type: "success"
+                  });
+                }
+                );
+            })
+          }
+        }).catch(error => {
+          this.$message.error(
+            "服务器错误！" + "(" + JSON.stringify(error.response.data) + ")"
           );
-      })
+        });
+
     },
 
     QuitClick (row) {
