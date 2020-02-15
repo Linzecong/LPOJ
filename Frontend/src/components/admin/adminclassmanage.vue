@@ -2,24 +2,24 @@
   <el-row>
     <el-row>
       <el-form>
-        <el-column>
+        <el-col>
           <el-form-item label="班级名称">
             <el-input v-model="form.className"
                       style="width:500px"></el-input>
           </el-form-item>
-        </el-column>
+        </el-col>
 
-        <el-column>
+        <el-col>
           <el-form-item label="班级总人数">
             <el-input v-model="form.classSize"
                       style="width:500px"></el-input>
           </el-form-item>
-        </el-column>
+        </el-col>
 
-        <el-column>
+        <el-col>
           <el-button round
                      @click="AddClass">增加班级</el-button>
-        </el-column>
+        </el-col>
       </el-form>
 
     </el-row>
@@ -30,6 +30,7 @@
                          label="班级"
                          width="300">
         </el-table-column>
+
         <el-table-column prop="classSize"
                          label="人数"
                          width="300">
@@ -62,9 +63,12 @@ export default {
     return {
       dialogFormVisible: false,
 
-
       tableData: [],
       tableData2: [],
+      cName: [],
+      classCount: "",
+
+      cPeoplecount: [],
       form: {
         className: "",
         classSize: "",
@@ -87,10 +91,8 @@ export default {
     },
     CheckDetail (row) {
       window.open("/classdetail?className=" + row.className);
-      console.log(row.className);
     },
     DeleteClass (row) {
-      console.log(row.className);
       this.$confirm(
         "确定删除" + row.className + "吗?",
         {
@@ -129,13 +131,26 @@ export default {
 
     this.$axios.get("/classes/")
       .then(response => {
-        console.log(response.data),
-          this.tableData = response.data;
+        this.classCount = response.data.length;
+        this.tableData = response.data;
+        for (var i = 0; i < response.data.length; i++) {
+          this.cName.push(response.data[i].className);
+        };
+        (async () => {
+          const dataArray = await Promise.all(
+            this.cName.map(i => this.$axios.get(`/classStudent/?className=${i}`))
+          );
+          for (const { data } of dataArray) {
+            if (typeof data === "object" && typeof data.length === "number") {
+              this.cPeoplecount.push(JSON.stringify(data.length));
+            }
+          }
+          console.log(this.cPeoplecount);
+          for (var ii = 0; ii < this.classCount; ii++) {
+            this.tableData[ii].classSize = this.cPeoplecount[ii] + "/" + this.tableData[ii].classSize;
+          }
+        })();
       })
-// this.$set(this.tableData);
-
-
-
   },
   mounted () {
   },

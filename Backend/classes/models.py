@@ -15,6 +15,7 @@ class ClassStudentData(models.Model):
 class Classes(models.Model):
     className = models.CharField(max_length=50, null=False, primary_key=True)
     classSize = models.CharField(max_length=50, null=False)
+    studentCount = models.CharField(max_length=50, null=False,default="0")
 
     objects = models.Manager()
 

@@ -79,6 +79,11 @@ export default {
   name: "classes",
   data () {
     return {
+
+      cName: [],
+      classCount: "",
+      cPeoplecount: [],
+
       tableData: [],
       tableData2: [],
       form: {
@@ -118,6 +123,7 @@ export default {
           .then(response => {
             if (response.data == "JoinOk") {
               this.$message.success("加入成功！");
+
               return;
             }
             if (response.data == "RepeatJoin") {
@@ -207,7 +213,25 @@ export default {
 
     this.$axios.get("/classes/")
       .then(response => {
+        this.classCount = response.data.length;
         this.tableData = response.data;
+        for (var i = 0; i < response.data.length; i++) {
+          this.cName.push(response.data[i].className);
+        };
+        (async () => {
+          const dataArray = await Promise.all(
+            this.cName.map(i => this.$axios.get(`/classStudent/?className=${i}`))
+          );
+          for (const { data } of dataArray) {
+            if (typeof data === "object" && typeof data.length === "number") {
+              this.cPeoplecount.push(JSON.stringify(data.length));
+            }
+          }
+          console.log(this.cPeoplecount);
+          for (var ii = 0; ii < this.classCount; ii++) {
+            this.tableData[ii].classSize = this.cPeoplecount[ii] + "/" + this.tableData[ii].classSize;
+          }
+        })();
       })
     this.$axios.get("/classStudent/?studentUserName=" + sessionStorage.username)
       .then(response => {
