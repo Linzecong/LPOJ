@@ -94,7 +94,14 @@
             </el-col>
           </el-row>
           <el-row>
-            <codemirror v-model="code" :options="cmOptions"></codemirror>
+            <!-- <codemirror v-model="code" :options="cmOptions"></codemirror> -->
+            <editor v-model="code" @init="editorInit" :lang="Lang" theme="tomorrow_night_blue" width="900" height="500" :options="cmOptions"></editor>
+            <!-- <MonacoEditor
+              width="800"
+              height="500"
+              theme="vs-dark"
+              language="javascript"
+            ></MonacoEditor> -->
           </el-row>
         </el-card>
       </el-row>
@@ -188,6 +195,7 @@ require("codemirror/mode/clike/clike");
 export default {
   name: "problemdetail",
   components: {
+    editor : require('vue2-ace-editor'),
     codemirror,
     statusmini,
     prostatistice,
@@ -196,11 +204,16 @@ export default {
   data() {
     return {
       cmOptions: {
-        tabSize: 4,
-        mode: "text/x-c++src",
-        theme: "base16-light",
-        lineNumbers: true
+        enableBasicAutocompletion: true,
+        enableSnippets: true,
+        enableLiveAutocompletion: true/*自动补全*/
       },
+      // cmOptions: {
+      //   tabSize: 4,
+      //   mode: "text/x-c++src",
+      //   theme: "base16-light",
+      //   lineNumbers: true
+      // },
       title: "",
       des: "",
       input: "",
@@ -220,7 +233,7 @@ export default {
       level: "Easy",
       code: "",
       language: "C++",
-
+      Lang: "c_cpp",
       codetemplate:{},
 
       ac: 100,
@@ -243,6 +256,18 @@ export default {
       this.$nextTick().then(()=>{
         this.reRender();
       });
+    },
+    language: function() {
+      console.log('language changed to ' + this.language);
+      if(this.language == "C++" || this.language == "C")
+        this.Lang = "c_cpp";
+      else if(this.language == "Python3" || this.language == "Python2")
+        this.Lang = "python";
+      else if(this.language == "Java")
+        this.Lang = "java";
+      else
+        this.Lang = "c_cpp";
+      console.log(this.Lang);
     }
   },
   created() {
@@ -364,6 +389,16 @@ export default {
       });
   },
   methods: {
+    editorInit () {
+      require('brace/ext/language_tools')
+      require('brace/mode/yaml')
+      require('brace/mode/javascript')
+      require('brace/mode/c_cpp')
+      require('brace/mode/python')
+      require('brace/mode/less')
+      require('brace/theme/tomorrow_night_blue')
+    },
+
     showdialog(){
       if(this.submitid != -1)
         this.$refs["Statusmini"].showdialog(this.submitid)
