@@ -25,16 +25,13 @@
       <el-table-column property="level" label="难度" width="70"></el-table-column>
       <el-table-column property="ac" label="AC数" width="70"></el-table-column>
       <el-table-column property="submission" label="提交数" width="70"></el-table-column>
-      <el-table-column
-      fixed="right"
-      label="操作"
-      width="240">
-      <template slot-scope="scope">
-        <el-button @click="handleEdit(scope.row)" type="primary" size="small">编辑</el-button>
-        <el-button @click="problemclick(scope.row)" type="primary" size="small">查看</el-button>
-        <el-button @click="handleDel(scope.row)" type="danger" size="small">删除</el-button>
-      </template>
-    </el-table-column>
+      <el-table-column fixed="right" label="操作" width="240">
+        <template slot-scope="scope">
+          <el-button @click="handleEdit(scope.row)" type="primary" size="small">编辑</el-button>
+          <el-button @click="problemclick(scope.row)" type="primary" size="small">查看</el-button>
+          <el-button @click="handleDel(scope.row)" type="danger" size="small">删除</el-button>
+        </template>
+      </el-table-column>
     </el-table>
 
     <el-dialog title="修改题目" :visible.sync="dialogTableVisible" width="85%">
@@ -86,7 +83,9 @@
         <el-form-item label="来源：">
           <el-input v-model="problemform.source" style="width:400px;"></el-input>
         </el-form-item>
-        <el-form-item label="模板代码：（用*****作为语言分割，如 *****C++***** xxxx *****C***** xxxx *****Python2***** xxxxx）">
+        <el-form-item
+          label="模板代码：（用*****作为语言分割，如 *****C++***** xxxx *****C***** xxxx *****Python2***** xxxxx）"
+        >
           <el-input type="textarea" v-model="problemform.template" autosize style="width:800px;"></el-input>
         </el-form-item>
         <el-form-item label="时间（ms）：">
@@ -153,7 +152,10 @@
           :http-request="myupload"
         >
           <el-button slot="trigger" size="small" type="primary">选取数据文件</el-button>
-          <div slot="tip" class="el-upload__tip">只能上传zip文件,压缩包内的不要有文件夹，输入输出文件后缀为.in和.out.添加一个casedes.txt文件（utf-8编码）可以对每一个样例进行说明，每行一个说明，中间不要有多余的空行，对应的case用|隔开，如：   case1|这是case1的说明</div>
+          <div
+            slot="tip"
+            class="el-upload__tip"
+          >只能上传zip文件,压缩包内的不要有文件夹，输入输出文件后缀为.in和.out.添加一个casedes.txt文件（utf-8编码）可以对每一个样例进行说明，每行一个说明，中间不要有多余的空行，对应的case用|隔开，如： case1|这是case1的说明</div>
         </el-upload>
 
         <el-form-item>
@@ -194,7 +196,8 @@ export default {
         level: 3,
         score: 100,
         oj: "LPOJ",
-        template:"*****C++*****\n\n*****C*****\n\n*****Python2*****\n\n*****Python3*****\n\n*****Java*****\n\n*****Swift5.1*****\n\n",
+        template:
+          "*****C++*****\n\n*****C*****\n\n*****Python2*****\n\n*****Python3*****\n\n*****Java*****\n\n*****Swift5.1*****\n\n"
       },
       problemdataform: {
         problem: "",
@@ -308,50 +311,56 @@ export default {
     handleError(response, file, fileList) {
       this.$message.error("数据上传失败！" + response);
     },
-    handleSuccess(response, file, fileList) {
-      this.$axios
-        .put("/problem/" + this.problemform.problem + "/", this.problemform)
-        .then(response => {
-          this.problemdataform.problem = this.problemform.problem;
-          this.problemdataform.title = this.problemform.title;
-          this.problemdataform.level = this.problemform.level;
-          this.problemdataform.tag = this.problemform.tag;
-          this.problemdataform.score = this.problemform.score;
-          this.problemdataform.auth = this.problemform.auth;
-          var tag = this.problemdataform.tag.split("|");
-          for (var i = 0; i < tag.length; i++) {
-            this.$axios
-              .post("/problemtag/", {
-                tagname: tag[i],
-                count: 1
-              })
-              .catch(error => {});
-          }
-          this.$axios
-            .put(
-              "/problemdata/" + this.problemform.problem + "/",
-              this.problemdataform
-            )
-            .then(response2 => {
-              this.$message({
-                message: "修改成功！修改题目编号为：" + response2.data.problem,
-                type: "success"
-              });
-              this.fileList = [];
-              this.loading = false;
-              this.dialogTableVisible = false
-            })
-            .catch(error => {
-              this.$message.error(
-                "服务器出错！" + JSON.stringify(error.response.data)
-              );
-            });
-        })
-        .catch(error => {
-          this.$message.error(
-            "服务器出错！" + JSON.stringify(error.response.data)
-          );
+    async handleSuccess(response, file, fileList) {
+
+      try{
+        var response = await this.$axios.put(
+          "/problem/" + this.problemform.problem + "/",
+          this.problemform
+        );
+      }
+      catch(error){
+        console.log(error)
+      }
+      
+
+      this.problemdataform.problem = this.problemform.problem;
+      this.problemdataform.title = this.problemform.title;
+      this.problemdataform.level = this.problemform.level;
+      this.problemdataform.tag = this.problemform.tag;
+      this.problemdataform.score = this.problemform.score;
+      this.problemdataform.auth = this.problemform.auth;
+      var tag = this.problemdataform.tag.split("|");
+      for (var i = 0; i < tag.length; i++) {
+        try{
+          await this.$axios.post("/problemtag/", {
+            tagname: tag[i],
+            count: 1
+          });
+        }catch(error){
+          console.log(error)
+        }
+      }
+
+      try{
+        var response2 = await this.$axios.put(
+        "/problemdata/" + this.problemform.problem + "/",
+        this.problemdataform
+        );
+
+        this.$message({
+          message: "修改成功！修改题目编号为：" + response2.data.problem,
+          type: "success"
         });
+        this.fileList = [];
+        this.loading = false;
+        this.dialogTableVisible = false;
+      }
+      catch(error){
+        console.log(error)
+      }
+
+
     },
 
     onAddProblemSubmit() {
