@@ -227,7 +227,8 @@ export default {
         var response = await this.$axios.post("/problem/", this.addproblemform);
       }
       catch(error){
-        console.log(error)
+        this.$message.error(error)
+        return false
       }
       
 
@@ -250,6 +251,7 @@ export default {
         }
         catch (err){
           console.log(err)
+          return false
         }
         
       }
@@ -265,9 +267,10 @@ export default {
         });
       }
       catch(error){
-        console.log(error)
+        this.$message.error(error)
+        return false
       }
-      
+      return true
 
       
     },
@@ -283,7 +286,8 @@ export default {
             type: "warning"
           }
         ).then(() => {
-          this.handleSuccess(1, 2, 3);
+          if(this.handleSuccess(1, 2, 3)==true)
+            this.$router.go(0);
         });
         return;
       }
