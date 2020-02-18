@@ -1,0 +1,69 @@
+#	This file is part of the software similarity tester SIM.
+#	Written by Dick Grune, Vrije Universiteit, Amsterdam.
+#	$Id: README,v 2.23 2017-12-15 17:15:21 dick Exp $
+
+These programs test for similar or equal stretches in one or more program
+or text files and can be used to detect common code or plagiarism. See sim.pdf.
+Checkers are available for
+    C, C++, Java, Pascal, Modula-2, Lisp, Miranda, 8086 assembler, and
+    natural language text.
+
+Dec 2017:
+    - speed-up
+    - 8086 assembler testing added
+    - full UTF-8 in input and full UTF-16 in file names
+
+March 2017:
+    - Version 3
+    - C++ testing added
+
+May 2016:
+    - symmetric percentage computation
+
+Jan 2014:
+    - 64-bit compatible
+    - works also on 32-bit machines with or without software 64-bit emulator
+
+==== To install on any system with gcc, flex, cp, ln, echo, rm, and wc,
+or their equivalents, for example UNIX/Linux or MSDOS+MinGW:
+
+Unpack the most recent archive sim_3_*.zip
+
+To compile and test, edit the Makefile to fit the local situation, and call:
+
+    make test
+
+This will generate one executable called sim_c, the checker for C, and will
+run two small tests to show sample output.
+
+To install, examine the Makefile, edit BINDIR and MAN1DIR to sensible paths,
+and call
+
+    make install
+
+To change defaults, adjust the file settings.par and recompile.
+
+==== To install on MSDOS, if you don't have a C compiler, the archive
+sim_exe_3_*.zip contains:
+
+    SIM_C.EXE          similarity tester for C
+    SIM_TEXT.EXE       similarity tester for text
+    SIM_C++.EXE        similarity tester for C++
+    SIM_JAVA.EXE       similarity tester for Java
+    SIM_PASC.EXE       similarity tester for Pascal
+    SIM_M2.EXE         similarity tester for Modula-2
+    SIM_LISP.EXE       similarity tester for Lisp
+    SIM_MIRA.EXE       similarity tester for Miranda
+    SIM_8086.EXE       similarity tester for 8086 assembler
+
+==== To extend:
+
+To add another language L, write a file Llang.l along the lines of clang.l
+or the other *lang.l files, extend the Makefile and recompile.
+All knowledge about a given language L is located in Llang.l; the rest of
+the program expects each token to be a 16-bit character.
+
+
+                Dick Grune
+                email:	dick@dickgrune.com
+                web:	http://www.dickgrune.com
