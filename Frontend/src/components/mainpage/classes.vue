@@ -5,6 +5,14 @@
     <el-tab-pane label="加入班级"
                  name="JoinClass">
       <template>
+        <el-input placeholder="输入班级名称以搜索..."
+                  v-model="searchclass"
+                  @keyup.native.enter="searchtitle"
+                  style="float:right;width:300px;">
+          <el-button slot="append"
+                     icon="el-icon-search"
+                     @click="searchtitle"></el-button>
+        </el-input>
         <el-table :data="tableData"
                   style="width: 100%">
           <el-table-column prop="className"
@@ -80,6 +88,7 @@ export default {
   data () {
     return {
 
+      searchclass: "",
       cName: [],
       classCount: "",
       cPeoplecount: [],
@@ -96,6 +105,16 @@ export default {
     };
   },
   methods: {
+    searchtitle () {
+      this.$axios
+        .get(
+          "/classes/?search=" +
+          this.searchclass
+        )
+        .then(response => {
+          this.tableData = response.data;
+        });
+    },
     homework (row) {
       window.open("/homework?className=" + row.className);
     },
@@ -122,31 +141,35 @@ export default {
                     this.form.studentUserName = response.data[0].username;
                     this.form.studentRealName = response.data[0].realname;
                     this.form.studentNumber = response.data[0].number;
+
+                    this.$axios.post("/AddClass/", this.form)
+                      .then(response => {
+                        if (response.data == "JoinOk") {
+                          this.$message.success("加入成功！");
+
+                          return;
+                        }
+                        if (response.data == "RepeatJoin") {
+                          this.$message.error("请不要重复加入同一班级！");
+                          return;
+                        }
+                        if (response.data == "JoinFail") {
+                          this.$message.error("加入班级失败（" + response + "）");
+                          return;
+                        }
+                        this.$message({
+                          message: "加入班级成功！",
+                          type: "success"
+                        });
+                      }
+                      );
+
+
                   }
                 ).catch(function (error) {
                   console.log(error);
                 });
-              this.$axios.post("/AddClass/", this.form)
-                .then(response => {
-                  if (response.data == "JoinOk") {
-                    this.$message.success("加入成功！");
 
-                    return;
-                  }
-                  if (response.data == "RepeatJoin") {
-                    this.$message.error("请不要重复加入同一班级！");
-                    return;
-                  }
-                  if (response.data == "JoinFail") {
-                    this.$message.error("加入班级失败（" + response + "）");
-                    return;
-                  }
-                  this.$message({
-                    message: "加入班级成功！",
-                    type: "success"
-                  });
-                }
-                );
             })
           }
         }).catch(error => {

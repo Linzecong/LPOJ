@@ -24,6 +24,15 @@
 
     </el-row>
     <el-row>
+      <el-input placeholder="输入班级名称以搜索..."
+                v-model="searchclass"
+                @keyup.native.enter="searchtitle"
+                style="float:right;width:300px;">
+        <el-button slot="append"
+                   icon="el-icon-search"
+                   @click="searchtitle"></el-button>
+      </el-input>
+
       <el-table :data="tableData"
                 style="width: 100%">
         <el-table-column prop="className"
@@ -76,11 +85,11 @@ export default {
     return {
       dialogFormVisible: false,
 
+      searchclass: "",
       tableData: [],
       tableData2: [],
       cName: [],
       classCount: "",
-      tmpform: [],
       cPeoplecount: [],
       form: {
         className: "",
@@ -90,16 +99,46 @@ export default {
     };
   },
   methods: {
+    searchtitle () {
+      this.$axios
+        .get(
+          "/classes/?search=" +
+          this.searchclass
+        )
+        .then(response => {
+          this.tableData = response.data;
+        });
+    },
     openClass (row) {
-      this.tmpform = row;
-      this.tmpform.canjoinclass = "open";
 
-      var tmpsize = this.tmpform.classSize.split("/");
-      this.tmpform.classSize = tmpsize[1];
+      var deepCopy = function (obj) {
+        var str,
+          newobj = obj.constructor === Array ? [] : {};
+        if (typeof obj !== "object") {
+          return;
+        } else if (window.JSON) {
+          (str = JSON.stringify(obj)), //系列化对象
+            (newobj = JSON.parse(str)); //还原
+        } else {
+          for (var i in obj) {
+            newobj[i] = typeof obj[i] === "object" ? cloneObj(obj[i]) : obj[i];
+          }
+        }
+        return newobj;
+      };
+
+      var tmpform = row;
+      tmpform = deepCopy(tmpform);
+      var tmpsize = tmpform.classSize.split("/");
+      tmpsize = String(tmpsize[1]);
+      tmpform.classSize = tmpsize;
+      tmpform.canjoinclass = "open";
+      console.log(tmpform);
+
       this.$axios.get("/classes/?className=" + row.className)
         .then(res => {
           var putId = res.data[0].id;
-          this.$axios.put("/classes/" + putId + "/", this.tmpform)
+          this.$axios.put("/classes/" + putId + "/", tmpform)
             .then(res2 => {
               this.$message.success("已开放班级" + row.className);
             })
@@ -110,20 +149,37 @@ export default {
             });
         })
 
-      this.tmpform.classSize = tmpsize[0] + "/" + tmpsize[1];
 
     },
     closeClass (row) {
-      this.tmpform = row;
-      this.tmpform.canjoinclass = "close";
+      var deepCopy = function (obj) {
+        var str,
+          newobj = obj.constructor === Array ? [] : {};
+        if (typeof obj !== "object") {
+          return;
+        } else if (window.JSON) {
+          (str = JSON.stringify(obj)), //系列化对象
+            (newobj = JSON.parse(str)); //还原
+        } else {
+          for (var i in obj) {
+            newobj[i] = typeof obj[i] === "object" ? cloneObj(obj[i]) : obj[i];
+          }
+        }
+        return newobj;
+      };
 
-      var tmpsize = this.tmpform.classSize.split("/");
-      this.tmpform.classSize = tmpsize[1];
+      var tmpform = row;
+      tmpform = deepCopy(tmpform);
+      var tmpsize = tmpform.classSize.split("/");
+      tmpsize = String(tmpsize[1]);
+      tmpform.classSize = tmpsize;
+      tmpform.canjoinclass = "close";
+      console.log(tmpform);
 
       this.$axios.get("/classes/?className=" + row.className)
         .then(res => {
           var putId = res.data[0].id;
-          this.$axios.put("/classes/" + putId + "/", this.tmpform)
+          this.$axios.put("/classes/" + putId + "/", tmpform)
             .then(res2 => {
               this.$message.success("已关闭班级" + row.className);
             })
@@ -135,7 +191,6 @@ export default {
         })
 
 
-      this.tmpform.classSize = tmpsize[0] + "/" + tmpsize[1];
     },
     AddClass () {
       console.log(this.form);
@@ -186,6 +241,7 @@ export default {
           })
       })
     },
+
   },
   created () {
 

@@ -7,6 +7,7 @@ from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST,HTTP_204_NO_
 from rest_framework.views import APIView
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.throttling import ScopedRateThrottle
+from .permission import ManagerOnly
 from .models import  theClasses,ClassStudentData
 from .serializers import ClassDataSerializer,ClassStudentDataSerializer
 # Create your views here.
@@ -16,7 +17,8 @@ class ClassDataView(viewsets.ModelViewSet):
     queryset = theClasses.objects.all()
     serializer_class = ClassDataSerializer
     filter_fields = ('className',)
-    search_fields = ('className', 'classSize')
+    search_fields = ('className',)
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter)
     pagination_class = LimitOffsetPagination
     throttle_scope = "post"
 
@@ -51,7 +53,8 @@ class ClassStudentDataView(viewsets.ModelViewSet):
     queryset = ClassStudentData.objects.all()
     serializer_class = ClassStudentDataSerializer
     filter_fields = ('studentUserName','studentNumber','className','studentRealName')
-    search_fields = ('studentUserName','studentNumber','className','studentRealName')
+    search_fields = ('studentUserName','studentNumber','studentRealName')
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter)
     throttle_scope = "post"
     pagination_class = LimitOffsetPagination
 
@@ -65,13 +68,9 @@ class ClassStudentDataAPIView(APIView):
         CName = data["className"]
         Number = data["studentNumber"]
         serializer = ClassStudentDataSerializer(data=data)
-
         if serializer.is_valid(raise_exception=True):
             if ClassStudentData.objects.filter(studentUserName__exact=Name,className__exact=CName,studentNumber__exact=Number):
-                print("case1")
                 return Response("RepeatJoin", HTTP_200_OK)
-
-            print("case2")
             serializer.save()
             return Response("JoinOk", status=HTTP_200_OK)
 

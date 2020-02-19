@@ -9,6 +9,15 @@
       </center>
     </el-row>
     <el-row>
+      <el-input placeholder="输入用户名/学号/姓名以搜索..."
+                v-model="searchstudent"
+                @keyup.native.enter="searchstu"
+                style="float:right;width:300px;">
+        <el-button slot="append"
+                   icon="el-icon-search"
+                   @click="searchstu"></el-button>
+      </el-input>
+
       <el-table :data="TableData"
                 style="width: 100%">
         <el-table-column prop="studentUserName"
@@ -45,12 +54,23 @@
 export default {
   data () {
     return {
+      searchstudent: "",
       classPeopleCount: "",
       className: "",
       TableData: [],
     }
   },
   methods: {
+    searchstu () {
+      this.$axios
+        .get(
+          "/classStudent/?search=" +
+          this.searchstudent
+        )
+        .then(response => {
+          this.TableData = response.data;
+        });
+    },
     DeleteStudent (row) {
       this.$axios.get("/classStudent/?studentName=" + row.studentName + "&className=" + this.className)
         .then(

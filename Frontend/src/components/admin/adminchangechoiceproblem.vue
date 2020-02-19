@@ -1,5 +1,14 @@
 <template>
   <el-row>
+    <el-input placeholder="输入题目信息以搜索..."
+              v-model="searchchoicepro"
+              @keyup.native.enter="searchpro"
+              style="float:right;width:300px;">
+      <el-button slot="append"
+                 icon="el-icon-search"
+                 @click="searchpro"></el-button>
+    </el-input>
+
     <el-table :data="tabledata">
       <el-table-column property="ChoiceProblemId"
                        label="ID"
@@ -103,7 +112,7 @@ export default {
   data () {
     return {
       changechoiceproblemid: "",
-
+      searchchoicepro: "",
       dialogTableVisible: false,
       tabledata: [],
       choiceproblemform: {
@@ -118,6 +127,16 @@ export default {
   },
 
   methods: {
+    searchpro () {
+      this.$axios
+        .get(
+          "/choiceproblem/?search=" +
+          this.searchchoicepro
+        )
+        .then(response => {
+          this.tabledata = response.data;
+        });
+    },
     AddChoiceProblemSubmit () {
       console.log(this.choiceproblemform);
       this.$confirm(

@@ -32,7 +32,10 @@ class ProblemView(viewsets.GenericViewSet, mixins.DestroyModelMixin, mixins.Crea
 class ChoiceProblemView(viewsets.ModelViewSet):
     queryset = ChoiceProblem.objects.all()
     serializer_class = ChoiceProblemSerializer
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter)
     filter_fields = ('ChoiceProblemId','des')
+    permission_classes = (ManagerOnly,)
+    search_fields = ('des',)
     throttle_scope = "post"
 
 class ProblemDataView(viewsets.ModelViewSet):
