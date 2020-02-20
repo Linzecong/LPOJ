@@ -1,193 +1,149 @@
-version: '2'
+version: "2"
 services:
   db:
     image: ccr.ccs.tencentyun.com/lpoj/database
     command: --default-authentication-plugin=mysql_native_password
     environment:
-            MYSQL_ROOT_PASSWORD: "lpojdatabase" # 选择性修改，如果你有自己的数据库，请忽略
+      MYSQL_ROOT_PASSWORD: "lpojdatabase" # 选择性修改，如果你有自己的数据库，请忽略
     ports:
-     - "3306:3306"
+      - "3306:3306"
     restart: always
     volumes:
-        - "./Database/data:/var/lib/mysql"
-        - "./Database/conf:/etc/mysql/mysql.conf.d"
+      - "./Database/data:/var/lib/mysql"
+      - "./Database/conf:/etc/mysql/mysql.conf.d"
 
   backend1:
     image: ccr.ccs.tencentyun.com/lpoj/backend
-    depends_on: 
-       - db
-    command: >
-      /bin/bash -c '
-      sleep 40 ;
-      python manage.py makemigrations &&
-      python manage.py makemigrations judgestatus item problem user contest board blog wiki &&
-      python manage.py migrate &&
-      echo "from django.contrib.auth.models import User; User.objects.filter(email=\"admin@example.com\").delete(); User.objects.create_superuser(\"admin\", \"admin@example.com\", \"admin\")" | python manage.py shell &&
-      gunicorn -w 5 --bind 0.0.0.0:8000 -k 'gevent' Backend.wsgi:application
-      '
-    
-    links: 
-      - db:lpojdatabase 
+    depends_on:
+      - db
+    links:
+      - db:lpojdatabase
     environment:
-            DB_PASSWORD: "lpojdatabase" # 选择性修改
-            DB_HOST: "lpojdatabase" # 选择性修改
-            DB_USER: 'root' # 选择性修改
-            DB_PORT: 3306 # 选择性修改
+      DB_PASSWORD: "lpojdatabase" # 选择性修改
+      DB_HOST: "lpojdatabase" # 选择性修改
+      DB_USER: "root" # 选择性修改
+      DB_PORT: 3306 # 选择性修改
     ports:
-     - "8000:8000"
+      - "8000:8000"
     restart: always
     volumes:
-        - "./Backend:/Backend"
+      - "./Backend:/Backend"
 
   backend2:
     image: ccr.ccs.tencentyun.com/lpoj/backend
-    depends_on: 
-       - backend1
-    command: >
-      /bin/bash -c '
-      sleep 70 ;
-      gunicorn -w 5 --bind 0.0.0.0:8000 -k 'gevent' Backend.wsgi:application
-      '
-    links: 
-      - db:lpojdatabase 
+    depends_on:
+      - backend1
+    command: gunicorn -w 5 --bind 0.0.0.0:8000 -k 'gevent' Backend.wsgi:application
+    links:
+      - db:lpojdatabase
     environment:
-            DB_PASSWORD: "lpojdatabase" # 选择性修改
-            DB_HOST: "lpojdatabase" # 选择性修改
-            DB_USER: 'root' # 选择性修改
-            DB_PORT: 3306 # 选择性修改
+      DB_PASSWORD: "lpojdatabase" # 选择性修改
+      DB_HOST: "lpojdatabase" # 选择性修改
+      DB_USER: "root" # 选择性修改
+      DB_PORT: 3306 # 选择性修改
     ports:
-     - "8001:8000"
+      - "8001:8000"
     restart: always
     volumes:
-        - "./Backend:/Backend"
-    
+      - "./Backend:/Backend"
+
   backend3:
     image: ccr.ccs.tencentyun.com/lpoj/backend
-    depends_on: 
-       - backend1
-    command: >
-      /bin/bash -c '
-      sleep 70 ;
-      gunicorn -w 5 --bind 0.0.0.0:8000 -k 'gevent' Backend.wsgi:application
-      '
-    links: 
-      - db:lpojdatabase 
+    depends_on:
+      - backend1
+    command: gunicorn -w 5 --bind 0.0.0.0:8000 -k 'gevent' Backend.wsgi:application
+
+    links:
+      - db:lpojdatabase
     environment:
-            DB_PASSWORD: "lpojdatabase" # 选择性修改
-            DB_HOST: "lpojdatabase" # 选择性修改
-            DB_USER: 'root' # 选择性修改
-            DB_PORT: 3306 # 选择性修改
+      DB_PASSWORD: "lpojdatabase" # 选择性修改
+      DB_HOST: "lpojdatabase" # 选择性修改
+      DB_USER: "root" # 选择性修改
+      DB_PORT: 3306 # 选择性修改
     ports:
-     - "8002:8000"
+      - "8002:8000"
     restart: always
     volumes:
-        - "./Backend:/Backend"
+      - "./Backend:/Backend"
 
   frontend:
     image: ccr.ccs.tencentyun.com/lpoj/frontend
-    depends_on: 
+    depends_on:
       - backend3
-    command: >
-      /bin/bash -c '
-      sleep 80 ;
-      nginx -g "daemon off;"
-      '
-    links: 
+    links:
       - backend1:lpojbackend1
       - backend2:lpojbackend2
       - backend3:lpojbackend3
     ports:
-     - "8080:80"
+      - "8080:80"
     restart: always
     volumes:
       - "./Frontend/dist/img:/Frontend/dist/img"
-  
+
   frontendmobile:
     image: ccr.ccs.tencentyun.com/lpoj/frontendmobile
-    depends_on: 
+    depends_on:
       - backend3
-    command: >
-      /bin/bash -c '
-      sleep 80 ;
-      nginx -g "daemon off;"
-      '
-    links: 
+    links:
       - backend1:lpojbackend1
       - backend2:lpojbackend2
       - backend3:lpojbackend3
     ports:
-     - "8081:8081"
+      - "8081:8081"
     restart: always
     volumes:
       - "./FrontendMobile/dist/img:/FrontendMobile/dist/img"
 
   judgerserver:
     image: ccr.ccs.tencentyun.com/lpoj/judgerserver
-    depends_on: 
+    depends_on:
       - db
-    command: >
-      /bin/bash -c '
-      sleep 60 ;
-      python main.py
-      '
-    links: 
+    links:
       - db:lpojdatabase
     environment:
-            DB_PASSWORD: "lpojdatabase" # 选择性修改
-            DB_HOST: "lpojdatabase" # 选择性修改
-            DB_USER: 'root' # 选择性修改
-            DB_PORT: 3306 # 选择性修改
+      DB_PASSWORD: "lpojdatabase" # 选择性修改
+      DB_HOST: "lpojdatabase" # 选择性修改
+      DB_USER: "root" # 选择性修改
+      DB_PORT: 3306 # 选择性修改
     ports:
-     - "9906:9906"
+      - "9906:9906"
     restart: always
 
   crawlingserver:
     image: ccr.ccs.tencentyun.com/lpoj/crawlingserver
-    depends_on: 
+    depends_on:
       - backend3
-    command: >
-      /bin/bash -c '
-      sleep 60 ;
-      python main.py
-      '
-    links: 
+    links:
       - db:lpojdatabase
     environment:
-            DB_PASSWORD: "lpojdatabase" # 选择性修改
-            DB_HOST: "lpojdatabase" # 选择性修改
-            DB_USER: 'root' # 选择性修改
-            DB_PORT: 3306 # 选择性修改
+      DB_PASSWORD: "lpojdatabase" # 选择性修改
+      DB_HOST: "lpojdatabase" # 选择性修改
+      DB_USER: "root" # 选择性修改
+      DB_PORT: 3306 # 选择性修改
     restart: always
-    
+
   judger:
     image: ccr.ccs.tencentyun.com/lpoj/judger
-    depends_on: 
-      - judgerserver 
-    command: >
-      /bin/bash -c '
-      sleep 65 ;
-      python3 main.py
-      '
-    links: 
+    depends_on:
+      - judgerserver
+    links:
       - judgerserver:lpojjudgerserver
       - db:lpojdatabase
     environment:
       DB_PASSWORD: "lpojdatabase" # 选择性修改
       DB_HOST: "lpojdatabase" # 选择性修改
-      DB_USER: 'root' # 选择性修改
+      DB_USER: "root" # 选择性修改
       DB_PORT: 3306
 
       SERVER_IP: "lpojjudgerserver"
       SFTP_PORT: 22
 
-      
       SFTP_IP: "172.17.0.1" # 必须修改，不能写127.0.0.1或localhost，必须写你的局域网地址或者公网地址
-      SFTP_USER: 'ubuntu' # 必须修改
-      SFTP_PASSWORD: 'ubuntuubuntu' # 必须修改
+      SFTP_USER: "ubuntu" # 必须修改
+      SFTP_PASSWORD: "ubuntuubuntu" # 必须修改
       BACKEND_PATH: "/home/ubuntu/LPOJ/Backend/" # 必须修改
       NO_DOWNLOAD: "no" # 设为yes，则不使用sftp，需要手动将数据压缩包放到Judger/ProblemData中
 
     restart: always
     volumes:
-        - "./Judger/ProblemData:/Judger/ProblemData"
-    
+      - "./Judger/ProblemData:/Judger/ProblemData"
