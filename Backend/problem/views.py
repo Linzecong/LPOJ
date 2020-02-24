@@ -93,6 +93,9 @@ class UploadFileAPIView(APIView):
 
 
 def filedown(request):
+    type = request.session.get('type', 1)
+    if type == 1:
+        return Response("Admin Only", status=HTTP_403_FORBIDDEN)
     name = request.GET.get('name')
     file = open('./ProblemData/'+name+'.zip','rb')
     response = FileResponse(file)

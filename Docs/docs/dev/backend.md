@@ -75,7 +75,7 @@ mysql > GRANT ALL PRIVILEGES ON *.* TO 'root'@'%'  IDENTIFIED BY 'your_password'
 mysql > ALTER user 'root'@'%' IDENTIFIED WITH mysql_native_password by 'your_password';
 mysql > flush privileges;
 mysql > exit;
-sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf 
+sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
 ```
 具体内容的意思就是新建一个名为LPOJ的数据库，并给予root用户所有权限。
 
@@ -242,9 +242,9 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 | model | 功能 |
 | :--  | :-- |
-| Banner | 首页新闻 | 
-| OJMessage | 留言板信息 | 
-| Blog | 爬虫得到的博客条目 | 
+| Banner | 首页新闻 |
+| OJMessage | 留言板信息 |
+| Blog | 爬虫得到的博客条目 |
 
 **Banner**
 
@@ -285,7 +285,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 | :--  | :--: | :--: |
 | BannerSerializer | ALL |
 | OJMessageSerializer | ALL |
-| BlogSerializer | ALL | 
+| BlogSerializer | ALL |
 
 
 **views.py**
@@ -298,11 +298,11 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 **urls.py**
 
-| 视图 | 访问路由  | 
+| 视图 | 访问路由  |
 | :--  | :-- |
-| BannerView | http://localhost:8000/banner/  | 
-| OJMessageView | http://localhost:8000/ojmessage/  | 
-| BlogView | http://localhost:8000/blog/ |  
+| BannerView | http://localhost:8000/banner/  |
+| OJMessageView | http://localhost:8000/ojmessage/  |
+| BlogView | http://localhost:8000/blog/ |
 
 
 ### Board
@@ -313,11 +313,11 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 | model | 功能 |
 | :--  | :-- |
-| SettingBoard | 保存OJ的设置 | 
-| Board | 用户爬虫需要的一些信息 | 
-| DailyBoard | 用户每天的AC题目数统计 | 
-| TeamBoard | 队伍Rating信息（该功能暂时弃用） | 
-| DailyContestBoard | 队伍排位赛的一些信息，用于备份，作用不大 | 
+| SettingBoard | 保存OJ的设置 |
+| Board | 用户爬虫需要的一些信息 |
+| DailyBoard | 用户每天的AC题目数统计 |
+| TeamBoard | 队伍Rating信息（该功能暂时弃用） |
+| DailyContestBoard | 队伍排位赛的一些信息，用于备份，作用不大 |
 
 **SettingBoard**
 | 属性 | 功能 | 类型 | 说明 |
@@ -379,9 +379,9 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 | serializers | 序列化字段 |
 | :--  | :--: | :--: |
 | SettingBoardSerializer | ALL |
-| BoardSerializer | ALL | 
+| BoardSerializer | ALL |
 | DailyBoardSerializer | ALL |
-| TeamBoardSerializer | ALL | 
+| TeamBoardSerializer | ALL |
 | DailyContestBoardSerializer | ALL |
 
 **views.py**
@@ -396,13 +396,76 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 **urls.py**
 
-| 视图 | 访问路由  | 
+| 视图 | 访问路由  |
 | :--  | :-- |
-| SettingBoardView | http://localhost:8000/settingboard/  | 
-| BoardView | http://localhost:8000/board/ |  
-| DailyBoardView |http://localhost:8000/dailyboard/  | 
+| SettingBoardView | http://localhost:8000/settingboard/  |
+| BoardView | http://localhost:8000/board/ |
+| DailyBoardView |http://localhost:8000/dailyboard/  |
 | TeamBoardView | http://localhost:8000/teamboard/  |
-| DailyContestBoardView | http://localhost:8000/dailycontestboard/  | 
+| DailyContestBoardView | http://localhost:8000/dailycontestboard/  |
+
+### Classes
+
+此模块主要用来实现班级相关的API
+
+**models.py**
+
+| model | 功能 |
+| :--  | :-- |
+| ClassStudentData | 学生与班级关系的基本信息 |
+| theClasses | 班级的基本信息 |
+
+**ClassStudentData**
+
+| 属性 | 功能 | 类型 | 说明 |
+| :--  | :-- | :-- | :-- |
+| studentUserName | 学生用户名 | CharField |  |
+| studentNumber | 学生学号 | CharField |  |
+| className | 学生所在班级 | CharField |  |
+| studentRealName | 学生真实姓名 | CharField |  |
+
+**theClasses**
+
+| 属性 | 功能 | 类型 | 说明 |
+| :--  | :-- | :-- | :-- |
+| className | 班级姓名 | CharField |  |
+| classSize | 班级总人数 | CharField |  |
+| canjoinclass | 班级是否开放加入 | CharField |  |
+
+**permission.py**
+
+| permission | 读权限 | 写权限 |
+| :--  | :--: | :--: |
+| ManagerOnly | 有 | 仅管理员 |
+
+**serializers.py**
+
+| serializers | 序列化字段 |
+| :--  | :--: | :--: |
+| ClassDataSerializer | ALL |
+| ClassStudentDataSerializer | ALL |
+
+**views.py**
+
+| 视图 | 查询集合  | 可过滤字段 | 权限 | 可分页 | 可搜索 |
+| :--  | :--: |:--: |  :--: | :--: | :--: |
+| ClassDataView | ALL  | ("className",) |  无 | 否 | 是 |
+| ClassStudentDataView | ALL  | ('studentUserName','studentNumber','className','studentRealName') | 无 | 否 | 是 |
+| ClassDataAPIView | 用于添加班级 | 无 |  无 | 否 | 否 |
+| DeleteClassDataAPIView | 用于删除班级 | 无 |  无 | 否 | 否 |
+| ClassStudentDataAPIView | 用于学生加入班级 | 无 |  无 | 否 | 否 |
+| QuitClassAPIView | 用于学生退出班级（暂时弃用） | 无 |  无 | 否 | 否 |
+
+**urls.py**
+
+| 视图 | 访问路由  |
+| :--  | :-- |
+| ClassDataView | http://localhost:8000/classes/  |
+| ClassStudentDataView | http://localhost:8000/classStudent/  |
+| ClassDataAPIView | http://localhost:8000/ADDclasses/  |
+| ClassStudentDataAPIView | http://localhost:8000/AddClass/  |
+| DeleteClassDataAPIView | http://localhost:8000/DeleteClass/  |
+| QuitClassAPIView | http://localhost:8000/QuitClass/  |
 
 ### Contest
 
@@ -412,15 +475,17 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 | model | 功能 |
 | :--  | :-- |
-| ContestInfo | 比赛的基本信息 | 
-| ContestAnnouncement | 比赛中的通知 | 
-| ContestProblem | 比赛包含的题目 | 
-| ContestBoard | 比赛排行榜信息 | 
-| ContestComment | 比赛提问 | 
-| ContestTutorial | 比赛题解 | 
-| ContestRegister | 比赛注册的用户 | 
-| ContestRatingChange | 比赛的积分变化信息 | 
+| ContestInfo | 比赛的基本信息 |
+| ContestAnnouncement | 比赛中的通知 |
+| ContestProblem | 比赛包含的题目 |
+| ContestBoard | 比赛排行榜信息 |
+| ContestComment | 比赛提问 |
+| ContestTutorial | 比赛题解 |
+| ContestRegister | 比赛注册的用户 |
+| ContestRatingChange | 比赛的积分变化信息 |
 | ContestComingInfo | 各大OJ近期的比赛汇总，由爬虫机器人收集 |
+| ContestChoiceProblem | 比赛的选择题 |
+| StudentChoiceAnswer | 学生选择题的答题 |
 
 **ContestInfo**
 
@@ -519,6 +584,25 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 | endTime | 比赛结束时间 | BigIntegerField | 毫秒为单位 |
 | contestName | 比赛名称 | CharField |  |
 
+**ContestChoiceProblem**
+
+| 属性 | 功能 | 类型 | 说明 |
+| :--  | :-- | :-- | :-- |
+| ContestId | 比赛ID | IntegerField |  |
+| ChoiceProblemId | 比赛选择题ID | CharField |  |
+| rank | 选择题顺序 | IntegerField |  |
+
+**StudentChoiceAnswer**
+
+| 属性 | 功能 | 类型 | 说明 |
+| :--  | :-- | :-- | :-- |
+| username | 用户名 | CharField |  |
+| realname | 真实姓名 | CharField |  |
+| number | 学号 | CharField |  |
+| contestid | 比赛ID | CharField |  |
+| answer | 学生作答的答案 | CharField |  |
+| score | 得分 | IntegerField |  |
+
 **permission.py**
 
 | permission | 读权限 | 写权限 |
@@ -532,13 +616,13 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 | serializers | 序列化字段 |
 | :--  | :--: | :--: |
 | ContestAnnouncementSerializer | ALL |
-| ContestTutorialSerializer | ALL | 
+| ContestTutorialSerializer | ALL |
 | ContestBoardSerializer | ALL |
-| ContestCommentSerializer | ALL | 
+| ContestCommentSerializer | ALL |
 | ContestInfoSerializer | ALL |
-| ContestProblemSerializer | ALL | 
+| ContestProblemSerializer | ALL |
 | ContestRegisterSerializer | ALL |
-| ContestRatingChangeSerializer | ALL | 
+| ContestRatingChangeSerializer | ALL |
 | ContestComingInfoSerializer | ALL |
 
 **views.py**
@@ -555,23 +639,26 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 | ContestRegisterView | ALL  | ('user', "contestid") |  UserRatingOnly2 | 是 | 否 |
 | ContestRatingChangeView | 比赛时间倒序  | ('user', "contestid") |  ManagerOnly | 是 | 否 |
 | CurrentTimeView | 当前时间 | 无 |  无 | 否 | 否 |
+| StudentChoiceAnswerView | ALL  | ('username','contestid') |   ManagerOnly | 否 | 否 |
+| ContestChoiceProblemView | ALL  | ('ContestId','ChoiceProblemId', "rank") |  ManagerOnly | 否 | 否 |
 
 
 **urls.py**
 
-| 视图 | 访问路由  | 
+| 视图 | 访问路由  |
 | :--  | :-- |
-| ContestAnnouncementView | http://localhost:8000/contestannouncement/  | 
-| ContestTutorialView | http://localhost:8000/contesttutorial/  | 
-| ContestBoardView | http://localhost:8000/settingboard/  | 
-| ContestCommentView | http://localhost:8000/contestcomment/  | 
-| ContestInfoView | http://localhost:8000/contestinfo/  | 
-| ContestComingInfoView | http://localhost:8000/contestcominginfo/  | 
-| ContestProblemView | http://localhost:8000/contestproblem/  | 
+| ContestAnnouncementView | http://localhost:8000/contestannouncement/  |
+| ContestTutorialView | http://localhost:8000/contesttutorial/  |
+| ContestBoardView | http://localhost:8000/settingboard/  |
+| ContestCommentView | http://localhost:8000/contestcomment/  |
+| ContestInfoView | http://localhost:8000/contestinfo/  |
+| ContestComingInfoView | http://localhost:8000/contestcominginfo/  |
+| ContestProblemView | http://localhost:8000/contestproblem/  |
 | ContestRegisterView | http://localhost:8000/contestregister/  |
-| ContestRatingChangeView | http://localhost:8000/contestratingchange/  | 
+| ContestRatingChangeView | http://localhost:8000/contestratingchange/  |
 | CurrentTimeView | http://localhost:8000/currenttime/ |
-
+| StudentChoiceAnswerView | http://localhost:8000/conteststudentchoiceanswer/ |
+| ContestChoiceProblemView | http://localhost:8000/contestchoiceproblem/ |
 
 ### Judgestatus
 
@@ -581,8 +668,8 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 | model | 功能 |
 | :--  | :-- |
-| JudgeStatus | 提交判题的信息 | 
-| CaseStatus | 每一个case的情况 | 
+| JudgeStatus | 提交判题的信息 |
+| CaseStatus | 每一个case的情况 |
 
 
 **JudgeStatus**
@@ -605,6 +692,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 | message | 额外信息 | TextField | 保存编译错误信息，运行时错误信息等，同时也作为其他OJ的题目ID，用于VJudge |
 | problemtitle | 提交的标题 | CharField |  |
 | rating | 用户留言时的Rating | IntegerField | 用于实现前端改变颜色 |
+| ip | 提交用户的ip | CharField | 提交者ip地址 |
 
 **CaseStatus**
 
@@ -634,8 +722,8 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 | serializers | 序列化字段 |
 | :--  | :--: | :--: |
 | JudgeStatusSerializer | 不包括代码 |
-| JudgeStatusCodeSerializer | ALL | 
-| CaseStatusSerializer | ALL | 
+| JudgeStatusCodeSerializer | ALL |
+| CaseStatusSerializer | ALL |
 
 **views.py**
 
@@ -649,12 +737,12 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 **urls.py**
 
-| 视图 | 访问路由  | 
+| 视图 | 访问路由  |
 | :--  | :-- |
-| JudgeStatusView | http://localhost:8000/judgestatus/  | 
-| JudgeStatusPutView | http://localhost:8000/judgestatusput/ |  
-| JudgeStatusCodeView | http://localhost:8000/judgestatuscode/  | 
-| CaseStatusView | http://localhost:8000/casestatus/ |  
+| JudgeStatusView | http://localhost:8000/judgestatus/  |
+| JudgeStatusPutView | http://localhost:8000/judgestatusput/ |
+| JudgeStatusCodeView | http://localhost:8000/judgestatuscode/  |
+| CaseStatusView | http://localhost:8000/casestatus/ |
 | RejudgeAPIView | http://localhost:8000/rejudge/ |
 
 ### Problem
@@ -665,9 +753,9 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 | model | 功能 |
 | :--  | :-- |
-| Problem | 题目的详细信息 | 
-| ProblemData | 题目的简要信息 | 
-| ProblemTag | 题目的标签 | 
+| Problem | 题目的详细信息 |
+| ProblemData | 题目的简要信息 |
+| ProblemTag | 题目的标签 |
 
 **Problem**
 | 属性 | 功能 | 类型 | 说明 |
@@ -715,6 +803,16 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 | tagname | 标签名字 | CharField | unique |
 | count | 该标签的数量 | IntegerField | 暂时弃用 |
 
+**ChoiceProblem**
+| 属性 | 功能 | 类型 | 说明 |
+| :--  | :-- | :-- | :-- |
+| ChoiceProblemId | 选择题ID | CharField | default=-1 |
+| des | 题目描述 | TextField | 描述题目 |
+| choiceA | 选项A | TextField |  |
+| choiceB | 选项B | TextField |  |
+| choiceC | 选项C | TextField |  |
+| choiceD | 选项D | TextField |  |
+
 **permission.py**
 
 | permission | 读权限 | 写权限 |
@@ -727,8 +825,8 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 | serializers | 序列化字段 |
 | :--  | :--: | :--: |
 | ProblemSerializer | ALL |
-| ProblemDataSerializer | ALL | 
-| ProblemTagSerializer | ALL | 
+| ProblemDataSerializer | ALL |
+| ProblemTagSerializer | ALL |
 
 **views.py**
 
@@ -738,15 +836,20 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 | ProblemDataView | ID倒序  | ('auth','oj',) |  ManagerOnly | 是 | ('tag', 'title') |
 | ProblemTagView | ALL  | 无 |  ManagerOnly | 否 | 否 |
 | UploadFileAPIView | 用于上传测试数据  | 无 |  仅管理员 | 否 | 否 |
+| filedown | 用于下载测试数据  | 无 |  仅管理员 | 否 | 否 |
+| showpic | 用于显示图片  | 无 |  | 否 | 否 |
 
 **urls.py**
 
-| 视图 | 访问路由  | 
+| 视图 | 访问路由  |
 | :--  | :-- |
-| ProblemView | http://localhost:8000/problem/  | 
-| ProblemDataView | http://localhost:8000/problemdata/ |  
-| ProblemTagView | http://localhost:8000/problemtag/  | 
-| UploadFileAPIView | http://localhost:8000/uploadfile/ |  
+| ProblemView | http://localhost:8000/problem/  |
+| ProblemDataView | http://localhost:8000/problemdata/ |
+| ProblemTagView | http://localhost:8000/problemtag/  |
+| UploadFileAPIView | http://localhost:8000/uploadfile/ |
+| ChoiceProblemView | http://localhost:8000/choiceproblem/ |
+| filedown | http://localhost:8000/downloadfile/ |
+| showpic/ | http://localhost:8000/showpic/ |
 
 ### User
 
@@ -756,9 +859,9 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 | model | 功能 |
 | :--  | :-- |
-| User | 用户的详细信息 | 
-| UserData | 用户的简要信息 | 
-| UserLoginData | 用户的登录信息 | 
+| User | 用户的详细信息 |
+| UserData | 用户的简要信息 |
+| UserLoginData | 用户的登录信息 |
 
 **User**
 | 属性 | 功能 | 类型 | 说明 |
@@ -770,7 +873,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 | logintime | 上次登录时间 | DateTimeField | auto_now（暂时弃用，见userlogindata表） |
 | school | 学校 | CharField |  |
 | course | 专业 | CharField |  |
-| classes | 班级 | CharField |  |
+| originclass | 班级 | CharField |  |
 | number | 学号 | CharField |  |
 | realname | 真实姓名 | CharField |  |
 | qq | QQ | CharField |  |
@@ -813,10 +916,10 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 | serializers | 序列化字段 |
 | :--  | :--: | :--: |
 | UserSerializer | ALL |
-| UserNoPassSerializer | 不包括密码 | 
-| UserNoTypeSerializer | 不包括权限 | 
-| UserDataSerializer | ALL | 
-| UserLoginDataSerializer | ALL | 
+| UserNoPassSerializer | 不包括密码 |
+| UserNoTypeSerializer | 不包括权限 |
+| UserDataSerializer | ALL |
+| UserLoginDataSerializer | ALL |
 
 **views.py**
 
@@ -834,17 +937,17 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 **urls.py**
 
-| 视图 | 访问路由  | 
+| 视图 | 访问路由  |
 | :--  | :-- |
-| UserDataView | http://localhost:8000/problem/  | 
-| UserView | http://localhost:8000/problemdata/ |  
-| UserChangeView | http://localhost:8000/problemtag/  | 
-| UserChangeAllView | http://localhost:8000/uploadfile/ | 
-| UserRegisterAPIView | http://localhost:8000/problemtag/  | 
-| UserLoginAPIView | http://localhost:8000/uploadfile/ | 
-| UserLogoutAPIView | http://localhost:8000/problemtag/  | 
-| UserUpdateRatingAPIView | http://localhost:8000/uploadfile/ | 
-| UserLoginDataView | http://localhost:8000/userlogindata/ | 
+| UserDataView | http://localhost:8000/problem/  |
+| UserView | http://localhost:8000/problemdata/ |
+| UserChangeView | http://localhost:8000/problemtag/  |
+| UserChangeAllView | http://localhost:8000/uploadfile/ |
+| UserRegisterAPIView | http://localhost:8000/problemtag/  |
+| UserLoginAPIView | http://localhost:8000/uploadfile/ |
+| UserLogoutAPIView | http://localhost:8000/problemtag/  |
+| UserUpdateRatingAPIView | http://localhost:8000/uploadfile/ |
+| UserLoginDataView | http://localhost:8000/userlogindata/ |
 
 ### Wiki
 
@@ -854,10 +957,10 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 | model | 功能 |
 | :--  | :-- |
-| Wiki | 算法详情 | 
-| MBCode | 模板介绍 | 
-| MBCodeDetail | 模板详细代码 | 
-| TrainningContest | 试炼谷的内容 | 
+| Wiki | 算法详情 |
+| MBCode | 模板介绍 |
+| MBCodeDetail | 模板详细代码 |
+| TrainningContest | 试炼谷的内容 |
 
 **Wiki**
 | 属性 | 功能 | 类型 | 说明 |
@@ -913,10 +1016,10 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 | serializers | 序列化字段 |
 | :--  | :--: | :--: |
 | WikiSerializer | ALL |
-| WikiCountSerializer | 不包括内容 | 
-| MBCodeSerializer | ALL | 
-| MBCodeDetailSerializer | ALL | 
-| MBCodeDetailNoCodeSerializer | 不包括代码 | 
+| WikiCountSerializer | 不包括内容 |
+| MBCodeSerializer | ALL |
+| MBCodeDetailSerializer | ALL |
+| MBCodeDetailNoCodeSerializer | 不包括代码 |
 | TrainningContestSerializer | ALL |
 
 **views.py**
@@ -933,14 +1036,14 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 **urls.py**
 
-| 视图 | 访问路由  | 
+| 视图 | 访问路由  |
 | :--  | :-- |
-| WikiView | http://localhost:8000/wiki/  | 
-| WikiCountView | http://localhost:8000/wikicount/ |  
-| MBCodeView | http://localhost:8000/mbcode/  | 
-| MBCodeDetailView | http://localhost:8000/mbcodedetail/ | 
-| MBCodeDetailNoCodeView | http://localhost:8000/mbcodedetailnocode/  | 
-| TrainningContestView | http://localhost:8000/trainning/ | 
+| WikiView | http://localhost:8000/wiki/  |
+| WikiCountView | http://localhost:8000/wikicount/ |
+| MBCodeView | http://localhost:8000/mbcode/  |
+| MBCodeDetailView | http://localhost:8000/mbcodedetail/ |
+| MBCodeDetailNoCodeView | http://localhost:8000/mbcodedetailnocode/  |
+| TrainningContestView | http://localhost:8000/trainning/ |
 
 
 ## 修改后端
