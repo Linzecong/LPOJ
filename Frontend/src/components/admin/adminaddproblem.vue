@@ -251,7 +251,6 @@ export default {
         }
         catch (err){
           console.log(err)
-          return false
         }
         
       }
@@ -265,6 +264,7 @@ export default {
           message: "提交成功！题目编号为：" + response2.data.problem,
           type: "success"
         });
+        return true
       }
       catch(error){
         this.$message.error(error)
@@ -272,7 +272,6 @@ export default {
       }
       return true
 
-      
     },
 
     onAddProblemSubmit() {
