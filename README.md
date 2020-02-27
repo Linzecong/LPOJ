@@ -69,6 +69,8 @@ sudo docker-compose up -d --scale judger=3
 > 然后进入 IP:8000/admin 以用户名admin 密码admin 登录后台（请及时修改后台密码）
 > 
 > 修改User表中，你注册的超级用户的type为3，使得你注册的用户变为超级管理员
+> 
+> 以管理员登录，右上角进入管理员页面，然后在网站设置标签，提交一次设置
 
 3. 更新OJ
 

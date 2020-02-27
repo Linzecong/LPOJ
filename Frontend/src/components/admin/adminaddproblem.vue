@@ -211,9 +211,8 @@ export default {
       this.$message.error("数据上传失败！" + response);
     },
     handleSuccessNone(response, file, fileList) {
-      this.$message.success("上传成功！");
-      this.loading = false;
-      this.$router.go(0);
+      this.$message.success("上传数据文件成功！开始保存题目！");
+      this.handleSuccess(1, 2, 3);
     },
 
     async handleSuccess(response, file, fileList) {
@@ -228,7 +227,6 @@ export default {
       }
       catch(error){
         this.$message.error(error)
-        return false
       }
       
 
@@ -264,12 +262,13 @@ export default {
           message: "提交成功！题目编号为：" + response2.data.problem,
           type: "success"
         });
-        return true
       }
       catch(error){
         this.$message.error(error)
-        return false
       }
+
+      this.loading = false;
+      this.$router.go(0);
       return true
 
     },
@@ -285,8 +284,8 @@ export default {
             type: "warning"
           }
         ).then(() => {
-          await this.handleSuccess(1, 2, 3)
-          this.$router.go(0)
+          this.loading = true;
+          this.handleSuccess(1, 2, 3)
         });
         return;
       }
@@ -305,8 +304,6 @@ export default {
         type: "warning"
       }).then(() => {
         this.loading = true;
-        await this.handleSuccess(1, 2, 3);
-
         this.$refs.upload.submit();
       });
     }
