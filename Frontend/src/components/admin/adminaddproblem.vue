@@ -274,7 +274,7 @@ export default {
 
     },
 
-    onAddProblemSubmit() {
+    async onAddProblemSubmit() {
       if (this.fileList.length <= 0) {
         this.$confirm(
           "确定添加吗？本次添加没有添加数据文件！后续可在修改题目中添加",
@@ -285,8 +285,8 @@ export default {
             type: "warning"
           }
         ).then(() => {
-          if(this.handleSuccess(1, 2, 3)==true)
-            this.$router.go(0);
+          await this.handleSuccess(1, 2, 3)
+          this.$router.go(0)
         });
         return;
       }
@@ -305,7 +305,7 @@ export default {
         type: "warning"
       }).then(() => {
         this.loading = true;
-        this.handleSuccess(1, 2, 3);
+        await this.handleSuccess(1, 2, 3);
 
         this.$refs.upload.submit();
       });
