@@ -97,13 +97,11 @@
 </template>
 
 <script>
-import login from "@/login";
-import register from "@/register";
 export default {
   name: "App",
   components: {
-    login,
-    register
+    "login":resolve=>require(['@/login'],resolve),
+    "register":resolve=>require(['@/register'],resolve)
   },
   data() {
     return {

@@ -9,5 +9,12 @@
     ],
     "stage-3"
   ],
-  "plugins": ["transform-runtime", "syntax-dynamic-import"]
+
+  "plugins": [
+    ["import", {
+      "libraryName": "muse-ui",
+      "libraryDirectory": "lib",
+      "camel2DashComponentName": false
+    }]
+  ]
 }

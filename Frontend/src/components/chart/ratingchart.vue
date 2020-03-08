@@ -6,7 +6,7 @@
 
 <script>
 import moment from "moment";
-import echarts from "echarts";
+import echarts from "./echarts";
 export default {
   name: "ratingchart",
   data() {
