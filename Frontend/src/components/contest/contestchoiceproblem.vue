@@ -73,7 +73,6 @@ export default {
       }
     },
     Submit () {
-      console.log(this.$store.state.contestisend);
       if (this.$store.state.contestisend == true) {
         this.$message.error("比赛已结束");
       }
@@ -106,13 +105,10 @@ export default {
                         this.form.answer += "X";
                       }
                     }
-                    console.log(this.form.username);
                     this.$axios.get("/user/?username=" + this.form.username)
                       .then(response2 => {
                         this.form.realname = response2.data[0].realname;
                         this.form.number = response2.data[0].number;
-
-                        console.log(this.form);
                         this.$axios.post("/conteststudentchoiceanswer/", this.form)
                           .then(
                             response3 => {
@@ -159,16 +155,11 @@ export default {
     this.$axios.get("/contestchoiceproblem/?ContestId=" + this.$route.params.contestID)
       .then(response => {
         this.ProblenCount = response.data.length;
-        console.log(this.ProblenCount);
-        // for (var ii = 0; ii < response.data.length; ii++) {
-        //   this.AnswerMerge += "X";
-        // }
         for (var i = 0; i < response.data.length; i++) {
           this.ChoiceProblemIds.push(response.data[i].ChoiceProblemId);
         }
 
         this.ChoiceProblemIds.sort(this.compare("rank"));
-        console.log(this.ChoiceProblemIds);
 
         for (var i = 0; i < response.data.length; i++) {
           this.$axios.get(
@@ -176,7 +167,6 @@ export default {
             + response.data[i].ChoiceProblemId
           )
             .then(response2 => {
-              console.log(response2.data[0]);
               this.ChoiceProblemDatas.push(
                 this.GetItem(
                   response2.data[0].des,
@@ -188,8 +178,6 @@ export default {
                 ));
             })
         }
-
-        console.log(this.ChoiceProblemDatas);
 
       })
   }

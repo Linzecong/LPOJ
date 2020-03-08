@@ -445,47 +445,10 @@ export default {
         this.$message.error("代码过短！");
         return;
       }
-      // console.log("this.$route.params.contestID");
-      // console.log(this.$route.params.contestID);
-      // console.log("this.currentcontest");
-      // console.log(this.currentcontest);
-      this.$axios.get("/contestinfo/?id=" + this.currentcontest)
-        .then(
-          res => {
-            this.ContestIpRange = res.data[0].iprange;
-            // console.log("res.data[0].iprange");
-            // console.log(res.data[0].iprange);
-            // console.log("this.ContestIpRange");
-            // console.log(this.ContestIpRange);
-          }
-        ).catch(error => {
-          this.$message.error(
-            "服务器错误！"
-          );
-        });
+
       var Myip = require('ip').address();
       var ipr = JSON.stringify(this.ContestIpRange);
 
-      // if (this.ContestIpRange != "None") {
-      //   console.log("开始比较");
-      //   this.ContestIpRange = this.ContestIpRange.split(";");
-      //   console.log(this.ContestIpRange);
-      //   var cani = false;
-      //   for (var i = 0; i < this.ContestIpRange.length; i++) {
-      //     var c = this.ContestIpRange[i].split(",");
-      //     console.log(c[0]);
-      //     console.log(c[1]);
-      //     if (this.Myip >= this.c[0] && this.Myip <= this.c[1]) {
-      //       this.cani = true;
-      //       console.log("在范围内");
-      //       break;
-      //     }
-      //   }
-      //   if (!this.cani) {
-      //     this.$message.error("提交失败！");
-      //     return;
-      //   }
-      // }
       this.$confirm("确定提交该题吗？ 题目：" + this.title, "提交确认", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",

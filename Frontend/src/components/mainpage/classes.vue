@@ -189,16 +189,6 @@ export default {
           type: "warning"
         }
       ).then(() => {
-        //获取学号
-        // this.$axios.get("/user/?username=" + sessionStorage.username)
-        //   .then(
-        //     response => {
-        //       this.form.studentNumber = response.data[0].number;
-        //     }
-        //   ).catch(function (error) {
-        //     console.log(error);
-        //   });
-        // this.form.className = row.className;
 
         this.$axios.get("/classStudent/?studentUserName=" + sessionStorage.username + "&className=" + row.className)
           .then(
@@ -212,36 +202,6 @@ export default {
             console.log(error);
           });
 
-
-        // this.$axios.delete("/QuitClass/",
-        //   {
-        //     data: {
-        //       studentNumber: this.form.studentNumber,
-        //       studentUserName: this.form.studentUserName,
-        //       studentRealName: this.form.studentRealName,
-        //       className: row.className
-        //     }
-        //   })
-        //   .then(response => {
-        //     if (response.data == "QuitOk") {
-        //       this.$message.success("已退出班级");
-        //       return;
-        //     }
-        //     if (response.data == "AlreadyQuit") {
-        //       this.$message.error("已退出班级");
-        //       return;
-        //     }
-        //     if (response.data == "QuitFail") {
-        //       this.$message.error("退出班级失败（" + response + "）");
-        //       return;
-        //     }
-        //     // if (response.data == "QuitOk") {
-        //     //   this.$message({
-        //     //     message: "已退出班级" + this.form.className,
-        //     //     type: "success"
-        //     //   });
-        //     // }
-        //   })
       })
     },
   },
@@ -264,7 +224,6 @@ export default {
               this.cPeoplecount.push(JSON.stringify(data.length));
             }
           }
-          console.log(this.cPeoplecount);
           for (var ii = 0; ii < this.classCount; ii++) {
             this.tableData[ii].classSize = this.cPeoplecount[ii] + "/" + this.tableData[ii].classSize;
           }

@@ -12,5 +12,4 @@ urlpatterns = [
     url(r'^ADDclasses', views.ClassDataAPIView.as_view()),
     url(r'^AddClass', views.ClassStudentDataAPIView.as_view()),
     url(r'^DeleteClass', views.DeleteClassDataAPIView.as_view()),
-    url(r'^QuitClass', views.QuitClassAPIView.as_view()),
 ]

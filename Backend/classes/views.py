@@ -76,21 +76,3 @@ class ClassStudentDataAPIView(APIView):
 
         return Response("JoinFail", status=HTTP_400_BAD_REQUEST)
 
-class QuitClassAPIView(APIView):
-    queryset = ClassStudentData.objects.all()
-    serializer_class = ClassStudentDataSerializer
-    def delete(self, request, format=None):
-        data = request.data.copy()
-        Name = data["studentUserName"]
-        RName = data["studentRealName"]
-        CName = data["className"]
-        Number = data["studentNumber"]
-        # if ClassStudentData.objects.filter(studentUserName__exact=Name,className__exact=CName,studentNumber__exact=Number):
-        if ClassStudentData.objects.filter(studentUserName__exact=Name,className__exact=CName,studentNumber__exact=Number).delete():
-                return Response("QuitOk", status=HTTP_200_OK)
-        else:
-            return Response("AlreadyQuit", HTTP_200_OK)
-
-        return Response("QuitFail", status=HTTP_400_BAD_REQUEST)
-
-

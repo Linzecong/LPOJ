@@ -70,7 +70,7 @@
           <div style="text-align:center;margin:5px;">班级</div>
         </el-col>
         <el-col :span="12">
-          <el-input v-model="form.originclass"
+          <el-input v-model="form.classes"
                     autocomplete="off"
                     placeholder="请填写真实班级，必填"></el-input>
         </el-col>
@@ -138,7 +138,7 @@ export default {
         name: "",
         school: "",
         course: "",
-        originclass: "",
+        classes: "",
         number: "",
         realname: "",
         qq: "",
@@ -155,7 +155,7 @@ export default {
         !this.form.name ||
         !this.form.school ||
         !this.form.course ||
-        !this.form.originclass ||
+        !this.form.classes ||
         !this.form.number ||
         !this.form.realname
       ) {
