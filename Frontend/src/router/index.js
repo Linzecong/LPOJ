@@ -1,52 +1,32 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-// import main from '@/components/main'
-// import problem from '@/components/mainpage/problem'
-// import statue from '@/components/mainpage/statue'
-// import user from '@/components/mainpage/user'
-// import setting from '@/components/mainpage/setting'
-// import contest from '@/components/mainpage/contest'
-// import contestdetail from '@/components/contest/contestdetail'
-// import problemdetail from '@/components/problem/problemdetail'
-// import rank from '@/components/mainpage/rank'
-// import admin from '@/components/mainpage/admin'
-// import billboard from '@/components/mainpage/billboard'
-// import blog from '@/components/mainpage/blog'
-// import wiki from '@/components/mainpage/wiki'
-// import algorithm from '@/components/wiki/algorithm'
-// import mbcode from '@/components/wiki/code'
-// import trainning from '@/components/wiki/trainning'
-// import viewcode from '@/components/wiki/mbcode/viewcode'
-// import viewcodedetail from '@/components/wiki/mbcode/viewcodedetail'
-// import codeedit from '@/components/wiki/mbcode/codeedit'
-// import wikidetail from '@/components/utils/wikidetail'
-// import trainningdetail from '@/components/wiki/trainning/trainningdetail'
-// import newalgorithm from '@/components/wiki/newalgorithm'
-// import todolist from '@/components/utils/todolist'
-
-const main = r => require.ensure([], () => r(require("@/components/main")), 'main"');
-const problem = r => require.ensure([], () => r(require("@/components/mainpage/problem")), 'mainpage');
-const statue = r => require.ensure([], () => r(require("@/components/mainpage/statue")), 'mainpage'); 
-const user = r => require.ensure([], () => r(require("@/components/mainpage/user")), 'mainpage');     
-const setting = r => require.ensure([], () => r(require("@/components/mainpage/setting")), 'mainpage');
-const contest = r => require.ensure([], () => r(require("@/components/mainpage/contest")), 'mainpage');
-const contestdetail = r => require.ensure([], () => r(require("@/components/contest/contestdetail")), 'contest');
-const problemdetail = r => require.ensure([], () => r(require("@/components/problem/problemdetail")), 'problem');
-const rank = r => require.ensure([], () => r(require("@/components/mainpage/rank")), 'mainpage');     
-const admin = r => require.ensure([], () => r(require("@/components/mainpage/admin")), 'mainpage');   
-const billboard = r => require.ensure([], () => r(require("@/components/mainpage/billboard")), 'mainpage');
-const blog = r => require.ensure([], () => r(require("@/components/mainpage/blog")), 'mainpage');     
-const wiki = r => require.ensure([], () => r(require("@/components/mainpage/wiki")), 'mainpage');     
-const algorithm = r => require.ensure([], () => r(require("@/components/wiki/algorithm")), 'wiki');   
-const mbcode = r => require.ensure([], () => r(require("@/components/wiki/code")), 'wiki');
-const trainning = r => require.ensure([], () => r(require("@/components/wiki/trainning")), 'wiki');   
-const viewcode = r => require.ensure([], () => r(require("@/components/wiki/mbcode/viewcode")), 'wiki');
-const viewcodedetail = r => require.ensure([], () => r(require("@/components/wiki/mbcode/viewcodedetail")), 'wiki');
-const codeedit = r => require.ensure([], () => r(require("@/components/wiki/mbcode/codeedit")), 'wiki');
-const wikidetail = r => require.ensure([], () => r(require("@/components/utils/wikidetail")), 'utils');
-const trainningdetail = r => require.ensure([], () => r(require("@/components/wiki/trainning/trainningdetail")), 'wiki');
-const newalgorithm = r => require.ensure([], () => r(require("@/components/wiki/newalgorithm")), 'wiki');
-const todolist = r => require.ensure([], () => r(require("@/components/utils/todolist")), 'utils');
+import main from '@/components/main'
+import problem from '@/components/mainpage/problem'
+import statue from '@/components/mainpage/statue'
+import user from '@/components/mainpage/user'
+import setting from '@/components/mainpage/setting'
+import contest from '@/components/mainpage/contest'
+import contestdetail from '@/components/contest/contestdetail'
+import problemdetail from '@/components/problem/problemdetail'
+import rank from '@/components/mainpage/rank'
+import admin from '@/components/mainpage/admin'
+import billboard from '@/components/mainpage/billboard'
+import blog from '@/components/mainpage/blog'
+import wiki from '@/components/mainpage/wiki'
+import classes from '@/components/mainpage/classes'
+import classdetail from '@/components/mainpage/classdetail'
+import algorithm from '@/components/wiki/algorithm'
+import mbcode from '@/components/wiki/code'
+import trainning from '@/components/wiki/trainning'
+import viewcode from '@/components/wiki/mbcode/viewcode'
+import viewcodedetail from '@/components/wiki/mbcode/viewcodedetail'
+import codeedit from '@/components/wiki/mbcode/codeedit'
+import wikidetail from '@/components/utils/wikidetail'
+import trainningdetail from '@/components/wiki/trainning/trainningdetail'
+import newalgorithm from '@/components/wiki/newalgorithm'
+import todolist from '@/components/utils/todolist'
+import homework from '@/components/mainpage/homework'
+import givechoiceproblemscore from "@/components/admin/givechoiceproblemscore"
 
 Vue.use(Router)
 
@@ -124,6 +104,16 @@ export default new Router({
       component: wiki,
     },
     {
+      path: '/classdetail',
+      name: 'classdetail',
+      component: classdetail,
+    },
+    {
+      path: '/classes',
+      name: 'classes',
+      component: classes,
+    },
+    {
       path: '/wiki/algorithm',
       name: 'algorithm',
       component: algorithm,
@@ -172,6 +162,16 @@ export default new Router({
       path: '/todolist',
       name: 'todolist',
       component: todolist,
+    },
+    {
+      path: '/homework',
+      name: 'homework',
+      component: homework,
+    },
+    {
+      path: '/givechoiceproblemscore',
+      name: 'givechoiceproblemscore',
+      component: givechoiceproblemscore,
     }
   ]
 })

@@ -1,0 +1,78 @@
++ in text.c:
+int
+Open_Text_Third_Pass(const struct text *txt) {
+	last_tk_cnt = 0;
+	last_nl_cnt = 1;
+	lex_nl_cnt = 1;
+	lex_tk_cnt = 0;
+
+	return Open_Stream(txt->tx_fname);
+}
+
++ in text.h:
+extern int Open_Text_Third_Pass(const struct text *txt);
+
++ in pass3.c:
+
+#include	"stream.h"
+#include	"lang.h"
+
+							/* CHUNK IMPROVEMENT */
+
+static void
+improve_chunk(const struct chunk *cnk) {
+
+	/* Open_Text_Second_Pass() initializes lex_nl_cnt and lex_tk_cnt */
+	if (!Open_Text_Third_Pass(cnk->ch_text)) {
+		fprintf(stderr, ">>>> File %s disappeared <<<<\n",
+			cnk->ch_text->tx_fname
+		);
+		return;
+	}
+
+	const struct position *pos_f = &cnk->ch_first;
+	const struct position *pos_l = &cnk->ch_last;
+
+	while (Next_Stream_Token_Obtained()) {
+		if (Token_EQ(lex_token, End_Of_Line)) continue;
+		if (pos_f->ps_tk_cnt == lex_tk_cnt-1
+		    && pos_f->ps_nl_cnt != lex_nl_cnt
+		) {
+			fprintf(stderr, "fname= %s\n", cnk->ch_text->tx_fname);
+			fprintf(stderr, "> pos_f->ps_tk_cnt= %d\n",
+				pos_f->ps_tk_cnt);
+			fprintf(stderr,
+				"@pos_f->ps_tk_cnt= %d, lex_tk_cnt-1= %d\n",
+				pos_f->ps_tk_cnt, lex_tk_cnt-1
+				);
+			fprintf(stderr,
+				"%c pos_f->ps_nl_cnt= %d, lex_nl_cnt= %d\n",
+				(pos_f->ps_nl_cnt == lex_nl_cnt ? '=' : 'X'),
+				pos_f->ps_nl_cnt, lex_nl_cnt
+				);
+		}
+		if (pos_l->ps_tk_cnt == lex_tk_cnt-1
+		    && pos_l->ps_nl_cnt != lex_nl_cnt
+		) {
+			fprintf(stderr, "fname= %s\n", cnk->ch_text->tx_fname);
+			fprintf(stderr, "> pos_l->ps_tk_cnt= %d\n",
+				pos_l->ps_tk_cnt);
+			fprintf(stderr,
+				"@pos_l->ps_tk_cnt= %d, lex_tk_cnt-1= %d\n",
+				pos_l->ps_tk_cnt, lex_tk_cnt-1
+				);
+			fprintf(stderr,
+				"%c pos_l->ps_nl_cnt= %d, lex_nl_cnt= %d\n",
+				(pos_l->ps_nl_cnt == lex_nl_cnt ? '=' : 'X'),
+				pos_l->ps_nl_cnt, lex_nl_cnt
+				);
+		}
+	}
+
+	Close_Stream();
+}
+
+in print_run():
+
+	improve_chunk(cnk0);
+	improve_chunk(cnk1);
