@@ -9,8 +9,8 @@ from rest_framework.views import APIView
 from rest_framework.throttling import ScopedRateThrottle
 from rest_framework import viewsets, mixins, filters
 from .permission import ManagerOnly, UserRatingOnly, UserRatingOnly2
-from .models import ContestBoardTotal, ContestComingInfo,ContestTutorial, ContestAnnouncement, ContestRatingChange, ContestBoard, ContestComment, ContestInfo, ContestProblem, ContestRegister
-from .serializers import ContestBoardTotalSerializer, ContestComingInfoSerializer,ContestTutorialSerializer, ContestRatingChangeSerializer, ContestAnnouncementSerializer, ContestBoardSerializer, ContestCommentSerializer, ContestInfoSerializer, ContestProblemSerializer, ContestRegisterSerializer
+from .models import ContestBoardTotal, ContestComingInfo,ContestTutorial, ContestAnnouncement, ContestRatingChange, ContestBoard, ContestComment, ContestInfo, ContestProblem, ContestRegister, StudentChoiceAnswer, ContestChoiceProblem
+from .serializers import ContestBoardTotalSerializer, ContestComingInfoSerializer,ContestTutorialSerializer, ContestRatingChangeSerializer, ContestAnnouncementSerializer, ContestBoardSerializer, ContestCommentSerializer, ContestInfoSerializer, ContestProblemSerializer, ContestRegisterSerializer, StudentChoiceAnswerSerializer, ContestChoiceProblemSerializer
 import datetime
 
 from user.models import User
@@ -64,7 +64,7 @@ class ContestInfoView(viewsets.ModelViewSet):
     pagination_class = LimitOffsetPagination
     permission_classes = (ManagerOnly,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter)
-    filter_fields = ("begintime", "level", "type","title",)
+    filter_fields = ("begintime", "level", "type","title","classes")
     search_fields = ('title',)
     throttle_scope = "post"
     throttle_classes = [ScopedRateThrottle, ]
@@ -130,14 +130,14 @@ class ContestBoardTotalView(viewsets.ModelViewSet):
 
 
 class ContestBoardFilterAPIView(APIView):
-    
+
     throttle_scope = "post"
     throttle_classes = [ScopedRateThrottle, ]
 
     def post(self, request, format=None):
         # if request.session.get("type") != 3:
         #     return Response("nopermission", status=HTTP_400_BAD_REQUEST)
-        
+
         data = request.data
 
         contestid = data.get("contestid")
@@ -146,7 +146,7 @@ class ContestBoardFilterAPIView(APIView):
         classname = data.get("class","")
         reslist = []
         boards = ContestBoard.objects.filter(contestid=contestid)
-        
+
         usermap = {}
 
         for b in boards:
@@ -159,22 +159,38 @@ class ContestBoardFilterAPIView(APIView):
             user = User.objects.get(username=username)
             flag = True
 
-            if schoolname != "": 
+            if schoolname != "":
                 if str(user.school) != str(schoolname):
                     flag = False
-            
-            if coursename != "": 
+
+            if coursename != "":
                 if str(user.course) != str(coursename):
                     flag = False
-            
-            if classname != "": 
+
+            if classname != "":
                 if str(user.classes) != str(classname):
                     flag = False
-            
+
             if flag == True:
                 reslist.append(b)
-            
+
             usermap[username] = flag
 
        # res = ContestBoard.objects.filter(pk__in=reslist)
         return Response(ContestBoardSerializer(reslist,many=True).data, HTTP_200_OK)
+
+
+class StudentChoiceAnswerView(viewsets.ModelViewSet):
+    queryset = StudentChoiceAnswer.objects.all()
+    serializer_class = StudentChoiceAnswerSerializer
+    permission_classes = (ManagerOnly,)
+    filter_fields = ('username','contestid')
+
+
+
+class ContestChoiceProblemView(viewsets.ModelViewSet):
+    queryset = ContestChoiceProblem.objects.all()
+    serializer_class = ContestChoiceProblemSerializer
+    permission_classes = (ManagerOnly,)
+    filter_fields = ('ContestId','ChoiceProblemId', "rank")
+    throttle_scope = "post"

@@ -1,0 +1,214 @@
+		CONCISE REPORT ON THE ALGORITHMS IN SIM			970623
+
+
+
+	INTRODUCTION
+
+The general outline of the similarity checker is as follows:
+
+	1. the files are read in (pass 1)
+	2. a forward-reference table is prepared
+	3. the set of interesting runs is determined
+	4. the line numbers of the runs are determined (pass 2)
+	5. the contents of the runs are printed in order (pass 3)
+
+To keep the memory requirements (relatively) small, the exact positions
+of the tokens are not recorded.  This necessitates pass 2.  See, however,
+the pertinent chapter.
+
+
+	READING THE FILES
+
+Each file is tokenized using an lex-generated scanner appropriate for
+the input.  Each token fits in one byte, possibly using all 8 bits.  The
+tokens are stored in the array Token_Array[], which is extended by
+reallocation if it overflows.  See tokenarray.c.
+
+Also, to optimize away pass 2, an attempt is made to remember the token
+positions of all beginnings of lines.  The token-positions at BOL are
+stored in the array nl_buff[], which is also extended by reallocation,
+if needed.  If the attempt fails due to lack of memory, nl_buff[] is
+abandoned, and pass2 will read the files instead.
+
+
+	PREPARING THE FORWARD-REFERENCE TABLE
+
+Text is compared by comparing every substring to all substrings
+to the right of it; this process is in essence quadratic.  However,
+only substrings of length at least 'MinRunSize' are of interest,
+which gives us the possibility to speed up this process by using
+a hash table.
+
+Once the entire text has been read in, a forward-reference table
+forward_references[] is made (see hash.c).
+For every position in the text, we construct an index which gives
+the next position in the text where a run of MinRunSize tokens
+starts that has the same hash code.  If there is no such run, the
+index is 0.
+
+To fill in this array, we use a hash table last_index[], such that
+last_index[i] is the index of the latest token with hash_code i, or 0 if
+there is none.  If at a given position p, we find that the text ahead of
+us has hash code i, last_index[i] tells us which position in
+forward_references[] will have to be updated to p.
+See MakeForward_References().
+
+For long text sequences (say hundreds of thousands of tokens), the
+hashing is not really efficient any more since too many spurious matches
+occur.  Therefore, the forward reference table is scanned a second time,
+eliminating from any chain all references to runs that do not start with
+and end in the same token (actually this is a second hash code).
+For the UNIX manuals this reduced the number of matches from 91.9% to 1.9%
+(of which 0.06% was genuine).
+
+	DETERMINING THE SET OF INTERESTING RUNS
+
+The overall structure of the routine Compare_Files() (see compare.c) is:
+
+for all new files
+	for all texts it must be compared to
+		for all positions in the new file
+			for all positions in the text
+				for ever increasing sizes
+					try to match and keep the best
+
+If for a given position in the new file a good run (i.e. on of at least
+minimum length) has been found, the run is registered using a call of
+add_run(), the run is skipped in the new file and searching continues at
+the position after it.  This prevents duplicate reports of runs.
+
+Add_run() allocates a struct run for the run (see sim.h)
+which contains two struct chunks and a quality description.  It fills
+in the two chunks with the pertinent info, one for the first file and
+one for the second (which may be the same, if the run relates two chunks
+in the same file).
+
+The run is then entered into the arbitrary-in-sorted-out store AISO (see
+aiso.spc and aiso.bdy, a genuine generic abstract data type in C!), in
+which it is inserted according to its quality.  Both positions
+(struct position) in both chunks in the run (so four in total) are each
+entered in a linked list starting at the tx_pos field in the struct text
+of the appropriate file.
+
+When this is finished, the forward reference table can be deleted.
+
+So the final results of this phase are visible both through the tx_pos
+fields and through the aiso interface.
+
+
+	DETERMINING THE EXACT POSITION OF EACH RUN (PASS 2)
+
+The purpose of this pass is to find for each chunk, which up to now is
+known by token position only, its starting and ending line number (which
+cannot be easily derived from the token position).
+
+For each file that has a non-zero tx_pos field, ie. that has some
+interesting chunks, the positions in the tx_pos list are sorted on
+ascending line number (they have been found in essentially arbitrary
+order) by sort_pos() in pass2.c.
+
+Next we scan the pos list and the file in parallel, updating the info in
+a position when we meet it.  A position carries an indication whether it
+is a starting or an ending position, since slightly differing
+calculations have to be done in each case.
+
+Actually, if the nl_buff[] data structure still exists, the file is not
+accessed at all and the data from nl_buff[] is used instead.  This is
+done transparently in buff.c.
+
+
+	PRINTING THE CONTENTS OF THE RUNS (PASS 3)
+
+Since each struct run has now been completely filled in, this is simple;
+the hard work is calculating the page layout.
+Pass3() accesses the aiso store and retrieves from it the runs in
+descending order of importance.  Show_run() opens both files, positions
+them using the line numbers and prints the runs.
+
+================================================================
+	CODE EXCERPT OF THE SOFTWARE SIMILARITY TESTER SIM (980222)
+
+sim:
+	get command line options
+	check the options
+
+	init language, to precompute tables
+
+	pass1, read the files
+		# there is an array Token_Array[] that holds all input tokens
+
+	make forward reference table
+		# there is an array forward_references[], with one entry for
+		#   each token in the input; forward_references[i] gives the
+		#   token number where a token sequence starts with the same
+		#   hash value as the one starting at i
+
+	compare various files to find runs
+	delete forward reference table
+	pass2, find newline positions of found similarities
+	pass3, print the similarities
+
+
+
+pass1, read the files:
+	for each file
+		divide the text into tokens
+		store all tokens except newlines in Token_Array and try to
+			keep a record of the newline positions
+
+
+
+make forward reference table:
+	# there are two independent hash functions, hash1() and hash2().
+	#   hash1(i) gives the hash value of the token sequence starting at i
+	#   likewise for hash2(i)
+
+	set up the forward references using the last_index table:
+		# there is an array last_index[], with one entry for each
+		#   possible hash value; last_index[i] gives the position in
+		#   forward_references[] at which i was most recently
+		#   encountered as a hash value
+		for each file
+			for all positions in file except the last MinRunSize
+				set forward_references[] and update last_index[]
+
+	use hash2() to clean out matches:
+		for all tokens
+			find first token in chain with same hash2 code
+			short-circuit forward reference to it
+
+
+
+compare:
+	for all new files
+		for all texts it must be compared to
+			for all positions in the new file
+				for all positions in the text
+					for ever increasing sizes
+						try to match and keep the best
+	try to match and keep the best:
+		# using forward_references[], we find a list of positions in
+		#   which a matching token sequence will start;
+		#   scanning this list, we measure the maximum length of the
+		#   match and add the longest match to the run collection
+
+
+
+pass2, find positions of found runs:
+	for all files:
+		sort the positions in the runs
+
+		# we scan the pos list and the file in parallel
+		for all positions inside this file
+			if it matches a token position in a run
+				record line number
+
+
+
+pass3, print the similarities:
+	for all runs
+		# a run consists of two chunks
+		open the files that hold the chunks and position them
+		  at the beginning of the chunk
+		display the chunks
+

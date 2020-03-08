@@ -23,6 +23,8 @@ import Router from 'vue-router'
 // import trainningdetail from '@/components/wiki/trainning/trainningdetail'
 // import newalgorithm from '@/components/wiki/newalgorithm'
 // import todolist from '@/components/utils/todolist'
+// import homework from '@/components/mainpage/homework'
+// import givechoiceproblemscore from "@/components/admin/givechoiceproblemscore"
 
 const main = r => require.ensure([], () => r(require("@/components/main")), 'main"');
 const problem = r => require.ensure([], () => r(require("@/components/mainpage/problem")), 'mainpage');
@@ -47,6 +49,9 @@ const wikidetail = r => require.ensure([], () => r(require("@/components/utils/w
 const trainningdetail = r => require.ensure([], () => r(require("@/components/wiki/trainning/trainningdetail")), 'wiki');
 const newalgorithm = r => require.ensure([], () => r(require("@/components/wiki/newalgorithm")), 'wiki');
 const todolist = r => require.ensure([], () => r(require("@/components/utils/todolist")), 'utils');
+const homework = r => require.ensure([], () => r(require("@/components/mainpage/homework")), 'mainpage');
+const givechoiceproblemscore = r => require.ensure([], () => r(require("@/components/admin/givechoiceproblemscore")), 'admin');
+
 
 Vue.use(Router)
 
@@ -124,6 +129,16 @@ export default new Router({
       component: wiki,
     },
     {
+      path: '/classdetail',
+      name: 'classdetail',
+      component: classdetail,
+    },
+    {
+      path: '/classes',
+      name: 'classes',
+      component: classes,
+    },
+    {
       path: '/wiki/algorithm',
       name: 'algorithm',
       component: algorithm,
@@ -172,6 +187,16 @@ export default new Router({
       path: '/todolist',
       name: 'todolist',
       component: todolist,
+    },
+    {
+      path: '/homework',
+      name: 'homework',
+      component: homework,
+    },
+    {
+      path: '/givechoiceproblemscore',
+      name: 'givechoiceproblemscore',
+      component: givechoiceproblemscore,
     }
   ]
 })

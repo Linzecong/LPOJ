@@ -1,0 +1,82 @@
+- check input for correct UTF-8, to prevent garbled display afterwards.
+  see EXP_UTF8 in pass3.c
+
+- tx_pos is a pig. struct texts are in principle immutable objects, except that
+  lists of positions are attached to it. These lists (and that is the root of
+  the problem )are accessed and modified from two points, one in pass2 to fill
+  in NL positions and in pass3 to report them. This makes it impossible to write
+  const struct text in most places. Maybe there should be a superstruct
+  struct super_text {
+  	 const struct *st_text;
+	 struct position *st_pos;
+  }
+  Not elegant either.
+
+- some size_t are sizes, others are positions, indexes
+
+- start,limit -> start,length
+
+- report runs as '... <matching text only> ...' (proper name for Retrieve_Runs())
+
+- unify idf2token() in *lang.l
+
+- get rid of static forward references to routines; occurrences:
+      	     	    	    egr static *.c | grep "("
+      3 compare.c
+      4 hash.c
+      3 options.c
+      4 percentages.c
+      3 runs.c
+
+- lex_nl_cnt counts from 1; this requires small, complicating adjustments
+
+Done ================================================================
+
++ command line parameter consistency
+
++ make sim_text case-indifferent?
+
++ sortlist.bdy by split-merge
+
++ get rid of the nl_buff mechanism. No, use 16 bits line length.
+
++ in hash.c, size_t -> uint64_t? No, unit32_t is just as good.
+
++ / misinterpreted by shell; | alternative
+
++ register - removed
+
++ Run hashing OK: average chain length = 1.5, for sim-ing the sources of MCD2
++ Idf hashing OK: smooth distribution when sim-ing the sources of MCD2
+
++ use two-byte tokens to obtain better resolution for sim_text and on -F option
+  and UTF-8 (Johnson, Benjamin (US - Chicago))
+
++ different defaults per program
+
++ cleaning up sim.c & names
+
++ Microsoft comment (// ... unescaped \n)
+
++ emails 2009-2011 (A = I answered, R= they replied)
++AR	Marcus Brinkmann, separate letters
++AR	Scott Kuhl, percentages
++AR	Yaroslav Halchenko, identifying non-existent lines
++A	Rumen Stefanov, UTF-8
++A	Jonathan Martin, UTF-8
++AR	UTF-8 (Johnson, Benjamin (US - Chicago))
+
++ better structure between X.h and X.c
+
++ clean-up language.h and its sub-class algollike.h
+
++ warning in README to correct for non-MSDOS
+
+Rejected ================================================================
+
+X remove Miranda
+X Mon Apr 11 13:23:41 1994: sim_orca
+X Thu May 13 23:02:46 1993: sim ook voor C++ en Ada
+
+X db_ not protected by #ifdef but by compilation to a call to an (empty) routine
+  1. not conspicuous enough in the code; 2. impairs efficiency

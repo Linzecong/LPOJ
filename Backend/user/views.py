@@ -71,7 +71,7 @@ class UserChangeView(APIView):
             user2.save()
 
             return Response("ok", status=HTTP_200_OK)
-  
+
         return Response("nologin", status=HTTP_400_BAD_REQUEST)
 
 

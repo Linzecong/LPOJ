@@ -48,10 +48,11 @@ INSTALLED_APPS = [
     'contest',
     'board',
     'blog',
-    'wiki', 
+    'wiki',
     'item',
     "sslserver",
     'gunicorn',
+    'classes'
 ]
 
 REST_FRAMEWORK = {
@@ -115,6 +116,7 @@ DATABASES = {
         'PASSWORD':os.environ.get("DB_PASSWORD")  if os.environ.get("DB_PASSWORD") else 'lpojdatabase',
         'HOST': os.environ.get("DB_HOST")  if os.environ.get("DB_HOST") else 'lpojdatabase',
         'PORT': os.environ.get("DB_PORT")  if os.environ.get("DB_PORT") else 3306,
+      
     }
 }
 
@@ -161,6 +163,6 @@ STATIC_URL = '/static/'
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
-SESSION_COOKIE_AGE = 60 * 60 * 12  
+SESSION_COOKIE_AGE = 60 * 60 * 12
 SESSION_SAVE_EVERY_REQUEST = True
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True

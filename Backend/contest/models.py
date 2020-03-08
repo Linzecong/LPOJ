@@ -15,6 +15,8 @@ class ContestInfo(models.Model):
     type = models.CharField(max_length=50, default="ACM")
     auth = models.IntegerField(default=2)  # 1 public 2 private 0 protect(需注册)
     clonefrom = models.IntegerField(default=-1)
+    classes = models.CharField(max_length=500, default="All")
+    iprange = models.CharField(max_length=2000, default="iprange")
 
     objects = models.Manager()
 
@@ -44,6 +46,8 @@ class ContestProblem(models.Model):
 
     def __str__(self):
         return self.contestid
+
+
 
 
 class ContestBoard(models.Model):
@@ -145,3 +149,28 @@ class ContestBoardTotal(models.Model):
 
     def __str__(self):
         return self.user
+
+class ContestChoiceProblem(models.Model):
+
+    ContestId = models.IntegerField()
+    ChoiceProblemId = models.CharField(max_length=50)
+    rank = models.IntegerField()  # 顺序
+
+    objects = models.Manager()
+
+    def __str__(self):
+        return self.contestid
+
+class StudentChoiceAnswer(models.Model):
+    username = models.CharField(max_length=100,default="")
+    realname = models.CharField(max_length=100,default="")
+    number = models.CharField(max_length=100,default="")
+    contestid = models.CharField(max_length=100,default="")
+    answer = models.CharField(max_length=100)
+    score = models.IntegerField()
+
+    objects = models.Manager()
+
+    def __str__(self):
+        return self.user
+

@@ -237,28 +237,28 @@ import mycon from '@/components/mycon'
 
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
-| [login](/dev/frontend.html#login-vue) | 登录框  | 
-| [register](/dev/frontend.html#register-vue) | 注册框  | 
+| [login](/dev/frontend.html#login-vue) | 登录框  |
+| [register](/dev/frontend.html#register-vue) | 注册框  |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
-| activeIndex | 当前激活的菜单序号  | 
-| school | OJ名称  | 
-| loginshow | 是否显示登录框  | 
-| username | 用户名  | 
-| name | 昵称  | 
-| isadmin | 是否是管理员  | 
+| activeIndex | 当前激活的菜单序号  |
+| school | OJ名称  |
+| loginshow | 是否显示登录框  |
+| username | 用户名  |
+| name | 昵称  |
+| isadmin | 是否是管理员  |
 
 **methods**
 
 | name | 作用  | 补充说明 |
 | :--  | :-- | :-- |
 | loginopen | 打开登录框  | 通过ref实现 |
-| registeropen | 打开注册框  | 通过ref实现 | 
+| registeropen | 打开注册框  | 通过ref实现 |
 | handleCommand | 处理用户菜单栏的路由跳转 | 通过$router.push直接跳转 |
 
 **mounted**
@@ -271,9 +271,9 @@ import mycon from '@/components/mycon'
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
-| dialogLoginVisible | 是否显示登录框  | 
+| dialogLoginVisible | 是否显示登录框  |
 | form | 登录信息的表单  |
 
 **methods**
@@ -281,7 +281,7 @@ import mycon from '@/components/mycon'
 | name | 作用  | 补充说明 |
 | :--  | :-- | :-- |
 | open | 打开登录框  | visible.sync实现 |
-| loginClick | 登录函数  | 先将密码MD5哈希，然后提交表单，根据返回结果判断是否登录成功，登录成功后再获取一些必要的信息后自动刷新一下来更新内容。 | 
+| loginClick | 登录函数  | 先将密码MD5哈希，然后提交表单，根据返回结果判断是否登录成功，登录成功后再获取一些必要的信息后自动刷新一下来更新内容。 |
 
 ### [register.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/register.vue)
 
@@ -289,9 +289,9 @@ import mycon from '@/components/mycon'
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
-| dialogRegisterVisible | 是否显示注册框  | 
+| dialogRegisterVisible | 是否显示注册框  |
 | form | 注册信息的表单  |
 
 **methods**
@@ -299,7 +299,7 @@ import mycon from '@/components/mycon'
 | name | 作用  | 补充说明 |
 | :--  | :-- | :-- |
 | open | 打开注册框  | visible.sync实现 |
-| registerClick | 注册函数  | 先判断填写信息是否满足要求，然后将密码MD5哈希，然后提交表单，根据返回结果判断是否注册成功 | 
+| registerClick | 注册函数  | 先判断填写信息是否满足要求，然后将密码MD5哈希，然后提交表单，根据返回结果判断是否注册成功 |
 
 ### [main.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/main.vue)
 
@@ -307,19 +307,19 @@ import mycon from '@/components/mycon'
 
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
-| [rankchart](/dev/frontend.html#rankchart-vue) | 个人排名图表  | 
-| [ojmessage](/dev/frontend.html#ojmessage-vue) | 留言板  | 
-| [welcomemessage](/dev/frontend.html#welcomemessage-vue) | 左上角的控件  | 
-| [topuser](/dev/frontend.html#topuser-vue) | 排行榜前十用户  | 
-| [soulrow](/dev/frontend.html#soulrow-vue) | 顶部的三个卡片控件  | 
-| [ratingrule](/dev/frontend.html#ratingrule-vue) | OJ规则控件  | 
-| [contestmini](/dev/frontend.html#contestmini-vue) | 近期比赛控件  | 
+| [rankchart](/dev/frontend.html#rankchart-vue) | 个人排名图表  |
+| [ojmessage](/dev/frontend.html#ojmessage-vue) | 留言板  |
+| [welcomemessage](/dev/frontend.html#welcomemessage-vue) | 左上角的控件  |
+| [topuser](/dev/frontend.html#topuser-vue) | 排行榜前十用户  |
+| [soulrow](/dev/frontend.html#soulrow-vue) | 顶部的三个卡片控件  |
+| [ratingrule](/dev/frontend.html#ratingrule-vue) | OJ规则控件  |
+| [contestmini](/dev/frontend.html#contestmini-vue) | 近期比赛控件  |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 | label | 一些标题  |
 
@@ -327,7 +327,7 @@ import mycon from '@/components/mycon'
 
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 | adminaddproblem     |   管理员添加题目页面  |
 | adminaddcontest     |   管理员添加比赛页面  |
@@ -338,10 +338,14 @@ import mycon from '@/components/mycon'
 | admintrainning     |   管理员添加训练页面  |
 | adminboard     |   管理员爬虫页面管理  |
 | adminsetting     |   OJ设置页面  |
+| adminaddchoiceproblem     |   管理员添加选择题页面  |
+| adminchangechoiceproblem     |   管理员管理选择题页面  |
+| adminclassmanage     |   管理员管理班级页面  |
+| givechoiceproblemscore     |   管理员评阅选择题页面  |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -353,18 +357,18 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 
 ### [billboard.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/mainpage/billboard.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -376,17 +380,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [blog.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/mainpage/blog.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -398,17 +402,61 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
+### [classdetail.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/mainpage/classdetail.vue)
+**component**
+
+| name | 作用  |
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  |
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+>
+### [classes.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/mainpage/classes.vue)
+**component**
+
+| name | 作用  |
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  |
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+>
 ### [contest.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/mainpage/contest.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -420,17 +468,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [problem.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/mainpage/problem.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -442,17 +490,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [rank.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/mainpage/rank.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -464,17 +512,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [setting.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/mainpage/setting.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -486,17 +534,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [statue.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/mainpage/statue.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -508,17 +556,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [user.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/mainpage/user.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -530,17 +578,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [wiki.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/mainpage/wiki.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -552,17 +600,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [rankchart.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/chart/billboard.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -574,17 +622,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [ratingchart.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/chart/ratingchart.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -596,17 +644,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [problemdetail.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/problem/problemdetail.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -618,17 +666,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [algorithmselect.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/utils/algorithmselect.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -640,17 +688,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [blogmini.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/utils/blogmini.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -662,17 +710,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [contestmini.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/utils/contestmini.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -684,17 +732,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [ojmessage.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/utils/ojmessage.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -706,17 +754,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [prostatistice.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/utils/prostatistice.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -728,17 +776,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [ratingrule.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/utils/ratingrule.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -750,17 +798,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [soulrow.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/utils/soulrow.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -772,17 +820,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [statusmini.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/utils/statusmini.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -794,17 +842,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [topuser.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/utils/topuser.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -816,17 +864,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [welcomemessage.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/utils/welcomemessage.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -838,17 +886,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [wikidetail.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/utils/wikidetail.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -860,17 +908,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [contestannounce.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/contest/contestannounce.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -882,17 +930,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [contestcomment.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/contest/contestcomment.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -904,17 +952,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [contestdetail.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/contest/contestdetail.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -926,17 +974,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [contestoverview.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/contest/contestoverview.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -948,17 +996,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [contestproblem.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/contest/contestproblem.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -970,17 +1018,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [contestrank.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/contest/contestrank.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -992,17 +1040,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [contestsubmit.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/contest/contestsubmit.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -1014,17 +1062,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [contesttutorial.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/contest/contesttutorial.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -1036,17 +1084,39 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
+### [contestchoiceproblem.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/contest/contestchoiceproblem.vue)
+**component**
+
+| name | 作用  |
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  |
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+>
 ### [adminaddcontest.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/admin/adminaddcontest.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -1058,17 +1128,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [adminaddproblem.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/admin/adminaddproblem.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -1080,17 +1150,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [adminboard.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/admin/adminboard.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -1102,17 +1172,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [adminchangecontest.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/admin/adminchangecontest.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -1124,17 +1194,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [adminchangepro.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/admin/adminchangepro.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -1146,17 +1216,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [adminmanageuser.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/admin/adminmanageuser.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -1168,17 +1238,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [adminrejudge.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/admin/adminrejudge.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -1190,17 +1260,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [adminsetting.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/admin/adminsetting.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -1212,17 +1282,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [admintrainning.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/admin/admintrainning.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -1234,17 +1304,105 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
+### [adminaddchoiceproblem.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/admin/adminaddchoiceproblem.vue)
+**component**
+
+| name | 作用  |
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  |
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+>
+### [adminchangechoiceproblem.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/admin/adminchangechoiceproblem.vue)
+**component**
+
+| name | 作用  |
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  |
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+>
+### [adminclassmanage.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/admin/adminclassmanage.vue)
+**component**
+
+| name | 作用  |
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  |
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+>
+### [givechoiceproblemscore.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/admin/givechoiceproblemscore.vue)
+**component**
+
+| name | 作用  |
+| :--  | :-- |
+|      |     |
+
+**data**
+
+| name | 作用  |
+| :--  | :-- |
+|      |     |
+
+**methods**
+
+| name | 作用  | 补充说明 |
+| :--  | :-- | :-- |
+|      |     |      |
+
+**mounted**
+
+>
 ### [algorithm.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/wiki/algorithm.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -1256,17 +1414,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [code.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/wiki/code.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -1278,17 +1436,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [trainning.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/wiki/trainning.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -1300,17 +1458,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [basic.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/wiki/algorithmpages/basic.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -1322,17 +1480,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [dp.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/wiki/algorithmpages/dp.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -1344,17 +1502,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [ds.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/wiki/algorithmpages/ds.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -1366,17 +1524,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [editalgorithm.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/wiki/algorithmpages/editalgorithm.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -1388,17 +1546,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [geometry.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/wiki/algorithmpages/geometry.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -1410,17 +1568,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [graph.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/wiki/algorithmpages/graph.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -1432,17 +1590,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [intro.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/wiki/algorithmpages/intro.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -1454,17 +1612,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [math.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/wiki/algorithmpages/math.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -1476,17 +1634,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [search.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/wiki/algorithmpages/search.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -1498,17 +1656,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [string.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/wiki/algorithmpages/string.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -1520,17 +1678,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [codeedit.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/wiki/mbcode/codeedit.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -1542,17 +1700,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [viewcode.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/wiki/mbcode/viewcode.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -1564,17 +1722,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [viewcodedetail.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/wiki/mbcode/viewcodedetail.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -1586,17 +1744,17 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 ### [trainningdetail.vue](https://github.com/Linzecong/LPOJ/blob/master/Frontend/src/components/wiki/trainning/trainningdetail.vue)
 **component**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
 **data**
 
-| name | 作用  | 
+| name | 作用  |
 | :--  | :-- |
 |      |     |
 
@@ -1608,6 +1766,6 @@ import mycon from '@/components/mycon'
 
 **mounted**
 
-> 
+>
 
 
