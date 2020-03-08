@@ -255,8 +255,8 @@ export default {
       var name = file.name;
       var li = name.split(".");
       this.fileList = fileList;
-      if (li[1] != "zip") {
-        this.$message.error("数据文件名名不正确！后缀应为zip");
+      if (li[1] != "zip" && li[1] != "jpeg" && li[1] != "jpg" && li[1] != "png") {
+        this.$message.error("数据文件名名不正确！后缀应为zip/jpeg/jpg/png");
         this.fileList = [];
       }
     },
@@ -323,8 +323,8 @@ export default {
       console.log(this.fileList);
       var name = this.fileList[0].name;
       var li = name.split(".");
-      if (li[1] != "zip") {
-        this.$message.error("数据文件名名不正确！后缀应为zip");
+      if (li[1] != "zip" && li[1] != "jpeg" && li[1] != "jpg" && li[1] != "png") {
+        this.$message.error("数据文件名名不正确！后缀应为zip/jpeg/jpg/png");
         this.fileList = [];
       }
 

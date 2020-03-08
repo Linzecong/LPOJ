@@ -172,11 +172,7 @@
                        :value="0"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="IP范围（起始IP与结束IP之间用【英文逗号 , 】分隔，多个范围用【英文分号 ; 】分隔）：">
-          <el-input type="textarea"
-                    v-model="addcontestform.iprange"
-                    autosize></el-input>
-        </el-form-item>
+        
 
         <el-row>
           <el-col>
