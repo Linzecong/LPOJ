@@ -148,34 +148,12 @@
       ></el-input-number>
     </el-form-item>
 
-    <el-upload
-      style="width:400px;"
-      ref="upload"
-      :action="uploadaddress"
-      :on-exceed="handleExceed"
-      :on-change="handleChange"
-      :on-success="handleSuccessNone"
-      :on-error="handleError"
-      :on-remove="handleRemove"
-      :file-list="fileList"
-      :multiple="false"
-      :limit="1"
-      :auto-upload="false"
-      :http-request="myupload"
-    >
-      <el-button slot="trigger" size="small" type="primary">选取数据文件</el-button>
-      <div
-        slot="tip"
-        class="el-upload__tip"
-      >只能上传zip文件,压缩包内的不要有文件夹，输入输出文件后缀为.in和.out.添加一个casedes.txt文件（utf-8编码）可以对每一个样例进行说明，每行一个说明，中间不要有多余的空行，对应的case用|隔开，如： data1|xxxxxx</div>
-    </el-upload>
-
     <el-upload style="width:400px;"
                    ref="upload"
                    :action="uploadaddress"
                    :on-exceed="handleExceed"
                    :on-change="handleChange"
-                   :on-success="handleSuccess"
+                   :on-success="handleSuccessNone"
                    :on-error="handleError"
                    :on-remove="handleRemove"
                    :file-list="fileList"
@@ -247,10 +225,10 @@ export default {
       var tail = f.file.name.split(".");
 
       if (tail[1] == "zip") {
-        var newfile = new File([f.file], this.problemform.problem + ".zip");
+        var newfile = new File([f.file], this.addproblemform.problem + ".zip");
       }
       else if (tail[1] == "jpg") {
-        var newfile = new File([f.file], this.problemform.problem + ".jpg");
+        var newfile = new File([f.file], this.addproblemform.problem + ".jpg");
       }
 
       param.append("file", newfile); //通过append向form对象添加数据
@@ -278,7 +256,7 @@ export default {
       var name = file.name;
       var li = name.split(".");
       this.fileList = fileList;
-      if (li[1] != "zip" && li[1] != "jpeg" && li[1] != "jpg" && li[1] != "png") {
+      if (li[1] != "zip" && li[1] != "jpg") {
         this.$message.error("数据文件名名不正确！后缀应为zip/jpeg/jpg/png");
         this.fileList = [];
       }

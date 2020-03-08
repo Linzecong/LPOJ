@@ -34,9 +34,9 @@
                        label="选项D"
                        width="300"></el-table-column>
 
-      <el-table-column fixed="right"
+      <el-table-column
                        label="操作"
-                       width="240">
+                      >
         <template slot-scope="scope">
           <el-button @click="EditChoiceProblem(scope.row)"
                      type="primary"

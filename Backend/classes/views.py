@@ -40,8 +40,8 @@ class DeleteClassDataAPIView(APIView):
     def delete(self, request, format=None):
         data = request.data.copy()
         CName = data["className"]
-        if Classes.objects.filter(className__exact=CName):
-            if Classes.objects.filter(className__exact=CName).delete():
+        if theClasses.objects.filter(className__exact=CName):
+            if theClasses.objects.filter(className__exact=CName).delete():
                 return Response("DeleteOk", status=HTTP_200_OK)
         else:
             return Response("AlreadyDelete", HTTP_200_OK)

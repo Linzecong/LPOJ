@@ -47,8 +47,8 @@
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item command="home">Home</el-dropdown-item>
           <el-dropdown-item command="submittion">Submittion</el-dropdown-item>
-          <el-dropdown-item command="setting" divided>Setting</el-dropdown-item>
-          <el-dropdown-item command="classes">Class</el-dropdown-item>
+          <el-dropdown-item command="setting">Setting</el-dropdown-item>
+          <el-dropdown-item command="classes" divided>Class</el-dropdown-item>
           <el-dropdown-item command="admin"
                             divided
                             v-show="isadmin">Admin</el-dropdown-item>
@@ -86,7 +86,7 @@
            target="_blank"
            style="text-decoration: none;color:#409EFF;">Linzecong</a>
         <span>
-          &nbsp; Version: 3.3&nbsp;&nbsp; Docs:&nbsp;&nbsp;
+          &nbsp; Version: 3.4&nbsp;&nbsp; Docs:&nbsp;&nbsp;
           <a href="https://docs.lpoj.cn"
              target="_blank"
              style="text-decoration: none;color:#409EFF;">LPOJ Docs</a>&nbsp;&nbsp;欢迎加入LPOJ讨论群: 875136693&nbsp;&nbsp;

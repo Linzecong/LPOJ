@@ -87,7 +87,7 @@ export default {
   name: "classes",
   data () {
     return {
-
+      activeName:"JoinClass",
       searchclass: "",
       cName: [],
       classCount: "",
@@ -146,7 +146,7 @@ export default {
                       .then(response => {
                         if (response.data == "JoinOk") {
                           this.$message.success("加入成功！");
-
+                          this.$router.go(0);
                           return;
                         }
                         if (response.data == "RepeatJoin") {
@@ -161,6 +161,7 @@ export default {
                           message: "加入班级成功！",
                           type: "success"
                         });
+                        this.$router.go(0);
                       }
                       );
 
@@ -197,6 +198,7 @@ export default {
               var deleteId = response.data[0].id;
               this.$axios.delete("/classStudent/" + deleteId + "/");
               this.$message("已退出班级");
+              this.$router.go(0);
             }
           ).catch(function (error) {
             console.log(error);

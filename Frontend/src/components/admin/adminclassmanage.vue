@@ -141,6 +141,7 @@ export default {
           this.$axios.put("/classes/" + putId + "/", tmpform)
             .then(res2 => {
               this.$message.success("已开放班级" + row.className);
+              this.$router.go(0);
             })
             .catch(error => {
               this.$message.error(
@@ -182,6 +183,7 @@ export default {
           this.$axios.put("/classes/" + putId + "/", tmpform)
             .then(res2 => {
               this.$message.success("已关闭班级" + row.className);
+              this.$router.go(0);
             })
             .catch(error => {
               this.$message.error(
@@ -201,6 +203,7 @@ export default {
               message: "添加班级成功！",
               type: "success"
             });
+            this.$router.go(0);
           }
         )
     },
@@ -237,6 +240,7 @@ export default {
                 message: "已删除班级" + this.form.className,
                 type: "success"
               });
+              this.$router.go(0);
             }
           })
       })

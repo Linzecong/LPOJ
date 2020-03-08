@@ -51,6 +51,8 @@ const newalgorithm = r => require.ensure([], () => r(require("@/components/wiki/
 const todolist = r => require.ensure([], () => r(require("@/components/utils/todolist")), 'utils');
 const homework = r => require.ensure([], () => r(require("@/components/mainpage/homework")), 'mainpage');
 const givechoiceproblemscore = r => require.ensure([], () => r(require("@/components/admin/givechoiceproblemscore")), 'admin');
+const classes = r => require.ensure([], () => r(require("@/components/mainpage/classes")), 'mainpage');
+const classdetail = r => require.ensure([], () => r(require("@/components/mainpage/classdetail")), 'mainpage');
 
 
 Vue.use(Router)
