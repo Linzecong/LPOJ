@@ -34,19 +34,6 @@ class JudgeStatusPutView(viewsets.GenericViewSet, mixins.CreateModelMixin):
     throttle_scope = "judge"
     throttle_classes = [ScopedRateThrottle, ]
 
-class InOrOutIpRange(APIView):
-
-    def post(self, request, format=None):
-        print(request.data)
-        Sip=request.data["SubmitId"]
-        print(Sip)
-        ContestId = request.data.get("ContestId")
-        IpRange = ContestInfo.objects.filter(id=ContestId).values('iprange')
-        IpRange = list(IpRange)
-        var1="".join(IpRange[0])
-        print(var1)
-        return Response("ok", status=HTTP_200_OK)
-
 
 class JudgeStatusCodeView(viewsets.GenericViewSet, mixins.RetrieveModelMixin):
     queryset = JudgeStatus.objects.all()

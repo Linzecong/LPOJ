@@ -873,7 +873,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 | logintime | 上次登录时间 | DateTimeField | auto_now（暂时弃用，见userlogindata表） |
 | school | 学校 | CharField |  |
 | course | 专业 | CharField |  |
-| originclass | 班级 | CharField |  |
+| classes | 班级 | CharField |  |
 | number | 学号 | CharField |  |
 | realname | 真实姓名 | CharField |  |
 | qq | QQ | CharField |  |
