@@ -31,8 +31,17 @@
     </el-row>
     <el-row>
       <el-button type="primary"
-                 @click="Submit">提交</el-button>
+                 @click="Submit"
+                 v-show="havechopro == true">提交</el-button>
     </el-row>
+
+    <div v-show="havechopro == true">已提交的答案</div>
+    <el-input placeholder="已提交的答案"
+              v-model="myanswer"
+              :disabled="true"
+              v-show="havechopro == true">
+    </el-input>
+
   </div>
 </template>
 
@@ -49,8 +58,8 @@ export default {
         answer: "",
         score: "0",
       },
-
-
+      myanswer: "",
+      havechopro: false,
       ProblenCount: "",
       allRadio: [],
       radio: [],
@@ -76,13 +85,20 @@ export default {
       if (this.$store.state.contestisend == true) {
         this.$message.error("比赛已结束");
       }
-      else {
-        this.$confirm("确定提交答案吗？只能提交一次！",
-          {
-            confirmButtonText: "确定",
-            cancelButtonText: "取消",
-            type: "warning"
-          }).then(() => {
+      else {        this.form.answer = "";
+        for (var i = 0; i < this.ProblenCount; i++) {
+          if (this.allRadio[i]) {
+            this.form.answer += this.allRadio[i];
+          }
+          else {
+            this.form.answer += "X";
+          }
+        }
+        this.$axios.get("/user/?username=" + this.form.username)
+          .then(response2 => {
+            this.form.realname = response2.data[0].realname;
+            this.form.number = response2.data[0].number;
+
 
             this.$axios.get(
               "/conteststudentchoiceanswer/?username=" +
@@ -92,43 +108,56 @@ export default {
             )
               .then(
                 response => {
-                  if (response.data[0]) {
-                    this.$message.error("你已经提交过答案");
+                  if (response.data.length > 0) {
+                    var updateId = response.data[0].id;
+                    this.$axios.put("/conteststudentchoiceanswer/"+ updateId + "/", this.form)
+                      .then(
+                        response3 => {
+                          this.$message({
+                            message: "提交成功！",
+                            type: "success"
+                          });
+                        }
+                      ).catch(error => {
+                        this.$message.error(
+                          "提交失败！请再提交一次" + "(" + JSON.stringify(error.response.data) + ")"
+                        );
+                      });
                   }
                   else {
-                    this.form.answer = "";
-                    for (var i = 0; i < this.ProblenCount; i++) {
-                      if (this.allRadio[i]) {
-                        this.form.answer += this.allRadio[i];
-                      }
-                      else {
-                        this.form.answer += "X";
-                      }
-                    }
-                    this.$axios.get("/user/?username=" + this.form.username)
-                      .then(response2 => {
-                        this.form.realname = response2.data[0].realname;
-                        this.form.number = response2.data[0].number;
-                        this.$axios.post("/conteststudentchoiceanswer/", this.form)
-                          .then(
-                            response3 => {
-                              this.$message({
-                                message: "提交成功！",
-                                type: "success"
-                              });
-                            }
-                          ).catch(error => {
-                            this.$message.error(
-                              "提交失败！请再提交一次" + "(" + JSON.stringify(error.response.data) + ")"
-                            );
+                    this.$axios.post("/conteststudentchoiceanswer/", this.form)
+                      .then(
+                        response3 => {
+                          this.$message({
+                            message: "提交成功！",
+                            type: "success"
                           });
-                      }
-                      )
-
-
+                        }
+                      ).catch(error => {
+                        this.$message.error(
+                          "提交失败！请再提交一次" + "(" + JSON.stringify(error.response.data) + ")"
+                        );
+                      });
                   }
+                  this.$axios.get(
+                    "/conteststudentchoiceanswer/?username=" +
+                    this.form.username +
+                    "&contestid=" +
+                    this.form.contestid
+                  )
+                    .then(
+                      response => {
+                        this.myanswer = response.data[0].answer;
+                      })
+
                 })
-          })
+
+
+          }
+          )
+
+
+
       };
 
     },
@@ -155,6 +184,7 @@ export default {
     this.$axios.get("/contestchoiceproblem/?ContestId=" + this.$route.params.contestID)
       .then(response => {
         this.ProblenCount = response.data.length;
+        if (response.data.length > 0) this.havechopro = true;
         for (var i = 0; i < response.data.length; i++) {
           this.ChoiceProblemIds.push(response.data[i].ChoiceProblemId);
         }
@@ -180,6 +210,19 @@ export default {
         }
 
       })
+    this.$axios.get(
+      "/conteststudentchoiceanswer/?username=" +
+      this.form.username +
+      "&contestid=" +
+      this.form.contestid
+    )
+      .then(
+        response => {
+          this.myanswer = response.data[0].answer;
+        })
+
+
+
   }
 }
 </script>
