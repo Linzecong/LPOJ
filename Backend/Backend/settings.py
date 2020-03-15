@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '@x8t=y8%*+y1#=%15=01dh@$8hqh0%&&2f1ntk&e$olprw1fkq'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -113,8 +113,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'LPOJ',
         'USER': os.environ.get("DB_USER")  if os.environ.get("DB_USER") else 'root' ,
-        'PASSWORD':os.environ.get("DB_PASSWORD")  if os.environ.get("DB_PASSWORD") else 'lpojdatabase',
-        'HOST': os.environ.get("DB_HOST")  if os.environ.get("DB_HOST") else 'lpojdatabase',
+        'PASSWORD':os.environ.get("DB_PASSWORD")  if os.environ.get("DB_PASSWORD") else '',
+        'HOST': os.environ.get("DB_HOST")  if os.environ.get("DB_HOST") else 'localhost',
         'PORT': os.environ.get("DB_PORT")  if os.environ.get("DB_PORT") else 3306,
       
     }

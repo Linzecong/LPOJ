@@ -139,13 +139,11 @@
                 style="width:400px;"></el-input>
     </el-form-item>
     <el-form-item label="分数（建议100~10000）：">
-      <el-input-number
-        style="width:200px;"
-        v-model="addproblemform.score"
-        :step="100"
-        :min="100"
-        :max="10000"
-      ></el-input-number>
+      <el-input-number style="width:200px;"
+                       v-model="addproblemform.score"
+                       :step="100"
+                       :min="100"
+                       :max="10000"></el-input-number>
     </el-form-item>
 
     <el-upload style="width:400px;"
@@ -264,48 +262,50 @@ export default {
     handleError (response, file, fileList) {
       this.$message.error("数据上传失败！" + response);
     },
-    handleSuccessNone(response, file, fileList) {
-      this.$message.success("上传数据文件成功！开始保存题目！");
-      this.handleSuccess(1, 2, 3);
+    handleSuccessNone (response, file, fileList) {
+      this.$message.success("上传成功！");
+      this.loading = false;
+      this.$router.go(0);
     },
-
-    async handleSuccess(response, file, fileList) {
+    handleSuccess (response, file, fileList) {
       if (this.addproblemform.isspj == true) {
-        this.addproblemform.hint =
-          this.addproblemform.hint +
-          "\n <b>【本题为Special Judge，即答案可能有多种情况】</b>";
+        this.addproblemform.hint = this.addproblemform.hint + "\n <b>【本题为Special Judge，即答案可能有多种情况】</b>"
       }
+      console.log(this.addproblemform);
+      this.$axios.post("/problem/", this.addproblemform).then(response => {
+        this.addproblemdataform.problem = this.addproblemform.problem;
+        this.addproblemdataform.title = this.addproblemform.title;
+        this.addproblemdataform.level = this.addproblemform.level;
+        this.addproblemdataform.tag = this.addproblemform.tag;
+        this.addproblemdataform.score = this.addproblemform.score;
+        this.addproblemdataform.auth = this.addproblemform.auth;
+        this.addproblemdataform.oj = this.addproblemform.oj;
 
-      try{
-        var response = await this.$axios.post("/problem/", this.addproblemform);
-      }
-      catch(error){
-        this.$message.error(error)
-      }
-      
+        var tag = this.addproblemdataform.tag.split("|");
 
-      this.addproblemdataform.problem = this.addproblemform.problem;
-      this.addproblemdataform.title = this.addproblemform.title;
-      this.addproblemdataform.level = this.addproblemform.level;
-      this.addproblemdataform.tag = this.addproblemform.tag;
-      this.addproblemdataform.score = this.addproblemform.score;
-      this.addproblemdataform.auth = this.addproblemform.auth;
-      this.addproblemdataform.oj = this.addproblemform.oj;
+        for (var i = 0; i < tag.length; i++) {
+          this.$axios
+            .post("/problemtag/", {
+              tagname: tag[i],
+              count: 1
+            })
+            .catch(error => { });
+        }
+        this.$axios
+          .post("/problemdata/", this.addproblemdataform)
+          .then(response2 => {
+            this.$message({
+              message: "提交成功！题目编号为：" + response2.data.problem,
+              type: "success"
+            });
 
-
-      var tag = this.addproblemdataform.tag.split("|");
-      for (var i = 0; i < tag.length; i++) {
-        try{
-          await this.$axios.post("/problemtag/", {
-            tagname: tag[i],
-            count: 1
           });
         }
-        catch (err){
+      ).catch(err=>{
           console.log(err)
-        }
+        })
         
-      }
+ 
 
       try{
         var response2 = await this.$axios.post(
@@ -327,7 +327,7 @@ export default {
 
     },
 
-    async onAddProblemSubmit() {
+    onAddProblemSubmit () {
       if (this.fileList.length <= 0) {
         this.$confirm(
           "确定添加吗？本次添加没有添加数据文件！后续可在修改题目中添加",
@@ -358,6 +358,8 @@ export default {
         type: "warning"
       }).then(() => {
         this.loading = true;
+        this.handleSuccess(1, 2, 3);
+
         this.$refs.upload.submit();
       });
     }
