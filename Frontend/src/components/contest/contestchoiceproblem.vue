@@ -82,10 +82,13 @@ export default {
       }
     },
     Submit () {
+      console.log(this.radio);
+
       if (this.$store.state.contestisend == true) {
         this.$message.error("比赛已结束");
       }
-      else {        this.form.answer = "";
+      else {
+        this.form.answer = "";
         for (var i = 0; i < this.ProblenCount; i++) {
           if (this.allRadio[i]) {
             this.form.answer += this.allRadio[i];
@@ -98,8 +101,6 @@ export default {
           .then(response2 => {
             this.form.realname = response2.data[0].realname;
             this.form.number = response2.data[0].number;
-
-
             this.$axios.get(
               "/conteststudentchoiceanswer/?username=" +
               this.form.username +
@@ -110,7 +111,7 @@ export default {
                 response => {
                   if (response.data.length > 0) {
                     var updateId = response.data[0].id;
-                    this.$axios.put("/conteststudentchoiceanswer/"+ updateId + "/", this.form)
+                    this.$axios.put("/conteststudentchoiceanswer/" + updateId + "/", this.form)
                       .then(
                         response3 => {
                           this.$message({
@@ -149,22 +150,15 @@ export default {
                       response => {
                         this.myanswer = response.data[0].answer;
                       })
-
                 })
-
-
           }
           )
-
-
-
       };
 
     },
     getIputValue (index) {
       var ChooseAnswer = this.radio[index].split(".");
       this.allRadio[index] = ChooseAnswer[0]; // 将数据存入提交给后台的数据中
-      console.log(this.allRadio);
     },
     GetItem: function (des, choiceA, choiceB, choiceC, choiceD, rank) {
       return {
@@ -175,6 +169,9 @@ export default {
         "choiceD": "D. " + choiceD,
         "rank": rank,
       }
+    },
+    GetItem2: function (ChoiceProblemDatas) {
+      return ChoiceProblemDatas
     }
   },
   created () {
@@ -208,7 +205,6 @@ export default {
                 ));
             })
         }
-
       })
     this.$axios.get(
       "/conteststudentchoiceanswer/?username=" +
@@ -221,8 +217,48 @@ export default {
           this.myanswer = response.data[0].answer;
         })
 
+    this.$axios.get(
+      "/conteststudentchoiceanswer/?username=" +
+      this.form.username +
+      "&contestid=" +
+      this.form.contestid
+    )
+      .then(
+        response => {
+          this.$axios.get("/contestchoiceproblem/?ContestId=" + this.$route.params.contestID)
+            .then(response2 => {
+              this.ProblenCount = response2.data.length;
+            })
 
+          var proCount = this.ProblenCount;
+          if (proCount > 0) {
+            var lastanswer = response.data[0].answer;
+          }
+          for (var i = 0; i < proCount; i++) {
+            if (lastanswer[i] == 'A') {
+              this.allRadio[i] = "A";
+              var tmp = this.ChoiceProblemDatas[i];
+              this.radio[i] = this.GetItem2(tmp.choiceA);
+            }
+            else if (lastanswer[i] == 'B') {
+              this.allRadio[i] = "B";
+              var tmp = this.ChoiceProblemDatas[i];
+              this.radio[i] = this.GetItem2(tmp.choiceB);
+            }
+            else if (lastanswer[i] == 'C') {
+              this.allRadio[i] = "C";
+              var tmp = this.ChoiceProblemDatas[i];
+              this.radio[i] = this.GetItem2(tmp.choiceC);
+            }
+            else if (lastanswer[i] == 'D') {
+              this.allRadio[i] = "D";
+              var tmp = this.ChoiceProblemDatas[i];
+              this.radio[i] = this.GetItem2(tmp.choiceD);
+            }
+          }
+        }
 
+      )
   }
 }
 </script>
