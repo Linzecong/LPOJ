@@ -19,6 +19,7 @@ python main.py
 每场比赛结束后，可以调用 [RatingCalculator.py](https://github.com/Linzecong/LPOJ/blob/master/CrawlingServer/main.py) 来计算某场比赛的Rating变化。记得设置**setting.json**里的数据库配置信息
 
 ## 查重脚本 duplication_checking.py
+
 此脚本基于SIM工具查重
 需要依赖：gcc,make,flex
 
