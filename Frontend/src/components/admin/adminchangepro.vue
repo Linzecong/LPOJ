@@ -401,50 +401,46 @@ export default {
     handleError (response, file, fileList) {
       this.$message.error("数据上传失败！" + response);
     },
-    handleSuccess (response, file, fileList) {
-      console.log(fileList);
-      this.$axios
-        .put("/problem/" + this.problemform.problem + "/", this.problemform)
-        .then(response => {
-          this.problemdataform.problem = this.problemform.problem;
-          this.problemdataform.title = this.problemform.title;
-          this.problemdataform.level = this.problemform.level;
-          this.problemdataform.tag = this.problemform.tag;
-          this.problemdataform.score = this.problemform.score;
-          this.problemdataform.auth = this.problemform.auth;
-          var tag = this.problemdataform.tag.split("|");
-          for (var i = 0; i < tag.length; i++) {
-            this.$axios
-              .post("/problemtag/", {
-                tagname: tag[i],
-                count: 1
-              })
-              .catch(error => { });
-          }
-          this.$axios
-            .put(
-              "/problemdata/" + this.problemform.problem + "/",
-              this.problemdataform
-            )
-            .then(response2 => {
-              this.$message({
-                message: "修改成功！修改题目编号为：" + response2.data.problem,
-                type: "success"
-              });
-              this.fileList = [];
-              this.loading = false;
-              this.dialogTableVisible = false
-            })
-            .catch(error => {
-              this.$message.error(
-                "服务器出错！" + JSON.stringify(error.response.data)
-              );
-            });
-        })
-        .catch(error => {
-          this.$message.error(
-            "服务器出错！" + JSON.stringify(error.response.data)
-          );
+    async handleSuccess(response, file, fileList) {
+
+      try{
+        var response = await this.$axios.put(
+          "/problem/" + this.problemform.problem + "/",
+          this.problemform
+        );
+      }
+      catch(error){
+        console.log(error)
+      }
+      
+
+      this.problemdataform.problem = this.problemform.problem;
+      this.problemdataform.title = this.problemform.title;
+      this.problemdataform.level = this.problemform.level;
+      this.problemdataform.tag = this.problemform.tag;
+      this.problemdataform.score = this.problemform.score;
+      this.problemdataform.auth = this.problemform.auth;
+      var tag = this.problemdataform.tag.split("|");
+      for (var i = 0; i < tag.length; i++) {
+        try{
+          await this.$axios.post("/problemtag/", {
+            tagname: tag[i],
+            count: 1
+          });
+        }catch(error){
+          console.log(error)
+        }
+      }
+
+      try{
+        var response2 = await this.$axios.put(
+        "/problemdata/" + this.problemform.problem + "/",
+        this.problemdataform
+        );
+
+        this.$message({
+          message: "修改成功！修改题目编号为：" + response2.data.problem,
+          type: "success"
         });
         this.fileList = [];
         this.loading = false;

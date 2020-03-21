@@ -41,15 +41,6 @@
       <contestrank ref="Rankings"></contestrank>
     </el-tab-pane>
 
-    <el-tab-pane label="ChoiceProblems" >
-      <span slot="label">
-        <b>
-          <i class="el-icon-menu"></i> ChoiceProblems
-        </b>
-      </span>
-      <contestchoiceproblem ref="ChoiceProblems"></contestchoiceproblem>
-    </el-tab-pane>
-
     <el-tab-pane label="Announcements" :disabled="!haveauth">
       <span slot="label">
         <b>

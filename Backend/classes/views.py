@@ -20,6 +20,7 @@ class ClassDataView(viewsets.ModelViewSet):
     search_fields = ('className',)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter)
     pagination_class = LimitOffsetPagination
+    permission_classes = (ManagerOnly,)
     throttle_scope = "post"
 
 
@@ -27,6 +28,10 @@ class ClassDataAPIView(APIView):
     queryset = theClasses.objects.all()
     serializer_class = ClassDataSerializer
     def post(self, request, format = None):
+        type = request.session.get('type', 1)
+        if type != 2 and type != 3:
+            return Response("AddFail", status=HTTP_400_BAD_REQUEST)
+
         data = request.data.copy()
         serializer = ClassDataSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
@@ -38,6 +43,9 @@ class DeleteClassDataAPIView(APIView):
     queryset = theClasses.objects.all()
     serializer_class = ClassDataSerializer
     def delete(self, request, format=None):
+        type = request.session.get('type', 1)
+        if type != 2 and type != 3:
+            return Response("AddFail", status=HTTP_400_BAD_REQUEST)
         data = request.data.copy()
         CName = data["className"]
         if theClasses.objects.filter(className__exact=CName):
@@ -67,6 +75,11 @@ class ClassStudentDataAPIView(APIView):
         RName = data["studentRealName"]
         CName = data["className"]
         Number = data["studentNumber"]
+
+        userid = request.session.get('user_id', None)
+        if userid != Name:
+            return Response("JoinFail", status=HTTP_400_BAD_REQUEST)
+
         serializer = ClassStudentDataSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
             if ClassStudentData.objects.filter(studentUserName__exact=Name,className__exact=CName,studentNumber__exact=Number):

@@ -91,3 +91,22 @@ class UserRatingOnly2(permissions.BasePermission):
             return True
         else:
             return False
+
+class UserOnly(permissions.BasePermission):
+
+
+
+    def has_object_permission(self, request, view, blog):
+        if getVisitorPermission(request) == False:
+            return False
+
+        if request.session.get('type', 1) != 1:
+            return True
+
+        userid = request.session.get('user_id', None)
+
+        if userid == blog.username:
+            return True
+       
+
+    
