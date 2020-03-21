@@ -9,7 +9,7 @@ import os
 from time import sleep
 from Codeforces import get_CF_data
 from CodeforcesRate import get_CF_Rate
-from CodeForceContestCounter import getContestsTimeLine, get_CF_ContestCount
+from CodeForceContestCounter import get_CF_ContestCount
 from HDU import get_HDU_data
 from Vjudge import get_VJ_data
 from LPOJ import get_LPOJ_data
@@ -34,8 +34,7 @@ except Exception as e:
     exit(1)
 
 while True:
-    # CF contest
-    contestsTimeLine = getContestsTimeLine()
+    
     # AC num
     cursor = db.cursor()
     cursor.execute("SELECT * from board_board")
@@ -57,7 +56,7 @@ while True:
         if CFRate == -1:
             CFRate = 0
         
-        CFCount = get_CF_ContestCount(accounts[0],contestsTimeLine)
+        CFCount = get_CF_ContestCount(accounts[0])
         print(accounts[0], "CFCount:", CFCount)
         if CFCount[0] == -1:
             CFCount[0] = 0

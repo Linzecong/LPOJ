@@ -10,7 +10,10 @@ from rest_framework.pagination import LimitOffsetPagination
 from .models import JudgeStatus, CaseStatus
 from .serializers import JudgeStatusSerializer, CaseStatusSerializer, JudgeStatusCodeSerializer
 from .permission import ManagerOnly, UserRatingOnly, NoContestOnly
+from contest.models import ContestInfo
+from contest.serializers import ContestInfoSerializer
 import datetime
+
 
 
 class JudgeStatusView(viewsets.ModelViewSet):
@@ -54,8 +57,7 @@ class CaseStatusView(viewsets.ModelViewSet):
     throttle_classes = [ScopedRateThrottle, ]
 
 class ACRankView(viewsets.ModelViewSet):
-    queryset = JudgeStatus.objects.filter(submittime__gte=datetime.datetime.now(
-    )-datetime.timedelta(days=7),result=0) # 注意这里只是临时这么写！如果OJ使用的人多！这里会有性能问题！！
+    queryset = JudgeStatus.objects.filter(submittime__gte=datetime.datetime.now()-datetime.timedelta(days=7),result=0) # 注意这里只是临时这么写！如果OJ使用的人多！这里会有性能问题！！
     serializer_class = JudgeStatusSerializer
     pagination_class = LimitOffsetPagination
     filter_backends = (DjangoFilterBackend,)

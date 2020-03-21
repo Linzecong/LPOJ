@@ -8,7 +8,7 @@
 > 一个基于Vue.js和Django的轻量级在线评测系统
 >
 > 目前应用于广东外语外贸大学
-## Demo地址：[www.lpoj.cn](https://www.lpoj.cn)
+## Demo地址：[oj.lpoj.cn](https://oj.lpoj.cn)
 ## 说明文档：[docs.lpoj.cn](https://docs.lpoj.cn)
 
 ## 简述
@@ -16,12 +16,13 @@
 + 前后端分离，提高服务器性能
 + 支持多机器多进程判题，判题更高效
 + 支持 C/C++/Java/Python2/Python3和Swift5.1语言
-+ 支持 Special Judge
++ 支持 Special Judge和选择题判题
 + 丰富的API，开放的源代码
 + 实时爬取用户的博客和其他OJ的做题数
 + 丰富的算法知识和体系化的套题训练
 + 一键保存和导出代码模板
 + 包含类CF的积分体系和比赛机制
++ 班级管理与布置作业功能
 + 现代化的界面 + 手机适配
 + **支持类似LeetCode的模板题判题功能**
 
@@ -69,6 +70,8 @@ sudo docker-compose up -d --scale judger=3
 > 然后进入 IP:8000/admin 以用户名admin 密码admin 登录后台（请及时修改后台密码）
 > 
 > 修改User表中，你注册的超级用户的type为3，使得你注册的用户变为超级管理员
+> 
+> 以管理员登录，右上角进入管理员页面，然后在网站设置标签，提交一次设置
 
 3. 更新OJ
 
@@ -118,7 +121,7 @@ sudo docker-compose -f docker-compose-build.yml up -d --build --scale judger=3
 
 ![image6](https://www.lpoj.cn/githubimage/image6.png)
 
-或者你可以直接访问我们  [www.lpoj.cn](https://www.lpoj.cn)
+或者你可以直接访问我们  [oj.lpoj.cn](https://oj.lpoj.cn)
 
 ## 浏览器支持
 

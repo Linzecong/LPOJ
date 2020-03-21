@@ -1,190 +1,222 @@
 <template>
-  <el-card shadow="always" id="card">
-    <el-dialog :visible.sync="dialogVisible" width="80%">
-      <el-alert
-        title="Program Message:"
-        :type="compilemsg=='编译成功！'?'success':'warning'"
-        :description="compilemsg"
-        :closable="false"
-        show-icon
-        :show-close="false"
-      ></el-alert>
-      <el-alert title="Code：" type="info" :closable="false">
-        <el-button
-          size="mini"
-          v-clipboard:copy="code"
-          v-clipboard:success="onCopy"
-          v-clipboard:error="onError"
-        >Copy</el-button>
-        <el-button
-          size="mini"
-          @click="downloadFile(curid,code)"
-        >Download</el-button>
-        <el-button
-          v-if="isadmin"
-          type="danger"
-          size="mini"
-          @click="deletestatus(curid)"
-        >Delete</el-button>
+  <el-card shadow="always"
+           id="card">
+    <el-dialog :visible.sync="dialogVisible"
+               width="80%">
+      <el-alert title="Program Message:"
+                :type="compilemsg=='编译成功！'?'success':'warning'"
+                :description="compilemsg"
+                :closable="false"
+                show-icon
+                :show-close="false"></el-alert>
+      <el-alert title="Code："
+                type="info"
+                :closable="false">
+        <el-button size="mini"
+                   v-clipboard:copy="code"
+                   v-clipboard:success="onCopy"
+                   v-clipboard:error="onError">Copy</el-button>
+        <el-button size="mini"
+                   @click="downloadFile(curid,code)">Download</el-button>
+        <el-button v-if="isadmin"
+                   type="danger"
+                   size="mini"
+                   @click="deletestatus(curid)">Delete</el-button>
       </el-alert>
 
-      <codemirror id="mycode" v-model="code" :options="cmOptions"></codemirror>
+      <codemirror id="mycode"
+                  v-model="code"
+                  :options="cmOptions"></codemirror>
       <el-collapse>
-        <el-collapse-item :key="index" v-for="(data,index) in dialogdata" v-if="data.casedata!=''">
+        <el-collapse-item :key="index"
+                          v-for="(data,index) in dialogdata"
+                          v-if="data.casedata!=''">
+
           <template slot="title">
-            <el-alert
-              :show-icon="true"
-              :type="data.caseresult=='Accepted'?'success':(data.caseresult=='Wrong Answer'?'error':'warning')"
-              :closable="false"
-              v-show="data.casedata!=''"
-            >
+            <el-alert :show-icon="true"
+                      :type="data.caseresult=='Accepted'?'success':(data.caseresult=='Wrong Answer'?'error':'warning')"
+                      :closable="false"
+                      v-show="data.casedata!=''">
               <template slot="title">
                 <b>{{' '+data.caseresult + ' on test ' + data.casetitle}}</b>
               </template>
             </el-alert>
           </template>
-          <el-alert
-            :title="''"
-            :type="data.caseresult=='Accepted'?'success':(data.caseresult=='Wrong Answer'?'error':'warning')"
-            :closable="false"
-            v-show="data.casedata!=''"
-          >
-            <h5
-              style="white-space:pre;margin-left:15px;"
-              v-if="data.casedata!=''"
-            >{{'Time: '+ data.casetime + 'MS'+' Memory: '+data.casememory+'MB'}}</h5>
-            <h5 style="white-space:pre;margin-left:15px;" v-if="data.casedata!=''">Test Input:</h5>
-            <div
+          <el-alert :title="''"
+                    :type="data.caseresult=='Accepted'?'success':(data.caseresult=='Wrong Answer'?'error':'warning')"
+                    :closable="false"
+                    v-show="data.casedata!=''">
+            <h5 style="white-space:pre;margin-left:15px;"
+                v-if="data.casedata!=''">{{'Time: '+ data.casetime + 'MS'+' Memory: '+data.casememory+'MB'}}</h5>
+            <h5 style="white-space:pre;margin-left:15px;"
+                v-if="data.casedata!=''">Test Input:</h5>
+            <div style="white-space:pre;margin-left:15px;word-wrap:break-word;word-break: normal;"
+                 v-if="data.casedata!=''">{{data.casedata+'\n'}}</div>
 
-              style="white-space:pre;margin-left:15px;word-wrap:break-word;word-break: normal;"
-              v-if="data.casedata!=''"
-            >{{data.casedata+'\n'}}</div>
+            <h5 style="white-space:pre;margin-left:15px;"
+                v-if="data.casedata!=''">Your Output:</h5>
+            <div style="white-space:pre;margin-left:15px;word-wrap:break-word;word-break: normal;"
+                 v-if="data.casedata!=''">{{data.caseuseroutput+'\n'}}</div>
 
-            <h5 style="white-space:pre;margin-left:15px;" v-if="data.casedata!=''">Your Output:</h5>
-            <div
-              style="white-space:pre;margin-left:15px;word-wrap:break-word;word-break: normal;"
-              v-if="data.casedata!=''"
-            >{{data.caseuseroutput+'\n'}}</div>
-
-            <h5 style="white-space:pre;margin-left:15px;" v-if="data.casedata!=''">Expected Output:</h5>
-            <div
-              style="white-space:pre;margin-left:15px;word-wrap:break-word;word-break: normal;"
-              v-if="data.casedata!=''"
-            >{{data.caseoutputdata+'\n'}}</div>
+            <h5 style="white-space:pre;margin-left:15px;"
+                v-if="data.casedata!=''">Expected Output:</h5>
+            <div style="white-space:pre;margin-left:15px;word-wrap:break-word;word-break: normal;"
+                 v-if="data.casedata!=''">{{data.caseoutputdata+'\n'}}</div>
           </el-alert>
         </el-collapse-item>
       </el-collapse>
     </el-dialog>
 
     <el-dialog :visible.sync="searchdialogVisible">
-      <el-form :model="searchform" label-position="right" @keyup.native.enter="searchstatus">
+      <el-form :model="searchform"
+               label-position="right"
+               @keyup.native.enter="searchstatus">
         <el-form-item label="User:">
-          <el-input v-model="searchform.user" placeholder="User..."></el-input>
+          <el-input v-model="searchform.user"
+                    placeholder="User..."></el-input>
         </el-form-item>
         <el-form-item label="Problem Number：">
-          <el-input v-model="searchform.problem" placeholder="Problem Number...or ABCDE"></el-input>
+          <el-input v-model="searchform.problem"
+                    placeholder="Problem Number...or ABCDE"></el-input>
         </el-form-item>
         <el-form-item label="Language：">
-          <el-select v-model="searchform.language" placeholder="Choose...">
+          <el-select v-model="searchform.language"
+                     placeholder="Choose...">
             <languageselect></languageselect>
           </el-select>
         </el-form-item>
         <el-form-item label="Result：">
-          <el-select v-model="searchform.result" placeholder="Choose...">
-            <el-option key="0" label="Accepted" value="0"></el-option>
-            <el-option key="1" label="Wrong Answer" value="-3"></el-option>
-            <el-option key="2" label="Waiting" value="-6"></el-option>
-            <el-option key="3" label="Presentation Error" value="-5"></el-option>
-            <el-option key="4" label="Compile Error" value="-4"></el-option>
-            <el-option key="5" label="Pending" value="-1"></el-option>
-            <el-option key="6" label="Judging" value="-2"></el-option>
-            <el-option key="7" label="Time Limit Exceeded 1" value="1"></el-option>
-            <el-option key="8" label="Time Limit Exceeded 2" value="2"></el-option>
-            <el-option key="9" label="Memory Limit Exceeded" value="3"></el-option>
-            <el-option key="10" label="Runtime Error" value="4"></el-option>
-            <el-option key="11" label="System Error" value="5"></el-option>
+          <el-select v-model="searchform.result"
+                     placeholder="Choose...">
+            <el-option key="0"
+                       label="Accepted"
+                       value="0"></el-option>
+            <el-option key="1"
+                       label="Wrong Answer"
+                       value="-3"></el-option>
+            <el-option key="2"
+                       label="Waiting"
+                       value="-6"></el-option>
+            <el-option key="3"
+                       label="Presentation Error"
+                       value="-5"></el-option>
+            <el-option key="4"
+                       label="Compile Error"
+                       value="-4"></el-option>
+            <el-option key="5"
+                       label="Pending"
+                       value="-1"></el-option>
+            <el-option key="6"
+                       label="Judging"
+                       value="-2"></el-option>
+            <el-option key="7"
+                       label="Time Limit Exceeded 1"
+                       value="1"></el-option>
+            <el-option key="8"
+                       label="Time Limit Exceeded 2"
+                       value="2"></el-option>
+            <el-option key="9"
+                       label="Memory Limit Exceeded"
+                       value="3"></el-option>
+            <el-option key="10"
+                       label="Runtime Error"
+                       value="4"></el-option>
+            <el-option key="11"
+                       label="System Error"
+                       value="5"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
+      <div slot="footer"
+           class="dialog-footer">
         <el-button @click="searchdialogVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="searchstatus">OK</el-button>
+        <el-button type="primary"
+                   @click="searchstatus">OK</el-button>
       </div>
     </el-dialog>
 
-    <el-switch
-      style="float: right;margin:10px;"
-      v-model="showall"
-      active-text="Show Mine"
-      inactive-text="Show All"
-      @change="statuechange"
-    ></el-switch>
-    <el-button
-      type="primary"
-      @click="resetsearch"
-      style="float: right;margin-top:6px;margin-right:10px;"
-      size="mini"
-    >Refresh</el-button>
-    <el-button
-      type="primary"
-      @click="searchdialogVisible = true"
-      style="float: right;margin-top:6px;margin-right:15px;"
-      size="mini"
-    >Filter</el-button>
+    <el-switch style="float: right;margin:10px;"
+               v-model="showall"
+               active-text="Show Mine"
+               inactive-text="Show All"
+               @change="statuechange"></el-switch>
+    <el-button type="primary"
+               @click="resetsearch"
+               style="float: right;margin-top:6px;margin-right:10px;"
+               size="mini">Refresh</el-button>
+    <el-button type="primary"
+               @click="searchdialogVisible = true"
+               style="float: right;margin-top:6px;margin-right:15px;"
+               size="mini">Filter</el-button>
 
-    <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="currentpage"
-      :page-sizes="[10, 20, 30, 50]"
-      :page-size="pagesize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="totalstatus"
-    ></el-pagination>
+    <el-pagination @size-change="handleSizeChange"
+                   @current-change="handleCurrentChange"
+                   :current-page="currentpage"
+                   :page-sizes="[10, 20, 30, 50]"
+                   :page-size="pagesize"
+                   layout="total, sizes, prev, pager, next, jumper"
+                   :total="totalstatus"></el-pagination>
 
-    <el-table
-      :default-sort="{prop: 'id', order: 'descending'}"
-      :data="tableData"
-      style="width: 100%"
-      :row-style="ratingcolor"
-      @row-click="rowClick"
-      size="small"
-      v-loading="loading"
-    >
-      <el-table-column prop="id" label="ID" :width="70"></el-table-column>
-      <el-table-column prop="user" label="User" :width="140"></el-table-column>
-      <el-table-column prop="problemtitle" label="Problem" :width="320">
+    <el-table :default-sort="{prop: 'id', order: 'descending'}"
+              :data="tableData"
+              style="width: 100%"
+              :row-style="ratingcolor"
+              @row-click="rowClick"
+              size="small"
+              v-loading="loading">
+      <el-table-column prop="id"
+                       label="ID"
+                       :width="70"></el-table-column>
+      <el-table-column prop="user"
+                       label="User"
+                       :width="140"></el-table-column>
+      <el-table-column prop="problemtitle"
+                       label="Problem"
+                       :width="320">
         <template slot-scope="scope">
           <font color="#409EFF">
             <b style="cursor:pointer;">{{ scope.row.problemtitle }}</b>
           </font>
         </template>
       </el-table-column>
-      <el-table-column prop="result" label="Status" :width="285">
+      <el-table-column prop="result"
+                       label="Status"
+                       :width="285">
         <template slot-scope="scope">
-          <el-tag size="medium" :type="statuetype(scope.row.result)" disable-transitions hit>
+          <el-tag size="medium"
+                  :type="statuetype(scope.row.result)"
+                  disable-transitions
+                  hit>
             {{ scope.row.result }}
-            <i class="el-icon-loading" v-show="statuejudge(scope.row.result)"></i>
+            <i class="el-icon-loading"
+               v-show="statuejudge(scope.row.result)"></i>
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="time" label="Time"></el-table-column>
-      <el-table-column prop="memory" label="Memory"></el-table-column>
-      <el-table-column prop="length" label="Length"></el-table-column>
-      <el-table-column prop="language" label="Language"></el-table-column>
-      <el-table-column prop="submittime" label="Submit time" :width="180"></el-table-column>
-      <el-table-column prop="judger" label="Judger"></el-table-column>
+      <el-table-column prop="time"
+                       label="Time"></el-table-column>
+      <el-table-column prop="memory"
+                       label="Memory"></el-table-column>
+      <el-table-column prop="length"
+                       label="Length"></el-table-column>
+      <el-table-column prop="language"
+                       label="Language"></el-table-column>
+      <el-table-column prop="submittime"
+                       label="Submit time"
+                       :width="180"></el-table-column>
+      <el-table-column prop="judger"
+                       label="Judger"></el-table-column>
+      <el-table-column prop="ip"
+                       label="Submitted By"></el-table-column>
     </el-table>
     <center>
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="currentpage"
-        :page-sizes="[10, 20, 30, 50]"
-        :page-size="pagesize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="totalstatus"
-      ></el-pagination>
+      <el-pagination @size-change="handleSizeChange"
+                     @current-change="handleCurrentChange"
+                     :current-page="currentpage"
+                     :page-sizes="[10, 20, 30, 50]"
+                     :page-size="pagesize"
+                     layout="total, sizes, prev, pager, next, jumper"
+                     :total="totalstatus"></el-pagination>
     </center>
   </el-card>
 </template>
@@ -211,28 +243,28 @@ export default {
     languageselect
   },
   methods: {
-    deletestatus(id){
+    deletestatus (id) {
       this.$axios
         .delete("/judgestatus/" + id + "/").then(response => {
-            this.$message.success("成功！")
+          this.$message.success("成功！")
         })
         .catch(error => {
-          this.$message.error("失败！"+error)
+          this.$message.error("失败！" + error)
         });
     },
-    onCopy(e) {
+    onCopy (e) {
       this.$message.success("复制成功！");
     },
     // 复制失败
-    onError(e) {
+    onError (e) {
       this.$message.error("复制失败：" + e);
     },
 
-    rowClick(row, col, e) {
+    rowClick (row, col, e) {
       console.log(col);
 
       if (col.label == "Problem") {
-        if(this.contest != "0")
+        if (this.contest != "0")
           return
         this.$router.push({
           name: "problemdetail",
@@ -249,7 +281,7 @@ export default {
         return;
       }
 
-      
+
 
       this.dialogdata = [];
       this.code = "";
@@ -259,15 +291,15 @@ export default {
         .then(response => {
           this.code = response.data.code;
           this.curid = row.id;
-          if(response.data.language=="Python2") this.curlang = 'py'
-          if(response.data.language=="Python3") this.curlang = 'py'
-          if(response.data.language=="C++") this.curlang = 'cpp'
-          if(response.data.language=="C") this.curlang = 'c'
-          if(response.data.language=="Java") this.curlang = 'java'
-          if(response.data.language=="Swift5.1") this.curlang = 'swift'
+          if (response.data.language == "Python2") this.curlang = 'py'
+          if (response.data.language == "Python3") this.curlang = 'py'
+          if (response.data.language == "C++") this.curlang = 'cpp'
+          if (response.data.language == "C") this.curlang = 'c'
+          if (response.data.language == "Java") this.curlang = 'java'
+          if (response.data.language == "Swift5.1") this.curlang = 'swift'
 
           this.compilemsg = "编译成功！"
-          if (row.result!="Accepted")
+          if (row.result != "Accepted")
             this.compilemsg = row.result
           if (response.data.message + "" != "0") this.compilemsg = response.data.message
 
@@ -291,13 +323,13 @@ export default {
 
       this.dialogVisible = true;
     },
-    searchstatus() {
+    searchstatus () {
       this.currentpage = 1;
       this.searchdialogVisible = false;
       this.setusername(this.searchform.user);
       this.getstatusdata();
     },
-    resetsearch() {
+    resetsearch () {
       this.currentpage = 1;
       this.searchform.user = "";
       this.setusername(this.searchform.user);
@@ -306,7 +338,7 @@ export default {
       this.searchform.result = "";
       this.creattimer();
     },
-    handleSizeChange(val) {
+    handleSizeChange (val) {
       if (!this.username) this.username = this.$route.query.username;
       this.contest = this.$route.params.contestID;
       if (!this.contest) this.contest = "0";
@@ -314,7 +346,7 @@ export default {
       this.pagesize = val;
       this.getstatusdata();
     },
-    handleCurrentChange(val) {
+    handleCurrentChange (val) {
       if (!this.username) this.username = this.$route.query.username;
       this.contest = this.$route.params.contestID;
       if (!this.contest) this.contest = "0";
@@ -322,7 +354,7 @@ export default {
       this.currentpage = val;
       this.getstatusdata();
     },
-    ratingcolor({ row, rowIndex }) {
+    ratingcolor ({ row, rowIndex }) {
       var back = "";
       if (row.result == "Accepted")
         back = "background:#e6ffdf;font-weight: bold;";
@@ -339,7 +371,7 @@ export default {
       return "color:#303133;" + back;
     },
 
-    statuetype: function(type) {
+    statuetype: function (type) {
       if (type == "Pending") return "info";
       if (type == "Judging") return "";
       if (type == "Wrong Answer") return "danger";
@@ -355,7 +387,7 @@ export default {
 
       return "danger";
     },
-    statuejudge: function(type) {
+    statuejudge: function (type) {
       if (type == "Pending") return true;
       if (type == "Judging") return true;
       if (type == "Wrong Answer") return false;
@@ -370,7 +402,7 @@ export default {
       if (type == "System Error") return false;
       return false;
     },
-    timer: function() {
+    timer: function () {
       if (!this.username) this.username = this.$route.query.username;
       this.contest = this.$route.params.contestID;
       if (!this.contest) this.contest = "0";
@@ -382,39 +414,39 @@ export default {
       this.getstatusdata();
     },
 
-    getstatusdata() {
+    getstatusdata () {
       this.loading = true;
       var url = ""
-      if(this.contest != 0)
-        url =  "/judgestatus/?user=" +
-            this.username +
-            "&limit=" +
-            this.pagesize +
-            "&offset=" +
-            (this.currentpage - 1) * this.pagesize +
-            "&problemtitle=" +
-            this.searchform.problem +
-            "&language=" +
-            this.searchform.language +
-            "&result=" +
-            this.searchform.result +
-            "&contest=" +
-            this.contest
+      if (this.contest != 0)
+        url = "/judgestatus/?user=" +
+          this.username +
+          "&limit=" +
+          this.pagesize +
+          "&offset=" +
+          (this.currentpage - 1) * this.pagesize +
+          "&problemtitle=" +
+          this.searchform.problem +
+          "&language=" +
+          this.searchform.language +
+          "&result=" +
+          this.searchform.result +
+          "&contest=" +
+          this.contest
       else
-        url =  "/judgestatus/?user=" +
-            this.username +
-            "&limit=" +
-            this.pagesize +
-            "&offset=" +
-            (this.currentpage - 1) * this.pagesize +
-            "&problem=" +
-            this.searchform.problem +
-            "&language=" +
-            this.searchform.language +
-            "&result=" +
-            this.searchform.result +
-            "&contest=" +
-            this.contest
+        url = "/judgestatus/?user=" +
+          this.username +
+          "&limit=" +
+          this.pagesize +
+          "&offset=" +
+          (this.currentpage - 1) * this.pagesize +
+          "&problem=" +
+          this.searchform.problem +
+          "&language=" +
+          this.searchform.language +
+          "&result=" +
+          this.searchform.result +
+          "&contest=" +
+          this.contest
 
       this.$axios
         .get(url)
@@ -501,11 +533,11 @@ export default {
         });
     },
 
-    setusername(name) {
+    setusername (name) {
       this.$route.query.username = "";
       this.username = name;
     },
-    statuechange(val) {
+    statuechange (val) {
       if (val == true) {
         if (!sessionStorage.username) {
           this.showall = false;
@@ -515,12 +547,12 @@ export default {
         this.setusername("");
       }
     },
-    creattimer() {
+    creattimer () {
       clearInterval(this.$store.state.timer);
       this.timer();
       //this.$store.state.timer = setInterval(this.timer, 60000); 取消自动刷新
     },
-    downloadFile(codeid, content) {
+    downloadFile (codeid, content) {
       var aLink = document.createElement("a");
       var blob = new Blob([content], { type: "data:text/plain" });
       var downloadElement = document.createElement("a");
@@ -533,7 +565,7 @@ export default {
       window.URL.revokeObjectURL(href); //释放掉blob对象
     }
   },
-  data() {
+  data () {
     return {
       cmOptions: {
         tabSize: 4,
@@ -545,8 +577,8 @@ export default {
         lineWrapping: true
       },
       isadmin: false,
-      curid:0,
-      curlang:'cpp',
+      curid: 0,
+      curlang: 'cpp',
       tableData: [],
       currentpage: 1,
       pagesize: 30,
@@ -568,10 +600,10 @@ export default {
       }
     };
   },
-  destroyed() {
+  destroyed () {
     clearInterval(this.$store.state.timer);
   },
-  created() {
+  created () {
     //创建一个全局定时器，定时刷新状态
     this.isadmin = sessionStorage.type == 2 || sessionStorage.type == 3;
     this.timer();
