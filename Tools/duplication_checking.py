@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# 自行查看攻略！ https://dickgrune.com/Programs/similarity_tester/
+
 import MySQLdb
 import sys
 import os

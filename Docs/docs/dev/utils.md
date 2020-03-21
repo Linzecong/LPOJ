@@ -21,7 +21,9 @@ python main.py
 ## 查重脚本 duplication_checking.py
 
 此脚本基于SIM工具查重
-需要依赖：gcc,make,flex
+
+
+自行查看攻略！ https://dickgrune.com/Programs/similarity_tester/
 
 修改其中的数据库信息
 ```py
