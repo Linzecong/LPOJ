@@ -32,6 +32,7 @@ Vue.prototype.$axios = axios;
 
 const store = new Vuex.Store({
   state: {
+    loginip:""
   },
 })
 
@@ -104,7 +105,13 @@ function getYourIP(){
                   i--;
               }
           }
-          store.state.loginip=displayAddrs[0].toString();
+          try{
+            store.state.loginip= displayAddrs[0].toString();
+          }
+          catch(error){
+            ;
+          }
+          
       }
       
       function grepSDP(sdp) {

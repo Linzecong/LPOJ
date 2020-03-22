@@ -26,7 +26,7 @@ import Router from 'vue-router'
 // import homework from '@/components/mainpage/homework'
 // import givechoiceproblemscore from "@/components/admin/givechoiceproblemscore"
 
-const main = r => require.ensure([], () => r(require("@/components/main")), 'main"');
+const homepage = r => require.ensure([], () => r(require("@/components/main")), 'main"');
 const problem = r => require.ensure([], () => r(require("@/components/mainpage/problem")), 'mainpage');
 const statue = r => require.ensure([], () => r(require("@/components/mainpage/statue")), 'mainpage'); 
 const user = r => require.ensure([], () => r(require("@/components/mainpage/user")), 'mainpage');     
@@ -62,8 +62,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'main',
-      component: main
+      name: 'homepage',
+      component: homepage
     },
     {
       path: '/problem',
@@ -74,11 +74,6 @@ export default new Router({
       path: '/problemdetail',
       name: 'problemdetail',
       component: problemdetail,
-    },
-    {
-      path: '/main',
-      name: 'main',
-      component: main
     },
     {
       path: '/admin',
