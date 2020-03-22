@@ -47,6 +47,7 @@
 
 <script>
 export default {
+
   name: "contestchoiceproblem",
   data () {
     return {
@@ -170,12 +171,8 @@ export default {
         "rank": rank,
       }
     },
-    GetItem2: function (ChoiceProblemDatas) {
-      return ChoiceProblemDatas
-    }
   },
   created () {
-
     this.form.username = sessionStorage.username;
     this.form.contestid = this.$route.params.contestID;
     this.$axios.get("/contestchoiceproblem/?ContestId=" + this.$route.params.contestID)
@@ -185,80 +182,64 @@ export default {
         for (var i = 0; i < response.data.length; i++) {
           this.ChoiceProblemIds.push(response.data[i].ChoiceProblemId);
         }
-
         this.ChoiceProblemIds.sort(this.compare("rank"));
-
-        for (var i = 0; i < response.data.length; i++) {
-          this.$axios.get(
-            "/choiceproblem/?ChoiceProblemId="
-            + response.data[i].ChoiceProblemId
-          )
-            .then(response2 => {
+        (async () => {
+          const dataArray = await Promise.all(
+            this.ChoiceProblemIds.map(i => this.$axios.get(`/choiceproblem/?ChoiceProblemId=${i}`))
+          );
+          for (const { data } of dataArray) {
+            {
               this.ChoiceProblemDatas.push(
                 this.GetItem(
-                  response2.data[0].des,
-                  response2.data[0].choiceA,
-                  response2.data[0].choiceB,
-                  response2.data[0].choiceC,
-                  response2.data[0].choiceD,
-                  response2.data[0].rank,
+                  data[0].des,
+                  data[0].choiceA,
+                  data[0].choiceB,
+                  data[0].choiceC,
+                  data[0].choiceD,
+                  data[0].rank,
                 ));
-            })
-        }
+            }
+          }
+        })();
       })
-    this.$axios.get(
-      "/conteststudentchoiceanswer/?username=" +
-      this.form.username +
-      "&contestid=" +
-      this.form.contestid
-    )
-      .then(
-        response => {
-          this.myanswer = response.data[0].answer;
-        })
+      .then(() => {
+        this.$axios.get(
+          "/conteststudentchoiceanswer/?username=" +
+          this.form.username +
+          "&contestid=" +
+          this.form.contestid
+        )
+          .then(
+            response3 => {
+              this.myanswer = response3.data[0].answer;
+              if (response3.data[0].answer) {
+                var lastanswer = response3.data[0].answer;
+              }
+              if (lastanswer) {
+                for (var i = 0; i < this.ProblenCount; i++) {
+                  if (lastanswer[i] == 'A') {
+                    this.allRadio[i] = "A";
+                    this.radio[i] = this.ChoiceProblemDatas[i].choiceA;
+                  }
+                  else if (lastanswer[i] == 'B') {
+                    this.allRadio[i] = "B";
+                    this.radio[i] = this.ChoiceProblemDatas[i].choiceB;
+                  }
+                  else if (lastanswer[i] == 'C') {
+                    this.allRadio[i] = "C";
+                    this.radio[i] = this.ChoiceProblemDatas[i].choiceC;
+                  }
+                  else if (lastanswer[i] == 'D') {
+                    this.allRadio[i] = "D";
+                    this.radio[i] = this.ChoiceProblemDatas[i].choiceD;
+                  }
+                }
+              }
 
-    this.$axios.get(
-      "/conteststudentchoiceanswer/?username=" +
-      this.form.username +
-      "&contestid=" +
-      this.form.contestid
-    )
-      .then(
-        response => {
-          this.$axios.get("/contestchoiceproblem/?ContestId=" + this.$route.params.contestID)
-            .then(response2 => {
-              this.ProblenCount = response2.data.length;
-            })
+            });
+      })
 
-          var proCount = this.ProblenCount;
-          if (proCount > 0) {
-            var lastanswer = response.data[0].answer;
-          }
-          for (var i = 0; i < proCount; i++) {
-            if (lastanswer[i] == 'A') {
-              this.allRadio[i] = "A";
-              var tmp = this.ChoiceProblemDatas[i];
-              this.radio[i] = this.GetItem2(tmp.choiceA);
-            }
-            else if (lastanswer[i] == 'B') {
-              this.allRadio[i] = "B";
-              var tmp = this.ChoiceProblemDatas[i];
-              this.radio[i] = this.GetItem2(tmp.choiceB);
-            }
-            else if (lastanswer[i] == 'C') {
-              this.allRadio[i] = "C";
-              var tmp = this.ChoiceProblemDatas[i];
-              this.radio[i] = this.GetItem2(tmp.choiceC);
-            }
-            else if (lastanswer[i] == 'D') {
-              this.allRadio[i] = "D";
-              var tmp = this.ChoiceProblemDatas[i];
-              this.radio[i] = this.GetItem2(tmp.choiceD);
-            }
-          }
-        }
 
-      )
   }
 }
 </script>
