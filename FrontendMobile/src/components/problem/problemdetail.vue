@@ -10,6 +10,8 @@
 
       <mu-card-text>
         <div style="word-break:break-all;white-space:pre-line;" v-html="des" :key="des"></div>
+        <img :src="'data:image/jpeg;base64,'+imgcode"
+               class="img-responsive" v-if="imgcode!=''">
       </mu-card-text>
 
       <mu-card-text>
@@ -125,6 +127,7 @@ export default {
         theme: "base16-light",
         lineNumbers: true
       },
+      imgcode: "",
       title: "",
       des: "",
       input: "",
@@ -200,6 +203,17 @@ export default {
         this.addtime = response.data["addtime"] = moment(
           response.data["addtime"]
         ).format("YYYY-MM-DD HH:mm:ss");
+
+        this.$axios
+        .get("/showpic/", {
+          params: {
+            ProblemId: this.ID
+          }
+        })
+        .then(res => {
+          this.imgcode = res.data;
+        });
+
 
         this.oj = response.data.oj;
         this.source = response.data.source;

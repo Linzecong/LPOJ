@@ -33,7 +33,8 @@ Vue.prototype.$axios = axios;
 
 const store = new Vuex.Store({
   state: {
-    loginip:""
+    loginip:"",
+    logininfo:"",
   },
 })
 
@@ -71,19 +72,6 @@ if (sessionStorage.username != ""&&sessionStorage.username!=undefined) {
   sessionStorage.setItem("acpro", "");
 }
 
-function getYourIP(){
-  
-  store.state.loginip='mobile';
-    
-}
-
-
-try {
-  getYourIP()
-  store.state.logininfo = 'mobile'
-} catch (error) {
-  console.log(error)
-}
 
 
 
@@ -95,9 +83,7 @@ new Vue({
   template: '<App/>',
   render: h => h(App),
   created() {
-    if(this.$store.state.loginip.indexOf("请使用主流浏览器")>=0){
-      this.$toast.success("推荐使用主流浏览器，例如Chrome,Firefox,Opera,Safari等，如果是360浏览器，请关闭极速模式！")
-    }
+    
   }
 })
 
