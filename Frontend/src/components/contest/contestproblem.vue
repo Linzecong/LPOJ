@@ -223,9 +223,6 @@ export default {
       loading: false,
       curindex: 0,
 
-      ContestId: "",
-      SubmitIp: "",
-      ContestIpRange: ""
     };
   },
   filters: {
@@ -467,9 +464,6 @@ export default {
         this.$message.error("代码过短！");
         return;
       }
-
-      var Myip = require('ip').address();
-      var ipr = JSON.stringify(this.ContestIpRange);
 
       this.$confirm("确定提交该题吗？ 题目：" + this.title, "提交确认", {
         confirmButtonText: "确定",

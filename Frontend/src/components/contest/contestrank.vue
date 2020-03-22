@@ -248,6 +248,8 @@ export default {
         var nameset = new Set();
         var namevis = { "!!!": 1 };
         for (let index = 0; index < response.data.length; index++) {
+          // if(response.data[index].username=="admin") //这里可以排除某些用户！
+          //   continue;
           nameset.add(
             response.data[index].username + "|" + response.data[index].user
           );
@@ -256,9 +258,7 @@ export default {
           ] = 0;
         }
 
-        //移除Admin
-        let BanAdmin = nameset.indexOf('admin');
-        nameset.splice(BanAdmin, 1);
+
 
         //遍历每一个人，计算每一个人的信息
         for (var na of nameset) {

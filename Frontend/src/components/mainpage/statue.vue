@@ -206,8 +206,6 @@
                        :width="180"></el-table-column>
       <el-table-column prop="judger"
                        label="Judger"></el-table-column>
-      <el-table-column prop="ip"
-                       label="Submitted By"></el-table-column>
     </el-table>
     <center>
       <el-pagination @size-change="handleSizeChange"

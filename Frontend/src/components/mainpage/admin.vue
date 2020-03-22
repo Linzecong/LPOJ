@@ -2,6 +2,7 @@
   <el-tabs type="border-card"
            v-show="canshow"
            v-loading="loading">
+    
     <el-tab-pane label="添加题目">
       <adminaddproblem></adminaddproblem>
     </el-tab-pane>

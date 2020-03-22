@@ -37,7 +37,8 @@
 ## 使用Docker部署
 
 ### 环境准备
-1. 安装必要的依赖
+
+### 1. 安装必要的依赖
 ```
 sudo apt-get update
 sudo apt-get install -y git
@@ -46,7 +47,7 @@ sudo apt install docker-compose -y
 sudo apt-get install openssh-server -y
 sftp yourusername@localhost # 验证是否安装成功！
 ```
-2. 开始安装
+### 2. 开始安装
 
 ```
 git clone https://github.com/Linzecong/LPOJ.git && cd LPOJ
@@ -70,17 +71,17 @@ sudo docker-compose up -d --scale judger=3
 
 等命令执行完成，然后运行 **sudo docker ps -a** 当看到所有的容器的状态均为 Up 就代表 OJ 已经启动成功。
 
-3. 准备工作
+### 3. 准备工作
 
-安装成功后，先通过IP:8080访问OJ，注册一个用户
+1. 安装成功后，先通过IP:8080访问OJ，注册一个用户
 
-然后进入 IP:8000/admin 以用户名admin 密码admin 登录后台（请及时修改后台密码，这个后台作用仅用于修改管理员权限，因此没有样式）
+2. 然后进入 IP:8000/admin 以用户名admin 密码admin 登录后台（请及时修改后台密码，这个后台作用仅用于修改管理员权限，因此没有样式）
 
-修改User表中，你注册的超级用户的type为3，使得你注册的用户变为超级管理员
+3. 修改User表中，你注册的超级用户的type为3，使得你注册的用户变为超级管理员
 
-以管理员登录，右上角进入管理员页面，然后在网站设置标签，提交一次设置
+4. 以管理员登录，右上角进入管理员页面，然后在网站设置标签，提交一次设置
 
-4. 更新OJ
+### 4. 更新OJ
 
 如要更新OJ只需在LPOJ目录下执行如下步骤
 ```

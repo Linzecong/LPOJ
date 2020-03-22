@@ -17,6 +17,10 @@
 
 ## 源码解析
 
+大概原理是这样的，这个判题服务器充当一个网关的功能，由他来拉取需要判题的列表，然后发送给各个服务器。这个判题服务器直接跟数据库进行通讯（直接把数据库当做中间件来用，比较方便）。用轮训的方式，不断地从数据库获取未判题列表，然后发送给各个判题机。当有判题机连入时，自动起一个线程来处理判题机的消息。判题机会不断地发送心跳包给判题服务器。
+
+我真的写不动注释了！！！
+
 [main.py](https://github.com/Linzecong/LPOJ/blob/master/JudgerServer/main.py)
 
 [HDUVjudge.py](https://github.com/Linzecong/LPOJ/blob/master/Judger/VJudge/HDUVjudge.py)
