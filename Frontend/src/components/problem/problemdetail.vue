@@ -16,7 +16,7 @@
           </el-row>
 
           <img :src="'data:image/jpeg;base64,'+imgcode"
-               class="img-responsive">
+               class="img-responsive" v-if="imgcode!=''">
 
           <el-row :gutter="18"
                   id="des">Input</el-row>
