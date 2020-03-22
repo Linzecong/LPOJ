@@ -119,10 +119,17 @@ class UserLoginDataAPIView(APIView):
 
     def post(self, request, format=None):
         data = request.data.copy()
-        if data.get("ip"):
-            if request.META.get('HTTP_X_FORWARDED_FOR'):
-                data["ip"] = request.META.get("HTTP_X_FORWARDED_FOR")
-
+        
+        ip = "获取失败"
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[0]#所以这里是真实的ip
+        else:
+            ip = request.META.get('REMOTE_ADDR')#这里获得代理ip
+        
+        data["msg"] = request.META.get("HTTP_USER_AGENT","获取失败")
+        data["ip"] = ip
+        print(data)
         serializer = UserLoginDataSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
