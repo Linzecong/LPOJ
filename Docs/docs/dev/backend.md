@@ -154,7 +154,8 @@ python manage.py runserver 0.0.0.0:8000
 6. problem 题目模块
 7. user 用户相关模块
 8. wiki Wiki模块
-9. ProblemData 存放题目数据的文件夹
+9. classes 班级管理相关模块
+10. ProblemData 存放题目数据的文件夹
 
 本教程不会对每个模块都做详细介绍，但是会列出各文件的功能，和点出一些自己的实现方法。
 
@@ -232,6 +233,12 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 #### urls.py
 
 这个文件主要是用来填写路由信息
+
+**注意！！这里列出的是我设计的数据库格式，仅做参考~**
+
+**注意！！这里列出的是我设计的数据库格式，仅做参考~**
+
+**注意！！这里列出的是我设计的数据库格式，仅做参考~**
 
 ### Blog
 
@@ -324,6 +331,13 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 | :--  | :-- | :-- | :-- |
 | schoolname | 学校名称 | CharField | 用于显示在排行榜上的学校名字 |
 | ojname | OJ名称 | CharField | OJ左上角的标题 |
+|openwiki | 是否开启Wiki |BooleanField |  |
+| openlanguage | 开启的语言| CharField |  | 
+| openoi| 是否开启OI判题模式 | BooleanField |  | 
+ |   openstatus | 是否开启代码 查看| BooleanField |  |  
+ |   openvisitor | 是否开启游客访问| BooleanField |  | 
+ |   openregister| 是否开启注册| BooleanField |  |  
+ |   openselfstatus | 自己是否能查看自己的代码| BooleanField |  |  
 
 **Board**
 
@@ -1174,5 +1188,10 @@ python manage.py startapp yourappname
 python manager.py makemigrations yourappname
 python manager.py migrate yourappname
 ```
+
+
+以上方法是最简单的方法，大家学习Django后，会对添加API接口的方式更加熟悉，可以写得更加底层更加优雅~
+
+
 
 以上就是后端开发教程

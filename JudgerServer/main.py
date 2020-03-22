@@ -58,7 +58,7 @@ def deal_client(newSocket: socket, addr):
     cursor = db.cursor()
     falsetime = 0
     while True:
-        sleep(2) # 每隔一秒取两次
+        sleep(2) # 每隔两秒取两次
         if mutex.acquire(): # 获取队列锁
             try:
                 if statue == True and queue.empty() is not True:

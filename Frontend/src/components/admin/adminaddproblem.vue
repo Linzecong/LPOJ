@@ -1,5 +1,6 @@
 <template>
   <el-form ref="addproblemform" :model="addproblemform" label-position="right" v-loading="loading">
+    <h3><a style="text-decoration: none;color:#67C23A;" target="_blank" href="https://docs.lpoj.cn/doc/oj.html#%E7%AE%A1%E7%90%86%E5%91%98%E9%A1%B5%E9%9D%A2%E8%AF%B4%E6%98%8E">具体使用，点我看管理员文档</a></h3>
     <el-form-item label="题目编号：">
       <el-input v-model="addproblemform.problem" style="width:400px;" readonly></el-input>
     </el-form-item>
@@ -35,10 +36,10 @@
     <el-form-item label="提示：">
       <el-input type="textarea" v-model="addproblemform.hint" autosize style="width:800px;"></el-input>
     </el-form-item>
-    <el-form-item label="是否Special Judge（规则详见 https://docs.lpoj.cn/doc/#special-judge）">
+    <el-form-item label="是否Special Judge（规则详见管理员文档）">
       <el-switch v-model="addproblemform.isspj" active-text="是" inactive-text="否"></el-switch>
     </el-form-item>
-    <el-form-item label="是否模板题">
+    <el-form-item label="是否模板题（规则详见管理员文档）">
       <el-switch v-model="addproblemform.istemp" active-text="是" inactive-text="否"></el-switch>
     </el-form-item>
 
@@ -121,6 +122,7 @@
         class="el-upload__tip"
       >只能上传zip/jpg文件【注意是小写字母后缀】,压缩包内的不要有文件夹，输入输出文件后缀为.in和.out.添加一个casedes.txt文件（utf-8编码）可以对每一个样例进行说明，每行一个说明，中间不要有多余的空行，对应的case用|隔开，如： case1|这是case1的说明</div>
     </el-upload>
+    <h5><a style="text-decoration: none;color:#67C23A;" target="_blank" href="https://docs.lpoj.cn/doc/judger.html#special-judge">点我看判题机文档</a></h5>
 
     <el-button type="success" @click="onAddProblemSubmit" style="float:right;">添加题目</el-button>
   </el-form>

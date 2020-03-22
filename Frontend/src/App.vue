@@ -7,7 +7,7 @@
              id="nav">
       <el-menu-item index="/"
                     id="title">{{school}}</el-menu-item>
-      <el-menu-item index="/main">
+      <el-menu-item index="/">
         <i class="el-icon-star-off"></i>Home
       </el-menu-item>
       <el-menu-item index="/problem">

@@ -8,7 +8,7 @@
 > 一个基于Vue.js和Django的轻量级在线评测系统
 >
 > 目前应用于广东外语外贸大学
-## Demo地址：[oj.lpoj.cn](https://oj.lpoj.cn)
+## 演示地址：[oj.lpoj.cn](https://oj.lpoj.cn)
 ## 说明文档：[docs.lpoj.cn](https://docs.lpoj.cn)
 
 ## 简述
@@ -18,13 +18,12 @@
 + 支持 C/C++/Java/Python2/Python3和Swift5.1语言
 + 支持 Special Judge和选择题判题
 + 丰富的API，开放的源代码
-+ 实时爬取用户的博客和其他OJ的做题数
-+ 丰富的算法知识和体系化的套题训练
 + 一键保存和导出代码模板
-+ 包含类CF的积分体系和比赛机制
-+ 班级管理与布置作业功能
-+ 现代化的界面 + 手机适配
 + **支持类似LeetCode的模板题判题功能**
++ **新增班级管理与布置作业功能**
++ 现代化的界面 + 手机适配
++ 实时爬取自定义用户的博客和其他OJ的做题数
++ 丰富的算法知识和体系化的套题训练
 
 ## 模块列表
 + [前端 Vue.js](https://github.com/Linzecong/LPOJ/tree/master/Frontend)
@@ -36,8 +35,10 @@
 
 
 ## 使用Docker部署
+
 ### 环境准备
-1. 安装必要的依赖
+
+### 1. 安装必要的依赖
 ```
 sudo apt-get update
 sudo apt-get install -y git
@@ -46,45 +47,51 @@ sudo apt install docker-compose -y
 sudo apt-get install openssh-server -y
 sftp yourusername@localhost # 验证是否安装成功！
 ```
-2. 开始安装
+### 2. 开始安装
+
 ```
 git clone https://github.com/Linzecong/LPOJ.git && cd LPOJ
+```
 
-# 如有需要，修改docker-compose.yml中的数据库密码（所有的 DB_PASSWORD，MYSQL_ROOT_PASSWORD 字段）
+**请修改docker-compose.yml中的数据库密码（所有的 DB_PASSWORD，MYSQL_ROOT_PASSWORD 字段**
 
-# 必须修改docker-compose.yml中的BACKEND_PATH,SFTP_USER,SFTP_PASSWORD为你的LPOJ/Backend文件夹的绝对路径和服务器的用户名密码
 
-# 必须修改docker-compose.yml中的SFTP_IP为你的服务器的IP
+**必须修改docker-compose.yml中的BACKEND_PATH, SFTP_USER, SFTP_PASSWORD 为你的LPOJ/Backend文件夹的绝对路径和运行的服务器的SFTP用户名密码（没有新增用户的话一般用你的登录用户）**
 
-sudo docker-compose up -d --scale judger=3
-
-# 以上命令默认开启3个判题机，可以自行修改数量
+**必须修改docker-compose.yml中的SFTP_IP为你的服务器的IP**
 
 ```
+sudo docker-compose up -d --scale judger=3
+```
+
+以上命令默认开启3个判题机，可以自行修改数量
+
+
 根据网速和配置情况，大约10到20分钟就可以自动搭建完成，全程无需人工干预。
 
 等命令执行完成，然后运行 **sudo docker ps -a** 当看到所有的容器的状态均为 Up 就代表 OJ 已经启动成功。
 
-> 安装成功后，先通过IP:8080访问OJ，注册一个用户
-> 
-> 然后进入 IP:8000/admin 以用户名admin 密码admin 登录后台（请及时修改后台密码）
-> 
-> 修改User表中，你注册的超级用户的type为3，使得你注册的用户变为超级管理员
-> 
-> 以管理员登录，右上角进入管理员页面，然后在网站设置标签，提交一次设置
+### 3. 准备工作
 
-3. 更新OJ
+1. 安装成功后，先通过IP:8080访问OJ，注册一个用户
+
+2. 然后进入 IP:8000/admin 以用户名admin 密码admin 登录后台（请及时修改后台密码，这个后台作用仅用于修改管理员权限，因此没有样式）
+
+3. 修改User表中，你注册的超级用户的type为3，使得你注册的用户变为超级管理员
+
+4. 以管理员登录，右上角进入管理员页面，然后在网站设置标签，提交一次设置
+
+### 4. 更新OJ
 
 如要更新OJ只需在LPOJ目录下执行如下步骤
 ```
-git pull
+git pull # 如果你修改了代码，自行解决merge得到情况
 sudo docker-compose stop
 sudo docker-compose pull
 sudo docker-compose up -d --scale judger=3
-# 以上命令默认开启3个判题机，可以自行修改数量
 ```
 
-**容易运行时产生的数据会保存在对应的文件夹中，如数据库文件，题目数据等**
+**容器运行时产生的数据会保存在对应的文件夹中，如数据库文件，题目数据等**
 
 ## 自定义OJ
 
@@ -99,6 +106,8 @@ git clone https://github.com/Linzecong/LPOJ.git && cd LPOJ
 sudo docker-compose -f docker-compose-build.yml up -d --build --scale judger=3
 ```
 
+同样的，您需要修改**docker-compose-build.yml**中的配置，详见**开始安装**
+
 由于会重新构建整个系统，而不是拉去已构建好的镜像，所以花的时间会比较长~请耐心等待
 
 网站的静态文件可以放在 ./Frontend/dist/img中，比如存放题目所用的图片
@@ -106,6 +115,17 @@ sudo docker-compose -f docker-compose-build.yml up -d --build --scale judger=3
 
 ## 如无意外，部署成功！
 具体使用，请参阅使用[文档](https://docs.lpoj.cn)
+
+## 更新日志
+
+3.3 更新类似LeetCode的模板题功能
+
+3.4 更新班级管理和布置作业功能，可以在比赛中添加选择题
+
+## 代办功能
+
+1. 封榜功能
+2. 更优秀的排行榜显示（现在人数多了会卡）
 
 ## 部分截图
 

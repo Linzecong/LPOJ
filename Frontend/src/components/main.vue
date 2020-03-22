@@ -65,7 +65,7 @@ export default {
     description,
     cfrate
   },
-  name: "main",
+  name: "homepage",
   data() {
     return {
       label: {

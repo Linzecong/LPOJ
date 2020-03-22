@@ -30,17 +30,19 @@
 + 前后端分离，提高服务器性能
 + 支持多机器多进程判题，判题更高效
 + 支持 C/C++/Java/Python2/Python3和Swift5.1语言
-+ 支持 Special Judge
++ 支持 Special Judge和选择题判题
 + 丰富的API，开放的源代码
-+ 实时爬取用户的博客和其他OJ的做题数
-+ 丰富的算法知识和体系化的套题训练
 + 一键保存和导出代码模板
-+ 包含类CF的积分体系和比赛机制
-+ 现代化的界面 + 手机适配
 + **支持类似LeetCode的模板题判题功能**
++ **新增班级管理与布置作业功能**
++ 现代化的界面 + 手机适配
++ 实时爬取自定义用户的博客和其他OJ的做题数
++ 丰富的算法知识和体系化的套题训练
+
 
 ## 模块列表
 + [前端 Vue.js](https://github.com/Linzecong/LPOJ/tree/master/Frontend)
++ [手机前端 Vue.js](https://github.com/Linzecong/LPOJ/tree/master/FrontendMobile)
 + [后端 Djangorestframework](https://github.com/Linzecong/LPOJ/tree/master/Backend)
 + [判题服务器 Python](https://github.com/Linzecong/LPOJ/tree/master/JudgerServer)
 + [判题程序 Python](https://github.com/Linzecong/LPOJ/tree/master/Judger)

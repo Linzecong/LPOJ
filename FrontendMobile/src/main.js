@@ -33,6 +33,7 @@ Vue.prototype.$axios = axios;
 
 const store = new Vuex.Store({
   state: {
+    loginip:""
   },
 })
 

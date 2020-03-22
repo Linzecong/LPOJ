@@ -45,6 +45,8 @@
                    v-html="des"
                    :key="des"></div>
             </el-row>
+            <img :src="'data:image/jpeg;base64,'+imgcode"
+               class="img-responsive" v-if="imgcode!=''">
             <el-row :gutter="18"
                     id="des">Input</el-row>
             <el-row :gutter="18"
@@ -170,6 +172,7 @@ export default {
   },
   data () {
     return {
+      imgcode: "",
       ip: "",
       userip: "",
       cmOptions: {
@@ -220,9 +223,6 @@ export default {
       loading: false,
       curindex: 0,
 
-      ContestId: "",
-      SubmitIp: "",
-      ContestIpRange: ""
     };
   },
   filters: {
@@ -311,6 +311,16 @@ export default {
           this.soutput = response.data.soutput.split("|#)");
           this.author = response.data.author;
           this.source = response.data.source;
+
+          this.$axios
+          .get("/showpic/", {
+            params: {
+              ProblemId: this.currentproblem
+            }
+          })
+          .then(res => {
+            this.imgcode = res.data;
+          });
 
           var li = response.data.template.split("*****")
           for (var i = 1; i < li.length; i += 2) {
@@ -408,7 +418,16 @@ export default {
                     this.codetemplate[li[i]] = li[i + 1]
                   }
                   this.code = this.codetemplate[this.language]
-
+                  
+                  this.$axios
+                  .get("/showpic/", {
+                    params: {
+                      ProblemId: this.currentproblem
+                    }
+                  })
+                  .then(res => {
+                    this.imgcode = res.data;
+                  });
 
                   if (this.oj != "LPOJ") {
                     this.proid = this.source
@@ -445,9 +464,6 @@ export default {
         this.$message.error("代码过短！");
         return;
       }
-
-      var Myip = require('ip').address();
-      var ipr = JSON.stringify(this.ContestIpRange);
 
       this.$confirm("确定提交该题吗？ 题目：" + this.title, "提交确认", {
         confirmButtonText: "确定",
@@ -716,5 +732,10 @@ export default {
 
 .el-row {
   margin-bottom: 20px;
+}
+.img-responsive {
+  display: inline-block;
+  height: auto;
+  max-width: 75%;
 }
 </style>
