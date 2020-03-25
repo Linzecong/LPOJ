@@ -396,44 +396,28 @@ def judgeCPP(timelimit, memorylimit, inputpath, outputpath, errorpath, id, judge
 
 def judgeJava(timelimit, memorylimit, inputpath, outputpath, errorpath, id, judgername):
 
-    com1 = "/usr/bin/time -f '"+"%"+"U' -o %stime.txt " % (judgername)
-    com2 = "timeout %s java -cp %s -Djava.security.manager -Djava.security.policy==policy -Djava.awt.headless=true Main 1>%s 2>%s<%s" % (
-        str(timelimit/1000.0), judgername, outputpath, errorpath, inputpath)
-    com = com1 + com2
-    result = os.system(com)
-
-    ret = dict()
-
-    if result == 0:
-        tf = open(judgername+"time.txt", "r")
-        time = tf.read()
-        time = float(str(time).strip())*1000
-        ret["cpu_time"] = int(time)
-        ret["memory"] = 5201314
-        ret["result"] = 0
-        ret["exit_code"] = result
-        ret["signal"] = 0
-        tf.close()
-    elif result == 31744:
-        ret["cpu_time"] = timelimit
-        ret["memory"] = 5201314
-        ret["result"] = 1
-        ret["exit_code"] = result
-        ret["signal"] = 0
-    else:
-        tf = open(errorpath, "r")
-        msg = tf.read()
-        GlobalVar.cursor.execute(
-            "UPDATE judgestatus_judgestatus SET message=%s WHERE id = %s", (msg, id))
-        GlobalVar.db.commit()
-        ret["cpu_time"] = 0
-        ret["memory"] = 5201314
-        ret["result"] = 4
-        ret["exit_code"] = result
-        ret["signal"] = 0
-        tf.close()
-
-    return ret
+    return _judger.run(max_cpu_time=timelimit,
+                        max_real_time=timelimit*10,
+                        max_memory=memorylimit * 1024 * 1024,
+                        max_process_number=200,
+                        max_output_size=32 * 1024 * 1024,
+                        max_stack=32 * 1024 * 1024,
+                        # five args above can be _judger.UNLIMITED
+                        exe_path="/usr/bin/java",
+                        input_path=inputpath,
+                        output_path=outputpath,
+                        error_path=errorpath,
+                        args=["-cp",judgername,"-Djava.security.policy==policy","-Djava.awt.headless=true","Main"],
+                        # can be empty list
+                        env=[],
+                        log_path=judgername+"judger.log",
+                        # can be None
+                        seccomp_rule_name=None,
+                        memory_limit_check_only=1,
+                        uid=0,
+                        gid=0
+                        )
+                        
 
 def judgeSwift(timelimit, memorylimit, inputpath, outputpath, errorpath, id, judgername):
     return _judger.run(max_cpu_time=timelimit,
