@@ -78,24 +78,31 @@ class GlobalVar:
         datajsonfile.close()
 
         GlobalVar.judgername = socket.gethostbyname(socket.gethostname())
+        GlobalVar.logger.info("Judger name: " + GlobalVar.judgername)
 
         GlobalVar.host = GlobalVar.judgerjson["server_ip"]
         GlobalVar.port = GlobalVar.judgerjson["server_port"]
         GlobalVar.python3path = GlobalVar.judgerjson["python3_path"]
         GlobalVar.python2path = GlobalVar.judgerjson["python2_path"]
 
+        GlobalVar.logger.info("Connecting database !")
         GlobalVar.db = MySQLdb.connect(GlobalVar.judgerjson["db_ip"], GlobalVar.judgerjson["db_user"], GlobalVar.judgerjson["db_pass"],
                             GlobalVar.judgerjson["db_database"], int(GlobalVar.judgerjson["db_port"]), charset='utf8')
         GlobalVar.cursor = GlobalVar.db.cursor()
+        GlobalVar.logger.info("Connect db succeed!")
 
+        GlobalVar.logger.info("Connecting sftp !")
         if GlobalVar.judgerjson["nodownload"] != "yes":
             GlobalVar.sftp_t = paramiko.Transport((GlobalVar.judgerjson["sftp_ip"], 22))
             GlobalVar.sftp_t.connect(username=GlobalVar.judgerjson["sftp_username"],
                         password=GlobalVar.judgerjson["sftp_password"])  # 登录远程服务器
             GlobalVar.sftp = paramiko.SFTPClient.from_transport(GlobalVar.sftp_t)  # sftp传输协议
+        GlobalVar.logger.info("Connect sftp succeed!")
 
+        GlobalVar.logger.info("Connecting judger server!")
         GlobalVar.clientsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         GlobalVar.clientsocket.connect((GlobalVar.host, GlobalVar.port))
+        GlobalVar.logger.info("Connect judger server succeed!")
 
 class Controller:
 
@@ -594,6 +601,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
         ojpro: 其实是提交中的message字段，用于保存VJudge中提交的是远程OJ的哪一题
     """
 
+    GlobalVar.logger.info("Begin to judger %d"%id)
     contest = int(contest)
     contest = contest + 1 # 迷之Bug
     contest = contest - 1
@@ -617,23 +625,22 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
     templatemsg = ""
 
 
-    if oj != "LPOJ":
-        if oj == "HDU":
-            try:
-                jr = JudgeHDU(ojpro, lang, code)
-                if jr[0] == "-4":
-                    Controller.compileError(id,problem,jr[3])
-                    GlobalVar.statue = True
-                    return
-                if jr[0] == "0":
-                    Controller.acProblem(id,problem,jr[3],int(jr[2]), int(jr[1]),username,score,HaveAC,contest)
-                    GlobalVar.statue = True
-                else:
-                    Controller.doneProblem(id,problem,jr[3],int(jr[2]), int(jr[1]),username,contest,jr[0],"?")
-                    GlobalVar.statue = True
-            except Exception as e:
-                Controller.doneProblem(id,problem,str(e).replace('\'',"").replace("\"",""),0, 0,username,contest,"5","?")
+    if oj == "HDU":
+        try:
+            jr = JudgeHDU(ojpro, lang, code)
+            if jr[0] == "-4":
+                Controller.compileError(id,problem,jr[3])
                 GlobalVar.statue = True
+                return
+            if jr[0] == "0":
+                Controller.acProblem(id,problem,jr[3],int(jr[2]), int(jr[1]),username,score,HaveAC,contest)
+                GlobalVar.statue = True
+            else:
+                Controller.doneProblem(id,problem,jr[3],int(jr[2]), int(jr[1]),username,contest,jr[0],"?")
+                GlobalVar.statue = True
+        except Exception as e:
+            Controller.doneProblem(id,problem,str(e).replace('\'',"").replace("\"",""),0, 0,username,contest,"5","?")
+            GlobalVar.statue = True
         return
     else:
 
@@ -652,7 +659,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
             GlobalVar.statue = True
             return
 
-
+        GlobalVar.logger.info("Begin to Compile!")
         if lang == "C": 
             # 模板题测试
             if os.path.isfile("./ProblemData/%s/template.c" %problem):
@@ -768,7 +775,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
 
         # 尝试下载数据
 
-        
+        GlobalVar.logger.info("Loading datas!!")
         tempset = set()  # 用于判读数据是否都有in,out
         newfiles = set()
         casedes = dict()
@@ -947,6 +954,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 result = 0  # 0 ac -3 wrong -5 presentation
                 # specialjudge，如果spj.cpp存在，则判定为特判问题
                 if os.path.isfile("./ProblemData/%s/spj.cpp" %problem):
+                    GlobalVar.logger.info("Begin to special judge!!")
                     isspj = " (This test case is Special Judge) "
                     r = specialjudge(problem,"./ProblemData/%s/%s.in" %(problem, filename), "./ProblemData/%s/%s.out" % (problem, filename), GlobalVar.judgername+"temp.out")
                     if r == 256: result = -3
@@ -959,6 +967,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                         tmsg.close()
 
                 else:
+                    GlobalVar.logger.info("Comparing output!")
                     # 比较输出文件是否一致!
                     file1 = open(GlobalVar.judgername+"temp.out", "r")
                     file2 = open("./ProblemData/%s/%s.out" %
@@ -1041,7 +1050,9 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                         outputdata,
                         useroutputdata
                     )
+                GlobalVar.logger.info("Done one data!")
 
+        GlobalVar.logger.info("Judge all data done, begin to save result!")
         # 所有样例评判结束，汇总结果!
         if myresult == 100:
             Controller.acProblem(id,problem,"",maxmemory/1024/1024,maxtime,username,score,HaveAC,contest)
@@ -1052,6 +1063,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 Controller.doneProblem(id,problem,"",mymemory/1024/1024, mytime,username,contest,myresult,mytestcase)
 
         GlobalVar.statue = True
+        GlobalVar.logger.info("All done!!")
 
 
 def reconnect():
@@ -1107,12 +1119,13 @@ def MainLoop():
                             isoi = isoi[5]
                         else:
                             isoi = True
-
+                        GlobalVar.logger.info("Starting judge thread!")
                         t = threading.Thread(target=judge, args=(
                             data[0], data[13], data[8], data[3], data[11], data[1], data[9], data[12], data[2],data[15],isoi))
                         t.setDaemon(True)
                         t.start()
                     except:
+                        GlobalVar.logger.error("db error!!")
                         GlobalVar.db.rollback()
                         GlobalVar.statue = True
             else:
