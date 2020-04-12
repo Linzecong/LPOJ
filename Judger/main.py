@@ -11,7 +11,9 @@ import os
 import zipfile
 import time
 import datetime
+import logging
 from JudgeHDU.JudgeHDU import JudgeHDU
+
 
 # 全局变量类，用于保存全局变量
 class GlobalVar:
@@ -29,8 +31,29 @@ class GlobalVar:
     sftp = None
     clientsocket = None
 
+    logger = None
+
+    @staticmethod
+    def initLogger():
+        GlobalVar.logger = logging.getLogger(__name__)
+        GlobalVar.logger.setLevel(level = logging.INFO)
+        handler = logging.FileHandler("judger.log")
+        handler.setLevel(logging.INFO)
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        handler.setFormatter(formatter)
+
+        console = logging.StreamHandler()
+        console.setLevel(logging.INFO)
+
+        GlobalVar.logger.addHandler(handler)
+        GlobalVar.logger.addHandler(console)
+
+        GlobalVar.logger.info("Start print log")
+
     @staticmethod 
     def initGlobalVar():
+        GlobalVar.initLogger()
+
         GlobalVar.statue = True
         myjsonfile = open("./setting.json", 'r')
         GlobalVar.judgerjson = json.loads(myjsonfile.read())
@@ -111,7 +134,7 @@ class Controller:
 
     @staticmethod
     def compileError(id,problem,message):
-        print(id,message,problem)
+        GlobalVar.logger.info("Compile error! "+str(id))
         GlobalVar.cursor.execute("UPDATE judgestatus_judgestatus SET result = '-4',message=%s WHERE id = %s", (message, id))
         GlobalVar.cursor.execute("UPDATE problem_problemdata SET ce = ce+1 WHERE problem = '%s'" % problem)
         GlobalVar.db.commit()
@@ -135,7 +158,7 @@ class Controller:
     @staticmethod
     def doneProblem(id,problem,message,memory,mytime,username,contest,result,testcase):
         if message != "":
-            print(message)
+            GlobalVar.logger.info(message)
             GlobalVar.cursor.execute("UPDATE judgestatus_judgestatus SET memory = %s, time= %s, result = %s,testcase=%s,message=%s  WHERE id = %s" , (str(memory), str(mytime), str(result), str(testcase),str(message), str(id)))
         else:
             GlobalVar.cursor.execute("UPDATE judgestatus_judgestatus SET memory = %d, time= %d, result = '%s',testcase='%s' WHERE id = '%s'" % (memory, mytime, result,testcase, id))
@@ -169,7 +192,6 @@ def specialjudge(problem,testin,testout,userout):
     if result:
         return 5
     res = os.system("timeout 20 ./%s.out %s %s %s" % (GlobalVar.judgername, testin, testout, userout))
-    print(res)
     return res
 
 # 用于远程下载数据文件，首先判断数据文件有没有更新，有的话就更新
@@ -203,16 +225,19 @@ def remote_scp(host_ip, remote_path, local_path, username, password, problem):
                 tmpfile.write(tstr)
                 tmpfile.close()
                 
-            print("Extract Succeed!")
+            GlobalVar.logger.info("Extract Succeed!")
             return True
         except:
             shutil.rmtree("./ProblemData/" +
                           dirname+"/", ignore_errors=True)
             os.remove("./ProblemData/"+str(problem)+".zip")
-            print("Extract Failed!")
+           
+            GlobalVar.logger.error("No Download Extract failed!!")
             return False
+
     try:
         if GlobalVar.sftp_t.is_authenticated() == False:
+            GlobalVar.logger.info("Connecting sftp!")
             GlobalVar.sftp_t.close()
             GlobalVar.sftp_t = paramiko.Transport((host_ip, 22))
             GlobalVar.sftp_t.connect(username=username, password=password)  # 登录远程服务器
@@ -221,6 +246,7 @@ def remote_scp(host_ip, remote_path, local_path, username, password, problem):
         try:
             remt = GlobalVar.sftp.stat(remote_path).st_mtime
         except:
+            GlobalVar.logger.info("Reconnect sftp!!")
             GlobalVar.sftp_t = paramiko.Transport((host_ip, 22))
             GlobalVar.sftp_t.connect(username=username, password=password)  # 登录远程服务器
             GlobalVar.sftp = paramiko.SFTPClient.from_transport(GlobalVar.sftp_t)  # sftp传输协议
@@ -234,11 +260,13 @@ def remote_scp(host_ip, remote_path, local_path, username, password, problem):
             json.dump(GlobalVar.datatimejson, json_file, ensure_ascii=False)
             json_file.close()
 
-        print("download "+remote_path+" to "+local_path)
+        GlobalVar.logger.info("Begin to download "+remote_path+" to "+local_path)
         GlobalVar.sftp.get(remote_path, local_path)  # 下载文件
+        GlobalVar.logger.info("Download done!!")
         # 解压文件
         dirname = str(problem)
         try:
+            GlobalVar.logger.info("Begin to Extract!")
             shutil.rmtree("./ProblemData/" +
                           dirname+"/", ignore_errors=True)
             f = zipfile.ZipFile("./ProblemData/"+str(problem)+".zip", 'r')
@@ -256,16 +284,16 @@ def remote_scp(host_ip, remote_path, local_path, username, password, problem):
                 tmpfile.write(tstr)
                 tmpfile.close()
                 
-            print("Extract Succeed!")
+            GlobalVar.logger.info("Extract succeed!!")
             return True
         except:
             shutil.rmtree("./ProblemData/" +
                           dirname+"/", ignore_errors=True)
             os.remove("./ProblemData/"+str(problem)+".zip")
-            print("Extract Failed!")
+            GlobalVar.logger.error("Extract failed!!")
             return False
     except IOError as e:
-        print(e)
+        GlobalVar.logger.error(repr(e))
         return True
 
 # 获取系统内存，返回MB，用于判断内存是否足够用于判题，否则，等待内存足够
@@ -609,7 +637,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
         return
     else:
 
-        isdone = remote_scp(GlobalVar.judgerjson["sftp_ip"], GlobalVar.judgerjson["backend_path"]+"ProblemData/"+str(problem)+".zip", "./ProblemData/" +
+        isdone = remote_scp(GlobalVar.judgerjson["sftp_ip"], GlobalVar.judgerjson["backend_path"]+"/ProblemData/"+str(problem)+".zip", "./ProblemData/" +
                     str(problem)+".zip", GlobalVar.judgerjson["sftp_username"], GlobalVar.judgerjson["sftp_password"], problem)
 
         # 判断有无数据
@@ -619,12 +647,11 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
         try:
             files = os.listdir("./ProblemData/%s/" % problem)
         except Exception as e:
-            print(e)
+            GlobalVar.logger.error(repr(e))
             Controller.doneProblem(id,problem,"download error!",0,0,username,contest,"5","?")
             GlobalVar.statue = True
             return
 
-        
 
         if lang == "C": 
             # 模板题测试
@@ -771,7 +798,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                     file3.close()
                     continue
             except Exception as e:
-                print(e)
+                GlobalVar.logger.error(repr(e))
                 casedes = dict()
             if s in tempset:
                 newfiles.add(s)
@@ -783,7 +810,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
         newfiles = sorted(newfiles) # 将数据排个序
 
         for filename in newfiles:
-            print("judging!!!", id, "/%s/%s.in" % (problem, filename))
+            GlobalVar.logger.info("Judging!! %d /%s/%s.in"%(id,problem, filename))
             try:
                 waittime = 0
                 while True:
@@ -792,7 +819,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                         break
                     waittime = waittime + 1
                     if waittime > 15:
-                        print("memory error!")
+                        GlobalVar.logger.info("Memory error!")
                         Controller.doneProblem(id,problem,"system memory low!!!",0,0,username,contest,"5","?")
                         GlobalVar.statue = True
                         return
@@ -823,7 +850,8 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 return
                     
 
-            print(ret)
+            GlobalVar.logger.info(str(ret))
+      
 
             maxmemory = max(ret["memory"], maxmemory)
             maxtime = max(ret["cpu_time"], maxtime)
@@ -1035,8 +1063,8 @@ def reconnect():
         GlobalVar.clientsocket.connect((GlobalVar.host, GlobalVar.port))
         GlobalVar.statue = True
     except Exception as e:
-        print(e)
-        print("connect error!")
+        GlobalVar.logger.error("Connect db failed!")
+        GlobalVar.logger.error(repr(e)) 
         pass
 
 def MainLoop():
@@ -1053,7 +1081,8 @@ def MainLoop():
                     else:
                         GlobalVar.clientsocket.send("notok".encode("utf-8"))
                 elif data == "timeout":
-                    print("timeout!")
+                    GlobalVar.logger.error("Judge time out!!!!")
+      
                     GlobalVar.cursor.execute(
                         "UPDATE judgestatus_judgestatus SET memory =0, time=0, result = '5', message='Judger out of time', testcase='0'  WHERE id = '%s'" % (cur))
                     GlobalVar.db.commit()
@@ -1065,7 +1094,7 @@ def MainLoop():
                     try:
                         GlobalVar.cursor.execute("SELECT * from judgestatus_judgestatus where id = '%s'" % tp[1])
                     except:
-                        print("too long no submit")
+                        GlobalVar.logger.info("Too long no submit, reconnect db!")
                         reconnect()
                         GlobalVar.cursor.execute("SELECT * from judgestatus_judgestatus where id = '%s'" % tp[1])
                     data = GlobalVar.cursor.fetchone()
@@ -1091,7 +1120,7 @@ def MainLoop():
         except socket.error:
             reconnect()
         except Exception as e:
-            print(e)
+            GlobalVar.logger.error(repr(e))
             reconnect()
 
 if __name__ == "__main__":

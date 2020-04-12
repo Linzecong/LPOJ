@@ -44,7 +44,8 @@ class UserRatingOnly(permissions.BasePermission):
     def has_permission(self, request, view):
         if getVisitorPermission(request) == False:
             return False
-        if request.method in permissions.SAFE_METHODS or request.method=="PUT":
+            
+        if request.method in permissions.SAFE_METHODS:
             return True
 
         # rating = request.data.get('rating', -1)
