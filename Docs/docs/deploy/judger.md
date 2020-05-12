@@ -12,8 +12,6 @@ nano setting.json
 
 修改server_ip为你的判题服务器的IP地址
 
-修改backend_ip为你的后端地址（用于下载数据）
-
 如果你需要Python判题，那么请注意修改python_path 
 
 你可以使用 whereis python 命名查看python路径

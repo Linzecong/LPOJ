@@ -171,6 +171,7 @@ services:
     links: 
       - judgerserver:lpojjudgerserver
       - db:lpojdatabase
+      - backend1:lpojbackend1
     environment:
       DB_PASSWORD: "lpojdatabase" # 选择性修改
       DB_HOST: "lpojdatabase" # 选择性修改
@@ -179,8 +180,8 @@ services:
       SERVER_IP: "lpojjudgerserver"
 
       BACKEND_PORT: 8000
-      BACKEND_IP: "localhost" # 必须修改，不能写127.0.0.1或localhost，必须写你的局域网地址或者公网地址
-      BACKEND_HEAD: 'http' # 如果你用了https，请改为https
+      BACKEND_IP: "lpojbackend1"
+      BACKEND_HEAD: 'http'
 
       NO_DOWNLOAD: "no" # 设为yes，则不使用http，需要手动将数据压缩包放到Judger/ProblemData中
 

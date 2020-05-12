@@ -51,10 +51,7 @@ sudo apt install docker-compose -y
 git clone https://github.com/Linzecong/LPOJ.git && cd LPOJ
 ```
 
-**请修改docker-compose.yml中的数据库密码（所有的 DB_PASSWORD，MYSQL_ROOT_PASSWORD 字段**
-
-
-**修改docker-compose.yml中的BACKEND_PATH, BACKEND_IP, BACKEND_PORT 为你的LPOJ/Backend文件夹的绝对路径和运行的服务器的IP和后端的端口（没有新增用户的话一般用你的登录用户）**
+**请修改docker-compose.yml中的数据库密码（所有的 DB_PASSWORD，MYSQL_ROOT_PASSWORD 字段）和一些你认为必要的设置**
 
 
 ```

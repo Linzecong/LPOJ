@@ -12,5 +12,5 @@ features:
   details: 采用前后端分离，开发迅速。
 - title: 轻量级
   details: 使用最简单的技术开发，方便自定义修改
-footer: MIT Licensed | Copyright © 2020.03.22 Linzecong  QQ群：875136693
+footer: MIT Licensed | Copyright © 2020.05.13 Linzecong  QQ群：875136693
 ---

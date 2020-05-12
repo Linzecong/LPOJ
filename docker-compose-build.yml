@@ -179,8 +179,8 @@ services:
       SERVER_IP: "lpojjudgerserver"
       
       BACKEND_PORT: 8000
-      BACKEND_IP: "localhost" # 必须修改，不能写127.0.0.1或localhost，必须写你的局域网地址或者公网地址
-      BACKEND_HEAD: 'http' # 如果你用了https，请改为https
+      BACKEND_IP: "lpojbackend1"
+      BACKEND_HEAD: 'http'
       
       NO_DOWNLOAD: "no"
 
