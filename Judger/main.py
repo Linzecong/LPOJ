@@ -159,6 +159,7 @@ class Controller:
             GlobalVar.cursor.execute("UPDATE user_userdata SET acpro = concat(acpro,'|%s') WHERE username = '%s'" % (str(problem), username))
         if contest != 0:
             GlobalVar.cursor.execute("UPDATE contest_contestboard SET type =1 WHERE submitid = '%s'" % id)
+        GlobalVar.cursor.execute("UPDATE user_userdata SET submit = submit+1 WHERE username = '%s'" % username)
         GlobalVar.db.commit()
     
     @staticmethod
@@ -183,6 +184,7 @@ class Controller:
             GlobalVar.cursor.execute("UPDATE problem_problemdata SET wa = wa+1 WHERE problem = '%s'" % problem)
         if contest != 0:
             GlobalVar.cursor.execute("UPDATE contest_contestboard SET type =0  WHERE submitid = '%s'" % id)
+        GlobalVar.cursor.execute("UPDATE user_userdata SET submit = submit+1 WHERE username = '%s'" % username)
         GlobalVar.db.commit()
 
     @staticmethod
