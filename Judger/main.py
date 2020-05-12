@@ -253,7 +253,7 @@ def remote_scp(problem, local_path):
 
         remote_path_time = ""
         remote_path_file = ""
-        if GlobalVar.judgerjson["backend_ip"].isdigit():
+        if GlobalVar.judgerjson["backend_port"].isdigit():
             remote_path_time = GlobalVar.judgerjson["backend_head"] + "://" + GlobalVar.judgerjson["backend_ip"] +":"+ GlobalVar.judgerjson["backend_port"]+"/judgerfiletime/?name="+problem+"&password="+GlobalVar.judgerjson["db_pass"]
             remote_path_file = GlobalVar.judgerjson["backend_head"] + "://" + GlobalVar.judgerjson["backend_ip"] +":"+ GlobalVar.judgerjson["backend_port"]+"/judgerdownloadfile/?name="+problem+"&password="+GlobalVar.judgerjson["db_pass"]
         else:
