@@ -13,7 +13,7 @@ import time
 import datetime
 import logging
 from JudgeHDU.JudgeHDU import JudgeHDU
-
+import requests
 
 # 全局变量类，用于保存全局变量
 class GlobalVar:
@@ -27,8 +27,8 @@ class GlobalVar:
     python2path = "/usr/bin/python"
     cursor = None
     db = None
-    sftp_t = None
-    sftp = None
+    # sftp_t = None
+    # sftp = None
     clientsocket = None
 
     logger = None
@@ -66,11 +66,10 @@ class GlobalVar:
             GlobalVar.judgerjson["db_port"] = os.environ.get("DB_PORT")
 
             GlobalVar.judgerjson["server_ip"] = os.environ.get("SERVER_IP")
-            GlobalVar.judgerjson["sftp_ip"] = os.environ.get("SFTP_IP")
-            GlobalVar.judgerjson["sftp_port"] = os.environ.get("SFTP_PORT")
-            GlobalVar.judgerjson["sftp_username"] = os.environ.get("SFTP_USER")
-            GlobalVar.judgerjson["sftp_password"] = os.environ.get("SFTP_PASSWORD")
-            GlobalVar.judgerjson["backend_path"] = os.environ.get("BACKEND_PATH")
+            GlobalVar.judgerjson["backend_ip"] = os.environ.get("BACKEND_IP")
+            GlobalVar.judgerjson["backend_port"] = os.environ.get("BACKEND_PORT")
+            GlobalVar.judgerjson["backend_head"] = os.environ.get("BACKEND_HEAD")
+            # GlobalVar.judgerjson["backend_path"] = os.environ.get("BACKEND_PATH")
             GlobalVar.judgerjson["nodownload"] = os.environ.get("NO_DOWNLOAD")
 
         datajsonfile = open("./datatime.json", 'r')
@@ -91,13 +90,13 @@ class GlobalVar:
         GlobalVar.cursor = GlobalVar.db.cursor()
         GlobalVar.logger.info("Connect db succeed!")
 
-        GlobalVar.logger.info("Connecting sftp !")
-        if GlobalVar.judgerjson["nodownload"] != "yes":
-            GlobalVar.sftp_t = paramiko.Transport((GlobalVar.judgerjson["sftp_ip"], 22))
-            GlobalVar.sftp_t.connect(username=GlobalVar.judgerjson["sftp_username"],
-                        password=GlobalVar.judgerjson["sftp_password"])  # 登录远程服务器
-            GlobalVar.sftp = paramiko.SFTPClient.from_transport(GlobalVar.sftp_t)  # sftp传输协议
-        GlobalVar.logger.info("Connect sftp succeed!")
+        # GlobalVar.logger.info("Connecting sftp !")
+        # if GlobalVar.judgerjson["nodownload"] != "yes":
+        #     GlobalVar.sftp_t = paramiko.Transport((GlobalVar.judgerjson["sftp_ip"], 22))
+        #     GlobalVar.sftp_t.connect(username=GlobalVar.judgerjson["sftp_username"],
+        #                 password=GlobalVar.judgerjson["sftp_password"])  # 登录远程服务器
+        #     GlobalVar.sftp = paramiko.SFTPClient.from_transport(GlobalVar.sftp_t)  # sftp传输协议
+        # GlobalVar.logger.info("Connect sftp succeed!")
 
         GlobalVar.logger.info("Connecting judger server!")
         GlobalVar.clientsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -202,7 +201,7 @@ def specialjudge(problem,testin,testout,userout):
     return res
 
 # 用于远程下载数据文件，首先判断数据文件有没有更新，有的话就更新
-def remote_scp(host_ip, remote_path, local_path, username, password, problem):
+def remote_scp(problem, local_path):
     if GlobalVar.judgerjson["nodownload"] == "yes": # 如果采用手动直接上传的方式，那么不用下载
         dirname = str(problem)
 
@@ -243,21 +242,33 @@ def remote_scp(host_ip, remote_path, local_path, username, password, problem):
             return False
 
     try:
-        if GlobalVar.sftp_t.is_authenticated() == False:
-            GlobalVar.logger.info("Connecting sftp!")
-            GlobalVar.sftp_t.close()
-            GlobalVar.sftp_t = paramiko.Transport((host_ip, 22))
-            GlobalVar.sftp_t.connect(username=username, password=password)  # 登录远程服务器
-            GlobalVar.sftp = paramiko.SFTPClient.from_transport(GlobalVar.sftp_t)  # sftp传输协议
-        remt = 0
-        try:
-            remt = GlobalVar.sftp.stat(remote_path).st_mtime
-        except:
-            GlobalVar.logger.info("Reconnect sftp!!")
-            GlobalVar.sftp_t = paramiko.Transport((host_ip, 22))
-            GlobalVar.sftp_t.connect(username=username, password=password)  # 登录远程服务器
-            GlobalVar.sftp = paramiko.SFTPClient.from_transport(GlobalVar.sftp_t)  # sftp传输协议
-            remt = GlobalVar.sftp.stat(remote_path).st_mtime
+        # if GlobalVar.sftp_t.is_authenticated() == False:
+        #     GlobalVar.logger.info("Connecting sftp!")
+        #     GlobalVar.sftp_t.close()
+        #     GlobalVar.sftp_t = paramiko.Transport((host_ip, 22))
+        #     GlobalVar.sftp_t.connect(username=username, password=password)  # 登录远程服务器
+        #     GlobalVar.sftp = paramiko.SFTPClient.from_transport(GlobalVar.sftp_t)  # sftp传输协议
+
+        remote_path_time = ""
+        remote_path_file = ""
+        if GlobalVar.judgerjson["backend_ip"].isdigit():
+            remote_path_time = GlobalVar.judgerjson["backend_head"] + "://" + GlobalVar.judgerjson["backend_ip"] +":"+ GlobalVar.judgerjson["backend_port"]+"/judgerfiletime/?name="+problem+"&password="+GlobalVar.judgerjson["db_pass"]
+            remote_path_file = GlobalVar.judgerjson["backend_head"] + "://" + GlobalVar.judgerjson["backend_ip"] +":"+ GlobalVar.judgerjson["backend_port"]+"/judgerdownloadfile/?name="+problem+"&password="+GlobalVar.judgerjson["db_pass"]
+        else:
+            remote_path_time = GlobalVar.judgerjson["backend_head"] + "://" + GlobalVar.judgerjson["backend_ip"] +"/"+ GlobalVar.judgerjson["backend_port"]+"/judgerfiletime/?name="+problem+"&password="+GlobalVar.judgerjson["db_pass"]
+            remote_path_file = GlobalVar.judgerjson["backend_head"] + "://" + GlobalVar.judgerjson["backend_ip"] +"/"+ GlobalVar.judgerjson["backend_port"]+"/judgerdownloadfile/?name="+problem+"&password="+GlobalVar.judgerjson["db_pass"]
+        
+
+        remt = requests.get(remote_path_time).text
+
+        # try:
+        #     remt = GlobalVar.sftp.stat(remote_path).st_mtime
+        # except:
+        #     GlobalVar.logger.info("Reconnect sftp!!")
+        #     GlobalVar.sftp_t = paramiko.Transport((host_ip, 22))
+        #     GlobalVar.sftp_t.connect(username=username, password=password)  # 登录远程服务器
+        #     GlobalVar.sftp = paramiko.SFTPClient.from_transport(GlobalVar.sftp_t)  # sftp传输协议
+        #     remt = GlobalVar.sftp.stat(remote_path).st_mtime
 
         if str(remt) == GlobalVar.datatimejson.get(str(problem), "no"):
             return True
@@ -267,8 +278,12 @@ def remote_scp(host_ip, remote_path, local_path, username, password, problem):
             json.dump(GlobalVar.datatimejson, json_file, ensure_ascii=False)
             json_file.close()
 
-        GlobalVar.logger.info("Begin to download "+remote_path+" to "+local_path)
-        GlobalVar.sftp.get(remote_path, local_path)  # 下载文件
+        GlobalVar.logger.info("Begin to download "+remote_path_file+" to "+local_path)
+
+        fileresponse = requests.get(remote_path_file)  # 下载文件
+        with open(local_path,'wb') as f:
+            f.write(fileresponse.content)
+
         GlobalVar.logger.info("Download done!!")
         # 解压文件
         dirname = str(problem)
@@ -644,8 +659,11 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
         return
     else:
 
-        isdone = remote_scp(GlobalVar.judgerjson["sftp_ip"], GlobalVar.judgerjson["backend_path"]+"/ProblemData/"+str(problem)+".zip", "./ProblemData/" +
-                    str(problem)+".zip", GlobalVar.judgerjson["sftp_username"], GlobalVar.judgerjson["sftp_password"], problem)
+        # isdone = remote_scp(GlobalVar.judgerjson["sftp_ip"], GlobalVar.judgerjson["backend_path"]+"/ProblemData/"+str(problem)+".zip", "./ProblemData/" +
+        #             str(problem)+".zip", GlobalVar.judgerjson["sftp_username"], GlobalVar.judgerjson["sftp_password"], problem)
+        
+        isdone = remote_scp(str(problem), "./ProblemData/" + str(problem)+".zip")
+
 
         # 判断有无数据
         if isdone == False: 

@@ -95,7 +95,7 @@ class UploadFileAPIView(APIView):
 def filedown(request):
     type = request.session.get('type', 1)
     if type == 1:
-        return Response("Admin Only", status=HTTP_403_FORBIDDEN)
+        return HttpResponse("Admin Only", HTTP_403_FORBIDDEN)
     name = request.GET.get('name')
     file = open('./ProblemData/'+name+'.zip','rb')
     response = FileResponse(file)
@@ -113,3 +113,32 @@ def showpic(request):
     return HttpResponse(result, content_type='image/jpg')
 
 
+def judgerfiledown(request):
+    judgersecret = "lpojdatabase"
+    if os.environ.get("DB_PASSWORD"): 
+        judgersecret = os.environ.get("DB_PASSWORD")
+    
+    password = request.GET.get('password')
+    if str(password) != str(judgersecret):
+        return HttpResponse("Admin Only", HTTP_403_FORBIDDEN)
+
+    name = request.GET.get('name')
+
+    file = open('./ProblemData/'+name+'.zip','rb')
+    response = FileResponse(file)
+    response['Content-Type']='application/msword'
+    response['Content-Disposition']='attachment;filename='+name+'.zip'
+    return response
+
+def judgerfiletime(request):
+    judgersecret = "lpojdatabase"
+    if os.environ.get("DB_PASSWORD"): 
+        judgersecret = os.environ.get("DB_PASSWORD")
+    
+    password = request.GET.get('password')
+    if str(password) != str(judgersecret):
+        return HttpResponse("Admin Only", HTTP_403_FORBIDDEN)
+
+    name = request.GET.get('name')
+    time = os.stat("./ProblemData/"+str(name)+".zip").st_mtime
+    return HttpResponse(time,HTTP_200_OK)

@@ -37,8 +37,6 @@ sudo apt-get update
 sudo apt-get install -y git
 sudo apt install docker.io -y
 sudo apt install docker-compose -y
-sudo apt-get install openssh-server -y
-sftp yourusername@localhost # 验证是否安装成功！
 ```
 ### 2. 开始安装
 
@@ -49,9 +47,9 @@ git clone https://github.com/Linzecong/LPOJ.git && cd LPOJ
 **请修改docker-compose.yml中的数据库密码（所有的 DB_PASSWORD，MYSQL_ROOT_PASSWORD 字段**
 
 
-**必须修改docker-compose.yml中的BACKEND_PATH, SFTP_USER, SFTP_PASSWORD 为你的LPOJ/Backend文件夹的绝对路径和运行的服务器的SFTP用户名密码（没有新增用户的话一般用你的登录用户）**
+**修改docker-compose.yml中的BACKEND_PATH, BACKEND_IP, BACKEND_PORT 为你的LPOJ/Backend文件夹的绝对路径和运行的服务器的IP和后端的端口（没有新增用户的话一般用你的登录用户）**
 
-**必须修改docker-compose.yml中的SFTP_IP为你的服务器的IP**
+
 
 ```
 sudo docker-compose up -d --scale judger=3

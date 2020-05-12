@@ -1,15 +1,15 @@
 
 # OJ常见问题
 
-## 不想使用SFTP
+## 不想使用HTTP下载文件
 
-如果你不想使用SFTP咋办？
+如果你不想使用HTTP咋办？
 
 因为有的服务器不支持或者觉得不安全！
 
 那么你可以修改docker-comopse.yml中的 NO_DOWNLOAD 为yes，
 
-yes则不使用sftp
+yes则不使用HTTP
 
 
 但是你就需要手动将数据压缩包放到Judger/ProblemData中
@@ -97,14 +97,11 @@ services:
       DB_PORT: 3306 # 必须修改！！
 
       SERVER_IP: "111.111.111.112" # 必须修改！！
-      SFTP_PORT: 22
-
+      BACKEND_PORT: 8000
+      BACKEND_IP: "localhost" # 必须修改，不能写127.0.0.1或localhost，必须写你的局域网地址或者公网地址
+      BACKEND_HEAD: 'http' # 如果你用了https，请改为https
       
-      SFTP_IP: "172.17.0.1" # 必须修改，不能写127.0.0.1或localhost，必须写你的局域网地址或者公网地址
-      SFTP_USER: 'ubuntu' # 必须修改
-      SFTP_PASSWORD: 'ubuntuubuntu' # 必须修改
-      BACKEND_PATH: "/home/ubuntu/LPOJ/Backend/" # 必须修改
-      NO_DOWNLOAD: "no" # 设为yes，则不使用sftp，需要手动将数据压缩包放到Judger/ProblemData中
+      NO_DOWNLOAD: "no" # 设为yes，则不使用http，需要手动将数据压缩包放到Judger/ProblemData中
 
     restart: always
     volumes:

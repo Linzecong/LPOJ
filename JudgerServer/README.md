@@ -3,9 +3,9 @@
 ## Docker部署
 非专业用户不推荐使用Docker单独部署
 
-首先修改配置文件，setting.json里的东西都要修改为你的ip，其中sftp应配置为你的后端服务器的用户名和密码和ip
+首先修改配置文件，setting.json里的东西都要修改为你的ip
 ``` 
-cd Judger
+cd JudgerServer
 nano setting.json
 ```
 接着运行容器
