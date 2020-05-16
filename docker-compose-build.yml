@@ -171,6 +171,7 @@ services:
     links: 
       - judgerserver:lpojjudgerserver
       - db:lpojdatabase
+      - backend1:lpojbackend1
     environment:
       DB_PASSWORD: "lpojdatabase" # 选择性修改
       DB_HOST: "lpojdatabase" # 选择性修改
