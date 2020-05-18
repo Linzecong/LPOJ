@@ -44,7 +44,8 @@ class UserRatingOnly(permissions.BasePermission):
     def has_permission(self, request, view):
         if getVisitorPermission(request) == False:
             return False
-        if request.method in permissions.SAFE_METHODS or request.method=="PUT":
+            
+        if request.method in permissions.SAFE_METHODS:
             return True
 
         # rating = request.data.get('rating', -1)
@@ -91,3 +92,22 @@ class UserRatingOnly2(permissions.BasePermission):
             return True
         else:
             return False
+
+class UserOnly(permissions.BasePermission):
+
+
+
+    def has_object_permission(self, request, view, blog):
+        if getVisitorPermission(request) == False:
+            return False
+
+        if request.session.get('type', 1) != 1:
+            return True
+
+        userid = request.session.get('user_id', None)
+
+        if userid == blog.username:
+            return True
+       
+
+    

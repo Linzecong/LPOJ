@@ -4,6 +4,17 @@ from .models import User
 
 from board.models import SettingBoard
 
+
+def getWikiPermission():
+    setting = SettingBoard.objects.filter(id=1)
+    if len(setting) != 0:
+        if setting[0].openwiki is False:
+            return False
+        else:
+            return True
+    else:
+        return False
+
 def getVisitorPermission(request):
     setting = SettingBoard.objects.filter(id=1)
     if len(setting) != 0:
@@ -22,6 +33,10 @@ class UserOnly(permissions.BasePermission):
     def has_permission(self, request, view):
         if getVisitorPermission(request) == False:
             return False
+
+        if getWikiPermission() == False:
+            return False
+
         if request.method == "DELETE":
             return True
         if request.method == "GET":
@@ -38,6 +53,10 @@ class UserOnly(permissions.BasePermission):
     def has_object_permission(self, request, view, item):
         if getVisitorPermission(request) == False:
             return False
+            
+        if getWikiPermission() == False:
+            return False
+
         if request.method == "GET":
             return False
         else:

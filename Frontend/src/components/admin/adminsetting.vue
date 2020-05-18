@@ -6,7 +6,7 @@
           <el-input v-model="name" placeholder="School Name" style="width:200px"></el-input>
           <el-input v-model="ojname" placeholder="OJ Name" style="width:200px"></el-input>
         </el-form-item>
-        <el-form-item label="是否开启WIKI（用于比赛时防止查阅资料）">
+        <el-form-item label="是否开启WIKI和TodoList（用于比赛时防止查阅资料）">
           <el-switch v-model="wikiopen" active-text="开启" inactive-text="关闭"></el-switch>
         </el-form-item>
         <el-form-item label="开启语言（中间用 | 隔开，确保语言在判题机中支持！）">
@@ -15,7 +15,7 @@
         <el-form-item label="开启OI模式（样例全判）">
           <el-switch v-model="openoi" active-text="开启" inactive-text="关闭"></el-switch>
         </el-form-item>
-        <el-form-item label="是否开启源码查看（除管理员外不得查看源码）">
+        <el-form-item label="是否开启源码查看（除管理员外不得查看源码，自己只能看自己的代码）">
           <el-switch v-model="openstatus" active-text="开启" inactive-text="关闭"></el-switch>
         </el-form-item>
 
@@ -25,6 +25,9 @@
 
         <el-form-item label="是否开放注册">
           <el-switch v-model="openregister" active-text="开启" inactive-text="关闭"></el-switch>
+        </el-form-item>
+        <el-form-item label="是否允许自己查看自己的代码">
+          <el-switch v-model="openselfstatus" active-text="开启" inactive-text="关闭"></el-switch>
         </el-form-item>
         <el-button style="margin-top:20px;" type="primary" @click="click">提交</el-button>
       </el-form>
@@ -61,6 +64,7 @@ export default {
       openstatus:true,
       openvisitor:true,
       openregister:true,
+      openselfstatus:true,
     };
   },
   methods: {
@@ -107,6 +111,7 @@ export default {
             openstatus:this.openstatus,
             openvisitor:this.openvisitor,
             openregister:this.openregister,
+            openselfstatus:this.openselfstatus,
           })
           .then(res => {
             this.$message.success("提交成功！");
@@ -127,6 +132,7 @@ export default {
             openstatus:this.openstatus,
             openvisitor:this.openvisitor,
             openregister:this.openregister,
+            openselfstatus:this.openselfstatus,
           })
           .then(res => {
             this.$message.success("提交成功！");
@@ -152,6 +158,7 @@ export default {
           this.openstatus = res.data[0].openstatus;
           this.openvisitor =res.data[0].openvisitor;
           this.openregister =res.data[0].openregister;
+          this.openselfstatus= res.data[0].openselfstatus;
         } else this.name = "无";
         this.reflash();
       })

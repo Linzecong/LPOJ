@@ -49,7 +49,7 @@ export default {
   created() {
     this.setdata();
     var sb = this.$store.state.sb
-    if( sb ==undefined){
+    if(sb==undefined){
       this.$axios
       .get("/settingboard/")
       .then(res => {
@@ -95,14 +95,18 @@ export default {
         for (var i = 0; i < props.length; i++) {
           this.boardinfo.push({ prop: props[i], label: props[i] });
         }
+        this.boardinfo.push({ prop: 'cfrate', label: 'CFRate' });
+
         var data = [];
+
         for (var i = 0; i < response.data.length; i++) {
           var k = {
             username: response.data[i]["username"],
             number: response.data[i]["number"],
             classes: response.data[i]["classes"],
             ac: 0,
-            total: "0/0"
+            total: "0/0",
+            cfrate:0
           };
 
           for (var j = 0; j < this.boardinfo.length; j++) {
@@ -113,7 +117,7 @@ export default {
           var subnum = 0;
           var acli = response.data[i]["acnum"].split("|");
           var subli = response.data[i]["submitnum"].split("|");
-          for (var jj = 0; jj < this.boardinfo.length; jj++) {
+          for (var jj = 0; jj < this.boardinfo.length-1; jj++) {
             k[this.boardinfo[jj].prop] = acli[jj] + "/" + subli[jj];
             acnum = acnum + parseInt(acli[jj]);
             subnum = subnum + parseInt(subli[jj]);
@@ -121,6 +125,7 @@ export default {
           k["ac"] = acnum;
           k["sub"] = subnum;
           k["total"] = acnum + "/" + subnum;
+          k["cfrate"] = response.data[i]["cfrate"].split("|")[0];
 
           data.push(k);
         }

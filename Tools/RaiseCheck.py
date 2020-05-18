@@ -1,6 +1,7 @@
 
 
 
+
 import MySQLdb
 from queue import Queue
 import socket
@@ -8,8 +9,6 @@ import json
 from time import sleep
 import threading
 import os
-
-
 
 
 queue = Queue() # 全局判题列表
@@ -30,18 +29,30 @@ except Exception as e:
     exit(1)
 
 
-curcontest = set()
-curpro = set()
-curinpro = set()
 cursor = db.cursor()
 
-cursor.execute(
-    "SELECT * from contest_contestinfo where type <> 'Personal' and TO_SECONDS(NOW()) - TO_SECONDS(begintime) <= lasttime")
+cursor.execute("SELECT user, code from judgestatus_judgestatus")
 data = cursor.fetchall()
-getcontest = set()
+
+raisenum = {}
+
 for d in data:
-    id = int(d[0])  # 用于求结束的比赛
-    
+    id = str(d[0])
+    code = str(d[1])
+    raisenum[id] = 0 
+
+for d in data:
+    id = str(d[0])
+    code = str(d[1])
+    raisenum[id] = max(raisenum[id], code.count("raise"))
+
+li = sorted(raisenum.items(), key=lambda item:item[1],reverse=True)
+
+file = open("raisenum.txt", "w")
+
+for l in li:
+    file.write(l[0]+"  "+str(l[1])+'\n')
+    print(l[0]+"  "+str(l[1]))
     
 
             

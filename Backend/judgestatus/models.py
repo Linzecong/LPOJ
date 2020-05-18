@@ -17,11 +17,12 @@ class JudgeStatus(models.Model):
     judger = models.CharField(max_length=50)
     contest = models.IntegerField()
     contestproblem = models.IntegerField(default=-1)  # 对应比赛里的哪一题
-    code = models.TextField(max_length=50000)
+    code = models.TextField(max_length=200000)
     testcase = models.CharField(max_length=50, default="0")
     message = models.TextField() # 也作为 其他OJ 的 proid
     problemtitle = models.CharField(max_length=100, default="")
     rating = models.IntegerField(default=1500)
+    ip = models.CharField(max_length=50, default="无法获取ip")
 
     objects = models.Manager()
 

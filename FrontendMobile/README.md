@@ -1,8 +1,10 @@
 # 手机前端部署
 
+# 2019-08-01 后不再维护！
+
 ## Docker部署
 非专业用户不推荐使用Docker单独部署
-修改default.conf中proxy_pass的地址为你的后端地址，如有需要，可以修改其他配置
+修改nginx.conf中proxy_pass的地址为你的后端地址，如有需要，可以修改其他配置
 
 ```
 docker build -t lpojfrontendmobile .

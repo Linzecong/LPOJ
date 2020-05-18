@@ -58,7 +58,7 @@ def deal_client(newSocket: socket, addr):
     cursor = db.cursor()
     falsetime = 0
     while True:
-        sleep(2) # 每隔一秒取两次
+        sleep(2) # 每隔两秒取两次
         if mutex.acquire(): # 获取队列锁
             try:
                 if statue == True and queue.empty() is not True:
@@ -66,7 +66,7 @@ def deal_client(newSocket: socket, addr):
                     cursor.execute(
                         "SELECT language from judgestatus_judgestatus where id = '%d'" % (id))
                     data = cursor.fetchall()
-                    print(data[0][0])
+                   # print(data[0][0])
                     newSocket.send(("judge|%d" % id).encode("utf-8"))
                     statue = False 
                 else:
@@ -81,11 +81,11 @@ def deal_client(newSocket: socket, addr):
                         statue = False
                         if falsetime >= 180: # 计算一下未准备好的时间，如果超过120s，发送销毁重启命令
                             newSocket.send("timeout".encode("utf-8"))
-                            print(addr, "timeout!")
+                           # print(addr, "timeout!")
                             newSocket.close()
                             mutex.release()
                             return
-                    print(addr, statue)
+                   # print(addr, statue)
 
             except socket.error:
                 newSocket.close()
@@ -156,13 +156,13 @@ def changeauth():
                 db.commit()
 
             endcontest = curcontest.difference(getcontest)
-            print("curcontest", curcontest)
+           # print("curcontest", curcontest)
             for eid in endcontest:
                 cursor.execute(
                     "SELECT * from contest_contestproblem where contestid=%d" % eid)
                 pros = cursor.fetchall()
                 for pid in pros:
-                    print(pid[2])
+                   # print(pid[2])
                     curpro.remove(pid[2])
                     curinpro.remove(pid[2])
                     cursor.execute(

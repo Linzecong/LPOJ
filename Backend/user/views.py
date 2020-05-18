@@ -46,20 +46,61 @@ class UserView(viewsets.ModelViewSet):
     throttle_classes = [ScopedRateThrottle, ]
 
 
-class UserChangeView(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserNoTypeSerializer
-    permission_classes = (UserPUTOnly,)
+class UserChangeView(APIView):
+
     throttle_scope = "post"
     throttle_classes = [ScopedRateThrottle, ]
 
+    def put(self, request, format=None):
+        data = request.data.copy()
+        username = request.session.get('user_id', None)
+        if username != None:
+            user = User.objects.get(username=username)
+            user.password = data["password"]
+            user.name = data["name"]
+            user.school = data["school"]
+            user.course = data["course"]
+            user.classes = data["classes"]
+            user.number = data["number"]
+            user.realname = data["realname"]
+            user.qq = data["qq"]
+            user.email = data["email"]
+            user.save()
+            user2 = UserData.objects.get(username=username)
+            user2.des=data["des"]
+            user2.save()
 
-class UserChangeAllView(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-    permission_classes = (AuthPUTOnly,)
+            return Response("ok", status=HTTP_200_OK)
+
+        return Response("nologin", status=HTTP_400_BAD_REQUEST)
+
+
+class UserChangeAllView(APIView):
     throttle_scope = "post"
     throttle_classes = [ScopedRateThrottle, ]
+
+    def put(self, request, format=None):
+        if request.session.get('type',None) != 3:
+            return Response("no permission", status=HTTP_400_BAD_REQUEST)
+
+        data = request.data.copy()
+        username = data["username"]
+        if username != None:
+            user = User.objects.get(username=username)
+            if data["password"] != ".":
+                user.password = data["password"]
+            user.name = data["name"]
+            user.school = data["school"]
+            user.course = data["course"]
+            user.classes = data["classes"]
+            user.number = data["number"]
+            user.realname = data["realname"]
+            user.qq = data["qq"]
+            user.email = data["email"]
+            user.type = data["type"]
+            user.save()
+            return Response("ok", status=HTTP_200_OK)
+        return Response("username error", status=HTTP_400_BAD_REQUEST)
 
 class UserLoginDataView(viewsets.ModelViewSet):
     queryset = UserLoginData.objects.all().order_by('-id')
@@ -78,10 +119,17 @@ class UserLoginDataAPIView(APIView):
 
     def post(self, request, format=None):
         data = request.data.copy()
-        if data.get("ip"):
-            if data["ip"].find("chrome")>=0 and request.META.get('HTTP_X_FORWARDED_FOR'):
-                data["ip"] = request.META.get("HTTP_X_FORWARDED_FOR")
-
+        
+        ip = "获取失败"
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[0]#所以这里是真实的ip
+        else:
+            ip = request.META.get('REMOTE_ADDR')#这里获得代理ip
+        
+        data["msg"] = request.META.get("HTTP_USER_AGENT","获取失败")
+        data["ip"] = ip
+        print(data)
         serializer = UserLoginDataSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()

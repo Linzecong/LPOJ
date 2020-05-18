@@ -17,14 +17,27 @@ class Problem(models.Model):
     source = models.TextField() # 也可以用来存该OJ的Pro ID
     time = models.IntegerField()
     memory = models.IntegerField()
-    hint = models.TextField(null=True)
+    hint = models.TextField(null=True,default="")
     auth = models.IntegerField(default=1)  # 1公开 2私密 3 比赛中的题
-    template = models.CharField(max_length=1000, default="请删除这行")
+    template = models.CharField(max_length=10000, default="请删除这行")
 
     objects = models.Manager()
 
     def __str__(self):
         return self.title
+
+class ChoiceProblem(models.Model):
+    ChoiceProblemId = models.IntegerField(default=-1)
+    des = models.TextField()
+    choiceA = models.TextField()
+    choiceB = models.TextField()
+    choiceC = models.TextField()
+    choiceD = models.TextField()
+
+    objects = models.Manager()
+
+    def __str__(self):
+        return self.des
 
 
 class ProblemData(models.Model):
@@ -44,7 +57,7 @@ class ProblemData(models.Model):
     score = models.IntegerField(default=1000)
     auth = models.IntegerField(default=1)  # 1公开 2私密 3 比赛中的题
     oj = models.CharField(max_length=50, default="LPOJ")
-    
+
 
     objects = models.Manager()
 
@@ -60,3 +73,4 @@ class ProblemTag(models.Model):
 
     def __str__(self):
         return self.tagname
+

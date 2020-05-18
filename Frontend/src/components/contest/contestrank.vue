@@ -1,55 +1,73 @@
 <template>
   <el-row>
-    <el-dialog
-      :visible.sync="statusshow"
-      @opened="setstatus"
-      :show-close="false"
-      @closed="statusclosed"
-    >
+    <el-dialog :visible.sync="statusshow"
+               @opened="setstatus"
+               :show-close="false"
+               @closed="statusclosed">
       <statusmini ref="Status"></statusmini>
     </el-dialog>
 
     <center>
       <h1>{{ contesttitle }}</h1>
     </center>
+
+    <el-form :inline="true"
+             :model="filterform"
+             v-if="isadmin">
+      <el-form-item label="学校">
+        <el-input v-model="filterform.school"
+                  placeholder="school"></el-input>
+      </el-form-item>
+      <el-form-item label="专业">
+        <el-input v-model="filterform.course"
+                  placeholder="course"></el-input>
+      </el-form-item>
+      <el-form-item label="班级">
+        <el-input v-model="filterform.class"
+                  placeholder="class"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary"
+                   @click="onfilterboard">查询</el-button>
+      </el-form-item>
+    </el-form>
+
     <el-row :gutter="10">
-      <el-table
-        :data="tableData"
-        :cell-style="cellstyle"
-        border
-        stripe
-        size="small"
-        @cell-click="cellclick"
-        :row-style="ratingcolor"
-        id="out-table"
-      >
-        <el-table-column type="index" width="40" fixed></el-table-column>
-        <el-table-column prop="user" label="User" fixed></el-table-column>
-        <el-table-column
-          prop="nickname"
-          label="Nickname"
-          fixed
-        ></el-table-column>
-        <el-table-column
-          prop="score"
-          :label="SolveLabel"
-          fixed
-        ></el-table-column>
-        <el-table-column prop="time" label="Time"></el-table-column>
-        <el-table-column
-          v-for="(item, index) in probleminfo"
-          :key="index"
-          :prop="item.prop"
-          :label="item.label"
-          style="white-space: pre-line;"
-        >
+      <el-table :data="tableData"
+                :cell-style="cellstyle"
+                border
+                stripe
+                size="small"
+                @cell-click="cellclick"
+                :row-style="ratingcolor"
+                id="out-table">
+        <el-table-column type="index"
+                         width="45"
+                         fixed></el-table-column>
+        <el-table-column prop="user"
+                         label="User"
+                         fixed></el-table-column>
+        <el-table-column prop="nickname"
+                         label="Nickname"
+                         fixed></el-table-column>
+        <el-table-column prop="score"
+                         :label="SolveLabel"
+                         fixed></el-table-column>
+        <el-table-column prop="time"
+                         label="Time"></el-table-column>
+        <el-table-column v-for="(item, index) in probleminfo"
+                         :key="index"
+                         :prop="item.prop"
+                         :label="item.label"
+                         style="white-space: pre-line;">
           <template slot-scope="scope">
             <div style="white-space:pre-line;">{{ scope.row[item.prop] }}</div>
           </template>
         </el-table-column>
       </el-table>
       <br />
-      <el-button type="primary" @click="exportExcel">点击导出</el-button>
+      <el-button type="primary"
+                 @click="exportExcel">点击导出</el-button>
       <br />
     </el-row>
   </el-row>
@@ -64,7 +82,7 @@ export default {
   components: {
     statusmini
   },
-  data() {
+  data () {
     return {
       problemcount: this.$store.state.contestproblemcount,
       contesttitle: this.$store.state.contesttitle,
@@ -78,14 +96,23 @@ export default {
         problemid: ""
       },
       statusshow: false,
-      SolveLabel: "Solved"
+      SolveLabel: "Solved",
+
+      filterform: {
+        contestid: this.$route.params.contestID,
+        school: "",
+        course: "",
+        class: ""
+      },
+      isadmin: false,
     };
   },
-  created() {
+  created () {
+    this.isadmin = sessionStorage.type == 2 || sessionStorage.type == 3;
     //this.setproblemcount(this.$route.params.contestID);
   },
   methods: {
-    exportExcel() {
+    exportExcel () {
       /* 从表生成工作簿对象 */
       var wb = XLSX.utils.table_to_book(document.querySelector("#out-table"));
       /* 获取二进制字符串作为输出 */
@@ -110,8 +137,8 @@ export default {
       return wbout;
     },
 
-    sortByProperty(p1, p2) {
-      function sortfun(obj1, obj2) {
+    sortByProperty (p1, p2) {
+      function sortfun (obj1, obj2) {
         //核心代码
         if (obj1[p1] > obj2[p1]) return -1;
         else if (obj1[p1] < obj2[p1]) return 1;
@@ -123,11 +150,11 @@ export default {
       }
       return sortfun;
     },
-    toChar(val) {
+    toChar (val) {
       var A = "A";
       return String.fromCharCode(val + A.charCodeAt());
     },
-    cellclick(row, column, cell, event) {
+    cellclick (row, column, cell, event) {
       if (column.property.length > 1) return;
       var A = "A";
       this.statusdata.user = row.user;
@@ -140,17 +167,17 @@ export default {
 
       this.statusshow = true;
     },
-    statusclosed() {
+    statusclosed () {
       this.$refs.Status.setstatus("0", "|#)", "-1");
     },
-    setstatus() {
+    setstatus () {
       this.$refs.Status.setstatus(
         this.statusdata.problemid,
         this.statusdata.user,
         this.statusdata.contest
       );
     },
-    ratingcolor({ row, rowIndex }) {
+    ratingcolor ({ row, rowIndex }) {
       if (row.nickname.indexOf("[Clone]") > -1) return "color:#AAAAAA";
       if (row.rating >= 3000) return "color:red;font-weight: bold;";
       if (row.rating >= 2600) return "color:#BB5E00;font-weight: bold;";
@@ -163,7 +190,7 @@ export default {
       if (row.rating >= 1200) return "color:#909399;font-weight: bold;";
       return "color:#303133;font-weight: bold;";
     },
-    cellstyle(data) {
+    cellstyle (data) {
       var id = data.columnIndex - 5;
       var str = this.toChar(id);
       if (id < 0) return "background-color:white;text-align:center;";
@@ -176,7 +203,12 @@ export default {
 
       return "background-color:white";
     },
-    setproblemcount(cid) {
+
+    onfilterboard () {
+      this.setproblemcount(this.$route.params.contestID);
+    },
+
+    setproblemcount (cid) {
       if (this.$store.state.contesttype == "Rated") this.SolveLabel = "Score";
 
       this.contesttitle = this.$store.state.contesttitle;
@@ -192,59 +224,14 @@ export default {
           this.problemids.push(response3.data[i].problemid);
         }
 
-        if (
-          this.$store.state.contesttype == "Personal" &&
-          this.$store.state.contestboardid != cid
-        ) {
-          this.$axios
-            .get("/contestboard/?contestid=" + this.$store.state.contestfrom)
-            .then(response1 => {
-              this.$store.state.contestboardres = response1;
-              this.$store.state.contestboardid = cid;
-              this.setboard2(cid);
-            });
-        } else {
-          this.setboard2(cid);
-        }
+        this.setboard(cid, { data: [] });
+
       });
     },
 
-    setboard2(cid) {
-      var response = { data: [] };
-      //筛选
-      if (this.$store.state.contesttype == "Personal") {
-        this.$axios
-          .get("/contestinfo/" + this.$store.state.contestfrom + "/")
-          .then(res => {
-            var beginmis = new Date(Date.parse(res.data.begintime)).getTime();
-            var newres = { data: [] };
-            for (
-              let i = 0;
-              i < this.$store.state.contestboardres.data.length;
-              i++
-            ) {
-              let bt = this.$store.state.contestboardres.data[i].submittime;
-              if (bt - beginmis <= this.$store.state.contestleft * 1000) {
-                var t = JSON.parse(
-                  JSON.stringify(this.$store.state.contestboardres.data[i])
-                );
-                t.user = "[Clone] " + t.user;
-                t.submittime =
-                  t.submittime +
-                  (this.$store.state.contestbegintime - beginmis);
-                newres.data.push(t);
-              }
-            }
-            response = newres;
-            this.setboard(cid, response);
-          });
-      } else {
-        this.setboard(cid, response);
-      }
-    },
+    setboard (cid, response) {
 
-    setboard(cid, response) {
-      this.$axios.get("/contestboard/?contestid=" + cid).then(res1 => {
+      this.$axios.post("/contestfilterboard/", this.filterform).then(res1 => {
         for (let i = 0; i < res1.data.length; i++) {
           response.data.push(res1.data[i]);
         }
@@ -261,6 +248,8 @@ export default {
         var nameset = new Set();
         var namevis = { "!!!": 1 };
         for (let index = 0; index < response.data.length; index++) {
+          // if(response.data[index].username=="admin") //这里可以排除某些用户！
+          //   continue;
           nameset.add(
             response.data[index].username + "|" + response.data[index].user
           );
@@ -268,6 +257,8 @@ export default {
             response.data[index].username + "|" + response.data[index].user
           ] = 0;
         }
+
+
 
         //遍历每一个人，计算每一个人的信息
         for (var na of nameset) {

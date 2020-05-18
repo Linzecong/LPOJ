@@ -16,6 +16,14 @@
       </span>
       <contestproblem ref="Problems"></contestproblem>
     </el-tab-pane>
+    <el-tab-pane label="ChoiceProblems" >
+      <span slot="label">
+        <b>
+          <i class="el-icon-menu"></i> ChoiceProblems
+        </b>
+      </span>
+      <contestchoiceproblem ref="ChoiceProblems"></contestchoiceproblem>
+    </el-tab-pane>
     <el-tab-pane label="Submissions">
       <span slot="label">
         <b>
@@ -71,6 +79,8 @@ import contestsubmit from "@/components/contest/contestsubmit";
 import contestrank from "@/components/contest/contestrank";
 import contestcomment from "@/components/contest/contestcomment";
 import contesttutorial from "@/components/contest/contesttutorial";
+import contestchoiceproblem from "@/components/contest/contestchoiceproblem";
+
 export default {
   name: "contestdetail",
   components: {
@@ -80,7 +90,8 @@ export default {
     contestsubmit,
     contestrank,
     contestcomment,
-    contesttutorial
+    contesttutorial,
+    contestchoiceproblem
   },
   data() {
     return {
@@ -109,9 +120,9 @@ export default {
           var left = parseInt(
             (new Date(Date.parse(date2)).getTime() - date1.getTime()) / 1000
           );
-          if (left >= response.data.lasttime) {
-            auth = "1";
-          }
+          // if (left >= response.data.lasttime) {
+          //   auth = "1";
+          // }
           if (auth == "1") {
             this.haveauth = 1;
             this.$refs.Overview.haveauth = 1;
@@ -204,6 +215,10 @@ export default {
       }
       if (tab.label == "Tutorial") {
         this.$refs.Tutorial.reflash(this.$route.params.contestID);
+      }
+
+      if (tab.label == "ChoiceProblems") {
+        this.$refs.ChoiceProblems.reflash(this.$route.params.contestID);
       }
     }
   }

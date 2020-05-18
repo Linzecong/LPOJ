@@ -48,7 +48,6 @@ module.exports = {
                     '/dev/backend',
                     '/dev/judgerserver',
                     '/dev/judger',
-                    '/dev/utils',
                 ]
             },
             {
@@ -56,6 +55,10 @@ module.exports = {
                 collapsable: true,
                 children: [
                     '/doc/',
+                    '/doc/oj',
+                    '/doc/judger',
+                    '/doc/utils',
+                    '/doc/faq',
                 ]
             },
         ]

@@ -12,6 +12,7 @@ class SettingBoard(models.Model):
 
     openvisitor = models.BooleanField(default=True) # 是否开启游客访问
     openregister = models.BooleanField(default=True) # 是否开启注册
+    openselfstatus = models.BooleanField(default=True) # 自己是否能查看自己的代码
 
 
     objects = models.Manager()
@@ -31,6 +32,7 @@ class Board(models.Model):
     acnum = models.CharField(max_length=50, default="0|0|0|0|0")
     submitnum = models.CharField(max_length=50, default="0|0|0|0|0")
     blogaddress = models.CharField(max_length=500, default="")
+    cfrate = models.CharField(max_length=500, default="0|0|0") # 分数|最近一个月场数|上下分
 
     objects = models.Manager()
 
@@ -43,7 +45,8 @@ class DailyBoard(models.Model):
     username = models.CharField(max_length=50)
     account = models.IntegerField(default=0)
     collecttime = models.DateField(auto_now=True)
-
+    cfrate = models.IntegerField(default=0) # 分数
+    
     objects = models.Manager()
 
     def __str__(self):

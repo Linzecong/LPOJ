@@ -20,7 +20,7 @@ services:
       /bin/bash -c '
       sleep 40 ;
       python manage.py makemigrations &&
-      python manage.py makemigrations judgestatus item problem user contest board blog wiki &&
+      python manage.py makemigrations judgestatus item problem user contest board blog wiki classes &&
       python manage.py migrate &&
       echo "from django.contrib.auth.models import User; User.objects.filter(email=\"admin@example.com\").delete(); User.objects.create_superuser(\"admin\", \"admin@example.com\", \"admin\")" | python manage.py shell &&
       gunicorn -w 5 --bind 0.0.0.0:8000 -k 'gevent' Backend.wsgi:application
@@ -171,21 +171,20 @@ services:
     links: 
       - judgerserver:lpojjudgerserver
       - db:lpojdatabase
+      - backend1:lpojbackend1
     environment:
       DB_PASSWORD: "lpojdatabase" # 选择性修改
       DB_HOST: "lpojdatabase" # 选择性修改
       DB_USER: 'root' # 选择性修改
       DB_PORT: 3306
       SERVER_IP: "lpojjudgerserver"
-      SFTP_IP: "172.17.0.1"
-      SFTP_PORT: 22
-
       
-      SFTP_USER: 'ubuntu' # 必须修改
-      SFTP_PASSWORD: 'ubuntuubuntu' # 必须修改
-      BACKEND_PATH: "/home/ubuntu/LPOJ/Backend/" # 必须修改
+      BACKEND_PORT: 8000
+      BACKEND_IP: "lpojbackend1"
+      BACKEND_HEAD: 'http'
+      
+      NO_DOWNLOAD: "no"
 
     restart: always
     volumes:
-        - "./Judger:/Judger"
-    
+        - "./Judger/ProblemData:/Judger/ProblemData"

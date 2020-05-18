@@ -1,12 +1,20 @@
 {
-    "presets": [
-      [
-        "env",
-        {
-          "modules": false,
-          "useBuiltIns": "entry"
-        }
-      ],
-      "stage-3"
-    ]
-  }
+  "presets": [
+    [
+      "env",
+      {
+        "modules": false,
+        "useBuiltIns": "entry"
+      }
+    ],
+    "stage-3"
+  ],
+
+  "plugins": [
+    ["import", {
+      "libraryName": "muse-ui",
+      "libraryDirectory": "lib",
+      "camel2DashComponentName": false
+    }]
+  ]
+}

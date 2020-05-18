@@ -1,6 +1,5 @@
 # 后端与数据库部署
 
-## 一般部署
 
 ### 部署数据库
 
@@ -71,12 +70,6 @@ echo "from django.contrib.auth.models import User; User.objects.filter(email=\"a
 python manage.py runserver 0.0.0.0:8000
 ```
 
-### 安装sftp服务
-不安装无法判题,一般云服务器会自动安装
-```
-sudo apt-get install openssh-server
-sftp yourusername@localhost # 验证是否安装成功！
-```
 ### 添加管理员
 > 安装成功后，先通过IP:80访问OJ，注册一个用户
 > 

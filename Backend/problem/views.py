@@ -7,9 +7,15 @@ from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_403_FO
 from rest_framework.views import APIView
 from rest_framework.throttling import ScopedRateThrottle
 from rest_framework import viewsets, mixins, filters
-from .models import Problem, ProblemData, ProblemTag
-from .serializers import ProblemSerializer, ProblemDataSerializer, ProblemTagSerializer
+from .models import Problem, ProblemData, ProblemTag, ChoiceProblem
+from .serializers import ProblemSerializer, ProblemDataSerializer, ProblemTagSerializer,ChoiceProblemSerializer
 from .permission import ManagerOnly, AuthOnly
+from django.shortcuts import render
+from django.views.generic import View
+from django.shortcuts import HttpResponse
+from django.http import FileResponse
+
+import base64
 import zipfile
 import shutil
 import os
@@ -23,6 +29,14 @@ class ProblemView(viewsets.GenericViewSet, mixins.DestroyModelMixin, mixins.Crea
     throttle_scope = "post"
     throttle_classes = [ScopedRateThrottle, ]
 
+class ChoiceProblemView(viewsets.ModelViewSet):
+    queryset = ChoiceProblem.objects.all()
+    serializer_class = ChoiceProblemSerializer
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter)
+    filter_fields = ('ChoiceProblemId','des')
+    permission_classes = (ManagerOnly,)
+    search_fields = ('des',)
+    throttle_scope = "post"
 
 class ProblemDataView(viewsets.ModelViewSet):
 
@@ -76,3 +90,55 @@ class UploadFileAPIView(APIView):
         #     return Response("extract zip fail", status=HTTP_400_BAD_REQUEST)
 
         return Response('upload success', HTTP_200_OK)
+
+
+def filedown(request):
+    type = request.session.get('type', 1)
+    if type == 1:
+        return HttpResponse("Admin Only", HTTP_403_FORBIDDEN)
+    name = request.GET.get('name')
+    file = open('./ProblemData/'+name+'.zip','rb')
+    response = FileResponse(file)
+    response['Content-Type']='application/msword'
+    response['Content-Disposition']='attachment;filename='+name+'.zip'
+    return response
+
+def showpic(request):
+    name = request.GET.get('ProblemId')
+    file = open('./ProblemData/'+name+'.jpg','rb')
+    #file = open('./ProblemData/1.jpg','rb')
+    result = file.read()
+
+    result = base64.b64encode(result)
+    return HttpResponse(result, content_type='image/jpg')
+
+
+def judgerfiledown(request):
+    judgersecret = "lpojdatabase"
+    if os.environ.get("DB_PASSWORD"): 
+        judgersecret = os.environ.get("DB_PASSWORD")
+    
+    password = request.GET.get('password')
+    if str(password) != str(judgersecret):
+        return HttpResponse("Admin Only", HTTP_403_FORBIDDEN)
+
+    name = request.GET.get('name')
+
+    file = open('./ProblemData/'+name+'.zip','rb')
+    response = FileResponse(file)
+    response['Content-Type']='application/msword'
+    response['Content-Disposition']='attachment;filename='+name+'.zip'
+    return response
+
+def judgerfiletime(request):
+    judgersecret = "lpojdatabase"
+    if os.environ.get("DB_PASSWORD"): 
+        judgersecret = os.environ.get("DB_PASSWORD")
+    
+    password = request.GET.get('password')
+    if str(password) != str(judgersecret):
+        return HttpResponse("Admin Only", HTTP_403_FORBIDDEN)
+
+    name = request.GET.get('name')
+    time = os.stat("./ProblemData/"+str(name)+".zip").st_mtime
+    return HttpResponse(time,HTTP_200_OK)

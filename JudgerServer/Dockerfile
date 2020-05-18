@@ -5,3 +5,4 @@ WORKDIR /JudgerServer
 RUN pip install -r requirements.txt
 EXPOSE 9906
 CMD ["python", "main.py"]
+

@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import echarts from "echarts";
+import echarts from "./echarts";
 export default {
   name: "teamchart",
   data() {

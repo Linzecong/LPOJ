@@ -1,7 +1,7 @@
 <template>
   <el-card>
     <el-table :data="tableData" @cell-click="blogclick" size="medium">
-      
+
       <el-table-column prop="username" label="User" :width="150"></el-table-column>
       <el-table-column prop="title" label="Title (Click to view content)">
 
@@ -51,7 +51,7 @@ export default {
       this.$axios
         .get("/blog/?limit=" + limit + "&offset=" + offset)
         .then(response => {
-          
+
           for (var i = 0; i < response.data.results.length; i++) {
             response.data.results[i].time=moment(
               response.data.results[i].time
