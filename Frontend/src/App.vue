@@ -1,6 +1,6 @@
 <template>
   <div id="app" style="top:0px;left:0px;">
-    <el-menu :default-active="activeIndex" mode="horizontal" v-bind:router="true" id="nav">
+    <el-menu :default-active="$route.path" mode="horizontal" v-bind:router="true" id="nav">
       <el-menu-item index="/" id="title">{{school}}</el-menu-item>
       <el-menu-item index="/main">
         <i class="el-icon-star-off"></i>Home
