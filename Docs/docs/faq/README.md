@@ -29,7 +29,11 @@ LPOJ是一个由在校学生（现在已毕业）的学生自主开发的一个�
 
 # 打赏人员名单
 
-**更新于2020-5-10**
+**更新于2020-5-26**
+
+感谢<font style="color:orange">GWT</font>20.00元 
+
+感谢<font style="color:orange">Kurisu</font>5.00元 
 
 感谢<font style="color:orange">04G</font>赞赏的20.00元 
 
