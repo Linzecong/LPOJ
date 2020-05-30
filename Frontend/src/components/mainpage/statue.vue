@@ -30,8 +30,8 @@
       <el-collapse>
         <el-collapse-item :key="index"
                           v-for="(data,index) in dialogdata"
-                          v-if="data.casedata!=''">
-
+                          v-if="data.casedata!=''"
+                          :class="data.caseresult=='Accepted'?'el-collapse-success':(data.caseresult=='Wrong Answer'?'el-collapse-error':'el-collapse-warning')">
           <template slot="title">
             <el-alert :show-icon="true"
                       :type="data.caseresult=='Accepted'?'success':(data.caseresult=='Wrong Answer'?'error':'warning')"
@@ -203,6 +203,7 @@
                        label="Language"></el-table-column>
       <el-table-column prop="submittime"
                        label="Submit time"
+
                        :width="180"></el-table-column>
       <el-table-column prop="judger"
                        label="Judger"></el-table-column>
@@ -225,11 +226,39 @@
   text-align: center;
   font-weight: bold;
 }
+
+
+.el-collapse-item__header{
+  background-color: unset;
+  line-height: unset;
+}
+
+.el-collapse-error{
+  background-color:#FEF0F0; 
+}
+
+.el-collapse-success{
+  background-color:#F0F9EB; 
+}
+
+.el-collapse-warning{
+  background-color:#FDF6EC; 
+}
+
+.el-collapse-item__content{
+  padding: 0;
+}
+
+.CodeMirror{
+  /* font-size: 18px; */
+}
 </style>
 
 <script>
 import moment from "moment";
 import { codemirror } from "vue-codemirror";
+import "codemirror/addon/scroll/simplescrollbars.js"
+require("codemirror/addon/scroll/simplescrollbars.css")
 require("codemirror/lib/codemirror.css");
 require("codemirror/theme/base16-light.css");
 require("codemirror/mode/clike/clike");
@@ -259,7 +288,7 @@ export default {
     },
 
     rowClick (row, col, e) {
-      console.log(col);
+      // console.log(col);
 
       if (col.label == "Problem") {
         if (this.contest != "0")
@@ -571,8 +600,10 @@ export default {
         theme: "base16-light",
         lineNumbers: true,
         readOnly: true,
+        cursorBlinkRate:-1,//负数，保留指针但是不显示
         viewportMargin: Infinity,
-        lineWrapping: true
+        lineWrapping: true,
+        scrollbarStyle:"simple",
       },
       isadmin: false,
       curid: 0,
