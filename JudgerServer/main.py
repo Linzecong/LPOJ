@@ -162,9 +162,11 @@ def changeauth():
                     "SELECT * from contest_contestproblem where contestid=%d" % eid)
                 pros = cursor.fetchall()
                 for pid in pros:
-                   # print(pid[2])
-                    curpro.remove(pid[2])
-                    curinpro.remove(pid[2])
+                    try:
+                        curpro.remove(pid[2])
+                        curinpro.remove(pid[2])
+                    except KeyError:
+                        pass
                     cursor.execute(
                         "UPDATE  problem_problemdata SET auth = 1 WHERE problem = %s" % pid[2])
                     cursor.execute(
