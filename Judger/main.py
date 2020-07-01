@@ -332,37 +332,37 @@ def getmem():
 
 # 敏感词列表，用于Python安全机制
 def minganci(ci):
-    # if ci.find("thread") >= 0:
-    #     return "thread"
-    # if ci.find("process") >= 0:
-    #     return "process"
-    # if ci.find("resource") >= 0:
-    #     return "resource"
-    # if ci.find("ctypes") >= 0:
-    #     return "ctypes"
-    # if ci.find(" os") >= 0:
-    #     return " os"
-    # if ci.find("__import__") >= 0:
-    #     return "__import__"
-    # if ci.find("eval") >= 0:
-    #     return "eval"
-    # if ci.find("exec") >= 0:
-    #     return "exec"
-    # if ci.find("globals") >= 0:
-    #     return "globals"
-    # if ci.find("locals") >= 0:
-    #     return "locals"
-    # if ci.find("compile") >= 0:
-    #     return "compile"
-    # if ci.find("frame") >= 0:
-    #     return "frame"
+    if ci.find("thread") >= 0:
+        return "thread"
+    if ci.find("process") >= 0:
+        return "process"
+    if ci.find("resource") >= 0:
+        return "resource"
+    if ci.find("ctypes") >= 0:
+        return "ctypes"
+    if ci.find(" os") >= 0:
+        return " os"
+    if ci.find("__import__") >= 0:
+        return "__import__"
+    if ci.find("eval") >= 0:
+        return "eval"
+    if ci.find("exec") >= 0:
+        return "exec"
+    if ci.find("globals") >= 0:
+        return "globals"
+    if ci.find("locals") >= 0:
+        return "locals"
+    if ci.find("compile") >= 0:
+        return "compile"
+    if ci.find("frame") >= 0:
+        return "frame"
     return "0"
 
 def judgePython2(timelimit, memorylimit, inputpath, outputpath, errorpath, id, judgername):
     return _judger.run(max_cpu_time=timelimit,
                         max_real_time=timelimit*10,
                         max_memory=memorylimit * 1024 * 1024,
-                        max_process_number=200,
+                        max_process_number=10,
                         max_output_size=32 * 1024 * 1024,
                         max_stack=32 * 1024 * 1024,
                         # five args above can be _judger.UNLIMITED
@@ -384,7 +384,7 @@ def judgePython3(timelimit, memorylimit, inputpath, outputpath, errorpath, id, j
     return _judger.run(max_cpu_time=timelimit,
                         max_real_time=timelimit*10,
                         max_memory=memorylimit * 1024 * 1024,
-                        max_process_number=200,
+                        max_process_number=10,
                         max_output_size=32 * 1024 * 1024,
                         max_stack=32 * 1024 * 1024,
                         # five args above can be _judger.UNLIMITED
@@ -406,7 +406,7 @@ def judgeC(timelimit, memorylimit, inputpath, outputpath, errorpath, id, judgern
     return _judger.run(max_cpu_time=timelimit,
                         max_real_time=timelimit*10,
                         max_memory=memorylimit * 1024 * 1024,
-                        max_process_number=200,
+                        max_process_number=10,
                         max_output_size=32 * 1024 * 1024,
                         max_stack=32 * 1024 * 1024,
                         # five args above can be _judger.UNLIMITED
@@ -428,7 +428,7 @@ def judgeCPP(timelimit, memorylimit, inputpath, outputpath, errorpath, id, judge
     return _judger.run(max_cpu_time=timelimit,
                         max_real_time=timelimit*10,
                         max_memory=memorylimit * 1024 * 1024,
-                        max_process_number=200,
+                        max_process_number=10,
                         max_output_size=32 * 1024 * 1024,
                         max_stack=32 * 1024 * 1024,
                         # five args above can be _judger.UNLIMITED
@@ -451,7 +451,7 @@ def judgeJava(timelimit, memorylimit, inputpath, outputpath, errorpath, id, judg
     return _judger.run(max_cpu_time=timelimit,
                         max_real_time=timelimit*10,
                         max_memory=memorylimit * 1024 * 1024,
-                        max_process_number=200,
+                        max_process_number=10,
                         max_output_size=32 * 1024 * 1024,
                         max_stack=32 * 1024 * 1024,
                         # five args above can be _judger.UNLIMITED
@@ -475,7 +475,7 @@ def judgeSwift(timelimit, memorylimit, inputpath, outputpath, errorpath, id, jud
     return _judger.run(max_cpu_time=timelimit,
                         max_real_time=timelimit*10,
                         max_memory=memorylimit * 1024 * 1024,
-                        max_process_number=200,
+                        max_process_number=10,
                         max_output_size=32 * 1024 * 1024,
                         max_stack=32 * 1024 * 1024,
                         # five args above can be _judger.UNLIMITED
