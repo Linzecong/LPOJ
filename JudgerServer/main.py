@@ -79,7 +79,7 @@ def deal_client(newSocket: socket, addr):
                     else:
                         falsetime = falsetime + 1
                         statue = False
-                        if falsetime >= 300: # 计算一下未准备好的时间，如果超过120s，发送销毁重启命令
+                        if falsetime >= 3600: # 计算一下未准备好的时间，如果超过120s，发送销毁重启命令
                             newSocket.send("timeout".encode("utf-8"))
                            # print(addr, "timeout!")
                             newSocket.close()
