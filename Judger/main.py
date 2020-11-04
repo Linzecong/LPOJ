@@ -196,10 +196,10 @@ class Controller:
 
 # SPJ函数，首先编译，然后运行，然后返回程序运行结果
 def specialjudge(problem,testin,testout,userout):
-    result = os.system("timeout 10 g++ ./ProblemData/%s/spj.cpp -o %s.out -O2 -std=c++14" % (str(problem),GlobalVar.judgername))
+    result = os.system("timeout 10 g++ ./ProblemData/%s/spj.cpp -o spj_%s.out -O2 -std=c++14" % (str(problem),GlobalVar.judgername))
     if result:
         return 5
-    res = os.system("timeout 20 ./%s.out %s %s %s" % (GlobalVar.judgername, testin, testout, userout))
+    res = os.system("timeout 20 ./spj_%s.out %s %s %s" % (GlobalVar.judgername, testin, testout, userout))
     return res
 
 # 用于远程下载数据文件，首先判断数据文件有没有更新，有的话就更新
