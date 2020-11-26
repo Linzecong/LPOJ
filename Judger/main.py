@@ -332,6 +332,8 @@ def getmem():
 
 # 敏感词列表，用于Python安全机制
 def minganci(ci):
+    if os.environ.get("PYTHONSWF") != "yes":
+        return "0"
     if ci.find("thread") >= 0:
         return "thread"
     if ci.find("process") >= 0:
@@ -670,6 +672,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
         # 判断有无数据
         if isdone == False: 
             Controller.doneProblem(id,problem,"unzip error!",0,0,username,contest,"5","?")
+            GlobalVar.statue = True
             return
         try:
             files = os.listdir("./ProblemData/%s/" % problem)

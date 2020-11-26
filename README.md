@@ -45,6 +45,7 @@ sudo apt-get install -y git
 sudo apt install docker.io -y
 sudo apt install docker-compose -y
 ```
+
 ### 2. 开始安装
 
 ```
@@ -53,6 +54,7 @@ git clone https://github.com/Linzecong/LPOJ.git && cd LPOJ
 
 **请修改docker-compose.yml中的数据库密码（所有的 DB_PASSWORD，MYSQL_ROOT_PASSWORD 字段）和一些你认为必要的设置**
 
+**请确保机器上 4406 8080 8000~8002 9906 端口没有被占用！**
 
 ```
 sudo docker-compose up -d --scale judger=3

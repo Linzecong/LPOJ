@@ -6,7 +6,7 @@ services:
     environment:
             MYSQL_ROOT_PASSWORD: "lpojdatabase" # 选择性修改，如果你有自己的数据库，请忽略
     ports:
-     - "3306:3306"
+     - "4406:3306"
     restart: always
     volumes:
         - "./Database/data:/var/lib/mysql"
@@ -184,7 +184,8 @@ services:
       BACKEND_HEAD: 'http'
 
       NO_DOWNLOAD: "no" # 设为yes，则不使用http，需要手动将数据压缩包放到Judger/ProblemData中
-
+      
+      PYTHONSWF: "yes" # 是否开启python敏感词过滤，能简单防攻击，可设成no
     restart: always
     volumes:
         - "./Judger/ProblemData:/Judger/ProblemData"
