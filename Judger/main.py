@@ -1078,7 +1078,10 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
         GlobalVar.logger.info("Judge all data done, begin to save result!")
         # 所有样例评判结束，汇总结果!
         if myresult == 100:
-            Controller.acProblem(id,problem,"",maxmemory/1024/1024,maxtime,username,score,HaveAC,contest)
+            if istemplatepro == True:
+                Controller.acProblem(id,problem,templatemsg,maxmemory/1024/1024,maxtime,username,score,HaveAC,contest)
+            else:
+                Controller.acProblem(id,problem,"",maxmemory/1024/1024,maxtime,username,score,HaveAC,contest)
         else:
             if istemplatepro == True:
                 Controller.doneProblem(id,problem,templatemsg,mymemory/1024/1024, mytime,username,contest,myresult,mytestcase)
