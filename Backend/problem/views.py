@@ -35,7 +35,7 @@ class ChoiceProblemView(viewsets.ModelViewSet):
     filter_backends = (DjangoFilterBackend, filters.SearchFilter)
     filter_fields = ('ChoiceProblemId','des')
     permission_classes = (ManagerOnly,)
-    search_fields = ('des',)
+    search_fields = ('des')
     throttle_scope = "post"
 
 class ProblemDataView(viewsets.ModelViewSet):

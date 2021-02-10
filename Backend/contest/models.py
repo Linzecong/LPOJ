@@ -159,7 +159,7 @@ class ContestChoiceProblem(models.Model):
     objects = models.Manager()
 
     def __str__(self):
-        return self.contestid
+        return self.ContestId
 
 class StudentChoiceAnswer(models.Model):
     username = models.CharField(max_length=100,default="")
@@ -167,6 +167,7 @@ class StudentChoiceAnswer(models.Model):
     number = models.CharField(max_length=100,default="")
     contestid = models.CharField(max_length=100,default="")
     answer = models.CharField(max_length=100)
+    answer_detail = models.TextField(default="")
     score = models.IntegerField()
 
     objects = models.Manager()

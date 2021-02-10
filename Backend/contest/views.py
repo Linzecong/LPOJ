@@ -10,6 +10,7 @@ from rest_framework.throttling import ScopedRateThrottle
 from rest_framework import viewsets, mixins, filters
 from .permission import ManagerOnly, UserRatingOnly, UserRatingOnly2, UserOnly
 from .models import ContestBoardTotal, ContestComingInfo,ContestTutorial, ContestAnnouncement, ContestRatingChange, ContestBoard, ContestComment, ContestInfo, ContestProblem, ContestRegister, StudentChoiceAnswer, ContestChoiceProblem
+from problem.models import ChoiceProblem
 from .serializers import ContestBoardTotalSerializer, ContestComingInfoSerializer,ContestTutorialSerializer, ContestRatingChangeSerializer, ContestAnnouncementSerializer, ContestBoardSerializer, ContestCommentSerializer, ContestInfoSerializer, ContestProblemSerializer, ContestRegisterSerializer, StudentChoiceAnswerSerializer, ContestChoiceProblemSerializer
 import datetime
 
@@ -189,8 +190,42 @@ class StudentChoiceAnswerView(viewsets.ModelViewSet):
 
 
 class ContestChoiceProblemView(viewsets.ModelViewSet):
-    queryset = ContestChoiceProblem.objects.all()
+    queryset = ContestChoiceProblem.objects.all().order_by('rank')
     serializer_class = ContestChoiceProblemSerializer
     permission_classes = (ManagerOnly,)
     filter_fields = ('ContestId','ChoiceProblemId', "rank")
     throttle_scope = "post"
+
+class GetContestChoiceProblems(APIView):
+
+    throttle_scope = "post"
+    throttle_classes = [ScopedRateThrottle, ]
+    def post(self, request, format=None):
+        #获取比赛id
+        data = request.data
+        if type(data) != dict:
+            data = data.dict()
+        contestid = data['ContestId']
+        #此次比赛的选择题
+        all_contest_choice_problem=[]
+        #获取此次比赛的选择题的id,根据rank排序
+        contest_choice_problem = ContestChoiceProblem.objects.filter(ContestId = contestid).order_by('rank')
+        contest_choice_problem_id=[]
+        #储存此次比赛的选择题的id
+        for pro in contest_choice_problem:
+            contest_choice_problem_id.append(int(pro.ChoiceProblemId))
+        #获取具体的选择题
+        for pro_id in contest_choice_problem_id:
+            cproblem = ChoiceProblem.objects.filter(ChoiceProblemId=pro_id)
+            single_pro = {}
+            for cpro in cproblem:
+                single_pro['des']=cpro.des
+                single_pro['A']=cpro.choiceA
+                single_pro['B']=cpro.choiceB
+                single_pro['C']=cpro.choiceC
+                single_pro['D']=cpro.choiceD
+                single_pro['cpro_id']=cpro.ChoiceProblemId
+            all_contest_choice_problem.append(single_pro)
+        print(all_contest_choice_problem)
+
+        return Response(all_contest_choice_problem, HTTP_200_OK)
