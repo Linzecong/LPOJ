@@ -237,7 +237,7 @@ class GetContestChoiceProblems(APIView):
 class ScoreContestChoiceProblems(APIView):
     throttle_scope = "post"
     throttle_classes = [ScopedRateThrottle, ]
-    permission_classes = (ManagerOnly,)
+    permission_classes = (ManagerOnly,UserOnly1)
     def post(self, request, format=None):
         try:
             #获取比赛id
