@@ -238,7 +238,7 @@ export default {
       })
       .catch(error => {
         this.$message.error(
-          "获取选择题失败，可能是后台出错，请联系管理员查看后台输出日志以获取错误信息" +
+          "获取选择题失败，可能是你没有登录，或者后台出错，请联系管理员查看后台输出日志以获取错误信息" +
             "(" +
             JSON.stringify(error.response.data) +
             ")"

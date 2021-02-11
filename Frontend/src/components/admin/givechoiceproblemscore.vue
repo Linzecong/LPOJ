@@ -96,7 +96,7 @@ export default {
           })
           .catch(error => {
             this.$message.error(
-              "提交评阅失败！请再提交一次。可能是后台出错，请联系管理员查看后台输出日志以获取错误信息" +
+              "提交评阅失败！请再提交一次。可能是你没有登录，或者后台出错，请联系管理员查看后台输出日志以获取错误信息" +
                 "(" +
                 JSON.stringify(error.response.data) +
                 ")"

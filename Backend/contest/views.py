@@ -8,7 +8,8 @@ from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
 from rest_framework.throttling import ScopedRateThrottle
 from rest_framework import viewsets, mixins, filters
-from .permission import ManagerOnly, UserRatingOnly, UserRatingOnly2, UserOnly
+from rest_framework.permissions import IsAuthenticated
+from .permission import ManagerOnly, UserRatingOnly, UserRatingOnly2, UserOnly, UserOnly1
 from .models import ContestBoardTotal, ContestComingInfo,ContestTutorial, ContestAnnouncement, ContestRatingChange, ContestBoard, ContestComment, ContestInfo, ContestProblem, ContestRegister, StudentChoiceAnswer, ContestChoiceProblem
 from problem.models import ChoiceProblem
 from .serializers import ContestBoardTotalSerializer, ContestComingInfoSerializer,ContestTutorialSerializer, ContestRatingChangeSerializer, ContestAnnouncementSerializer, ContestBoardSerializer, ContestCommentSerializer, ContestInfoSerializer, ContestProblemSerializer, ContestRegisterSerializer, StudentChoiceAnswerSerializer, ContestChoiceProblemSerializer
@@ -184,7 +185,7 @@ class ContestBoardFilterAPIView(APIView):
 class StudentChoiceAnswerView(viewsets.ModelViewSet):
     queryset = StudentChoiceAnswer.objects.all()
     serializer_class = StudentChoiceAnswerSerializer
-    permission_classes = (UserOnly,)
+    permission_classes = (UserOnly,UserOnly1)
     filter_fields = ('username','contestid')
 
 
@@ -199,6 +200,7 @@ class ContestChoiceProblemView(viewsets.ModelViewSet):
 class GetContestChoiceProblems(APIView):
     throttle_scope = "post"
     throttle_classes = [ScopedRateThrottle, ]
+    permission_classes = (UserOnly,UserOnly1)
     def post(self, request, format=None):
         try:
             #获取比赛id
@@ -235,6 +237,7 @@ class GetContestChoiceProblems(APIView):
 class ScoreContestChoiceProblems(APIView):
     throttle_scope = "post"
     throttle_classes = [ScopedRateThrottle, ]
+    permission_classes = (UserOnly,UserOnly1)
     def post(self, request, format=None):
         try:
             #获取比赛id
