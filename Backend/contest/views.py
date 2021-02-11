@@ -257,7 +257,7 @@ class ScoreContestChoiceProblems(APIView):
             for stu_info in stu_cpro_info:
                 stu_ans = stu_info.answer
                 stu_score = 0
-                for i in range(len(cpro_answer)-1):
+                for i in range(len(cpro_answer)):
                     if(str(cpro_answer[i]) == str(stu_ans[i])):
                         stu_score += one_pro_score
                 StudentChoiceAnswer.objects.filter(contestid = contestid, username = stu_info.username).update(score = stu_score)
