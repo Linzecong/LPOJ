@@ -95,7 +95,8 @@ export default {
                   pro_id: this.ChoiceProblemDatas[i].choice_problem_id,
                   user: sessionStorage.username,
                   real_name: this.form.realname,
-                  last_submit_time: this.curtime
+                  student_number:this.form.number,
+                  last_submit_time: response4.data
                 });
                 if (this.allRadio[i]) {
                   this.form.answer += this.allRadio[i];
