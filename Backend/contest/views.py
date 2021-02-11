@@ -197,35 +197,68 @@ class ContestChoiceProblemView(viewsets.ModelViewSet):
     throttle_scope = "post"
 
 class GetContestChoiceProblems(APIView):
-
     throttle_scope = "post"
     throttle_classes = [ScopedRateThrottle, ]
     def post(self, request, format=None):
-        #获取比赛id
-        data = request.data
-        if type(data) != dict:
-            data = data.dict()
-        contestid = data['ContestId']
-        #此次比赛的选择题
-        all_contest_choice_problem=[]
-        #获取此次比赛的选择题的id,根据rank排序
-        contest_choice_problem = ContestChoiceProblem.objects.filter(ContestId = contestid).order_by('rank')
-        contest_choice_problem_id=[]
-        #储存此次比赛的选择题的id
-        for pro in contest_choice_problem:
-            contest_choice_problem_id.append(int(pro.ChoiceProblemId))
-        #获取具体的选择题
-        for pro_id in contest_choice_problem_id:
-            cproblem = ChoiceProblem.objects.filter(ChoiceProblemId=pro_id)
-            single_pro = {}
-            for cpro in cproblem:
-                single_pro['des']=cpro.des
-                single_pro['A']=cpro.choiceA
-                single_pro['B']=cpro.choiceB
-                single_pro['C']=cpro.choiceC
-                single_pro['D']=cpro.choiceD
-                single_pro['cpro_id']=cpro.ChoiceProblemId
-            all_contest_choice_problem.append(single_pro)
-        print(all_contest_choice_problem)
+        try:
+            #获取比赛id
+            data = request.data
+            if type(data) != dict:
+                data = data.dict()
+            contestid = int(data['ContestId'])
+            #此次比赛的选择题
+            all_contest_choice_problem=[]
+            #获取此次比赛的选择题的id,根据rank排序
+            contest_choice_problem = ContestChoiceProblem.objects.filter(ContestId = contestid).order_by('rank')
+            contest_choice_problem_id=[]
+            #储存此次比赛的选择题的id
+            for pro in contest_choice_problem:
+                contest_choice_problem_id.append(int(pro.ChoiceProblemId))
+            #获取具体的选择题
+            for pro_id in contest_choice_problem_id:
+                cproblem = ChoiceProblem.objects.filter(ChoiceProblemId=pro_id)
+                single_pro = {}
+                for cpro in cproblem:
+                    #这个循环应该只会执行一遍
+                    single_pro['des']=cpro.des
+                    single_pro['A']=cpro.choiceA
+                    single_pro['B']=cpro.choiceB
+                    single_pro['C']=cpro.choiceC
+                    single_pro['D']=cpro.choiceD
+                    single_pro['cpro_id']=cpro.ChoiceProblemId
+                all_contest_choice_problem.append(single_pro)
 
-        return Response(all_contest_choice_problem, HTTP_200_OK)
+            return Response(all_contest_choice_problem, HTTP_200_OK)
+        except Exception as e:
+            print (e)
+
+class ScoreContestChoiceProblems(APIView):
+    throttle_scope = "post"
+    throttle_classes = [ScopedRateThrottle, ]
+    def post(self, request, format=None):
+        try:
+            #获取比赛id
+            data = request.data
+            if type(data) != dict:
+                data = data.dict()
+            #比赛ID
+            contestid = int(data['ContestId'])
+            #选择题标答
+            cpro_answer = data['ChoiceProblemAnswer'].upper()
+            #一道选择题的分值
+            one_pro_score = int(data['one_pro_score'])
+
+            #此次比赛学生选择题答案
+            stu_cpro_info = StudentChoiceAnswer.objects.filter(contestid = contestid)
+            stu_score = 0
+            for stu_info in stu_cpro_info:
+                stu_ans = stu_info.answer
+                stu_score = 0
+                for i in range(len(cpro_answer)-1):
+                    if(str(cpro_answer[i]) == str(stu_ans[i])):
+                        stu_score += one_pro_score
+                StudentChoiceAnswer.objects.filter(contestid = contestid, username = stu_info.username).update(score = stu_score)
+            return Response('评阅完成，刷新页面查看最新数据',HTTP_200_OK)
+        except Exception as e:
+            print (e)
+        

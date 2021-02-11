@@ -50,7 +50,8 @@ export default {
       radio: [],
       ChoiceProblemIds: [],
       ChoiceProblemDatas: [],
-      choice_problem_data: []
+      choice_problem_data: [],
+      curtime: ""
     };
   },
   methods: {
@@ -69,6 +70,10 @@ export default {
       };
     },
     Submit() {
+      if (!sessionStorage.username) {
+        this.$message.error("请先登录");
+        return;
+      }
       let post_answer_detail = [];
       if (this.$store.state.contestisend == true) {
         this.$message.error("比赛已结束");
@@ -79,73 +84,77 @@ export default {
             this.form.realname = response2.data[0].realname;
             this.form.number = response2.data[0].number;
             this.form.answer = "";
-            for (var i = 0; i < this.ChoiceProblemDatas.length; i++) {
-              //包含了学生选的选项描述，选择题题目，选择题id，学生用户名，真实姓名
-              post_answer_detail.push({
-                answer: this.allRadio[i],
-                des: this.radio[i],
-                pro: this.ChoiceProblemDatas[i].des,
-                pro_id: this.ChoiceProblemDatas[i].choice_problem_id,
-                user: sessionStorage.username,
-                real_name: this.form.realname
-              });
-              if (this.allRadio[i]) {
-                this.form.answer += this.allRadio[i];
-              } else {
-                this.form.answer += "X";
-              }
-            }
-            this.form.answer_detail = JSON.stringify(post_answer_detail);
-            this.$axios
-              .get(
-                "/conteststudentchoiceanswer/?username=" +
-                  this.form.username +
-                  "&contestid=" +
-                  this.form.contestid
-              )
-              .then(response => {
-                if (response.data.length > 0) {
-                  var updateId = response.data[0].id;
-                  this.$axios
-                    .put(
-                      "/conteststudentchoiceanswer/" + updateId + "/",
-                      this.form
-                    )
-                    .then(response3 => {
-                      this.myanswer = this.form.answer;
-                      this.$message({
-                        message: "提交成功！",
-                        type: "success"
-                      });
-                    })
-                    .catch(error => {
-                      this.$message.error(
-                        "提交失败！请再提交一次" +
-                          "(" +
-                          JSON.stringify(error.response.data) +
-                          ")"
-                      );
-                    });
+            this.$axios.get("/currenttime/").then(response4 => {
+              this.curtime = response4.data;
+              for (var i = 0; i < this.ChoiceProblemDatas.length; i++) {
+                //包含了学生选的选项描述，选择题题目，选择题id，学生用户名，真实姓名，最后一次提交答案的时间
+                post_answer_detail.push({
+                  answer: this.allRadio[i],
+                  des: this.radio[i],
+                  pro: this.ChoiceProblemDatas[i].des,
+                  pro_id: this.ChoiceProblemDatas[i].choice_problem_id,
+                  user: sessionStorage.username,
+                  real_name: this.form.realname,
+                  last_submit_time: this.curtime
+                });
+                if (this.allRadio[i]) {
+                  this.form.answer += this.allRadio[i];
                 } else {
-                  this.$axios
-                    .post("/conteststudentchoiceanswer/", this.form)
-                    .then(response3 => {
-                      this.myanswer = this.form.answer;
-                      this.$message({
-                        message: "提交成功！",
-                        type: "success"
-                      });
-                    })
-                    .catch(error => {
-                      this.$message.error(
-                        "提交失败！请再提交一次" +
-                          "(" +
-                          JSON.stringify(error.response.data) +
-                          ")"
-                      );
-                    });
+                  this.form.answer += "X";
                 }
-              });
+              }
+              this.form.answer_detail = JSON.stringify(post_answer_detail);
+              this.$axios
+                .get(
+                  "/conteststudentchoiceanswer/?username=" +
+                    this.form.username +
+                    "&contestid=" +
+                    this.form.contestid
+                )
+                .then(response => {
+                  if (response.data.length > 0) {
+                    var updateId = response.data[0].id;
+                    this.$axios
+                      .put(
+                        "/conteststudentchoiceanswer/" + updateId + "/",
+                        this.form
+                      )
+                      .then(response3 => {
+                        this.myanswer = this.form.answer;
+                        this.$message({
+                          message: "提交成功！",
+                          type: "success"
+                        });
+                      })
+                      .catch(error => {
+                        this.$message.error(
+                          "提交失败！请再提交一次" +
+                            "(" +
+                            JSON.stringify(error.response.data) +
+                            ")"
+                        );
+                      });
+                  } else {
+                    this.$axios
+                      .post("/conteststudentchoiceanswer/", this.form)
+                      .then(response3 => {
+                        this.myanswer = this.form.answer;
+                        this.$message({
+                          message: "提交成功！",
+                          type: "success"
+                        });
+                      })
+                      .catch(error => {
+                        this.$message.error(
+                          "提交失败！请再提交一次" +
+                            "(" +
+                            JSON.stringify(error.response.data) +
+                            ")"
+                        );
+                      });
+                  }
+                });
+            });
           });
       }
     },
@@ -190,43 +199,49 @@ export default {
           }
         }
         this.havechopro = true;
-        this.$axios
-          .get(
-            "/conteststudentchoiceanswer/?username=" +
-              this.form.username +
-              "&contestid=" +
-              this.form.contestid
-          )
-          .then(response5 => {
-            var lastanswer = null;
-            if (response5.data[0].answer) {
-              lastanswer = response5.data[0].answer;
-              this.myanswer = response5.data[0].answer;
-            } else {
-              this.myanswer = "";
-            }
-            if (lastanswer != null) {
-              for (let i = 0; i < this.ChoiceProblemDatas.length; i++) {
-                if (lastanswer[i] == "A") {
-                  this.allRadio[i] = "A";
-                  this.radio[i] = this.ChoiceProblemDatas[i].choiceA;
-                } else if (lastanswer[i] == "B") {
-                  this.allRadio[i] = "B";
-                  this.radio[i] = this.ChoiceProblemDatas[i].choiceB;
-                } else if (lastanswer[i] == "C") {
-                  this.allRadio[i] = "C";
-                  this.radio[i] = this.ChoiceProblemDatas[i].choiceC;
-                } else if (lastanswer[i] == "D") {
-                  this.allRadio[i] = "D";
-                  this.radio[i] = this.ChoiceProblemDatas[i].choiceD;
+        this.myanswer = "";
+        if (sessionStorage.username) {
+          this.$axios
+            .get(
+              "/conteststudentchoiceanswer/?username=" +
+                this.form.username +
+                "&contestid=" +
+                this.form.contestid
+            )
+            .then(response5 => {
+              var lastanswer = null;
+              if (response5.data[0].answer) {
+                lastanswer = response5.data[0].answer;
+                this.myanswer = response5.data[0].answer;
+              } else {
+                this.myanswer = "";
+              }
+              if (lastanswer != null) {
+                for (let i = 0; i < this.ChoiceProblemDatas.length; i++) {
+                  if (lastanswer[i] == "A") {
+                    this.allRadio[i] = "A";
+                    this.radio[i] = this.ChoiceProblemDatas[i].choiceA;
+                  } else if (lastanswer[i] == "B") {
+                    this.allRadio[i] = "B";
+                    this.radio[i] = this.ChoiceProblemDatas[i].choiceB;
+                  } else if (lastanswer[i] == "C") {
+                    this.allRadio[i] = "C";
+                    this.radio[i] = this.ChoiceProblemDatas[i].choiceC;
+                  } else if (lastanswer[i] == "D") {
+                    this.allRadio[i] = "D";
+                    this.radio[i] = this.ChoiceProblemDatas[i].choiceD;
+                  }
                 }
               }
-            }
-          });
+            });
+        }
       })
       .catch(error => {
         this.$message.error(
-          "获取选择题失败" + "(" + JSON.stringify(error.response.data) + ")"
+          "获取选择题失败，可能是后台出错，请联系管理员查看后台输出日志以获取错误信息" +
+            "(" +
+            JSON.stringify(error.response.data) +
+            ")"
         );
       });
   },

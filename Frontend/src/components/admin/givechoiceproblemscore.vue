@@ -1,74 +1,40 @@
 <template>
-  <el-tabs type="border-card"
-           v-show="canshow">
+  <el-tabs type="border-card" v-show="canshow">
     <el-row>
       <el-row>
-        <el-input placeholder="请输入一道题的分值（一题多少分）"
-                  v-model="singalscore"
-                  clearable>
-        </el-input>
+        <el-input placeholder="请输入一道题的分值（一题多少分）" v-model="singalscore" clearable></el-input>
 
         <el-col>
-          <el-input placeholder="请输入正确答案(区分大小写)"
-                    v-model="standardanswer"
-                    clearable>
-          </el-input>
+          <el-input placeholder="请输入正确答案(不区分大小写)" v-model="standardanswer" clearable></el-input>
         </el-col>
       </el-row>
       <el-row>
-        <el-button type="success"
-                   :disabled="!isadmin"
-                   @click="Score">评阅</el-button>
-
+        <el-button type="success" :disabled="!isadmin" @click="Score">评阅</el-button>
       </el-row>
 
       <el-row>
-        <el-table :data="tableData"
-                  id="out-table"
-                  style="width: 100%">
-          <el-table-column prop="username"
-                           label="用户名"
-                           width="180">
-          </el-table-column>
-          <el-table-column prop="realname"
-                           label="真实姓名"
-                           width="180">
-          </el-table-column>
-          <el-table-column prop="number"
-                           label="学号"
-                           width="180">
-          </el-table-column>
-          <el-table-column prop="answer"
-                           label="学生答案"
-                           width="400">
-          </el-table-column>
-          <el-table-column prop="score"
-                           label="分数"
-                           width="180">
-          </el-table-column>
-
+        <el-table :data="tableData" id="out-table" style="width: 100%">
+          <el-table-column prop="username" label="用户名" width="180"></el-table-column>
+          <el-table-column prop="realname" label="真实姓名" width="180"></el-table-column>
+          <el-table-column prop="number" label="学号" width="180"></el-table-column>
+          <el-table-column prop="answer" label="学生答案" width="400"></el-table-column>
+          <el-table-column prop="score" label="分数" width="180"></el-table-column>
         </el-table>
       </el-row>
 
-      <el-row>
-      </el-row>
-      <el-button type="success"
-                 :disabled="!isadmin"
-                 @click="SubmitScore">提交评阅</el-button>
-      <el-button type="primary"
-                 :disabled="!isadmin"
-                 @click="exportExcel">导出表格</el-button>
+      <el-row></el-row>
+      <el-button type="success" :disabled="!isadmin" @click="SubmitScore">提交评阅</el-button>
+      <el-button type="primary" :disabled="!isadmin" @click="exportExcel">导出表格</el-button>
+      <el-alert title="数据库中保存有学生答题的详细信息，包含了学生选的选项描述，选择题题目，选择题id，学生用户名，真实姓名，最后一次提交答案的时间" type="info"></el-alert>
     </el-row>
   </el-tabs>
 </template>
 <script>
-
-
 import FileSaver from "file-saver";
 import XLSX from "xlsx";
 export default {
   name: "givechoiceproblemscore",
-  data () {
+  data() {
     return {
       singalscore: "",
       studentcount: "",
@@ -79,19 +45,15 @@ export default {
       tableData: [],
       contestid: "",
 
-
       scoreform: {
-        username: "",
-        realname: "",
-        number: "",
-        contestid: "",
-        answer: "",
-        score: "",
+        ContestId: "",
+        ChoiceProblemAnswer: "",
+        one_pro_score: ""
       }
-    }
+    };
   },
   methods: {
-    exportExcel () {
+    exportExcel() {
       /* 从表生成工作簿对象 */
       var wb = XLSX.utils.table_to_book(document.querySelector("#out-table"));
       /* 获取二进制字符串作为输出 */
@@ -111,66 +73,51 @@ export default {
           "ChoiceProblemScores.xlsx"
         );
       } catch (e) {
-        if (typeof console !== "undefined") console.log(e, wbout);
+        if (typeof console !== "undefined") this.$message.error(e);
       }
       return wbout;
     },
-    SubmitScore () {
-      this.$confirm(
-        "确定提交评阅分数吗？",
-        {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }
-      ).then(() => {
-
-        for (var i = 0; i < this.studentcount; i++) {
-          var Username = this.tableData[i].username;
-          var Contestid = this.contestid;
-
-          this.scoreform.username = this.tableData[i].username;
-          this.scoreform.realname = this.tableData[i].realname;
-          this.scoreform.number = this.tableData[i].number;
-          this.scoreform.contestid = this.contestid;
-          this.scoreform.answer = this.tableData[i].answer;
-          this.scoreform.score = this.tableData[i].score;
-
-          this.$axios.get("/conteststudentchoiceanswer/?username=" + Username + "&contestid=" + Contestid)
-            .then(response => {
-              var SubId = response.data[0].id;
-              this.$axios.put("/conteststudentchoiceanswer/" + SubId + "/", this.scoreform)
-                .then(response2 => {
-
-                  this.scoreform.reset();
-                  console.log(this.scoreform);
-                }).catch(error => {
-                  this.$message.error(
-                    "服务器错误！" + JSON.stringify(error.response.data)
-                  );
-                });
-            })
-        }
-        this.$message.success("提交评阅成功！");
+    SubmitScore() {
+      this.$confirm("确定提交评阅分数吗？数据库中学生分数将在后台完成更新。", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        this.scoreform.ContestId = this.$route.query.contestid;
+        this.scoreform.ChoiceProblemAnswer = this.standardanswer;
+        this.scoreform.one_pro_score = this.singalscore;
+        this.$axios
+          .post("/scorecontestchoiceproblems", this.scoreform)
+          .then(response3 => {
+            this.$message({
+              message: response3.data,
+              type: "success"
+            });
+          })
+          .catch(error => {
+            this.$message.error(
+              "提交评阅失败！请再提交一次。可能是后台出错，请联系管理员查看后台输出日志以获取错误信息" +
+                "(" +
+                JSON.stringify(error.response.data) +
+                ")"
+            );
+          });
       });
     },
-    Score () {
-      var Answer = this.standardanswer;
+    Score() {
+      var Answer = this.standardanswer.toUpperCase();
       for (var i = 0; i < this.studentcount; i++) {
         var stuAnswer = this.tableData[i].answer;
         var Score = Number(0);
-
         for (var ii = 0; ii < Answer.length; ii++) {
-          if (stuAnswer[ii] === Answer[ii])
-            Score += Number(this.singalscore);
+          if (stuAnswer[ii] === Answer[ii]) Score += Number(this.singalscore);
         }
         this.tableData[i].score = Number(Score);
       }
-    },
+    }
   },
-  created () {
+  created() {
     this.type = sessionStorage.type;
-    console.log(this.type);
     if (this.type != 2 && this.type != 3) {
       this.$message.error("非法访问！");
       this.canshow = false;
@@ -181,14 +128,14 @@ export default {
       this.isadmin = true;
     }
     this.contestid = this.$route.query.contestid;
-    console.log(this.contestid);
-    this.$axios.get("/conteststudentchoiceanswer/?contestid=" + this.contestid)
+    this.$axios
+      .get("/conteststudentchoiceanswer/?contestid=" + this.contestid)
       .then(response => {
         this.tableData = response.data;
         this.studentcount = response.data.length;
-      })
-  },
-}
+      });
+  }
+};
 </script>
 <style scoped>
 </style>
