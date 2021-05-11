@@ -63,6 +63,8 @@ cd ..
 
 python manage.py makemigrations
 
+python manage.py makemigrations judgestatus item problem user contest board blog wiki classes &&
+
 python manage.py migrate
 
 echo "from django.contrib.auth.models import User; User.objects.filter(email=\"admin@example.com\").delete(); User.objects.create_superuser(\"admin\", \"admin@example.com\", \"admin\")" | python manage.py shell
