@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "axios": "<0.18.0",
-    "codemirror": "^5.44.0",
+    "codemirror": "^5.58.2",
     "echarts": "^4.2.1",
     "element-ui": "~2.12.0",
     "html-webpack-plugin": "^3.2.0",
