@@ -148,10 +148,18 @@ class ContestBoardFilterAPIView(APIView):
         classname = data.get("class","")
         reslist = []
         boards = ContestBoard.objects.filter(contestid=contestid)
+        contest = ContestInfo.objects.get(id=contestid)
+        userid = request.session.get("user_id")
+        usertype = request.session.get("type")
 
         usermap = {}
 
         for b in boards:
+            # 封榜判断
+
+            if usertype != 3 and userid != b.username and contest.lockboard == 1 and contest.lasttime - (datetime.datetime.fromtimestamp(b.submittime / 1000) - contest.begintime).total_seconds() <= contest.locktime * 60:
+                b.type = 2
+
             username = b.username
             if usermap.get(username,None)!=None:
                 if usermap.get(username) == True:
@@ -180,6 +188,23 @@ class ContestBoardFilterAPIView(APIView):
 
        # res = ContestBoard.objects.filter(pk__in=reslist)
         return Response(ContestBoardSerializer(reslist,many=True).data, HTTP_200_OK)
+
+class ContestIsBoardLockAPIView(APIView):
+
+    throttle_scope = "post"
+    throttle_classes = [ScopedRateThrottle, ]
+
+    def post(self, request, format=None):
+       
+        data = request.data
+
+        contestid = data.get("contestid")
+
+        contest = ContestInfo.objects.get(id=contestid)
+      
+        if contest.lockboard == 1 and contest.lasttime - (datetime.datetime.now() - contest.begintime).total_seconds() <= contest.locktime * 60:
+            return Response("yes", HTTP_200_OK)
+        return Response("no", HTTP_200_OK)
 
 
 class StudentChoiceAnswerView(viewsets.ModelViewSet):

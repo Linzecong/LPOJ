@@ -49,6 +49,7 @@
       <el-col :span="16">
         <center>
           <h1>{{ title }}</h1>
+          <h2>{{ isboardlock }}</h2>
         </center>
       </el-col>
 
@@ -142,6 +143,7 @@ export default {
     return {
       level: 3,
       id: this.$route.params.contestID,
+      isboardlock:"",
       tableData: [],
       title: "",
       level: 1,
@@ -313,6 +315,14 @@ export default {
       if (type == "Private") return "danger";
     },
     refresh(id) {
+      this.$axios.post("/isboardlock/", {
+        contestid:this.$route.params.contestID
+      }).then(res1 => {
+        if(res1.data == "yes"){
+          this.isboardlock = "当前封榜中...封榜后提交显示为Pending，榜单只显示提交次数..."
+        }
+      })
+
       this.$store.state.contestisend = false;
       this.$axios.get("/contestinfo/" + id + "/").then(response => {
         this.type = response.data["auth"];

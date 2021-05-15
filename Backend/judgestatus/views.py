@@ -26,6 +26,43 @@ class JudgeStatusView(viewsets.ModelViewSet):
     throttle_scope = "post"
     throttle_classes = [ScopedRateThrottle, ]
 
+    def list(self, request, *args, **kwargs):
+        self.check_permissions(request)
+        self.check_throttles(request)
+
+        userid = request._request.session.get("user_id")
+        usertype = request._request.session.get("type")
+
+        contestid = int(request._request.GET.get("contest",0))
+        
+        if contestid == 0:
+            queryset = self.filter_queryset(self.get_queryset())
+            page = self.paginate_queryset(queryset)
+            if page is not None:
+                serializer = self.get_serializer(page, many=True)
+                return self.get_paginated_response(serializer.data)
+            serializer = self.get_serializer(queryset, many=True)
+            return Response(serializer.data)
+
+        else: # 封榜特判
+            contest = ContestInfo.objects.get(id=contestid)
+
+            queryset = self.filter_queryset(self.get_queryset())
+            newpage = []
+            for data in queryset:
+                if usertype != 3 and userid != data.user and contest.lockboard == 1 and contest.lasttime - (data.submittime - contest.begintime).total_seconds() <= contest.locktime * 60:
+                    data.result = -1
+                newpage.append(data)
+            page = self.paginate_queryset(newpage)
+            if page is not None:
+                serializer = self.get_serializer(page, many=True)
+                return self.get_paginated_response(serializer.data)
+            serializer = self.get_serializer(newpage, many=True)
+            return Response(serializer.data)
+
+        
+
+
 
 class JudgeStatusPutView(viewsets.GenericViewSet, mixins.CreateModelMixin):
     queryset = JudgeStatus.objects.all()

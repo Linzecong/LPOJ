@@ -9,6 +9,7 @@
 
     <center>
       <h1>{{ contesttitle }}</h1>
+      <h2>{{ isboardlock }}</h2>
     </center>
 
     <el-form :inline="true"
@@ -87,6 +88,7 @@ export default {
       problemcount: this.$store.state.contestproblemcount,
       contesttitle: this.$store.state.contesttitle,
       contestid: this.$route.params.contestID,
+      isboardlock: "",
       probleminfo: [],
       tableData: [],
       problemids: [],
@@ -198,9 +200,11 @@ export default {
         return "background-color:#009100;text-align:center;font-weight:bold;color:white;";
       if (data.row[str].indexOf(":") > -1)
         return "background-color:#79FF79;text-align:center;color:black;";
+      if (data.row[str].indexOf("Submit") > -1)
+        return "background-color:purple;text-align:center;color:black;";
       if (data.row[str].indexOf("(") > -1)
         return "background-color:#F56C6C;text-align:center;color:black;";
-
+      
       return "background-color:white";
     },
 
@@ -230,6 +234,13 @@ export default {
     },
 
     setboard (cid, response) {
+      this.$axios.post("/isboardlock/", {
+        contestid:this.$route.params.contestID
+      }).then(res1 => {
+        if(res1.data == "yes"){
+          this.isboardlock = "当前封榜中...封榜后提交显示为Pending，榜单只显示提交次数..."
+        }
+      })
 
       this.$axios.post("/contestfilterboard/", this.filterform).then(res1 => {
         for (let i = 0; i < res1.data.length; i++) {
@@ -290,7 +301,7 @@ export default {
 
           var ProblemDataList = [];
           for (var ii = 0; ii < this.probleminfo.length; ii++)
-            ProblemDataList.push([5552304570991, 0]); //第一个代表AC时间，第二个代表罚时次数
+            ProblemDataList.push([5552304570991, 0, 0]); //第一个代表AC时间，第二个代表罚时次数，第三个代表提交次数
 
           //找出每一道题AC的时间
           for (let index = 0; index < response.data.length; index++) {
@@ -298,6 +309,7 @@ export default {
               response.data[index].username == username &&
               response.data[index].user == nickname
             ) {
+
               PaticipantData["rating"] = response.data[index].rating;
               if (parseInt(response.data[index]["type"]) == 1) {
                 let time = ProblemDataList[response.data[index].problemrank][0];
@@ -306,6 +318,7 @@ export default {
                     response.data[index].problemrank
                   ][0] = parseInt(response.data[index]["submittime"]);
               }
+              ProblemDataList[response.data[index].problemrank][2] = ProblemDataList[response.data[index].problemrank][2] + 1
             }
           }
 
@@ -372,6 +385,14 @@ export default {
               if (FaShiNum < 0) {
                 PaticipantData[this.toChar(ii)] = "(" + FaShiNum + ")";
                 prosub[ii] = prosub[ii] - FaShiNum;
+
+                var afternum = ProblemDataList[ii][2] + FaShiNum
+                if(afternum > 0)
+                  PaticipantData[this.toChar(ii)] = PaticipantData[this.toChar(ii)] + "\n" + String(afternum) + " Submit";
+              }
+              else // 还没有判题或者封榜消息（-1和2）
+              {
+                PaticipantData[this.toChar(ii)] = String(ProblemDataList[ii][2]) + " Submit";
               }
             }
           }
