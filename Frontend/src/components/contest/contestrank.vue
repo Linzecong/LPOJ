@@ -318,7 +318,8 @@ export default {
                     response.data[index].problemrank
                   ][0] = parseInt(response.data[index]["submittime"]);
               }
-              ProblemDataList[response.data[index].problemrank][2] = ProblemDataList[response.data[index].problemrank][2] + 1
+              else if(parseInt(response.data[index]["type"]) == 2) // 编译错误不算
+                ProblemDataList[response.data[index].problemrank][2] = ProblemDataList[response.data[index].problemrank][2] + 1
             }
           }
 
