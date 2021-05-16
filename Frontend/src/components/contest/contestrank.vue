@@ -386,8 +386,8 @@ export default {
               if (FaShiNum < 0) {
                 PaticipantData[this.toChar(ii)] = "(" + FaShiNum + ")";
                 prosub[ii] = prosub[ii] - FaShiNum;
-
-                PaticipantData[this.toChar(ii)] = PaticipantData[this.toChar(ii)] + "\n" + String(ProblemDataList[ii][2]) + " Submit";
+                if(ProblemDataList[ii][2]!=0)
+                  PaticipantData[this.toChar(ii)] = PaticipantData[this.toChar(ii)] + "\n" + String(ProblemDataList[ii][2]) + " Submit";
               }
               else // 还没有判题或者封榜消息（-1和2）
               {
