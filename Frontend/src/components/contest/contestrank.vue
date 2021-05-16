@@ -392,7 +392,8 @@ export default {
               }
               else // 还没有判题或者封榜消息（-1和2）
               {
-                PaticipantData[this.toChar(ii)] = String(ProblemDataList[ii][2]) + " Submit";
+                if(ProblemDataList[ii][2]!=0)
+                  PaticipantData[this.toChar(ii)] = String(ProblemDataList[ii][2]) + " Submit";
               }
             }
           }
