@@ -44,7 +44,12 @@ while True:
         accounts = str(data[5]).split("|")
         print(username)
 
+        t = 0
         while True:
+            t = t + 1
+            if t % 5:
+                CF = [0,0]
+                break
             CF = get_CF_data(accounts[0])
             print(accounts[0], "CF:", CF)
             if CF[0] != -1:
@@ -62,19 +67,34 @@ while True:
             CFCount[0] = 0
             CFCount[1] = 0
         
+        t = 0
         while True:
+            t = t + 1
+            if t % 5:
+                HDU = [0,0]
+                break
             HDU = get_HDU_data(accounts[1])
             print(accounts[1], "HDU:", HDU)
             if HDU[0] != -1:
                 break
-
+        
+        t = 0
         while True:
+            t = t + 1
+            if t % 5:
+                VJ = [0,0]
+                break
             VJ = get_VJ_data(accounts[2])
             print(accounts[2], "VJ:", VJ)
             if VJ[0] != -1:
                 break
         
+        t = 0
         while True:
+            t = t + 1
+            if t % 5:
+                LPOJ = [0,0]
+                break
             LPOJ = get_LPOJ_data(accounts[3])
             print(accounts[3], "LPOJ:", LPOJ)
             if LPOJ[0] != -1:
