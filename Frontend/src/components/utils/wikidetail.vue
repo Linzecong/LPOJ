@@ -31,13 +31,13 @@ export default {
   data() {
     return {
       editpage: "",
-      algurl:"https://oi-wiki.io.netease.com/"
+      algurl:"https://oi-wiki.org/"
       
     };
   },
   created(){
     var cururl = this.$route.params.wikiid
-    this.algurl = "https://oi-wiki.io.netease.com/" + cururl.replace("_","/") +"/"
+    this.algurl = "https://oi-wiki.org/" + cururl.replace("_","/") +"/"
     //console.log(this.algurl)
   },
 
@@ -49,7 +49,7 @@ export default {
         params: { wikiid: this.editpage }
       });
       var cururl = this.$route.params.wikiid
-      this.algurl = "https://oi-wiki.io.netease.com/" + cururl.replace("_","/") +"/"
+      this.algurl = "https://oi-wiki.org/" + cururl.replace("_","/") +"/"
       //console.log(this.algurl)
     },
   }
