@@ -1,8 +1,13 @@
 import requests
+import urllib
+import base64
 from time import sleep
 
 
 def JudgeHDU(problemid, language, usercode):
+    usercode = urllib.parse.quote(usercode)
+    usercode = base64.b64encode(usercode.encode('utf-8'))
+
     def substr(start_str, end, html):
         start = html.find(start_str)
         if start >= 0:
@@ -40,7 +45,8 @@ def JudgeHDU(problemid, language, usercode):
     postData = {
         "problemid": problemid,
         "language": language,
-        "usercode": usercode
+        "_usercode": usercode,
+        'check':0
     }
     responseRes = mafengwoSession.post(postUrl, data=postData, headers=header)
     resstr = f"text = {responseRes.text}"
@@ -88,3 +94,24 @@ def JudgeHDU(problemid, language, usercode):
                 
 
             return [restr, timestr, memstr, "Remote run ID:HDU  "+subid]
+
+
+if __name__ == "__main__":
+
+    code = """#include<stdio.h>
+#include<math.h>
+int main()
+{
+	double X1,Y1,X2,Y2;
+	while (scanf ("%lf" "%lf" "%lf" "%lf" , &X1,&Y1,&X2,&Y2) !=EOF)
+	{
+		double sum = pow(X1-X2,2) + pow(Y1-Y2,2);
+		double result = sqrt(sum);
+		printf ("%.2lf\n" , result);
+	}
+	return 0;
+}"""
+
+    
+    print(code)
+    JudgeHDU(2001,"C++",code)

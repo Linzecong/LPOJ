@@ -17,7 +17,7 @@ class Problem(models.Model):
     source = models.TextField() # 也可以用来存该OJ的Pro ID
     time = models.IntegerField()
     memory = models.IntegerField()
-    hint = models.TextField(null=True)
+    hint = models.TextField(null=True,default="")
     auth = models.IntegerField(default=1)  # 1公开 2私密 3 比赛中的题
     template = models.CharField(max_length=10000, default="请删除这行")
 

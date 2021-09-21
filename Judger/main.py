@@ -11,7 +11,9 @@ import os
 import zipfile
 import time
 import datetime
+import logging
 from JudgeHDU.JudgeHDU import JudgeHDU
+import requests
 
 # 全局变量类，用于保存全局变量
 class GlobalVar:
@@ -25,12 +27,33 @@ class GlobalVar:
     python2path = "/usr/bin/python"
     cursor = None
     db = None
-    sftp_t = None
-    sftp = None
+    # sftp_t = None
+    # sftp = None
     clientsocket = None
+
+    logger = None
+
+    @staticmethod
+    def initLogger():
+        GlobalVar.logger = logging.getLogger(__name__)
+        GlobalVar.logger.setLevel(level = logging.INFO)
+        handler = logging.FileHandler("judger.log")
+        handler.setLevel(logging.INFO)
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        handler.setFormatter(formatter)
+
+        console = logging.StreamHandler()
+        console.setLevel(logging.INFO)
+
+        GlobalVar.logger.addHandler(handler)
+        GlobalVar.logger.addHandler(console)
+
+        GlobalVar.logger.info("Start print log")
 
     @staticmethod 
     def initGlobalVar():
+        GlobalVar.initLogger()
+
         GlobalVar.statue = True
         myjsonfile = open("./setting.json", 'r')
         GlobalVar.judgerjson = json.loads(myjsonfile.read())
@@ -43,11 +66,10 @@ class GlobalVar:
             GlobalVar.judgerjson["db_port"] = os.environ.get("DB_PORT")
 
             GlobalVar.judgerjson["server_ip"] = os.environ.get("SERVER_IP")
-            GlobalVar.judgerjson["sftp_ip"] = os.environ.get("SFTP_IP")
-            GlobalVar.judgerjson["sftp_port"] = os.environ.get("SFTP_PORT")
-            GlobalVar.judgerjson["sftp_username"] = os.environ.get("SFTP_USER")
-            GlobalVar.judgerjson["sftp_password"] = os.environ.get("SFTP_PASSWORD")
-            GlobalVar.judgerjson["backend_path"] = os.environ.get("BACKEND_PATH")
+            GlobalVar.judgerjson["backend_ip"] = os.environ.get("BACKEND_IP")
+            GlobalVar.judgerjson["backend_port"] = os.environ.get("BACKEND_PORT")
+            GlobalVar.judgerjson["backend_head"] = os.environ.get("BACKEND_HEAD")
+            # GlobalVar.judgerjson["backend_path"] = os.environ.get("BACKEND_PATH")
             GlobalVar.judgerjson["nodownload"] = os.environ.get("NO_DOWNLOAD")
 
         datajsonfile = open("./datatime.json", 'r')
@@ -55,24 +77,31 @@ class GlobalVar:
         datajsonfile.close()
 
         GlobalVar.judgername = socket.gethostbyname(socket.gethostname())
+        GlobalVar.logger.info("Judger name: " + GlobalVar.judgername)
 
         GlobalVar.host = GlobalVar.judgerjson["server_ip"]
         GlobalVar.port = GlobalVar.judgerjson["server_port"]
         GlobalVar.python3path = GlobalVar.judgerjson["python3_path"]
         GlobalVar.python2path = GlobalVar.judgerjson["python2_path"]
 
+        GlobalVar.logger.info("Connecting database !")
         GlobalVar.db = MySQLdb.connect(GlobalVar.judgerjson["db_ip"], GlobalVar.judgerjson["db_user"], GlobalVar.judgerjson["db_pass"],
                             GlobalVar.judgerjson["db_database"], int(GlobalVar.judgerjson["db_port"]), charset='utf8')
         GlobalVar.cursor = GlobalVar.db.cursor()
+        GlobalVar.logger.info("Connect db succeed!")
 
-        if GlobalVar.judgerjson["nodownload"] != "yes":
-            GlobalVar.sftp_t = paramiko.Transport((GlobalVar.judgerjson["sftp_ip"], 22))
-            GlobalVar.sftp_t.connect(username=GlobalVar.judgerjson["sftp_username"],
-                        password=GlobalVar.judgerjson["sftp_password"])  # 登录远程服务器
-            GlobalVar.sftp = paramiko.SFTPClient.from_transport(GlobalVar.sftp_t)  # sftp传输协议
+        # GlobalVar.logger.info("Connecting sftp !")
+        # if GlobalVar.judgerjson["nodownload"] != "yes":
+        #     GlobalVar.sftp_t = paramiko.Transport((GlobalVar.judgerjson["sftp_ip"], 22))
+        #     GlobalVar.sftp_t.connect(username=GlobalVar.judgerjson["sftp_username"],
+        #                 password=GlobalVar.judgerjson["sftp_password"])  # 登录远程服务器
+        #     GlobalVar.sftp = paramiko.SFTPClient.from_transport(GlobalVar.sftp_t)  # sftp传输协议
+        # GlobalVar.logger.info("Connect sftp succeed!")
 
+        GlobalVar.logger.info("Connecting judger server!")
         GlobalVar.clientsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         GlobalVar.clientsocket.connect((GlobalVar.host, GlobalVar.port))
+        GlobalVar.logger.info("Connect judger server succeed!")
 
 class Controller:
 
@@ -111,7 +140,7 @@ class Controller:
 
     @staticmethod
     def compileError(id,problem,message):
-        print(id,message,problem)
+        GlobalVar.logger.info("Compile error! "+str(id))
         GlobalVar.cursor.execute("UPDATE judgestatus_judgestatus SET result = '-4',message=%s WHERE id = %s", (message, id))
         GlobalVar.cursor.execute("UPDATE problem_problemdata SET ce = ce+1 WHERE problem = '%s'" % problem)
         GlobalVar.db.commit()
@@ -130,12 +159,13 @@ class Controller:
             GlobalVar.cursor.execute("UPDATE user_userdata SET acpro = concat(acpro,'|%s') WHERE username = '%s'" % (str(problem), username))
         if contest != 0:
             GlobalVar.cursor.execute("UPDATE contest_contestboard SET type =1 WHERE submitid = '%s'" % id)
+        GlobalVar.cursor.execute("UPDATE user_userdata SET submit = submit+1 WHERE username = '%s'" % username)
         GlobalVar.db.commit()
     
     @staticmethod
     def doneProblem(id,problem,message,memory,mytime,username,contest,result,testcase):
         if message != "":
-            print(message)
+            GlobalVar.logger.info(message)
             GlobalVar.cursor.execute("UPDATE judgestatus_judgestatus SET memory = %s, time= %s, result = %s,testcase=%s,message=%s  WHERE id = %s" , (str(memory), str(mytime), str(result), str(testcase),str(message), str(id)))
         else:
             GlobalVar.cursor.execute("UPDATE judgestatus_judgestatus SET memory = %d, time= %d, result = '%s',testcase='%s' WHERE id = '%s'" % (memory, mytime, result,testcase, id))
@@ -154,6 +184,7 @@ class Controller:
             GlobalVar.cursor.execute("UPDATE problem_problemdata SET wa = wa+1 WHERE problem = '%s'" % problem)
         if contest != 0:
             GlobalVar.cursor.execute("UPDATE contest_contestboard SET type =0  WHERE submitid = '%s'" % id)
+        GlobalVar.cursor.execute("UPDATE user_userdata SET submit = submit+1 WHERE username = '%s'" % username)
         GlobalVar.db.commit()
 
     @staticmethod
@@ -165,15 +196,14 @@ class Controller:
 
 # SPJ函数，首先编译，然后运行，然后返回程序运行结果
 def specialjudge(problem,testin,testout,userout):
-    result = os.system("timeout 10 g++ ./ProblemData/%s/spj.cpp -o %s.out -O2 -std=c++14" % (str(problem),GlobalVar.judgername))
+    result = os.system("timeout 10 g++ ./ProblemData/%s/spj.cpp -o spj_%s.out -O2 -std=c++14" % (str(problem),GlobalVar.judgername))
     if result:
         return 5
-    res = os.system("timeout 20 ./%s.out %s %s %s" % (GlobalVar.judgername, testin, testout, userout))
-    print(res)
+    res = os.system("timeout 20 ./spj_%s.out %s %s %s" % (GlobalVar.judgername, testin, testout, userout))
     return res
 
 # 用于远程下载数据文件，首先判断数据文件有没有更新，有的话就更新
-def remote_scp(host_ip, remote_path, local_path, username, password, problem):
+def remote_scp(problem, local_path):
     if GlobalVar.judgerjson["nodownload"] == "yes": # 如果采用手动直接上传的方式，那么不用下载
         dirname = str(problem)
 
@@ -203,28 +233,44 @@ def remote_scp(host_ip, remote_path, local_path, username, password, problem):
                 tmpfile.write(tstr)
                 tmpfile.close()
                 
-            print("Extract Succeed!")
+            GlobalVar.logger.info("Extract Succeed!")
             return True
         except:
             shutil.rmtree("./ProblemData/" +
                           dirname+"/", ignore_errors=True)
             os.remove("./ProblemData/"+str(problem)+".zip")
-            print("Extract Failed!")
+           
+            GlobalVar.logger.error("No Download Extract failed!!")
             return False
+
     try:
-        if GlobalVar.sftp_t.is_authenticated() == False:
-            GlobalVar.sftp_t.close()
-            GlobalVar.sftp_t = paramiko.Transport((host_ip, 22))
-            GlobalVar.sftp_t.connect(username=username, password=password)  # 登录远程服务器
-            GlobalVar.sftp = paramiko.SFTPClient.from_transport(GlobalVar.sftp_t)  # sftp传输协议
-        remt = 0
-        try:
-            remt = GlobalVar.sftp.stat(remote_path).st_mtime
-        except:
-            GlobalVar.sftp_t = paramiko.Transport((host_ip, 22))
-            GlobalVar.sftp_t.connect(username=username, password=password)  # 登录远程服务器
-            GlobalVar.sftp = paramiko.SFTPClient.from_transport(GlobalVar.sftp_t)  # sftp传输协议
-            remt = GlobalVar.sftp.stat(remote_path).st_mtime
+        # if GlobalVar.sftp_t.is_authenticated() == False:
+        #     GlobalVar.logger.info("Connecting sftp!")
+        #     GlobalVar.sftp_t.close()
+        #     GlobalVar.sftp_t = paramiko.Transport((host_ip, 22))
+        #     GlobalVar.sftp_t.connect(username=username, password=password)  # 登录远程服务器
+        #     GlobalVar.sftp = paramiko.SFTPClient.from_transport(GlobalVar.sftp_t)  # sftp传输协议
+
+        remote_path_time = ""
+        remote_path_file = ""
+        if GlobalVar.judgerjson["backend_port"].isdigit():
+            remote_path_time = GlobalVar.judgerjson["backend_head"] + "://" + GlobalVar.judgerjson["backend_ip"] +":"+ GlobalVar.judgerjson["backend_port"]+"/judgerfiletime/?name="+problem+"&password="+GlobalVar.judgerjson["db_pass"]
+            remote_path_file = GlobalVar.judgerjson["backend_head"] + "://" + GlobalVar.judgerjson["backend_ip"] +":"+ GlobalVar.judgerjson["backend_port"]+"/judgerdownloadfile/?name="+problem+"&password="+GlobalVar.judgerjson["db_pass"]
+        else:
+            remote_path_time = GlobalVar.judgerjson["backend_head"] + "://" + GlobalVar.judgerjson["backend_ip"] +"/"+ GlobalVar.judgerjson["backend_port"]+"/judgerfiletime/?name="+problem+"&password="+GlobalVar.judgerjson["db_pass"]
+            remote_path_file = GlobalVar.judgerjson["backend_head"] + "://" + GlobalVar.judgerjson["backend_ip"] +"/"+ GlobalVar.judgerjson["backend_port"]+"/judgerdownloadfile/?name="+problem+"&password="+GlobalVar.judgerjson["db_pass"]
+        
+
+        remt = requests.get(remote_path_time).text
+
+        # try:
+        #     remt = GlobalVar.sftp.stat(remote_path).st_mtime
+        # except:
+        #     GlobalVar.logger.info("Reconnect sftp!!")
+        #     GlobalVar.sftp_t = paramiko.Transport((host_ip, 22))
+        #     GlobalVar.sftp_t.connect(username=username, password=password)  # 登录远程服务器
+        #     GlobalVar.sftp = paramiko.SFTPClient.from_transport(GlobalVar.sftp_t)  # sftp传输协议
+        #     remt = GlobalVar.sftp.stat(remote_path).st_mtime
 
         if str(remt) == GlobalVar.datatimejson.get(str(problem), "no"):
             return True
@@ -234,11 +280,17 @@ def remote_scp(host_ip, remote_path, local_path, username, password, problem):
             json.dump(GlobalVar.datatimejson, json_file, ensure_ascii=False)
             json_file.close()
 
-        print("download "+remote_path+" to "+local_path)
-        GlobalVar.sftp.get(remote_path, local_path)  # 下载文件
+        GlobalVar.logger.info("Begin to download "+remote_path_file+" to "+local_path)
+
+        fileresponse = requests.get(remote_path_file)  # 下载文件
+        with open(local_path,'wb') as f:
+            f.write(fileresponse.content)
+
+        GlobalVar.logger.info("Download done!!")
         # 解压文件
         dirname = str(problem)
         try:
+            GlobalVar.logger.info("Begin to Extract!")
             shutil.rmtree("./ProblemData/" +
                           dirname+"/", ignore_errors=True)
             f = zipfile.ZipFile("./ProblemData/"+str(problem)+".zip", 'r')
@@ -256,16 +308,16 @@ def remote_scp(host_ip, remote_path, local_path, username, password, problem):
                 tmpfile.write(tstr)
                 tmpfile.close()
                 
-            print("Extract Succeed!")
+            GlobalVar.logger.info("Extract succeed!!")
             return True
         except:
             shutil.rmtree("./ProblemData/" +
                           dirname+"/", ignore_errors=True)
             os.remove("./ProblemData/"+str(problem)+".zip")
-            print("Extract Failed!")
+            GlobalVar.logger.error("Extract failed!!")
             return False
     except IOError as e:
-        print(e)
+        GlobalVar.logger.error(repr(e))
         return True
 
 # 获取系统内存，返回MB，用于判断内存是否足够用于判题，否则，等待内存足够
@@ -280,37 +332,39 @@ def getmem():
 
 # 敏感词列表，用于Python安全机制
 def minganci(ci):
-    # if ci.find("thread") >= 0:
-    #     return "thread"
-    # if ci.find("process") >= 0:
-    #     return "process"
-    # if ci.find("resource") >= 0:
-    #     return "resource"
-    # if ci.find("ctypes") >= 0:
-    #     return "ctypes"
-    # if ci.find(" os") >= 0:
-    #     return " os"
-    # if ci.find("__import__") >= 0:
-    #     return "__import__"
-    # if ci.find("eval") >= 0:
-    #     return "eval"
-    # if ci.find("exec") >= 0:
-    #     return "exec"
-    # if ci.find("globals") >= 0:
-    #     return "globals"
-    # if ci.find("locals") >= 0:
-    #     return "locals"
-    # if ci.find("compile") >= 0:
-    #     return "compile"
-    # if ci.find("frame") >= 0:
-    #     return "frame"
+    if os.environ.get("PYTHONSWF") != "yes":
+        return "0"
+    if ci.find("thread") >= 0:
+        return "thread"
+    if ci.find("process") >= 0:
+        return "process"
+    if ci.find("resource") >= 0:
+        return "resource"
+    if ci.find("ctypes") >= 0:
+        return "ctypes"
+    if ci.find(" os") >= 0:
+        return " os"
+    if ci.find("__import__") >= 0:
+        return "__import__"
+    if ci.find("eval") >= 0:
+        return "eval"
+    if ci.find("exec") >= 0:
+        return "exec"
+    if ci.find("globals") >= 0:
+        return "globals"
+    if ci.find("locals") >= 0:
+        return "locals"
+    if ci.find("compile") >= 0:
+        return "compile"
+    if ci.find("frame") >= 0:
+        return "frame"
     return "0"
 
 def judgePython2(timelimit, memorylimit, inputpath, outputpath, errorpath, id, judgername):
     return _judger.run(max_cpu_time=timelimit,
                         max_real_time=timelimit*10,
                         max_memory=memorylimit * 1024 * 1024,
-                        max_process_number=200,
+                        max_process_number=10,
                         max_output_size=32 * 1024 * 1024,
                         max_stack=32 * 1024 * 1024,
                         # five args above can be _judger.UNLIMITED
@@ -332,7 +386,7 @@ def judgePython3(timelimit, memorylimit, inputpath, outputpath, errorpath, id, j
     return _judger.run(max_cpu_time=timelimit,
                         max_real_time=timelimit*10,
                         max_memory=memorylimit * 1024 * 1024,
-                        max_process_number=200,
+                        max_process_number=10,
                         max_output_size=32 * 1024 * 1024,
                         max_stack=32 * 1024 * 1024,
                         # five args above can be _judger.UNLIMITED
@@ -354,7 +408,7 @@ def judgeC(timelimit, memorylimit, inputpath, outputpath, errorpath, id, judgern
     return _judger.run(max_cpu_time=timelimit,
                         max_real_time=timelimit*10,
                         max_memory=memorylimit * 1024 * 1024,
-                        max_process_number=200,
+                        max_process_number=10,
                         max_output_size=32 * 1024 * 1024,
                         max_stack=32 * 1024 * 1024,
                         # five args above can be _judger.UNLIMITED
@@ -376,7 +430,7 @@ def judgeCPP(timelimit, memorylimit, inputpath, outputpath, errorpath, id, judge
     return _judger.run(max_cpu_time=timelimit,
                         max_real_time=timelimit*10,
                         max_memory=memorylimit * 1024 * 1024,
-                        max_process_number=200,
+                        max_process_number=10,
                         max_output_size=32 * 1024 * 1024,
                         max_stack=32 * 1024 * 1024,
                         # five args above can be _judger.UNLIMITED
@@ -396,50 +450,34 @@ def judgeCPP(timelimit, memorylimit, inputpath, outputpath, errorpath, id, judge
 
 def judgeJava(timelimit, memorylimit, inputpath, outputpath, errorpath, id, judgername):
 
-    com1 = "/usr/bin/time -f '"+"%"+"U' -o %stime.txt " % (judgername)
-    com2 = "timeout %s java -cp %s -Djava.security.manager -Djava.security.policy==policy -Djava.awt.headless=true Main 1>%s 2>%s<%s" % (
-        str(timelimit/1000.0), judgername, outputpath, errorpath, inputpath)
-    com = com1 + com2
-    result = os.system(com)
-
-    ret = dict()
-
-    if result == 0:
-        tf = open(judgername+"time.txt", "r")
-        time = tf.read()
-        time = float(str(time).strip())*1000
-        ret["cpu_time"] = int(time)
-        ret["memory"] = 5201314
-        ret["result"] = 0
-        ret["exit_code"] = result
-        ret["signal"] = 0
-        tf.close()
-    elif result == 31744:
-        ret["cpu_time"] = timelimit
-        ret["memory"] = 5201314
-        ret["result"] = 1
-        ret["exit_code"] = result
-        ret["signal"] = 0
-    else:
-        tf = open(errorpath, "r")
-        msg = tf.read()
-        GlobalVar.cursor.execute(
-            "UPDATE judgestatus_judgestatus SET message=%s WHERE id = %s", (msg, id))
-        GlobalVar.db.commit()
-        ret["cpu_time"] = 0
-        ret["memory"] = 5201314
-        ret["result"] = 4
-        ret["exit_code"] = result
-        ret["signal"] = 0
-        tf.close()
-
-    return ret
+    return _judger.run(max_cpu_time=timelimit,
+                        max_real_time=timelimit*10,
+                        max_memory=memorylimit * 1024 * 1024,
+                        max_process_number=10,
+                        max_output_size=32 * 1024 * 1024,
+                        max_stack=32 * 1024 * 1024,
+                        # five args above can be _judger.UNLIMITED
+                        exe_path="/usr/bin/java",
+                        input_path=inputpath,
+                        output_path=outputpath,
+                        error_path=errorpath,
+                        args=["-cp",judgername,"-Djava.security.policy==policy","-Djava.awt.headless=true","Main"],
+                        # can be empty list
+                        env=[],
+                        log_path=judgername+"judger.log",
+                        # can be None
+                        seccomp_rule_name=None,
+                        memory_limit_check_only=1,
+                        uid=0,
+                        gid=0
+                        )
+                        
 
 def judgeSwift(timelimit, memorylimit, inputpath, outputpath, errorpath, id, judgername):
     return _judger.run(max_cpu_time=timelimit,
                         max_real_time=timelimit*10,
                         max_memory=memorylimit * 1024 * 1024,
-                        max_process_number=200,
+                        max_process_number=10,
                         max_output_size=32 * 1024 * 1024,
                         max_stack=32 * 1024 * 1024,
                         # five args above can be _judger.UNLIMITED
@@ -582,6 +620,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
         ojpro: 其实是提交中的message字段，用于保存VJudge中提交的是远程OJ的哪一题
     """
 
+    GlobalVar.logger.info("Begin to judger %d"%id)
     contest = int(contest)
     contest = contest + 1 # 迷之Bug
     contest = contest - 1
@@ -605,43 +644,45 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
     templatemsg = ""
 
 
-    if oj != "LPOJ":
-        if oj == "HDU":
-            try:
-                jr = JudgeHDU(ojpro, lang, code)
-                if jr[0] == "-4":
-                    Controller.compileError(id,problem,jr[3])
-                    GlobalVar.statue = True
-                    return
-                if jr[0] == "0":
-                    Controller.acProblem(id,problem,jr[3],int(jr[2]), int(jr[1]),username,score,HaveAC,contest)
-                    GlobalVar.statue = True
-                else:
-                    Controller.doneProblem(id,problem,jr[3],int(jr[2]), int(jr[1]),username,contest,jr[0],"?")
-                    GlobalVar.statue = True
-            except Exception as e:
-                Controller.doneProblem(id,problem,str(e).replace('\'',"").replace("\"",""),0, 0,username,contest,"5","?")
+    if oj == "HDU":
+        try:
+            jr = JudgeHDU(ojpro, lang, code)
+            if jr[0] == "-4":
+                Controller.compileError(id,problem,jr[3])
                 GlobalVar.statue = True
+                return
+            if jr[0] == "0":
+                Controller.acProblem(id,problem,jr[3],int(jr[2]), int(jr[1]),username,score,HaveAC,contest)
+                GlobalVar.statue = True
+            else:
+                Controller.doneProblem(id,problem,jr[3],int(jr[2]), int(jr[1]),username,contest,jr[0],"?")
+                GlobalVar.statue = True
+        except Exception as e:
+            Controller.doneProblem(id,problem,str(e).replace('\'',"").replace("\"",""),0, 0,username,contest,"5","?")
+            GlobalVar.statue = True
         return
     else:
 
-        isdone = remote_scp(GlobalVar.judgerjson["sftp_ip"], GlobalVar.judgerjson["backend_path"]+"ProblemData/"+str(problem)+".zip", "./ProblemData/" +
-                    str(problem)+".zip", GlobalVar.judgerjson["sftp_username"], GlobalVar.judgerjson["sftp_password"], problem)
+        # isdone = remote_scp(GlobalVar.judgerjson["sftp_ip"], GlobalVar.judgerjson["backend_path"]+"/ProblemData/"+str(problem)+".zip", "./ProblemData/" +
+        #             str(problem)+".zip", GlobalVar.judgerjson["sftp_username"], GlobalVar.judgerjson["sftp_password"], problem)
+        
+        isdone = remote_scp(str(problem), "./ProblemData/" + str(problem)+".zip")
+
 
         # 判断有无数据
         if isdone == False: 
             Controller.doneProblem(id,problem,"unzip error!",0,0,username,contest,"5","?")
+            GlobalVar.statue = True
             return
         try:
             files = os.listdir("./ProblemData/%s/" % problem)
         except Exception as e:
-            print(e)
+            GlobalVar.logger.error(repr(e))
             Controller.doneProblem(id,problem,"download error!",0,0,username,contest,"5","?")
             GlobalVar.statue = True
             return
 
-        
-
+        GlobalVar.logger.info("Begin to Compile!")
         if lang == "C": 
             # 模板题测试
             if os.path.isfile("./ProblemData/%s/template.c" %problem):
@@ -757,7 +798,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
 
         # 尝试下载数据
 
-        
+        GlobalVar.logger.info("Loading datas!!")
         tempset = set()  # 用于判读数据是否都有in,out
         newfiles = set()
         casedes = dict()
@@ -787,7 +828,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                     file3.close()
                     continue
             except Exception as e:
-                print(e)
+                GlobalVar.logger.error(repr(e))
                 casedes = dict()
             if s in tempset:
                 newfiles.add(s)
@@ -799,7 +840,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
         newfiles = sorted(newfiles) # 将数据排个序
 
         for filename in newfiles:
-            print("judging!!!", id, "/%s/%s.in" % (problem, filename))
+            GlobalVar.logger.info("Judging!! %d /%s/%s.in"%(id,problem, filename))
             try:
                 waittime = 0
                 while True:
@@ -808,7 +849,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                         break
                     waittime = waittime + 1
                     if waittime > 15:
-                        print("memory error!")
+                        GlobalVar.logger.info("Memory error!")
                         Controller.doneProblem(id,problem,"system memory low!!!",0,0,username,contest,"5","?")
                         GlobalVar.statue = True
                         return
@@ -839,7 +880,8 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 return
                     
 
-            print(ret)
+            GlobalVar.logger.info(str(ret))
+      
 
             maxmemory = max(ret["memory"], maxmemory)
             maxtime = max(ret["cpu_time"], maxtime)
@@ -935,6 +977,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 result = 0  # 0 ac -3 wrong -5 presentation
                 # specialjudge，如果spj.cpp存在，则判定为特判问题
                 if os.path.isfile("./ProblemData/%s/spj.cpp" %problem):
+                    GlobalVar.logger.info("Begin to special judge!!")
                     isspj = " (This test case is Special Judge) "
                     r = specialjudge(problem,"./ProblemData/%s/%s.in" %(problem, filename), "./ProblemData/%s/%s.out" % (problem, filename), GlobalVar.judgername+"temp.out")
                     if r == 256: result = -3
@@ -947,6 +990,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                         tmsg.close()
 
                 else:
+                    GlobalVar.logger.info("Comparing output!")
                     # 比较输出文件是否一致!
                     file1 = open(GlobalVar.judgername+"temp.out", "r")
                     file2 = open("./ProblemData/%s/%s.out" %
@@ -1029,10 +1073,15 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                         outputdata,
                         useroutputdata
                     )
+                GlobalVar.logger.info("Done one data!")
 
+        GlobalVar.logger.info("Judge all data done, begin to save result!")
         # 所有样例评判结束，汇总结果!
         if myresult == 100:
-            Controller.acProblem(id,problem,"",maxmemory/1024/1024,maxtime,username,score,HaveAC,contest)
+            if istemplatepro == True:
+                Controller.acProblem(id,problem,templatemsg,maxmemory/1024/1024,maxtime,username,score,HaveAC,contest)
+            else:
+                Controller.acProblem(id,problem,"",maxmemory/1024/1024,maxtime,username,score,HaveAC,contest)
         else:
             if istemplatepro == True:
                 Controller.doneProblem(id,problem,templatemsg,mymemory/1024/1024, mytime,username,contest,myresult,mytestcase)
@@ -1040,6 +1089,7 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                 Controller.doneProblem(id,problem,"",mymemory/1024/1024, mytime,username,contest,myresult,mytestcase)
 
         GlobalVar.statue = True
+        GlobalVar.logger.info("All done!!")
 
 
 def reconnect():
@@ -1051,8 +1101,8 @@ def reconnect():
         GlobalVar.clientsocket.connect((GlobalVar.host, GlobalVar.port))
         GlobalVar.statue = True
     except Exception as e:
-        print(e)
-        print("connect error!")
+        GlobalVar.logger.error("Connect db failed!")
+        GlobalVar.logger.error(repr(e)) 
         pass
 
 def MainLoop():
@@ -1069,7 +1119,8 @@ def MainLoop():
                     else:
                         GlobalVar.clientsocket.send("notok".encode("utf-8"))
                 elif data == "timeout":
-                    print("timeout!")
+                    GlobalVar.logger.error("Judge time out!!!!")
+      
                     GlobalVar.cursor.execute(
                         "UPDATE judgestatus_judgestatus SET memory =0, time=0, result = '5', message='Judger out of time', testcase='0'  WHERE id = '%s'" % (cur))
                     GlobalVar.db.commit()
@@ -1081,7 +1132,7 @@ def MainLoop():
                     try:
                         GlobalVar.cursor.execute("SELECT * from judgestatus_judgestatus where id = '%s'" % tp[1])
                     except:
-                        print("too long no submit")
+                        GlobalVar.logger.info("Too long no submit, reconnect db!")
                         reconnect()
                         GlobalVar.cursor.execute("SELECT * from judgestatus_judgestatus where id = '%s'" % tp[1])
                     data = GlobalVar.cursor.fetchone()
@@ -1094,12 +1145,13 @@ def MainLoop():
                             isoi = isoi[5]
                         else:
                             isoi = True
-
+                        GlobalVar.logger.info("Starting judge thread!")
                         t = threading.Thread(target=judge, args=(
                             data[0], data[13], data[8], data[3], data[11], data[1], data[9], data[12], data[2],data[15],isoi))
                         t.setDaemon(True)
                         t.start()
                     except:
+                        GlobalVar.logger.error("db error!!")
                         GlobalVar.db.rollback()
                         GlobalVar.statue = True
             else:
@@ -1107,7 +1159,7 @@ def MainLoop():
         except socket.error:
             reconnect()
         except Exception as e:
-            print(e)
+            GlobalVar.logger.error(repr(e))
             reconnect()
 
 if __name__ == "__main__":

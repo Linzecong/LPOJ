@@ -6,7 +6,7 @@ services:
     environment:
             MYSQL_ROOT_PASSWORD: "lpojdatabase" # 选择性修改
     ports:
-     - "3306:3306"
+     - "4406:3306"
     restart: always
     volumes:
         - "./Database/data:/var/lib/mysql"
@@ -171,19 +171,18 @@ services:
     links: 
       - judgerserver:lpojjudgerserver
       - db:lpojdatabase
+      - backend1:lpojbackend1
     environment:
       DB_PASSWORD: "lpojdatabase" # 选择性修改
       DB_HOST: "lpojdatabase" # 选择性修改
       DB_USER: 'root' # 选择性修改
       DB_PORT: 3306
       SERVER_IP: "lpojjudgerserver"
-      SFTP_IP: "172.17.0.1"
-      SFTP_PORT: 22
-
       
-      SFTP_USER: 'ubuntu' # 必须修改
-      SFTP_PASSWORD: 'ubuntuubuntu' # 必须修改
-      BACKEND_PATH: "/home/ubuntu/LPOJ/Backend/" # 必须修改
+      BACKEND_PORT: 8000
+      BACKEND_IP: "lpojbackend1"
+      BACKEND_HEAD: 'http'
+      
       NO_DOWNLOAD: "no"
 
     restart: always

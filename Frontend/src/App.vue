@@ -1,7 +1,7 @@
 <template>
   <div id="app"
        style="top:0px;left:0px;">
-    <el-menu :default-active="activeIndex"
+    <el-menu :default-active="$route.path"
              mode="horizontal"
              v-bind:router="true"
              id="nav">

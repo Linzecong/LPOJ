@@ -113,6 +113,7 @@ DATABASES = {
 首先将LPOJ的后端代码生成mysql语句，然后我们再同步到数据库中
 ```bash
 python manager.py makemigrations
+python manage.py makemigrations judgestatus item problem user contest board blog wiki classes &&
 python manager.py migrate
 ```
 执行完毕后查看数据库，会发现你的LPOJ数据库中多了若干表格，这些都是Django运行所需要的表格。

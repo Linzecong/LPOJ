@@ -172,6 +172,28 @@
                        :value="0"></el-option>
           </el-select>
         </el-form-item>
+
+        <el-form-item label="是否封榜：">
+            <el-select style="width:200px;"
+                       v-model="addcontestform.lockboard"
+                       placeholder="Choose...">
+              <el-option key="0"
+                         label="不开启封榜（解除封榜）"
+                         :value="0"></el-option>
+              <el-option key="1"
+                         label="开启封榜功能"
+                         :value="1"></el-option>
+            </el-select>
+        </el-form-item>
+        
+        <el-form-item label="封榜时间（分钟）：">
+          <el-input-number
+            style="width:200px;"
+            v-model="addcontestform.locktime"
+            :step="10"
+            :min="0"
+          ></el-input-number>
+        </el-form-item>
         
 
         <el-row>
@@ -317,7 +339,9 @@ export default {
         type: "ACM",
         auth: 0,
         iprange: "None",
-        classes: "All"
+        classes: "All",
+        lockboard:0,
+        locktime:0
       }
     };
   },

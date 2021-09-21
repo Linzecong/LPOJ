@@ -14,4 +14,6 @@ urlpatterns = [
     url(r'^uploadfile', views.UploadFileAPIView.as_view()),
     url(r'^downloadfile/',views.filedown,name='download'),
     url(r'^showpic/',views.showpic,name='show_picture'),
+    url(r'^judgerdownloadfile/',views.judgerfiledown,name='judgerfiledown'),
+    url(r'^judgerfiletime/',views.judgerfiletime,name='judgerfiletime'),
 ]

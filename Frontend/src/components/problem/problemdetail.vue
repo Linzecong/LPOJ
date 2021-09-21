@@ -303,9 +303,9 @@ export default {
       })
       .then(res => {
         this.imgcode = res.data;
-        console.log(res);
-        console.log(res.data);
-      });
+      }).catch(error=>{
+            this.imgcode = ''
+          });
 
 
 

@@ -18,6 +18,9 @@ class ContestInfo(models.Model):
     classes = models.CharField(max_length=500, default="All")
     iprange = models.CharField(max_length=2000, default="iprange")
 
+    lockboard = models.IntegerField(default=0) # 0 不封 1 封
+    locktime = models.IntegerField(default=0) # 最后多少分钟封榜
+
     objects = models.Manager()
 
     def __str__(self):
@@ -56,7 +59,7 @@ class ContestBoard(models.Model):
     username = models.CharField(max_length=50)
     user = models.CharField(max_length=50)
     problemrank = models.IntegerField()
-    type = models.IntegerField()  # 1 AC， 0没AC算罚时，-1没AC不算罚时
+    type = models.IntegerField()  # 1 AC， 0没AC算罚时，-1没AC不算罚时, 2 封榜中，不算罚时(只会在后端做修改)
     submittime = models.BigIntegerField()  # 豪秒为单位
     submitid = models.IntegerField()  # 用于rejudge
     rating = models.IntegerField(default=1500)
@@ -159,7 +162,7 @@ class ContestChoiceProblem(models.Model):
     objects = models.Manager()
 
     def __str__(self):
-        return self.contestid
+        return self.ContestId
 
 class StudentChoiceAnswer(models.Model):
     username = models.CharField(max_length=100,default="")
@@ -167,6 +170,7 @@ class StudentChoiceAnswer(models.Model):
     number = models.CharField(max_length=100,default="")
     contestid = models.CharField(max_length=100,default="")
     answer = models.CharField(max_length=100)
+    answer_detail = models.TextField(default="")
     score = models.IntegerField()
 
     objects = models.Manager()

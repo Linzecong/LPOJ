@@ -320,6 +320,8 @@ export default {
           })
           .then(res => {
             this.imgcode = res.data;
+          }).catch(error=>{
+            this.imgcode = ''
           });
 
           var li = response.data.template.split("*****")
@@ -427,6 +429,8 @@ export default {
                   })
                   .then(res => {
                     this.imgcode = res.data;
+                  }).catch(error=>{
+                    this.imgcode = ''
                   });
 
                   if (this.oj != "LPOJ") {

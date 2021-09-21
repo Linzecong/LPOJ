@@ -8,8 +8,10 @@ from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
 from rest_framework.throttling import ScopedRateThrottle
 from rest_framework import viewsets, mixins, filters
-from .permission import ManagerOnly, UserRatingOnly, UserRatingOnly2, UserOnly
+from rest_framework.permissions import IsAuthenticated
+from .permission import ManagerOnly, UserRatingOnly, UserRatingOnly2, UserOnly, UserOnly1
 from .models import ContestBoardTotal, ContestComingInfo,ContestTutorial, ContestAnnouncement, ContestRatingChange, ContestBoard, ContestComment, ContestInfo, ContestProblem, ContestRegister, StudentChoiceAnswer, ContestChoiceProblem
+from problem.models import ChoiceProblem
 from .serializers import ContestBoardTotalSerializer, ContestComingInfoSerializer,ContestTutorialSerializer, ContestRatingChangeSerializer, ContestAnnouncementSerializer, ContestBoardSerializer, ContestCommentSerializer, ContestInfoSerializer, ContestProblemSerializer, ContestRegisterSerializer, StudentChoiceAnswerSerializer, ContestChoiceProblemSerializer
 import datetime
 
@@ -146,10 +148,18 @@ class ContestBoardFilterAPIView(APIView):
         classname = data.get("class","")
         reslist = []
         boards = ContestBoard.objects.filter(contestid=contestid)
+        contest = ContestInfo.objects.get(id=contestid)
+        userid = request.session.get("user_id")
+        usertype = request.session.get("type")
 
         usermap = {}
 
         for b in boards:
+            # 封榜判断
+
+            if usertype != 3 and userid != b.username and contest.lockboard == 1 and contest.lasttime - (datetime.datetime.fromtimestamp(b.submittime / 1000) - contest.begintime).total_seconds() <= contest.locktime * 60:
+                b.type = 2
+
             username = b.username
             if usermap.get(username,None)!=None:
                 if usermap.get(username) == True:
@@ -179,18 +189,104 @@ class ContestBoardFilterAPIView(APIView):
        # res = ContestBoard.objects.filter(pk__in=reslist)
         return Response(ContestBoardSerializer(reslist,many=True).data, HTTP_200_OK)
 
+class ContestIsBoardLockAPIView(APIView):
+
+    throttle_scope = "post"
+    throttle_classes = [ScopedRateThrottle, ]
+
+    def post(self, request, format=None):
+       
+        data = request.data
+
+        contestid = data.get("contestid")
+
+        contest = ContestInfo.objects.get(id=contestid)
+      
+        if contest.lockboard == 1 and contest.lasttime - (datetime.datetime.now() - contest.begintime).total_seconds() <= contest.locktime * 60:
+            return Response("yes", HTTP_200_OK)
+        return Response("no", HTTP_200_OK)
+
 
 class StudentChoiceAnswerView(viewsets.ModelViewSet):
     queryset = StudentChoiceAnswer.objects.all()
     serializer_class = StudentChoiceAnswerSerializer
-    permission_classes = (UserOnly,)
+    permission_classes = (UserOnly,UserOnly1)
     filter_fields = ('username','contestid')
 
 
 
 class ContestChoiceProblemView(viewsets.ModelViewSet):
-    queryset = ContestChoiceProblem.objects.all()
+    queryset = ContestChoiceProblem.objects.all().order_by('rank')
     serializer_class = ContestChoiceProblemSerializer
     permission_classes = (ManagerOnly,)
     filter_fields = ('ContestId','ChoiceProblemId', "rank")
     throttle_scope = "post"
+
+class GetContestChoiceProblems(APIView):
+    throttle_scope = "post"
+    throttle_classes = [ScopedRateThrottle, ]
+    permission_classes = (UserOnly,UserOnly1)
+    def post(self, request, format=None):
+        try:
+            #获取比赛id
+            data = request.data
+            if type(data) != dict:
+                data = data.dict()
+            contestid = int(data['ContestId'])
+            #此次比赛的选择题
+            all_contest_choice_problem=[]
+            #获取此次比赛的选择题的id,根据rank排序
+            contest_choice_problem = ContestChoiceProblem.objects.filter(ContestId = contestid).order_by('rank')
+            contest_choice_problem_id=[]
+            #储存此次比赛的选择题的id
+            for pro in contest_choice_problem:
+                contest_choice_problem_id.append(int(pro.ChoiceProblemId))
+            #获取具体的选择题
+            for pro_id in contest_choice_problem_id:
+                cproblem = ChoiceProblem.objects.filter(ChoiceProblemId=pro_id)
+                single_pro = {}
+                for cpro in cproblem:
+                    #这个循环应该只会执行一遍
+                    single_pro['des']=cpro.des
+                    single_pro['A']=cpro.choiceA
+                    single_pro['B']=cpro.choiceB
+                    single_pro['C']=cpro.choiceC
+                    single_pro['D']=cpro.choiceD
+                    single_pro['cpro_id']=cpro.ChoiceProblemId
+                all_contest_choice_problem.append(single_pro)
+
+            return Response(all_contest_choice_problem, HTTP_200_OK)
+        except Exception as e:
+            print (e)
+
+class ScoreContestChoiceProblems(APIView):
+    throttle_scope = "post"
+    throttle_classes = [ScopedRateThrottle, ]
+    permission_classes = (ManagerOnly,UserOnly1)
+    def post(self, request, format=None):
+        try:
+            #获取比赛id
+            data = request.data
+            if type(data) != dict:
+                data = data.dict()
+            #比赛ID
+            contestid = int(data['ContestId'])
+            #选择题标答
+            cpro_answer = data['ChoiceProblemAnswer'].upper()
+            #一道选择题的分值
+            one_pro_score = int(data['one_pro_score'])
+
+            #此次比赛学生选择题答案
+            stu_cpro_info = StudentChoiceAnswer.objects.filter(contestid = contestid)
+            stu_score = 0
+            for stu_info in stu_cpro_info:
+                stu_ans = stu_info.answer
+                stu_score = 0
+                for i in range(len(cpro_answer)):
+                    if(str(cpro_answer[i]) == str(stu_ans[i])):
+                        stu_score += one_pro_score
+                StudentChoiceAnswer.objects.filter(contestid = contestid, username = stu_info.username).update(score = stu_score)
+            return Response('评阅完成，刷新页面查看最新数据',HTTP_200_OK)
+        except Exception as e:
+            print (e)
+        

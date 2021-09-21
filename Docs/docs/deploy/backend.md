@@ -63,6 +63,8 @@ cd ..
 
 python manage.py makemigrations
 
+python manage.py makemigrations judgestatus item problem user contest board blog wiki classes &&
+
 python manage.py migrate
 
 echo "from django.contrib.auth.models import User; User.objects.filter(email=\"admin@example.com\").delete(); User.objects.create_superuser(\"admin\", \"admin@example.com\", \"admin\")" | python manage.py shell
@@ -70,12 +72,6 @@ echo "from django.contrib.auth.models import User; User.objects.filter(email=\"a
 python manage.py runserver 0.0.0.0:8000
 ```
 
-### 安装sftp服务
-不安装无法判题,一般云服务器会自动安装
-```
-sudo apt-get install openssh-server
-sftp yourusername@localhost # 验证是否安装成功！
-```
 ### 添加管理员
 > 安装成功后，先通过IP:80访问OJ，注册一个用户
 > 

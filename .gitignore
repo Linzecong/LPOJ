@@ -11,7 +11,6 @@ Judger/*.out
 *.out
 *.log
 Judger/output/libjudger.so
-migrations
 *.zip
 *.exe
 .vscode
@@ -25,3 +24,4 @@ Database/data
 CrawlingServer/NowCoderSpider.py
 CrawlingServer/CFSpider.py
 CrawlingServer/HDUSpider.py
+00*

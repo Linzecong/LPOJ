@@ -226,6 +226,29 @@
             </el-select>
           </el-form-item>
 
+          <el-form-item label="是否封榜：">
+            <el-select style="width:200px;"
+                       v-model="changecontestform.lockboard"
+                       placeholder="Choose...">
+              <el-option key="0"
+                         label="不开启封榜（解除封榜）"
+                         :value="0"></el-option>
+              <el-option key="1"
+                         label="开启封榜功能"
+                         :value="1"></el-option>
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="封榜时间（分钟）：">
+          <el-input-number
+            style="width:200px;"
+            v-model="changecontestform.locktime"
+            :step="10"
+            :min="0"
+          ></el-input-number>
+        </el-form-item>
+
+
           <el-form-item label="默认参赛人员（如果是公开比赛，请忽略，私有比赛请务必填写，因为私有比赛不可注册，中间用英文逗号或换行隔开）：">
             <el-input type="textarea"
                       v-model="contestregister"
@@ -366,7 +389,9 @@ export default {
         begintime: new Date(),
         lasttime: 0,
         type: "",
-        auth: 0
+        auth: 0,
+        lockboard: 0,
+        locktime:0
       },
       toolbars: {
         bold: true, // 粗体

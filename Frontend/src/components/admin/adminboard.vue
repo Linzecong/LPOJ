@@ -38,6 +38,9 @@
       <el-form-item label="LPOJ账号">
         <el-input v-model="lpoj" placeholder="请填写LPOJ账号，无则留空" style="width:200px"></el-input>
       </el-form-item>
+      <el-form-item label="其他账号">
+        <el-input v-model="otheraccount" placeholder="请填写其他账号，|分割" style="width:200px"></el-input>
+      </el-form-item>
       <el-form-item label="博客RSS地址">
         <el-input
           v-model="blog"
@@ -61,6 +64,7 @@ export default {
       hdu: "",
       vjudge: "",
       lpoj: "",
+      otheraccount:"",
       blog: "",
       classes: "",
       number: "",
@@ -76,11 +80,13 @@ export default {
         .get("/board/" + this.username + "/")
         .then(response => {
           var d = response.data.account;
-          var li = d.split("|");
+          var li = d.split("|",5);
           this.cf = li[0];
           this.hdu = li[1];
           this.vjudge = li[2];
           this.lpoj = li[3];
+          if(li.length > 4)
+          this.otheraccount = li[4];
           this.blog = response.data.blogaddress;
           this.classes = response.data.classes;
           this.number = response.data.number;
@@ -123,7 +129,7 @@ export default {
       ).then(() => {
         if (this.isnew == false) {
           var acc = "";
-          acc = this.cf + "|" + this.hdu + "|" + this.vjudge + "|" + this.lpoj;
+          acc = this.cf + "|" + this.hdu + "|" + this.vjudge + "|" + this.lpoj + "|" + this.otheraccount;
           this.$axios
             .put("/board/" + this.username + "/", {
               username: this.username,
@@ -142,7 +148,7 @@ export default {
             });
         } else {
           var acc = "";
-          acc = this.cf + "|" + this.hdu + "|" + this.vjudge + "|" + this.lpoj;
+          acc = this.cf + "|" + this.hdu + "|" + this.vjudge + "|" + this.lpoj + "|" + this.otheraccount;
           this.$axios
             .post("/board/", {
               username: this.username,

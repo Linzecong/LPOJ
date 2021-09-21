@@ -16,10 +16,10 @@
       </span>
       <contestproblem ref="Problems"></contestproblem>
     </el-tab-pane>
-    <el-tab-pane label="ChoiceProblems" >
+    <el-tab-pane label="ChoiceProblems" :disabled="!haveauth" :lazy="true">
       <span slot="label">
         <b>
-          <i class="el-icon-menu"></i> ChoiceProblems
+          <i class="el-icon-menu" ></i> ChoiceProblems
         </b>
       </span>
       <contestchoiceproblem ref="ChoiceProblems"></contestchoiceproblem>

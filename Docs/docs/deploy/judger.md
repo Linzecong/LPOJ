@@ -12,10 +12,6 @@ nano setting.json
 
 修改server_ip为你的判题服务器的IP地址
 
-修改sftp_ip为你的后端IP地址，同时修改登录的用户名和密码为你的后端服务器的用户名和密码
-
-修改backend_path为你的后端文件夹地址（用于下载数据）
-
 如果你需要Python判题，那么请注意修改python_path 
 
 你可以使用 whereis python 命名查看python路径
@@ -52,7 +48,8 @@ sudo python main.py
 
 非专业用户不推荐使用Docker单独部署
 
-首先修改配置文件，setting.json里的东西都要修改为你的ip，其中sftp应配置为你的后端服务器的用户名和密码和ip
+首先修改配置文件，setting.json里的东西都要修改为你的ip
+
 ``` 
 cd Judger
 nano setting.json

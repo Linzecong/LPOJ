@@ -2,7 +2,7 @@
   <mu-card>
     <mu-card-title :title="'Welcome to '+school"></mu-card-title>
     <mu-card-text>
-      <b>Mobile Version：1.0</b>
+      <b>Mobile Version：1.1</b>
       <br />
       <h3>
         <a
