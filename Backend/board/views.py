@@ -26,7 +26,7 @@ class BoardView(viewsets.ModelViewSet):
 
 
 class DailyBoardView(viewsets.ModelViewSet):
-    queryset = DailyBoard.objects.filter(collecttime__gte=datetime.datetime.now(
+    queryset = DailyBoard.objects.filter(collecttime__gte= lambda : datetime.datetime.now(
     )-datetime.timedelta(days=10)).order_by('collecttime')
     serializer_class = DailyBoardSerializer
     filter_fields = ('username', 'collecttime')
