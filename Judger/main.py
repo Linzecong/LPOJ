@@ -450,7 +450,7 @@ def judgeCPP(timelimit, memorylimit, inputpath, outputpath, errorpath, id, judge
 
 def judgeJava(timelimit, memorylimit, inputpath, outputpath, errorpath, id, judgername):
 
-    return _judger.run(max_cpu_time=timelimit,
+    res = _judger.run(max_cpu_time=timelimit,
                         max_real_time=timelimit*10,
                         max_memory=memorylimit * 1024 * 1024,
                         max_process_number=10,
@@ -471,6 +471,8 @@ def judgeJava(timelimit, memorylimit, inputpath, outputpath, errorpath, id, judg
                         uid=0,
                         gid=0
                         )
+    os.system("rm -rf ./"+judgername) # 删除缓存的Main.class，不然加package会运行上一次的代码……
+    return res
                         
 
 def judgeSwift(timelimit, memorylimit, inputpath, outputpath, errorpath, id, judgername):
