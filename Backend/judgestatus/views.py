@@ -33,7 +33,10 @@ class JudgeStatusView(viewsets.ModelViewSet):
         userid = request._request.session.get("user_id")
         usertype = request._request.session.get("type")
 
-        contestid = int(request._request.GET.get("contest",0))
+        cid = request._request.GET.get("contest",0)
+        if cid == "": 
+            cid = 0
+        contestid = int(cid)
         
         if contestid == 0:
             queryset = self.filter_queryset(self.get_queryset())
