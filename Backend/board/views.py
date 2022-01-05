@@ -25,9 +25,10 @@ class BoardView(viewsets.ModelViewSet):
     throttle_classes = [ScopedRateThrottle, ]
 
 
+
 class DailyBoardView(viewsets.ModelViewSet):
     queryset = DailyBoard.objects.filter(collecttime__gte=datetime.datetime.now(
-    )-datetime.timedelta(days=10)).order_by('collecttime')
+    )-datetime.timedelta(days=10)).order_by('collecttime') # 这里有bug，不应该在queryset里写filter。时间会提前算好，导致不准确
     serializer_class = DailyBoardSerializer
     filter_fields = ('username', 'collecttime')
     pagination_class = LimitOffsetPagination

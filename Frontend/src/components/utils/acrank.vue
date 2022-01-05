@@ -1,7 +1,7 @@
 <template>
   <el-card>
     <div slot="header">
-      <b>7 Days AC Rank</b>
+      <b>30 Days AC Rank</b>
     </div>
     <el-table
       :data="tableData"
@@ -92,7 +92,7 @@ export default {
         
         console.log(sorted)
 
-        for(var i=0;i<(sorted.length>=10?10:sorted.length);i++){
+        for(var i=0;i<(sorted.length>=20?20:sorted.length);i++){
           this.tableData.push({"user":sorted[i]["user"],"acnum":sorted[i]["acnum"]})
         }
 
