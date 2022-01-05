@@ -450,7 +450,7 @@ def judgeCPP(timelimit, memorylimit, inputpath, outputpath, errorpath, id, judge
 
 def judgeJava(timelimit, memorylimit, inputpath, outputpath, errorpath, id, judgername):
 
-    res = _judger.run(max_cpu_time=timelimit,
+    return _judger.run(max_cpu_time=timelimit,
                         max_real_time=timelimit*10,
                         max_memory=memorylimit * 1024 * 1024,
                         max_process_number=10,
@@ -471,8 +471,6 @@ def judgeJava(timelimit, memorylimit, inputpath, outputpath, errorpath, id, judg
                         uid=0,
                         gid=0
                         )
-    os.system("rm -rf ./"+judgername) # 删除缓存的Main.class，不然加package会运行上一次的代码……
-    return res
                         
 
 def judgeSwift(timelimit, memorylimit, inputpath, outputpath, errorpath, id, judgername):
@@ -1077,6 +1075,9 @@ def judge(id, code, lang, problem, contest, username, submittime, contestproblem
                     )
                 GlobalVar.logger.info("Done one data!")
 
+        if lang == "Java":
+            os.system("rm -rf ./"+GlobalVar.judgername) # 删除缓存的Main.class，不然加package会运行上一次的代码……
+            
         GlobalVar.logger.info("Judge all data done, begin to save result!")
         # 所有样例评判结束，汇总结果!
         if myresult == 100:
