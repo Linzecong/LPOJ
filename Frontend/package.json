@@ -11,7 +11,7 @@
     "analyz": "set NODE_ENV=production && set npm_config_report=true && npm run build"
   },
   "dependencies": {
-    "codemirror": "^5.44.0",
+    "codemirror": "^5.58.2",
     "echarts": "^4.2.1",
     "element-ui": "~2.12.0",
     "file-saver": "^2.0.2",
